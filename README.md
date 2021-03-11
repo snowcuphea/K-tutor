@@ -67,3 +67,7 @@
 - 소셜로그인
 - 오답노트
   - 틀린 문제를 확인할 수 있다.
+
+## Story Board
+
+- https://docs.google.com/presentation/d/1ST61xl2AEwgeZ_4NORf3zai0MY5jEQjtcHHnvImUxcY/edit?usp=sharing
