@@ -31,7 +31,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'account',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -87,7 +86,7 @@ WSGI_APPLICATION = 'k_tutor.wsgi.application'
 
 DATABASES = {
     'default' : {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.maria',
         'NAME': 'k_tutor',
         'USER': 'root',
         'PASSWORD': 'ssafy@123',
