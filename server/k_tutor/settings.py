@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'account'
+
 ]
 
 MIDDLEWARE = [
@@ -86,7 +88,7 @@ WSGI_APPLICATION = 'k_tutor.wsgi.application'
 
 DATABASES = {
     'default' : {
-        'ENGINE': 'django.db.backends.maria',
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'k_tutor',
         'USER': 'root',
         'PASSWORD': 'ssafy@123',
@@ -135,7 +137,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # Custom User Model
-AUTH_USER_MODEL = 'accounts.User'
+AUTH_USER_MODEL = 'account.User'
 
 # JWT additional settings
 
