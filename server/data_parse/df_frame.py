@@ -11,3 +11,14 @@ cpcq_columns = (
     "kor",
     "eng"
 )
+
+cpct_columns = (
+    "kor",
+    "eng",
+    "cs"
+)
+
+cs_columns = (
+    "type",
+    "name"
+)
