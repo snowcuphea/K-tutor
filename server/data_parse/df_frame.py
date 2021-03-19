@@ -14,18 +14,6 @@ cpcq_columns = (
     "eng"
 )
 
-<<<<<<< HEAD
-cpct_columns = (
-    "kor",
-    "eng",
-    "cs"
-)
-
-cs_columns = (
-    "type",
-    "name"
-)
-
 # kw_in_cpcq: 각 cpcq가 포함하는 kw
 kcq_columns = (
     "id",
