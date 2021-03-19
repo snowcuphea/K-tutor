@@ -13,7 +13,10 @@ def load_corpus_morph():
     return json.load(json_file)
 
 
-def main():
+def kw_cpcq_parse():
+    """
+    kw와 cpcq를 pkl로 save
+    """
     # konlpy의 kkma 형태소 분석기 사용
     kkma = Kkma()
     kkma_list = []
@@ -34,11 +37,11 @@ def main():
             temp_word_list = kkma.pos(c.원문)
             temp_word_list = [w for w in temp_word_list if w[1] in ['NNG', 'VV', 'VA', 'MAJ', 'XR']]
             if temp_word_list:
-                # kkma_list.append({
-                #     "id": index,
-                #     "words": temp_word_list
-                # })
-                # index += 1
+                kkma_list.append({
+                    "id": index,
+                    "words": temp_word_list
+                })
+                index += 1
 
                 cpcq_list.append([
                     index,
@@ -48,12 +51,14 @@ def main():
                 index += 1
                 print(cpcq_list[-1])
 
-    # with open("../data/pandas/corpus_morpheme_analysis.json", "w", encoding='utf-8') as json_file:
-    #     json.dump(kkma_list, json_file, indent=4, ensure_ascii=False)
+    with open("../data/pandas/corpus_morpheme_analysis.json", "w", encoding='utf-8') as json_file:
+        json.dump(kkma_list, json_file, indent=4, ensure_ascii=False)
 
     cpcq_frame = pd.DataFrame(data=cpcq_list, columns=cpcq_columns)
     pd.to_pickle(cpcq_frame, "../data/pandas/cpcq.pkl")
 
+def main():
+    return
 
 if __name__ == "__main__":
     main()
