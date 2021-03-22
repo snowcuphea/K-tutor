@@ -1,60 +1,62 @@
 <template>
   <v-app>
-    <v-app-bar
-      app
+    <div class="wrap">
+      <router-view />
+    </div>
+    <v-bottom-navigation
       color="primary"
-      dark
     >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
+      <v-btn :to="{name: 'Class'}">
+        <span>Class</span>
+        <v-icon>mdi-history</v-icon>
       </v-btn>
-    </v-app-bar>
 
-    <v-main>
-      <HelloWorld/>
-    </v-main>
+      <v-btn :to="{name: 'Test'}">
+        <span>Test</span>
+        <v-icon>mdi-heart</v-icon>
+      </v-btn>
+
+      <v-btn :to="{name: 'Report'}">
+        <span>Report</span>
+        <v-icon>mdi-map-marker</v-icon>
+      </v-btn>
+
+      <v-btn :to="{name: 'Achievement'}">
+        <span>Achieve</span>
+        <v-icon>mdi-map-marker</v-icon>
+      </v-btn>
+
+      <v-btn :to="{name: 'MyPage'}">
+        <span>My Page</span>
+        <v-icon>mdi-map-marker</v-icon>
+      </v-btn>
+    </v-bottom-navigation>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
+import "@/assets/css/mycss.css"
 
 export default {
   name: 'App',
 
   components: {
-    HelloWorld,
+    
   },
 
   data: () => ({
-    //
   }),
 };
 </script>
+
+<style>
+
+v-app {
+  height: 100%;
+}
+
+.wrap {
+  height: 90%
+}
+
+</style>
