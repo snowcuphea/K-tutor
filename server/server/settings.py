@@ -15,16 +15,18 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '5olftk(=k)nt0sufls%3x#lvl1y#p3q=n^)b4mtg@jgz$*vkd7'
+SECRET_KEY = '$hg$^-wim2pk)gn9+49#3jc4im9xor#6!c9vk6fzcow*y8@8fw'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
 
 # Application definition
 
@@ -42,6 +44,7 @@ INSTALLED_APPS = [
 
     'account',
     'class'
+
 ]
 
 MIDDLEWARE = [
@@ -55,11 +58,11 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
+ROOT_URLCONF = 'server.urls'
+
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:8080',
 ]
-
-ROOT_URLCONF = 'server.urls'
 
 TEMPLATES = [
     {
@@ -79,6 +82,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'server.wsgi.application'
 
+
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -92,6 +96,7 @@ DATABASES = {
         'PORT': '3306',
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -110,6 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/

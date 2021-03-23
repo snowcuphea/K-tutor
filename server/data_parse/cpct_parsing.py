@@ -16,7 +16,7 @@ def cpct_parsing():
         drama_file_names = os.listdir('../cpct/drama/' + folder)
         for file_name in drama_file_names:
             df = pd.read_excel('../cpct/drama/' + folder + '/' + file_name, engine='openpyxl')
-            cs_list.append(["movie", file_name[:-5]])
+            cs_list.append(["drama", file_name[:-5]])
             for i, row in df.iterrows():
                 subtitle = [x for x in list(map(str.strip, re.sub(r'\([^)]*\)|\[[^)]*\]|-', '', row.Subtitle).split("\n"))) if x]
                 translation = [x for x in list(map(str.strip, re.sub(r'\([^)]*\)|\[[^)]*\]|-', '', row.Translation).split("\n"))) if x]
