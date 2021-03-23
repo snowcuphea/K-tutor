@@ -50,6 +50,17 @@ export default {
   methods: {
     
   },
+  created() {
+    // default page
+    const defaultSetting = {
+      navName : "Report",
+      navValue : 2
+    }
+    // default setting
+    if (this.$route.path === "/report") {
+      this.$store.dispatch('changePage', defaultSetting)
+    }
+  }
 };
 </script>
 

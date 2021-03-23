@@ -42,7 +42,7 @@ export default {
   data: function() {
     return {
       value: this.$store.state.currentPageValue,
-      current: "Report",
+      current: this.$store.state.currentPage,
       navs: [
         {name : "Class", icon: "mdi-heart", path: "Class"},
         {name : "Test", icon: "mdi-heart", path: "Test"},
