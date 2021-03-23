@@ -1,13 +1,15 @@
 <template>
-  <div>
-    <h1>
-      테스트
-    </h1>
-  </div>
+  <v-container>
+    <router-view />
+  </v-container>
 </template>
 
 <script>
+
+
 export default {
+  components: {
+  }
 
 }
 </script>

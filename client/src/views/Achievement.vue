@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <h1>업적</h1>
-  </div>
+  <v-container>
+    
+  </v-container>
 </template>
 
 <script>
