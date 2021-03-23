@@ -83,6 +83,4 @@ export default {
     font-family: "RIDIBatang", sans-serif;
   }
 
-
-
 </style>
