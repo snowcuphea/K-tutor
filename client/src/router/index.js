@@ -9,8 +9,11 @@ import Report from '../views/Report.vue'
 Vue.use(VueRouter)
 
 const routes = [
+  { path: '/',
+    redirect: '/report',
+  },
   {
-    path: '/',
+    path: '/report',
     name: 'Report',
     component: Report,
     

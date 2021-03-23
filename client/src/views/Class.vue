@@ -1,9 +1,7 @@
 <template>
-  <div>
-    <h1>
-      클래스
-    </h1>
-  </div>
+  <v-container>
+    
+  </v-container>
 </template>
 
 <script>

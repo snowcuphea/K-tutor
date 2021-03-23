@@ -1,14 +1,15 @@
 <template>
-  <div>
-    <h1>
-      내역
-    </h1>
-  </div>
+  <v-container>
+
+  </v-container>
 </template>
 
 <script>
-export default {
 
+export default {
+  components: {
+
+  }
 }
 </script>
 
