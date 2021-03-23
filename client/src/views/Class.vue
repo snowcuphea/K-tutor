@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="class">
     <h1>
       클래스
     </h1>
