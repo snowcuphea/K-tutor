@@ -16,7 +16,6 @@ const routes = [
     path: '/report',
     name: 'Report',
     component: Report,
-    
   },
   {
     path: '/class',

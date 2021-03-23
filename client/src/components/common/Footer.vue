@@ -34,10 +34,14 @@
 </template>
 
 <script>
+
+import { mapState } from 'vuex'
+
+
 export default {
   data: function() {
     return {
-      value: 2,
+      value: this.$store.state.currentPageValue,
       current: "Report",
       navs: [
         {name : "Class", icon: "mdi-heart", path: "Class"},
@@ -54,13 +58,26 @@ export default {
         this.current = nav.name
         this.value = idx
         this.$router.push({ name: nav.path })
-        this.$store.dispatch('changePage', nav.name)
-        
+      
+        const changeItem = {
+          navName : nav.name,
+          navValue : idx
+        }
+        this.$store.dispatch('changePage', changeItem)
         console.log(this.current, this.value)
+
       }
 
     }
-  }
+  },
+  computed: {
+    ...mapState([
+      "currentPageValue"
+      ]
+    )
+  },
+
+
 }
 </script>
 

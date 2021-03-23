@@ -1,22 +1,31 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from "vuex-persistedstate"
+
 
 Vue.use(Vuex)
 
+
+
 export default new Vuex.Store({
   state: {
-    currentPage: 'Report',
+    currentPage: '',
+    currentPageValue:2,
   },
   mutations: {
-    changeCurrentPage ( state , pageName ) {
-      state.currentPage = pageName
+    changeCurrentPage ( state , changeItem ) {
+      state.currentPage = changeItem.navName
+      state.currentPageValue = changeItem.navValue
     }
   },
   actions: {
-    changePage ({ commit }, pageName ) {
-      commit('changeCurrentPage', pageName)
+    changePage ({ commit }, changeItem ) {
+      commit('changeCurrentPage', changeItem)
     }
   },
   modules: {
-  }
+  },
+
+  plugins: [createPersistedState()],
+
 })

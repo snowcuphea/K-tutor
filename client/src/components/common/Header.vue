@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="d-flex justify-center">
     <h1> {{ section }} </h1>
   </v-container>
 </template>
@@ -19,6 +19,10 @@ export default {
       ]
     )
   },
+  created() {
+      this.section = this.currentPage
+  },
+    
   watch: {
     currentPage() {
       this.section = this.currentPage
