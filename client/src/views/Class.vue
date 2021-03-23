@@ -1,40 +1,69 @@
 <template>
   <v-container id="class">
-   
-      <div class="d-flex justify-space-between">
 
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"/>
+    <v-row >
+
+    <v-col class="d-flex justify-space-between">
+
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <h1>{{currentPage}}</h1>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="hide"/>
-      </div>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="hide" />
+    </v-col>
+
+    </v-row>
+
+    <!-- <v-row>
+      <p>선택된 라우터 : {{$route.path}}</p>
+    <router-view style="background-color:pink;" />
+    </v-row> -->
+
+    <v-row v-if="$store.state.currentGenre != null">
+      <TitleList :genre="$store.state.currentGenre"  />
+    </v-row>
+    <v-row v-else>
+      <router-view style="background-color:pink;" />
+    </v-row>
 
 
     <v-navigation-drawer v-model="drawer" absolute temporary>
       <v-list nav dense>
-        <v-list-item-group v-model="group" active-class="deep-purple--text text--accent-4">
-          <v-list-item>
-            <v-list-item-title>Foo</v-list-item-title>
+        <v-subheader>Select Theme</v-subheader>
+        <v-list-item-group active-class="deep-purple--text text--accent-4" v-model="drawerGroup">
+
+          <v-list-item @click="goToDefault">
+            <v-list-item-title>genre 초기화(테스트용)</v-list-item-title>
           </v-list-item>
 
-          <v-list-item>
-            <v-list-item-title>Bar</v-list-item-title>
+          <v-list-item @click="goToMovieList">
+            <v-list-item-title>K-movie</v-list-item-title>
           </v-list-item>
 
-          <v-list-item>
-            <v-list-item-title>Fizz</v-list-item-title>
+          <v-list-item @click="goToDramaList">
+            <v-list-item-title>K-drama</v-list-item-title>
           </v-list-item>
 
-          <v-list-item>
-            <v-list-item-title>Buzz</v-list-item-title>
+          <v-list-item @click="goToPopList">
+            <v-list-item-title>K-pop</v-list-item-title>
           </v-list-item>
+
+
         </v-list-item-group>
       </v-list>
+
+
     </v-navigation-drawer>
+
+
+
+
 
   </v-container>
 </template>
 
 <script>
+
+import TitleList from '../components/class/TitleList.vue'
+
   import {
     mapState
   } from 'vuex'
@@ -42,15 +71,18 @@
 
   export default {
     name: "Class",
-    component: {},
+    components: {
+      TitleList,
+    },
     data: () => ({
 
-       drawer: false,
-      group: null,
+      drawer: false,
+      drawerGroup: null,
+      
 
     }),
     watch: {
-      group () {
+      drawerGroup() {
         this.drawer = false
       },
     },
@@ -65,6 +97,22 @@
 
     },
     methods: {
+      goToMovieList(){
+        this.$store.state.currentGenre = "movie"
+        
+      },
+      goToDramaList(){
+        this.$store.state.currentGenre = "drama"
+        
+      },
+      goToPopList(){
+        this.$store.state.currentGenre = "pop"
+        
+      },
+      goToDefault(){
+        this.$store.state.currentGenre = ""
+        
+      },
 
     },
 

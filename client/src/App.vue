@@ -30,7 +30,7 @@ export default {
 
   computed : {
     isNotClass () {
-      if (['Class'].includes(this.$route.name)) {
+      if (['Class', 'TitleList', 'ClassMain'].includes(this.$route.name)) {
         return false
       } else {
         return true

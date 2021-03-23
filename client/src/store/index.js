@@ -10,7 +10,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     currentPage: '',
-    currentPageValue:2,
+    currentPageValue: 2,
+    currentGenre: '',
+
   },
   mutations: {
     changeCurrentPage ( state , changeItem ) {
