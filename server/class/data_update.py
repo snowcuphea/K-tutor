@@ -124,7 +124,7 @@ def create_lc():
                         )
     # kpop
     cs_list = Cs.objects.filter(cs="kpop")
-    singer_list = list(set({x.split(" - ")[0] for x in cs_list}))
+    singer_list = list(set({x.name.split(" - ")[0] for x in cs_list}))
     for singer in singer_list:
         kw_check = [0] * (kw_cnt + 1)
         song_list = Cs.objects.filter(name__contains=singer)
