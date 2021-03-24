@@ -4,32 +4,6 @@
       <span>{{ nav.name }}</span>
       <v-icon>{{ nav.icon }}</v-icon>
     </v-btn>
-
-
-    <!-- <v-btn :to="{name: 'Class'}" value="Class">
-      <span>Class</span>
-      <v-icon>mdi-history</v-icon>
-    </v-btn>
-
-    <v-btn :to="{name: 'Test'}" value="Test">
-      <span>Test</span>
-      <v-icon>mdi-heart</v-icon>
-    </v-btn>
-
-    <v-btn :to="{name: 'Report'}" value="Report">
-      <span>Report</span>
-      <v-icon>mdi-map-marker</v-icon>
-    </v-btn>
-
-    <v-btn :to="{name: 'Achievement'}" value="Achievement">
-      <span>Achieve</span>
-      <v-icon>mdi-map-marker</v-icon>
-    </v-btn>
-
-    <v-btn :to="{name: 'MyPage'}" value="MyPage">
-      <span>My Page</span>
-      <v-icon>mdi-map-marker</v-icon>
-    </v-btn> -->
   </v-bottom-navigation>
 </template>
 

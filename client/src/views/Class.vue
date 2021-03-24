@@ -25,7 +25,7 @@
     </v-row>
 
 
-    <v-navigation-drawer v-model="drawer" absolute temporary>
+    <v-navigation-drawer v-model="drawer" absolute temporary >
       <v-list nav dense>
         <v-subheader>Select Theme</v-subheader>
         <v-list-item-group active-class="deep-purple--text text--accent-4" v-model="drawerGroup">
