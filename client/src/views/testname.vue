@@ -3,43 +3,24 @@
     <v-app-bar>
 
     </v-app-bar>
-    <v-container class="d-flex flex-wrap">
-      <v-col
-        rows
-        cols="4"
-        v-for = "(item, idx) in items"
-        :key = "idx"
-
-      >
-        <appMyModal :modalItem="item" @update="modal" />
-
-      </v-col>
-    </v-container>
-    <div class="modal_window"
-      v-if="visible"
-      @click="closeModal"
-      >
-      <v-img 
+    <v-col
+      rows
+      cols="4"
+      v-for="(item, index) in items"
+      :key = "index"
+    >
+      <v-img
         :src="item.src"
-        height="50%"
-        width="50%"
+        height="100%"
+        width="100%"
         padding="0"
-        class="modal_img"
+        @click="imgClick"
       />
-      <v-card-text class="modal_title">
-        {{ item.title }}
-      </v-card-text>
 
-      <v-card-text class="modal_contents">
-        {{ item.contents }}
-      </v-card-text>
-
-      <v-divider></v-divider>
-
-      <div class="my-modal__body">
-        <slot></slot>
-      </div>
-    </div>
+        <app-my-modal
+          :item = "item"
+          :visible.sync="visible">
+        </app-my-modal>
 
   </div>
 </template>
@@ -48,7 +29,7 @@
 import Achivemodal from '../components/modal/Achivemodal'
 export default {
   components: {
-    appMyModal: Achivemodal
+    myModal: Achivemodal
   },
   data: () => ({
     items: [
@@ -101,11 +82,7 @@ export default {
     visible: false,
   }),
   methods: {
-    modal (modalItem) {
-      this.item = modalItem,
-      this.visible = !this.visible
-    },
-    closeModal () {
+    imgClick() {
       this.visible = !this.visible
     }
   }
@@ -116,34 +93,6 @@ export default {
 
 #progress {
   width: 50%;
-}
-
-.modal_window {
-  height: 100%;
-	position: relative;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	/* min-width: 500px; */
-	/* min-height: 500px; */
-  background-color: grey;
-	/* background-color: rgba(0, 0, 0, 0.3); */
-	z-index: 101;
-  /* -webkit-filter: grayscale(100%); */
-}
-
-.modal_img {
-  margin-left: 25%;
-}
-
-.modal_title {
-  text-align: center;
-  font-weight: bolder;
-  font-size: 5rem;
-}
-
-.modal_contents {
-  text-align: center;
 }
 
 </style>
