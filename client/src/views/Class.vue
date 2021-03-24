@@ -17,8 +17,8 @@
     <router-view style="background-color:pink;" />
     </v-row> -->
 
-    <v-row v-if="$store.state.currentGenre != null">
-      <TitleList :genre="$store.state.currentGenre"  />
+    <v-row v-if="$store.state.currentType != null" >
+      <TitleList :genre="$store.state.currentType"  />
     </v-row>
     <v-row v-else>
       <router-view style="background-color:pink;" />
@@ -98,19 +98,19 @@ import TitleList from '../components/class/TitleList.vue'
     },
     methods: {
       goToMovieList(){
-        this.$store.state.currentGenre = "movie"
+        this.$store.state.currentType = "movie"
         
       },
       goToDramaList(){
-        this.$store.state.currentGenre = "drama"
+        this.$store.state.currentType = "drama"
         
       },
       goToPopList(){
-        this.$store.state.currentGenre = "pop"
+        this.$store.state.currentType = "pop"
         
       },
       goToDefault(){
-        this.$store.state.currentGenre = ""
+        this.$store.state.currentType = ""
         
       },
 
