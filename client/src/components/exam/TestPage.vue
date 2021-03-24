@@ -24,12 +24,16 @@
 
         <v-card tile height="75%" elevation="0">
 
-          <v-card tile height="70%" elevation="0"
-          class="">
-            {{ questions[targetQuestion].source }}
+          <v-card tile height="65%" elevation="0"
+          class="mx-5">
+            <div v-for="(line, idx) in questions[targetQuestion].lines_kr" :key="idx">
+              <p v-if="idx%2 == 0"> A: {{ line }} </p>
+              <p v-else> B: {{ line | question() }} </p>
+            </div>
           </v-card>
 
-          <v-card tile height="30%" elevation="0">
+          <v-card tile height="35%" elevation="0"
+          class="mx-5">
             {{ answers[targetQuestion] }}
           </v-card>
 
@@ -77,6 +81,18 @@
 </template>
 
 <script>
+import Vue from 'vue'
+
+
+Vue.filter("question", (line) => {
+  
+  const splitLine = line.split(' ');
+  // const new_line = ""
+
+  return splitLine
+});
+
+
 export default {
   props: ['showDialog'],
   data() {
