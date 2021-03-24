@@ -22,7 +22,7 @@ def updateDB(request):
             )
 
     # cs 업데이트
-    cs_data_frame = pd.read_pickle(path + "\data\pandas\cs.pkl")
+    cs_data_frame = pd.read_pickle(path + "/data/pandas/cs.pkl")
     for i, row in cs_data_frame.iterrows():
         if not Cs.objects.filter(name=row['name']).exists():
             Cs.objects.create(
@@ -33,7 +33,7 @@ def updateDB(request):
 
     # cpct 업데이트
     kkma = Kkma()
-    cpct_data_frame = pd.read_pickle(path + "\data\pandas\cpct.pkl")
+    cpct_data_frame = pd.read_pickle(path + "/data/pandas/cpct.pkl")
     for i, row in cpct_data_frame.iterrows():
         try:
             if row['cs'] < 212:
@@ -56,8 +56,8 @@ def updateDB(request):
             print(row)
 
     # cpcq, kcq 업데이트
-    cpcq_data_frame = pd.read_pickle(path + "\data\pandas\cpcq.pkl")
-    kcq_data_frame = pd.read_pickle(path + "\data\pandas\kcq.pkl")
+    cpcq_data_frame = pd.read_pickle(path + "/data/pandas/cpcq.pkl")
+    kcq_data_frame = pd.read_pickle(path + "/data/pandas/kcq.pkl")
 
     for i, row in cpcq_data_frame.iterrows():
         if not Cpcq.objects.filter(kor=row.kor).exists():
