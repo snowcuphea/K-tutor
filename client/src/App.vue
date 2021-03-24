@@ -4,7 +4,7 @@
     <!-- <h1>안냥</h1> -->
 
     <v-main >
-      <router-view />
+      <router-view class="mb-16" />
     </v-main>
 
     <Footer class="appFooter" />
