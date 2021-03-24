@@ -61,7 +61,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'server.urls'
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:8080',
+    'http://J4A303.p.ssafy.io:8080',
 ]
 
 TEMPLATES = [
@@ -91,8 +91,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'k-tutor',
         'USER': 'root',
-        'PASSWORD': 'ssafy@123',
-        'HOST': 'localhost',
+        'PASSWORD': 'emh4baTVMa3SYmSf',
+        'HOST': 'J4A303.p.ssafy.io',
         'PORT': '3306',
     }
 }
