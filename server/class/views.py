@@ -13,7 +13,7 @@ from .models import Kw, Cs, Cpct, Cpcq
 def updateDB(request):
     # kw 업데이트
     path = os.getcwd()
-    kw_data_frame = pd.read_pickle(path + "\data\pandas\kw.pkl")
+    kw_data_frame = pd.read_pickle(path + "/data/pandas/kw.pkl")
     for i, row in kw_data_frame.iterrows():
         if not Kw.objects.filter(content=row.content).exists():
             Kw.objects.create(
