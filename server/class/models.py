@@ -24,3 +24,12 @@ class Cpcq(models.Model):
     eng = models.TextField()
     kcq = models.ManyToManyField(Kw, related_name="contained_cpcq")
 
+
+class Lc(models.Model):
+    before_kor = models.TextField()
+    before_eng = models.TextField()
+    cpct_kor = models.TextField()
+    cpct_eng = models.TextField()
+    after_kor = models.TextField()
+    after_eng = models.TextField()
+    example = models.TextField()
