@@ -8,27 +8,27 @@ from .models import Kw, Cs, Cpct, Cpcq, Lc
 def update():
     # kw 업데이트
     path = os.getcwd()
-    kw_data_frame = pd.read_pickle(path + "\data\pandas\kw.pkl")
-    for i, row in kw_data_frame.iterrows():
-        if not Kw.objects.filter(content=row.content).exists():
-            Kw.objects.create(
-                content=row['content'],
-                count=row['count']
-            )
+    #kw_data_frame = pd.read_pickle(path + "\data\pandas\kw.pkl")
+    #for i, row in kw_data_frame.iterrows():
+    #    if not Kw.objects.filter(content=row.content).exists():
+    #        Kw.objects.create(
+    #            content=row['content'],
+    #            count=row['count']
+    #        )
 
     # cs 업데이트
-    cs_data_frame = pd.read_pickle(path + "\data\pandas\cs.pkl")
-    for i, row in cs_data_frame.iterrows():
-        if not Cs.objects.filter(name=row['name']).exists():
-            Cs.objects.create(
-                name=row['name'],
-                type=row['type'],
-                level=0
-            )
+    #cs_data_frame = pd.read_pickle(path + "\data\pandas\cs.pkl")
+    #for i, row in cs_data_frame.iterrows():
+    #    if not Cs.objects.filter(name=row['name']).exists():
+    #        Cs.objects.create(
+    #            name=row['name'],
+    #            type=row['type'],
+    #            level=0
+    #        )
 
     # cpct 업데이트
     kkma = Kkma()
-    cpct_data_frame = pd.read_pickle(path + "\data\pandas\cpct.pkl")
+    cpct_data_frame = pd.read_pickle(path + "/data/pandas/cpct.pkl")
     for i, row in cpct_data_frame.iterrows():
         try:
             if not Cpct.objects.filter(kor=row.kor).exists():
@@ -49,26 +49,26 @@ def update():
             print(row)
 
     # cpcq, kcq 업데이트
-    cpcq_data_frame = pd.read_pickle(path + "\data\pandas\cpcq.pkl")
-    kcq_data_frame = pd.read_pickle(path + "\data\pandas\kcq.pkl")
+    #cpcq_data_frame = pd.read_pickle(path + "\data\pandas\cpcq.pkl")
+    #kcq_data_frame = pd.read_pickle(path + "\data\pandas\kcq.pkl")
 
-    for i, row in cpcq_data_frame.iterrows():
-        if not Cpcq.objects.filter(kor=row.kor).exists():
-            cpcq = Cpcq.objects.create(
-                kor=row['kor'],
-                eng=row['eng'],
-            )
-            kcq_list = list(kcq_data_frame.loc[kcq_data_frame['cpcq_id'] == cpcq.id]['kw_id'])
-            for kcq in kcq_list:
-                cpcq.kcq.add(kcq)
+    #for i, row in cpcq_data_frame.iterrows():
+    #    if not Cpcq.objects.filter(kor=row.kor).exists():
+    #        cpcq = Cpcq.objects.create(
+    #            kor=row['kor'],
+    #            eng=row['eng'],
+    #        )
+    #        kcq_list = list(kcq_data_frame.loc[kcq_data_frame['cpcq_id'] == cpcq.id]['kw_id'])
+    #        for kcq in kcq_list:
+    #            cpcq.kcq.add(kcq)
 
 
 def create_lc():
     genres = ['drama', 'movie']
     kw_index = [
         1,
-        200,
-        1100,
+        300,
+        1000,
         1990
     ]
     kw_cnt = Kw.objects.all().count()
@@ -90,14 +90,12 @@ def create_lc():
         index = 1
         for i in range(3):
             while index <= sum(cnt_level[:i + 1]):
-                print(index, cs_list[index])
                 kw_check = [0] * (kw_cnt + 1)
                 cs = cs_list[index - 1]
                 index += 1
                 cs.level = i
                 cs.save()
-                cpcts = list(Cpct.objects.filter(cs=cs))
-                cpcts.sort(key=lambda x: x.main_kw.count)
+                cpcts = Cpct.objects.filter(cs=cs)
                 cpct_cnt = 0
                 for k in range(kw_index[i], kw_index[i + 1]):
                     kw = Kw.objects.get(pk=k)
@@ -112,7 +110,7 @@ def create_lc():
                             if not examples.exists():
                                 continue
 
-                        cpct = Cpct.objects.filter(main_kw=kw)
+                        cpct = cpcts.filter(main_kw=kw)
                         if cpct.exists():
                             cpct = cpct[0]
                         else:
@@ -127,11 +125,8 @@ def create_lc():
                             after = Cpct.objects.get(pk=cpct.pk + 1)
 
                         # 너무 짧을 때
-                        if len(before.kor.split()) <= 2 or len(cpct.kor.split()) <= 4 or len(after.kor.split()) <= 2:
+                        if len(before.kor.split()) <= 1 or len(cpct.kor.split()) <= 3 or len(after.kor.split()) <= 1:
                             continue
-
-                        kw_check[k] = 1
-                        cpct_cnt += 1
 
                         examples = list(examples)
                         if cpct in examples:
@@ -150,6 +145,10 @@ def create_lc():
                                 cs=cs,
                                 main_kw=kw
                             )
+                            kw_check[k] = 1
+                            cpct_cnt += 1
+                        else:
+                            print(cpct.cs, cpct.kor)
     # kpop
     cs_list = Cs.objects.filter(type="kpop")
     singer_list = list(set({x.name.split(" - ")[0] for x in cs_list}))
@@ -166,12 +165,6 @@ def create_lc():
                     examples = Cpct.objects.filter(main_kw_id=k)
                     if not examples.exists():
                         continue
-
-                kw_check[k] = 1
-                if cpct.exists():
-                    cpct = cpct[0]
-                else:
-                    continue
 
                 if cpct.pk == 1 or cpct.cs != Cpct.objects.get(pk=cpct.pk - 1).cs:
                     continue
@@ -199,12 +192,15 @@ def create_lc():
                         cs=song,
                         main_kw=cpct.main_kw
                     )
+                    kw_check[k] = 1
 
     singer_dict = dict()
     for singer in singer_list:
         song_list = Cs.objects.filter(name__contains=singer)
-        cpct_list = [Cpct.objects.filter(cs=song) for song in song_list]
-        level_list = [sum([cpct.main_kw.id ]) / len(cpcts) for cpct in cpcts for i, cpcts in enumerate(cpct_list)]
+        cpct_list = [Cpct.objects.filter(cs=song) for song in song_list if Cpct.objects.filter(cs=song).exists()]
+        level_list = [0] * len(cpct_list)
+        for i, cpcts in enumerate(cpct_list):
+            level_list[i] = sum([cpct.main_kw.id for cpct in cpcts])/len(cpcts)
         singer_dict[singer] = sum(level_list) / len(level_list)
     singer_list.sort(key=lambda x: singer_dict[x])
     singer_cnt = len(singer_list)
