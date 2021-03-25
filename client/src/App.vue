@@ -3,8 +3,8 @@
     <Header v-if="isNotClass"/>
     <!-- <h1>안냥</h1> -->
 
-    <v-main>
-      <router-view />
+    <v-main >
+      <router-view class="mb-16" />
     </v-main>
 
     <Footer class="appFooter" />
