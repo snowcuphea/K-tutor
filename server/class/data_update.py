@@ -89,20 +89,19 @@ def create_lc():
                 cpcts.sort(key=lambda x: x.main_kw.count)
                 cpct_cnt = 0
                 for k in range(kw_index[i], kw_index[i] + 663):
+                    kw = Kw.objects.get(k)
                     if cpct_cnt == 100:
                         break
 
                     if not kw_check[k]:
                         # 다른 예시가 존재하지 않을때
-                        examples = Cpcq.objects.filter(kcq=k)
+                        examples = Cpcq.kcq.filter(kw_id=k)
                         if not examples.exists():
-                            examples = Cpct.objects.filter(main_kw_id=k)
+                            examples = Cpct.objects.filter(main_kw=kw)
                             if not examples.exists():
                                 continue
 
-                        kw_check[k] = 1
-                        cpct_cnt += 1
-                        cpct = Cpct.objects.filter(main_kw_id=k)[0]
+                        cpct = Cpct.objects.filter(main_kw=kw)[0]
                         if cpct.pk == 1 or cpct.cs != Cpct.objects.get(pk=cpct.pk - 1).cs:
                             continue
                         else:
@@ -111,6 +110,13 @@ def create_lc():
                             continue
                         else:
                             after = Cpct.objects.get(pk=cpct.pk + 1)
+
+                        # 너무 짧을 때
+                        if len(before.kor.split()) <= 2 or len(cpct.kor.split()) <= 4 or len(after.kor.split()) <= 2:
+                            continue
+
+                        kw_check[k] = 1
+                        cpct_cnt += 1
 
                         examples = list(examples)
                         if cpct in examples:
@@ -124,7 +130,9 @@ def create_lc():
                             cpct_eng=cpct.eng,
                             after_kor=after.kor,
                             after_eng=after.eng,
-                            example="|".join([x.kor for x in examples])
+                            example="|".join([x.kor for x in examples]),
+                            cs=cs,
+                            main_kw=kw
                         )
     # kpop
     cs_list = Cs.objects.filter(cs="kpop")
@@ -164,7 +172,9 @@ def create_lc():
                     cpct_eng=cpct.eng,
                     after_kor=after.kor,
                     after_eng=after.eng,
-                    example="|".join([x.kor for x in examples])
+                    example="|".join([x.kor for x in examples]),
+                    cs=song,
+                    main_kw=cpct.main_kw
                 )
 
     singer_dict = dict()

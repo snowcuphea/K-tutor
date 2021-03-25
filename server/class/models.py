@@ -26,6 +26,8 @@ class Cpcq(models.Model):
 
 
 class Lc(models.Model):
+    cs = models.ForeignKey(Cs, on_delete=models.CASCADE)
+    main_kw = models.ForeignKey(Kw, on_delete=models.PROTECT)
     before_kor = models.TextField()
     before_eng = models.TextField()
     cpct_kor = models.TextField()
