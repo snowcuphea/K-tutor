@@ -68,7 +68,6 @@ def create_lc():
     for genre in genres:
         cs_cnt = Cs.objects.filter(type=genre).count()
         cnt_level = [
-            0,  # start point
             cs_cnt // 3 if cs_cnt % 3 == 0 else cs_cnt // 3 + 1,  # end index of beginner
             cs_cnt // 3 + 1 if cs_cnt % 3 == 2 else cs_cnt // 3,  # end index of intermediate
             cs_cnt // 3  # end index of advanced
@@ -80,9 +79,11 @@ def create_lc():
         ]
         kw_cnt = Kw.objects.all().count()
         kw_check = [0] * (kw_cnt + 1)
+        index = 1
         for i in range(3):
-            for j in range(cnt_level[i], cnt_level[i + 1]):
-                cs = Cs.objects.get(pk=j)
+            while index <= cnt_level[i]:
+                index += 1
+                cs = Cs.objects.get(pk=index)
                 cs.level = i
                 cpcts = Cpct.objects.filter(cs=cs)
                 cpcts.sort(key=lambda x: x.main_kw.count)
@@ -170,15 +171,14 @@ def create_lc():
     singer_list.sort(key=lambda x: singer_dict[x])
     singer_cnt = len(singer_list)
     singer_level = [
-        0,  # start point
         singer_cnt // 3 if singer_cnt % 3 == 0 else singer_cnt // 3 + 1,  # end index of beginner
         singer_cnt // 3 + 1 if singer_cnt % 3 == 2 else singer_cnt // 3,  # end index of intermediate
         singer_cnt // 3  # end index of advanced
     ]
-
+    index = 1
     for i in range(3):
-        for j in range(singer_level[i], singer_level[i + 1]):
-            singer = singer_list[j]
+        while index <= singer_level[i]:
+            singer = singer_list[index]
             song_list = Cs.objects.filter(name__contains=singer)
             for song in song_list:
                 song.level = i
