@@ -9,7 +9,8 @@ from .serializers import *
 @api_view(['GET'])
 def updateDB(request):
     # update()
-    create_lc()
+    # create_lc()
+    add_meaning_to_lc()
     return Response("OK", status=status.HTTP_200_OK)
 
 @api_view(['GET'])

@@ -1,3 +1,5 @@
+import requests
+
 import pandas as pd
 import os
 from konlpy.tag import Kkma
@@ -8,8 +10,8 @@ from .models import Kw, Cs, Cpct, Cpcq, Lc
 def update():
     # kw 업데이트
     path = os.getcwd()
-    #kw_data_frame = pd.read_pickle(path + "\data\pandas\kw.pkl")
-    #for i, row in kw_data_frame.iterrows():
+    # kw_data_frame = pd.read_pickle(path + "\data\pandas\kw.pkl")
+    # for i, row in kw_data_frame.iterrows():
     #    if not Kw.objects.filter(content=row.content).exists():
     #        Kw.objects.create(
     #            content=row['content'],
@@ -17,8 +19,8 @@ def update():
     #        )
 
     # cs 업데이트
-    #cs_data_frame = pd.read_pickle(path + "\data\pandas\cs.pkl")
-    #for i, row in cs_data_frame.iterrows():
+    # cs_data_frame = pd.read_pickle(path + "\data\pandas\cs.pkl")
+    # for i, row in cs_data_frame.iterrows():
     #    if not Cs.objects.filter(name=row['name']).exists():
     #        Cs.objects.create(
     #            name=row['name'],
@@ -49,10 +51,10 @@ def update():
             print(row)
 
     # cpcq, kcq 업데이트
-    #cpcq_data_frame = pd.read_pickle(path + "\data\pandas\cpcq.pkl")
-    #kcq_data_frame = pd.read_pickle(path + "\data\pandas\kcq.pkl")
+    # cpcq_data_frame = pd.read_pickle(path + "\data\pandas\cpcq.pkl")
+    # kcq_data_frame = pd.read_pickle(path + "\data\pandas\kcq.pkl")
 
-    #for i, row in cpcq_data_frame.iterrows():
+    # for i, row in cpcq_data_frame.iterrows():
     #    if not Cpcq.objects.filter(kor=row.kor).exists():
     #        cpcq = Cpcq.objects.create(
     #            kor=row['kor'],
@@ -80,7 +82,6 @@ def create_lc():
             cpct_list = list(Cpct.objects.filter(cs=cs))
             level_dict[cs.name] = sum([x.main_kw.id for x in cpct_list]) / len(cpct_list)
         cs_list = sorted(list(cs_list), key=lambda x: level_dict[x.name])
-        print(cs_list)
 
         cnt_level = [
             cs_cnt // 3 if cs_cnt % 3 == 0 else cs_cnt // 3 + 1,  # end index of beginner
@@ -200,7 +201,7 @@ def create_lc():
         cpct_list = [Cpct.objects.filter(cs=song) for song in song_list if Cpct.objects.filter(cs=song).exists()]
         level_list = [0] * len(cpct_list)
         for i, cpcts in enumerate(cpct_list):
-            level_list[i] = sum([cpct.main_kw.id for cpct in cpcts])/len(cpcts)
+            level_list[i] = sum([cpct.main_kw.id for cpct in cpcts]) / len(cpcts)
         singer_dict[singer] = sum(level_list) / len(level_list)
     singer_list.sort(key=lambda x: singer_dict[x])
     singer_cnt = len(singer_list)
@@ -218,3 +219,32 @@ def create_lc():
             for song in song_list:
                 song.level = i
                 song.save()
+
+
+def add_meaning_to_lc():
+    lcs = Lc.objects.all()
+    for i, lc in enumerate(lcs):
+        if i == 10:
+            break
+        print(request_dict(lc.main_kw.content))
+
+pos_dict = {
+    "NNG": 1,
+    "VV": 5,
+    "VA": 6,
+    "MAJ": 8,
+    "XR": 8
+}
+
+
+def request_dict(word):
+    word, pos = word.split("+")
+    url = "https://stdict.korean.go.kr/api/search.do"
+    param = {
+        "key": "065444917206BE0C332716BF7AABC758",
+        "q": word,
+        "advanced": "y",
+        "pos": pos_dict[pos]
+    }
+    res = requests.get(url, param)
+    return res
