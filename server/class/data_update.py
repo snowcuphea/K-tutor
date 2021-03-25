@@ -5,6 +5,7 @@ import os
 from gensim.models import Word2Vec as w2v
 from bs4 import BeautifulSoup
 from konlpy.tag import Kkma
+import numpy as np
 
 from .models import Kw, Cs, Cpct, Cpcq, Lc
 
@@ -245,8 +246,14 @@ def add_meaning_to_lc():
             temp_similarity = []
             for w1 in main_sentence:
                 for w2 in definitions_morph:
-                    temp_similarity.append(model.similarity(w1, w2))
-            similarity.append(sum(sorted(temp_similarity, reverse=True)[:20]) / 20)
+                    try:
+                        temp_similarity.append(model.similarity(w1, w2))
+                    except:
+                        continue
+            if not temp_similarity:
+                similarity.append(0)
+            else:
+                similarity.append(np.mean(sorted(temp_similarity[:20],reverse=True)))
         meaning = meaning[similarity.index(max(similarity))]
         lc.main_kw_word = meaning[0]
         lc.meaning = meaning[1]
