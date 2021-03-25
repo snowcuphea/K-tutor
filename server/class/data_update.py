@@ -121,7 +121,7 @@ def create_lc():
                             cpct_eng=None if cpct else cpct.eng,
                             after_kor=None if after else after.kor,
                             after_eng=None if after else after.eng,
-                            example="|".join(examples)
+                            example="|".join([x.kor for x in examples])
                         )
     # kpop
     cs_list = Cs.objects.filter(cs="kpop")
@@ -159,7 +159,7 @@ def create_lc():
                     cpct_eng=None if cpct else cpct.eng,
                     after_kor=None if after else after.kor,
                     after_eng=None if after else after.eng,
-                    example="|".join(examples)
+                    example="|".join([x.kor for x in examples])
                 )
 
     singer_dict = dict()
