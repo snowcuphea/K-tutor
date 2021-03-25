@@ -81,9 +81,9 @@ def create_lc():
         kw_check = [0] * (kw_cnt + 1)
         index = 1
         for i in range(3):
-            while index <= cnt_level[i]:
-                index += 1
+            while index <= sum(cnt_level[:i + 1]):
                 cs = Cs.objects.get(pk=index)
+                index += 1
                 cs.level = i
                 cpcts = list(Cpct.objects.filter(cs=cs))
                 cpcts.sort(key=lambda x: x.main_kw.count)
@@ -203,8 +203,9 @@ def create_lc():
     ]
     index = 1
     for i in range(3):
-        while index <= singer_level[i]:
+        while index <= sum(singer_level[:i + 1]):
             singer = singer_list[index]
+            index += 1
             song_list = Cs.objects.filter(name__contains=singer)
             for song in song_list:
                 song.level = i
