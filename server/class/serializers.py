@@ -8,7 +8,7 @@ class CsSerializer(serializers.ModelSerializer):
         fields = ('name', 'type', 'level')
 
 
-class CpctSerializer(serializers.Modelserializer):
+class CpctSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cpct
         fields = ('kor', 'eng', 'level')

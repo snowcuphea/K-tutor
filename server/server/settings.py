@@ -25,7 +25,7 @@ SECRET_KEY = '$hg$^-wim2pk)gn9+49#3jc4im9xor#6!c9vk6fzcow*y8@8fw'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'j4a303.p.ssafy.io']
+ALLOWED_HOSTS = ['127.0.0.1', 'k-tutor']
 
 
 # Application definition
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_extensions',
     'rest_framework',
+    'drf_yasg',
 
     'account',
     'class'
