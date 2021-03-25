@@ -66,7 +66,13 @@ def update():
 def create_lc():
     genres = ['drama', 'movie']
     for genre in genres:
-        cs_cnt = Cs.objects.filter(type=genre).count()
+        cs_list = Cs.objects.filter(type=genre)
+        cs_cnt = cs_list.count()
+        level_dict = dict()
+        for cs in cs_list:
+            cpct_list = list(Cpct.objects.filter(cs=cs))
+            level_dict[cs.name] = sum([x.main_kw.id for x in cpct_list]) / len(cpct_list)
+        cs_list.sort(key=lambda x: level_dict[x.name])
         cnt_level = [
             cs_cnt // 3 if cs_cnt % 3 == 0 else cs_cnt // 3 + 1,  # end index of beginner
             cs_cnt // 3 + 1 if cs_cnt % 3 == 2 else cs_cnt // 3,  # end index of intermediate
@@ -74,21 +80,22 @@ def create_lc():
         ]
         kw_index = [
             1,
-            664,
-            1327
+            200,
+            1100,
+            1990
         ]
         kw_cnt = Kw.objects.all().count()
         kw_check = [0] * (kw_cnt + 1)
         index = 1
         for i in range(3):
             while index <= sum(cnt_level[:i + 1]):
-                cs = Cs.objects.get(pk=index)
+                cs = cs_list[index - 1]
                 index += 1
                 cs.level = i
                 cpcts = list(Cpct.objects.filter(cs=cs))
                 cpcts.sort(key=lambda x: x.main_kw.count)
                 cpct_cnt = 0
-                for k in range(kw_index[i], kw_index[i] + 663):
+                for k in range(kw_index[i], kw_index[i + 1]):
                     kw = Kw.objects.get(pk=k)
                     if cpct_cnt == 100:
                         break
@@ -140,7 +147,7 @@ def create_lc():
                                 main_kw=kw
                             )
     # kpop
-    cs_list = Cs.objects.filter(cs="kpop")
+    cs_list = Cs.objects.filter(type="kpop")
     singer_list = list(set({x.name.split(" - ")[0] for x in cs_list}))
     for singer in singer_list:
         kw_check = [0] * (kw_cnt + 1)
@@ -192,7 +199,7 @@ def create_lc():
     for singer in singer_list:
         song_list = Cs.objects.filter(name__contains=singer)
         cpct_list = [Cpct.objects.filter(cs=song) for song in song_list]
-        level_list = [sum([cpct.main_kw.count for cpct in cpcts]) / len(cpcts) for i, cpcts in enumerate(cpct_list)]
+        level_list = [sum([cpct.main_kw.id for cpct in cpcts]) / len(cpcts) for i, cpcts in enumerate(cpct_list)]
         singer_dict[singer] = sum(level_list) / len(level_list)
     singer_list.sort(key=lambda x: singer_dict[x])
     singer_cnt = len(singer_list)
