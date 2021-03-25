@@ -113,7 +113,8 @@ def create_lc():
                             after = Cpct.objects.get(pk=cpct.pk + 1)
 
                         examples = list(examples)
-                        examples.remove(cpct)
+                        if cpct in examples:
+                            examples.remove(cpct)
                         examples = examples[:3]
 
                         Lc.objects.create(
