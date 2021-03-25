@@ -73,6 +73,7 @@ def create_lc():
             cpct_list = list(Cpct.objects.filter(cs=cs))
             level_dict[cs.name] = sum([x.main_kw.id for x in cpct_list]) / len(cpct_list)
         cs_list = sorted(list(cs_list), key=lambda x: level_dict[x.name])
+        print(cs_list)
         cnt_level = [
             cs_cnt // 3 if cs_cnt % 3 == 0 else cs_cnt // 3 + 1,  # end index of beginner
             cs_cnt // 3 + 1 if cs_cnt % 3 == 2 else cs_cnt // 3,  # end index of intermediate
@@ -150,11 +151,13 @@ def create_lc():
     cs_list = Cs.objects.filter(type="kpop")
     singer_list = list(set({x.name.split(" - ")[0] for x in cs_list}))
     for singer in singer_list:
-        kw_check = [0] * (kw_cnt + 1)
         song_list = Cs.objects.filter(name__contains=singer)
         for song in song_list:
+            kw_check = [0] * (kw_cnt + 1)
             for cpct in Cpct.objects.filter(cs=song):
                 k = cpct.main_kw.id
+                if kw_check[k]:
+                    continue
                 examples = cpct.main_kw.contained_cpcq.all()
                 if not examples.exists():
                     examples = Cpct.objects.filter(main_kw_id=k)
@@ -179,7 +182,8 @@ def create_lc():
                     after = Cpct.objects.get(pk=cpct.pk + 1)
 
                 examples = list(examples)
-                examples.remove(cpct)
+                if cpct in examples:
+                    examples.remove(cpct)
                 examples = examples[:3]
 
                 if not Lc.objects.filter(cpct_kor=cpct.kor).exists():
