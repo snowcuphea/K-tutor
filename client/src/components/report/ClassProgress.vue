@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <div v-for="(cls, idx) in userProgress.class" :key="idx"
+    <div v-for="(cls, idx) in orderedList()" :key="idx"
     class="d-flex">
       <v-row>
         <v-col cols="4">
@@ -25,7 +25,31 @@ export default {
     percentage(cls) {
 
       return (cls.done / cls.total * 100).toFixed(0)
+    },
+
+    orderedList() {
+
+      const newList = []
+
+      for ( var cls of this.userProgress.class ){
+        const form = {
+          title: cls.title, 
+          total: cls.total, 
+          done: cls.done, 
+          percentage: this.percentage(cls)
+        }
+        newList.push(form)
+      }
+      
+      newList.sort((a,b) => {
+        return - (a.percentage - b.percentage)
+      })
+
+
+      return newList
+
     }
+
   },
   computed: {
     ...mapState(['userProgress'])
