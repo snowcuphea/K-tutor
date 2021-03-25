@@ -84,7 +84,7 @@ def create_lc():
             for j in range(cnt_level[i], cnt_level[i + 1]):
                 cs = Cs.objects.get(pk=j)
                 cs.level = i
-                cpcts = Cpct.objects.filter(cs=cs)
+                cpcts = list(Cpct.objects.filter(cs=cs))
                 cpcts.sort(key=lambda x: x.main_kw.count)
                 cpct_cnt = 0
                 for k in range(kw_index[i], kw_index[i] + 663):
