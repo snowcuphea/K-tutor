@@ -100,7 +100,7 @@ def create_lc():
 
                         kw_check[k] = 1
                         cpct_cnt += 1
-                        cpct = Cpct.objects.get(main_kw_id=k)[0]
+                        cpct = Cpct.objects.filter(main_kw_id=k)[0]
                         if cpct.pk == 1 or cpct.cs != Cpct.objects.get(pk=cpct.pk - 1).cs:
                             continue
                         else:
@@ -138,7 +138,7 @@ def create_lc():
 
                 kw_check[k] = 1
                 cpct_cnt += 1
-                cpct = Cpct.objects.get(main_kw_id=k)
+                cpct = Cpct.objects.filter(main_kw_id=k)[0]
                 if cpct.pk == 1 or cpct.cs != Cpct.objects.get(pk=cpct.pk - 1).cs:
                     continue
                 else:
