@@ -95,7 +95,7 @@ def create_lc():
 
                     if not kw_check[k]:
                         # 다른 예시가 존재하지 않을때
-                        examples = Cpcq.kcq.filter(kw_id=k)
+                        examples = kw.contained_cpcq.all()
                         if not examples.exists():
                             examples = Cpct.objects.filter(main_kw=kw)
                             if not examples.exists():
@@ -143,7 +143,7 @@ def create_lc():
         for song in song_list:
             for cpct in Cpct.objects.filter(cs=song):
                 k = cpct.main_kw.id
-                examples = Cpcq.objects.filter(kcq=k)
+                examples = cpct.main_kw.contained_cpcq.all()
                 if not examples.exists():
                     examples = Cpct.objects.filter(main_kw_id=k)
                     if not examples.exists():
