@@ -1,103 +1,108 @@
 <template>
   <div>
-    <v-app-bar>
-
+    <v-app-bar fixed class="app_bar">
     </v-app-bar>
-    <v-container class="d-flex flex-wrap">
+    <br><br>
+    <div class="modal-overlay"
+      v-if="visible"
+      @click="closeModal"
+      >
+      <div class="modal-window">
+
+        <v-img 
+          :src="item.src"
+          height="50%"
+          width="50%"
+          padding="0"
+          class="modal_img"
+        />
+        <v-card-text class="modal_title">
+          {{ item.title }}
+        </v-card-text>
+
+        <v-card-text class="modal_contents">
+          {{ item.contents }}
+        </v-card-text>
+      </div>
+
+    </div>
+
+    <v-container class="wrap d-flex flex-wrap main_img" id="achieve_body">
       <v-col
         rows
         cols="4"
-        v-for = "(item, idx) in items"
+        v-for = "(item, idx) in $store.state.items"
         :key = "idx"
-
       >
         <appMyModal :modalItem="item" @update="modal" />
 
       </v-col>
     </v-container>
-    <div class="modal_window"
-      v-if="visible"
-      @click="closeModal"
-      >
-      <v-img 
-        :src="item.src"
-        height="50%"
-        width="50%"
-        padding="0"
-        class="modal_img"
-      />
-      <v-card-text class="modal_title">
-        {{ item.title }}
-      </v-card-text>
+    <div>
+      <v-container>
+        <v-flex>업적 달성률</v-flex>
+      </v-container>
+      <v-container>
+        <v-row style="margin-left: 5px">
+          <v-progress-linear
+            style="width: 60%"
+            color="light-blue"
+            height="10"
+            value="30"
+            striped
+          ></v-progress-linear>
+          
+          <v-flex text-right style="margin-right: 10px">
+            <div>9 / 30</div>
 
-      <v-card-text class="modal_contents">
-        {{ item.contents }}
-      </v-card-text>
+          </v-flex>
+        </v-row>
+      </v-container>
 
-      <v-divider></v-divider>
-
-      <div class="my-modal__body">
-        <slot></slot>
-      </div>
     </div>
 
+    
+    <!-- <v-card-actions>
+      <v-spacer></v-spacer>
+
+      <v-btn
+        icon
+        @click="show = !show"
+      >
+        <v-icon>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+      </v-btn>
+    </v-card-actions>
+    <v-expand-transition>
+      <div v-show="show">
+        <v-divider></v-divider>
+
+        <v-container class="d-flex flex-wrap">
+          <v-col
+            rows
+            cols="4"
+            v-for = "(item, idx) in $store.state.items"
+            :key = "idx"
+
+          >
+            <appMyModal :modalItem="item" @update="modal" />
+
+          </v-col>
+        </v-container>
+      </div>
+    </v-expand-transition> -->
+    
   </div>
 </template>
 
 <script>
-import Achivemodal from '../components/modal/Achivemodal'
+import Achievemodal from '../components/modal/Achievemodal'
+
 export default {
+  name: "Achievement",
   components: {
-    appMyModal: Achivemodal
+    appMyModal: Achievemodal
   },
   data: () => ({
-    items: [
-      {
-        title: 'score',
-        src: require('@/assets/img/score.png'),
-        contents: '1',
-      },
-      {
-        title: 'award',
-        src: require('@/assets/img/award.png'),
-        contents: '2',
-      },
-      {
-        title: 'hardworker',
-        src: require('@/assets/img/hardworker.png'),
-        contents: '135',
-      },
-      {
-        title: 'jun',
-        src: require('@/assets/img/jun.png'),
-        contents: '123124',
-      },
-      {
-        title: 'korean',
-        src: require('@/assets/img/korean.png'),
-        contents: '1255215',
-      },
-      {
-        title: 'kpop',
-        src: require('@/assets/img/kpop.png'),
-        contents: '1234',
-      },
-      {
-        title: 'level',
-        src: require('@/assets/img/level.png'),
-        contents: '6',
-      },
-      {
-        title: 'master',
-        src: require('@/assets/img/master.png'),
-        contents: '4',
-      },
-      {
-        title: 'sign',
-        src: require('@/assets/img/sign.png'),
-        contents: '3',
-      },
-    ],
     visible: false,
   }),
   methods: {
@@ -114,36 +119,52 @@ export default {
 
 <style>
 
-#progress {
-  width: 50%;
+.app_bar {
+  text-align: center;
 }
 
-.modal_window {
+#achieve_body {
+  overflow-y: auto;
+  height: 500px;
+}
+
+.modal-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 100%;
   height: 100%;
-	position: relative;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	/* min-width: 500px; */
-	/* min-height: 500px; */
-  background-color: grey;
-	/* background-color: rgba(0, 0, 0, 0.3); */
-	z-index: 101;
-  /* -webkit-filter: grayscale(100%); */
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-window {
+  padding: 10px 20px;
+  background: #fff;
+  border-radius: 4px;
+  overflow: hidden;
+  min-width: 500px;
 }
 
 .modal_img {
+  height: 50%;
+  width: 50%;
   margin-left: 25%;
 }
 
 .modal_title {
   text-align: center;
-  font-weight: bolder;
-  font-size: 5rem;
 }
 
 .modal_contents {
   text-align: center;
+}
+
+.main_img {
+  max-height: 400px;
 }
 
 </style>

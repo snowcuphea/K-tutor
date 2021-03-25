@@ -5,6 +5,7 @@
     </div>
     <v-bottom-navigation
       color="primary"
+      fixed
     >
       <v-btn :to="{name: 'Class'}">
         <span>Class</span>
