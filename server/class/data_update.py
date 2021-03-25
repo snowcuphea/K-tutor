@@ -72,7 +72,7 @@ def create_lc():
         for cs in cs_list:
             cpct_list = list(Cpct.objects.filter(cs=cs))
             level_dict[cs.name] = sum([x.main_kw.id for x in cpct_list]) / len(cpct_list)
-        cs_list.sort(key=lambda x: level_dict[x.name])
+        cs_list = list(cs_list).sort(key=lambda x: level_dict[x.name])
         cnt_level = [
             cs_cnt // 3 if cs_cnt % 3 == 0 else cs_cnt // 3 + 1,  # end index of beginner
             cs_cnt // 3 + 1 if cs_cnt % 3 == 2 else cs_cnt // 3,  # end index of intermediate
