@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Class from '../views/Class.vue'
+import ClassMain from '../views/class/ClassMain.vue'
 import Test from '../views/Test.vue'
 import Achievement from '../views/Achievement.vue'
 import MyPage from '../views/MyPage.vue'
@@ -8,18 +9,33 @@ import Report from '../views/Report.vue'
 
 Vue.use(VueRouter)
 
-const routes = [
-  {
+const routes = [{
     path: '/',
+    redirect: '/report',
+  },
+  {
+    path: '/report',
     name: 'Report',
     component: Report,
-    
   },
   {
     path: '/class',
     name: 'Class',
-    component: Class
+    component: Class,
+    children: [
+      {
+        path: '',
+        redirect: 'classmain'
+      },
+      {
+        path: 'classmain',
+        name: 'ClassMain',
+        component: ClassMain
+      },
+
+    ],
   },
+
   {
     path: '/test',
     name: 'Test',

@@ -1,63 +1,103 @@
 <template>
   <v-app>
-    <div class="wrap">
+    <Header class="header" v-if="isNotClass"/>
+    <!-- <h1>안냥</h1> -->
+
+    <v-main class="main">
       <router-view />
-    </div>
-    <v-bottom-navigation
-      color="primary"
-      fixed
-    >
-      <v-btn :to="{name: 'Class'}">
-        <span>Class</span>
-        <v-icon>mdi-history</v-icon>
-      </v-btn>
+    </v-main>
 
-      <v-btn :to="{name: 'Test'}">
-        <span>Test</span>
-        <v-icon>mdi-heart</v-icon>
-      </v-btn>
+    <Footer/>
 
-      <v-btn :to="{name: 'Report'}">
-        <span>Report</span>
-        <v-icon>mdi-map-marker</v-icon>
-      </v-btn>
 
-      <v-btn :to="{name: 'Achievement'}">
-        <span>Achieve</span>
-        <v-icon>mdi-map-marker</v-icon>
-      </v-btn>
 
-      <v-btn :to="{name: 'MyPage'}">
-        <span>My Page</span>
-        <v-icon>mdi-map-marker</v-icon>
-      </v-btn>
-    </v-bottom-navigation>
   </v-app>
 </template>
 
 <script>
-import "@/assets/css/mycss.css"
+  import Header from "@/components/common/Header.vue"
+  import Footer from "@/components/common/Footer.vue"
 
-export default {
-  name: 'App',
 
-  components: {
-    
-  },
+  export default {
+    name: 'App',
 
-  data: () => ({
-  }),
-};
+    components: {
+      Header,
+      Footer
+    },
+
+    data: function () {
+      return {
+
+      }
+    },
+
+    computed: {
+      isNotClass() {
+        if (['Class', 'TitleList', 'ClassMain'].includes(this.$route.name)) {
+          return false
+        } else {
+          return true
+        }
+      },
+
+
+      // isNotClass () {
+      //   if (this.$route.name === 'Class') {
+      //     return false
+      //   } else {
+      //     return true
+      //   }
+      // },
+
+    },
+    methods: {
+
+    },
+    created() {
+      // default page
+      const defaultSetting = {
+        navName: "Report",
+        navValue: 2
+      }
+      // default setting
+      if (this.$route.path === "/report") {
+        this.$store.dispatch('changePage', defaultSetting)
+      }
+    }
+  };
 </script>
 
 <style>
+  @import "./assets/css/mycss.css";
 
-v-app {
-  height: 100%;
-}
+  @font-face {
+    font-family: 'RIDIBatang';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.0/RIDIBatang.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
 
-.wrap {
-  height: 90%
-}
+  @font-face {
+    font-family: 'SeoulHangangM';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/SeoulHangangM.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  * {
+    font-family: "RIDIBatang", sans-serif;
+  }
+
+  .header{
+    min-height:70px;
+  }
+
+  .main{
+    height: 10px;
+    overflow-y: auto;
+  }
+
 
 </style>

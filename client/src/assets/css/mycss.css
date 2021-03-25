@@ -1,3 +1,12 @@
-body {
-  height: 100vh;
+
+.hide {
+    visibility: hidden;
+  }
+
+.close-dialog {
+  position: fixed;
+  top: 0.5em;
+  left: 0.5em;
+  z-index: 99;
 }
+
