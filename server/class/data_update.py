@@ -85,10 +85,10 @@ def create_lc():
             1990
         ]
         kw_cnt = Kw.objects.all().count()
-        kw_check = [0] * (kw_cnt + 1)
         index = 1
         for i in range(3):
             while index <= sum(cnt_level[:i + 1]):
+                kw_check = [0] * (kw_cnt + 1)
                 cs = cs_list[index - 1]
                 index += 1
                 cs.level = i
