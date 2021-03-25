@@ -49,9 +49,9 @@ export default new Vuex.Store({
 
     userProgress: {
       genres: [
-        { genre : 'kmovie', total : 100, done : 45 },
-        { genre: 'kdrama', total : 100, done : 57 },
-        { genre : 'kpop', total : 100, done : 89 }
+        { type : 'kmovie', total : 58, done : 45 },
+        { type: 'kdrama', total : 80, done : 57 },
+        { type : 'kpop', total : 94, done : 89 }
       ],
       class: [
         { title: '태양의 후예', total : 100, done : 35},

@@ -1,9 +1,9 @@
 <template>
   <v-container>
     <div class="d-flex">
-      <p>Lv.{{ userLevel }}</p>
+      <p class="mb-0">Lv.{{ userLevel }}</p>
       <v-spacer></v-spacer>
-      <p>{{ userExperience }}/{{ userLevel*10 }}</p>
+      <p class="mb-0">{{ userExperience }}/{{ userLevel*10 }}</p>
     </div>
     <v-progress-linear
       :value="progress">
