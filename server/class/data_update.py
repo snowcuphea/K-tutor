@@ -101,7 +101,11 @@ def create_lc():
                             if not examples.exists():
                                 continue
 
-                        cpct = Cpct.objects.filter(main_kw=kw)[0]
+                        cpct = Cpct.objects.filter(main_kw=kw)
+                        if cpct.exists():
+                            cpct = cpct[0]
+                        else:
+                            continue
                         if cpct.pk == 1 or cpct.cs != Cpct.objects.get(pk=cpct.pk - 1).cs:
                             continue
                         else:
@@ -123,17 +127,18 @@ def create_lc():
                             examples.remove(cpct)
                         examples = examples[:3]
 
-                        Lc.objects.create(
-                            before_kor=before.kor,
-                            before_eng=before.eng,
-                            cpct_kor=cpct.kor,
-                            cpct_eng=cpct.eng,
-                            after_kor=after.kor,
-                            after_eng=after.eng,
-                            example="|".join([x.kor for x in examples]),
-                            cs=cs,
-                            main_kw=kw
-                        )
+                        if not Lc.objects.filter(cpct_kor=cpct.kor).exists():
+                            Lc.objects.create(
+                                before_kor=before.kor,
+                                before_eng=before.eng,
+                                cpct_kor=cpct.kor,
+                                cpct_eng=cpct.eng,
+                                after_kor=after.kor,
+                                after_eng=after.eng,
+                                example="|".join([x.kor for x in examples]),
+                                cs=cs,
+                                main_kw=kw
+                            )
     # kpop
     cs_list = Cs.objects.filter(cs="kpop")
     singer_list = list(set({x.name.split(" - ")[0] for x in cs_list}))
@@ -151,7 +156,12 @@ def create_lc():
 
                 kw_check[k] = 1
                 cpct_cnt += 1
-                cpct = Cpct.objects.filter(main_kw_id=k)[0]
+                cpct = Cpct.objects.filter(main_kw_id=k)
+                if cpct.exists():
+                    cpct = cpct[0]
+                else:
+                    continue
+
                 if cpct.pk == 1 or cpct.cs != Cpct.objects.get(pk=cpct.pk - 1).cs:
                     continue
                 else:
@@ -165,17 +175,18 @@ def create_lc():
                 examples.remove(cpct)
                 examples = examples[:3]
 
-                Lc.objects.create(
-                    before_kor=before.kor,
-                    before_eng=before.eng,
-                    cpct_kor=cpct.kor,
-                    cpct_eng=cpct.eng,
-                    after_kor=after.kor,
-                    after_eng=after.eng,
-                    example="|".join([x.kor for x in examples]),
-                    cs=song,
-                    main_kw=cpct.main_kw
-                )
+                if not Lc.objects.filter(cpct_kor=cpct.kor).exists():
+                    Lc.objects.create(
+                        before_kor=before.kor,
+                        before_eng=before.eng,
+                        cpct_kor=cpct.kor,
+                        cpct_eng=cpct.eng,
+                        after_kor=after.kor,
+                        after_eng=after.eng,
+                        example="|".join([x.kor for x in examples]),
+                        cs=song,
+                        main_kw=cpct.main_kw
+                    )
 
     singer_dict = dict()
     for singer in singer_list:
