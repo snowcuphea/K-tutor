@@ -23,12 +23,17 @@
         </v-card>
 
         <v-card tile height="75%" elevation="0">
-
           <v-card tile height="55%" elevation="0"
           class="mx-5">
+            <p>Listen carefully and select the correct words in order.</p>
             <div v-for="(line, idx) in questions[targetQuestion].lines_kr" :key="idx">
-              <p v-if="idx%2 == 0"> A: {{ line }} </p>
-              <p v-else> B: {{ myAnswer }} </p>
+              <div v-if="questions[targetQuestion].lines_kr.length == 3">
+                <p v-if="idx%2 == 0"> A: {{ line }} </p>
+                <p v-else> B: {{ myAnswer }} </p>
+              </div>
+              <div v-else>
+                <p> A: {{ myAnswer }}</p>
+              </div>
             </div>
 
             <div class="d-flex justify-end">
@@ -90,18 +95,19 @@
           </div>
 
           <div class="mt-5">
-            <h4>Correct Answers</h4>
+            <h4 v-if="myCorrect().length != 0">Correct Answers</h4>
             <div v-for="(correct,idx) in myCorrect()" :key="'correct'+idx"
             class="mx-3">
               <p>{{ correct.problemId }}. {{ correct.correctAnswer }} </p>
             </div>
-            <h4>Incorrect Answers</h4>
+            <h4 v-if="myWrong().length != 0">Incorrect Answers</h4>
             <div v-for="(wrong,idx) in myWrong()" :key="'wrong'+idx"
             class="mx-3">
               <p>{{ wrong.problemId }}. {{ wrong.correctAnswer }} </p>
               <p>My Answer : {{ wrong.myAnswer }} </p>
             </div>
           </div>
+          <Experience :experience="grade/10"/>
         </v-card>
         
         <v-spacer></v-spacer>
@@ -123,9 +129,13 @@
 </template>
 
 <script>
+import Experience from "@/components/user/Experience.vue"
 
 export default {
   props: ['showDialog'],
+  components: {
+    Experience
+  },
   data() {
     return {
       targetQuestion : 0,
@@ -137,8 +147,11 @@ export default {
         {source : "도깨비", 
         lines_kr : ["나랑 벚꽃축제 갈래?", "너무 좋아 나도 벚꽃 보러 가고 싶었어.","그러면 토요일 어때?"],
         lines_en : ["Do you want to go to the cherry blossom festival with me?", "Yes, I would love to go see cherry blossoms.","Saturday sounds good?"]},
+        {source : "뉴스",
+        lines_kr : ["이렇게 한줄로만 나오는 문제도 있다."],
+        lines_en : ["There are questions that only have one sentence."]}
       ],
-      answers: [ "나는 오늘 저녁으로 고기를 먹었어.", "너무 좋아, 나도 벚꽃 보러 가고 싶었어."],
+      answers: [ "나는 오늘 저녁으로 고기를 먹었어.", "너무 좋아, 나도 벚꽃 보러 가고 싶었어.","이렇게 한줄로만 나오는 문제도 있다."],
       myAnswers: new Array(2).fill([]),
       myAnswer: "",
       order: 0,
@@ -151,6 +164,7 @@ export default {
   methods: {
     hideDialog() {
       this.defaultSetting()
+      this.showDialog2 = false
       this.$emit('hideDialog')
     },
     previousQuestion() {
@@ -182,8 +196,6 @@ export default {
       this.myAnswer = this.myAnswers[idx]
     },
     endTest() {
-      this.order = 0
-      this.targetQuestion = 0
       this.defaultSetting()
       this.showDialog2 = false
       this.$emit('hideDialog')
@@ -214,6 +226,7 @@ export default {
         }
       }
       this.showDialog2 = true
+      this.$store.dispatch('gainExperience', this.grade/10)
     },
     myCorrect() {
       const correctList = []
@@ -275,6 +288,9 @@ export default {
       }
       this.myAnswer = this.myAnswers[0]
       this.correct = new Array(2).fill(0)
+      this.order = 0
+      this.targetQuestion = 0
+      this.grade = 0
     }
   },
   created() {

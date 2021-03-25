@@ -39,7 +39,13 @@ export default new Vuex.Store({
       {name: '박효신', cs_type:'pop'},
 
     ],
-  
+    
+    userLevel: 4,
+    userExperience: 39,
+    
+
+
+
   },
   getters: {
     getCurrentTypeTitleList: function (state) {
@@ -55,11 +61,30 @@ export default new Vuex.Store({
     changeCurrentPage ( state , changeItem ) {
       state.currentPage = changeItem.navName
       state.currentPageValue = changeItem.navValue
+    },
+    changeExperience ( state, experience ) {
+      state.userExperience += (experience)
+      const temp = state.userExperience - (state.userLevel)*10
+      if ( state.userExperience >= state.userLevel*10 ) {
+        state.userExperience = state.userLevel*10
+        setTimeout( function() {
+          state.userLevel += 1
+          state.userExperience = 0
+        },500)
+        setTimeout( function () {
+          state.userExperience += temp
+        }, 500)
+      }
     }
   },
   actions: {
     changePage ({ commit }, changeItem ) {
       commit('changeCurrentPage', changeItem)
+    },
+    gainExperience ({ commit }, experience) {
+      setTimeout( function() {
+        commit('changeExperience', experience )
+      }, 1000)
     }
   },
   modules: {
