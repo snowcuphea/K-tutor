@@ -2,8 +2,7 @@ import requests
 
 import pandas as pd
 import os
-import gensim.models
-import Word2Vec as w2v
+from gensim.models import Word2Vec as w2v
 from bs4 import BeautifulSoup
 from konlpy.tag import Kkma
 
