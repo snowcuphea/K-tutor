@@ -24,7 +24,7 @@
 
         <v-card tile height="75%" elevation="0">
           <v-card tile height="55%" elevation="0"
-          class="mx-5">
+          class="px-5">
             <p>Listen carefully and select the correct words in order.</p>
             <div v-for="(line, idx) in questions[targetQuestion].lines_kr" :key="idx">
               <div v-if="questions[targetQuestion].lines_kr.length == 3">
@@ -47,9 +47,10 @@
           </v-card>
 
           <v-card tile height="45%" elevation="0"
-          class="mx-5">
+          class="px-5 ">
             <v-btn v-for="(choice,idx) in choices" :key="idx" 
-            @click="putAnswer(choice)" :disabled="checked.includes(choice)"> {{ choice }} </v-btn>
+            @click="putAnswer(choice)" :disabled="checked.includes(choice)"
+            class="ma-2"> {{ choice }} </v-btn>
           </v-card>
 
         </v-card>
@@ -89,7 +90,7 @@
           <h3>Test Report</h3>
         </v-card>
 
-        <v-card elevation="0" class="mx-8">
+        <v-card elevation="0" class="px-8">
           <div>
             <h4>Test Result :   {{ grade }}/{{ answers.length * 10 }}</h4>
           </div>
@@ -97,12 +98,12 @@
           <div class="mt-5">
             <h4 v-if="myCorrect().length != 0">Correct Answers</h4>
             <div v-for="(correct,idx) in myCorrect()" :key="'correct'+idx"
-            class="mx-3">
+            class="px-3">
               <p>{{ correct.problemId }}. {{ correct.correctAnswer }} </p>
             </div>
             <h4 v-if="myWrong().length != 0">Incorrect Answers</h4>
             <div v-for="(wrong,idx) in myWrong()" :key="'wrong'+idx"
-            class="mx-3">
+            class="px-3">
               <p>{{ wrong.problemId }}. {{ wrong.correctAnswer }} </p>
               <p>My Answer : {{ wrong.myAnswer }} </p>
             </div>
@@ -152,11 +153,11 @@ export default {
         lines_en : ["There are questions that only have one sentence."]}
       ],
       answers: [ "나는 오늘 저녁으로 고기를 먹었어.", "너무 좋아, 나도 벚꽃 보러 가고 싶었어.","이렇게 한줄로만 나오는 문제도 있다."],
-      myAnswers: new Array(2).fill([]),
+      myAnswers: new Array(3).fill([]),
       myAnswer: "",
       order: 0,
       checked: [],
-      correct: new Array(2).fill(0),
+      correct: new Array(3).fill(0),
       grade: 0
 
     }

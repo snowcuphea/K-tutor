@@ -3,7 +3,7 @@
     <Header v-if="isNotClass"/>
     <!-- <h1>안냥</h1> -->
 
-    <v-main >
+    <v-main>
       <router-view />
     </v-main>
 

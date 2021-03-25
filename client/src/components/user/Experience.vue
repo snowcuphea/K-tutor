@@ -9,7 +9,7 @@
       :value="progress">
     </v-progress-linear>
     <div>
-      <p class="text-end">+{{ experience }}</p>
+      <p v-if="experience != -1" class="text-end">+{{ experience }}</p>
     </div>
   </v-container>
 </template>
