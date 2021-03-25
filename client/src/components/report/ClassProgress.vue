@@ -20,7 +20,7 @@
 import { mapState } from 'vuex'
 
 export default {
-
+  props: [ 'showMore' ],
   methods: {
     percentage(cls) {
 
@@ -45,8 +45,11 @@ export default {
         return - (a.percentage - b.percentage)
       })
 
-
-      return newList
+      if (this.showMore) {
+        return newList
+      } else {
+        return newList.slice(0,3)
+      }
 
     }
 

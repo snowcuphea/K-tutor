@@ -12,9 +12,15 @@
       <ClassCards />
     </div>
 
-    <div>
+    <div class="my-3 d-flex flex-column">
       <h3>Recent Class Progress</h3>
-      <ClassProgress />
+      <ClassProgress :showMore="showMore" />
+      <v-btn class="mt-n5 align-self-end" @click="showMore = !showMore"
+        v-if="!showMore"
+        plain text retain-focus-on-click>more</v-btn>
+      <v-btn class="mt-n5 align-self-end" @click="showMore = !showMore"
+        v-else
+        plain text retain-focus-on-click>less</v-btn>
     </div>
 
     <div>
@@ -35,6 +41,11 @@ import GenreProgress from "@/components/report/GenreProgress.vue"
 
 
 export default {
+  data() {
+    return {
+      showMore: false,
+    }
+  },
   components: {
     Experience,
     ClassCards,

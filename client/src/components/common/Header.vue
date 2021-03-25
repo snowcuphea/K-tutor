@@ -1,5 +1,5 @@
 <template>
-  <v-container class="d-flex justify-center">
+  <v-container class="head d-flex justify-center">
     <h1> {{ section }} </h1>
   </v-container>
 </template>
@@ -32,5 +32,10 @@ export default {
 </script>
 
 <style>
+
+.head {
+  border-bottom: 1px solid;
+}
+
 
 </style>

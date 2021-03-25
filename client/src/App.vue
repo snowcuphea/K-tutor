@@ -1,13 +1,13 @@
 <template>
   <v-app>
-    <Header v-if="isNotClass"/>
+    <Header class="header" v-if="isNotClass"/>
     <!-- <h1>안냥</h1> -->
 
-    <v-main >
-      <router-view class="mb-16" />
+    <v-main class="main">
+      <router-view />
     </v-main>
 
-    <Footer class="appFooter" />
+    <Footer/>
 
 
 
@@ -90,13 +90,14 @@
     font-family: "RIDIBatang", sans-serif;
   }
 
-  v-main{
-    overflow: auto;
+  .header{
+    min-height:70px;
   }
-  .appFooter{
-    position:fixed;
-    bottom:0;
-    width:100%;
+
+  .main{
+    height: 10px;
+    overflow-y: auto;
   }
+
 
 </style>
