@@ -13,7 +13,7 @@
           </v-col>
           <v-col cols="6">
             <div class="my_info">
-              <v-text>test1</v-text>
+              <p>test1</p>
               <v-btn
                 icon
                 class="my_info_icon"
@@ -21,7 +21,7 @@
                 <v-icon>mdi-cog-outline</v-icon>
               </v-btn>
               <br>
-              <v-text>test1@test1.com</v-text>
+              <p>test1@test1.com</p>
 
             </div>
 
@@ -62,7 +62,7 @@
             v-for="(item, idx) in items"
             :key="idx"
           >
-            <appMyPage :pageModalItem="item" @pageUpdate="pageModal" />
+            <!-- <appMyPage :pageModalItem="item" @pageUpdate="pageModal" /> -->
 
             <v-card-actions>
 
@@ -72,45 +72,33 @@
                 </div>
                   <v-btn
                     icon
-                    @click="show = !show"
                     class="title_btn"
                   >
-                    <v-icon>{{ show ? 'mdi-chevron-left' : 'mdi-chevron-right' }}</v-icon>
+
                   </v-btn>
+                  <!-- <v-btn
+                    icon
+                    @click="show = !show"
+                    class="title_btn"
+                  > -->
+                    <!-- <v-icon>{{ show ? 'mdi-chevron-left' : 'mdi-chevron-right' }}</v-icon> -->
+                    <v-icon>mdi-chevron-right</v-icon>
+                  <!-- </v-btn> -->
 
               </v-row>
             </v-card-actions>
-            <v-expand-transition>
+            <!-- <v-expand-transition>
               <div v-show="show">
                 <v-divider></v-divider>
 
                 {{ item.contents }}                  
 
               </div>
-            </v-expand-transition>
+            </v-expand-transition> -->
 
 
           </v-list-item-group>
-                  
-        
-          <!-- <v-list-item-group
-            v-for="(item, idx) in items"
-            :key="idx"
-          >
-            <v-row class="title_row">
-              <div class="title_list">
-                {{ item.title }}
-              </div>
-              <v-btn
-                icon
-                @click="show = !show"
-                class="title_btn"
-              >
-              <v-icon>{{ show ? 'mdi-chevron-left' : 'mdi-chevron-right' }}</v-icon>
-            </v-btn>
-
-            </v-row>
-          </v-list-item-group> -->
+     
         </v-list><br>
 
       </div>
@@ -133,12 +121,12 @@
 </template>
 
 <script>
-import Mypage from '../components/mypage/Mypage'
+// import Mypage from '../components/mypage/Mypage'
 
 export default {
-  components: {
-    appMyPage: Mypage
-  },
+  // components: {
+  //   appMyPage: Mypage
+  // },
   data: () => ({
     items: [
       {
@@ -158,7 +146,6 @@ export default {
         contents: '??',
       },
     ],
-    show: false,
   }),
   methods: {
     pageModal (pageModalItem) {
