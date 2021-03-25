@@ -42,9 +42,30 @@ export default new Vuex.Store({
 
     ],
     
+    userName: 'DanceMachine',
     userLevel: 4,
     userExperience: 39,
-    userGrade: [30,60,20,70,80,50,30,20,70,90]
+    userGrade: [30,60,20,70,80,50,30,20,70,90],
+
+    userProgress: {
+      genres: [
+        { genre : 'kmovie', total : 100, done : 45 },
+        { genre: 'kdrama', total : 100, done : 57 },
+        { genre : 'kpop', total : 100, done : 89 }
+      ],
+      class: [
+        { title: '태양의 후예', total : 100, done : 35},
+        { title: '도깨비', total : 100, done : 87},
+        { title: '승리호', total : 43, done : 23},
+        { title: '사이코지만 괜찮아', total : 100, done : 64},
+        { title: '기생충', total : 100, done : 64},
+        { title: '박효신', total : 87, done : 64},
+        { title: '방탄소년단', total : 70, done : 64},
+      ]
+    },
+
+    studyCnt: 100,
+    contiDay: 9,
     
 
 
