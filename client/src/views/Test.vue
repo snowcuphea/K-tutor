@@ -9,7 +9,7 @@
     <Experience :experience="-1" />
 
     <div class="d-flex justify-center">
-      <v-btn @click="showDialog = !showDialog">시험보기</v-btn>
+      <v-btn class="mt-5" @click="showDialog = !showDialog">시험보기</v-btn>
     </div>
 
     <TestPage :showDialog="showDialog" @hideDialog="showDialog = !showDialog"/>
