@@ -89,7 +89,7 @@ def create_lc():
                 cpcts.sort(key=lambda x: x.main_kw.count)
                 cpct_cnt = 0
                 for k in range(kw_index[i], kw_index[i] + 663):
-                    kw = Kw.objects.get(k)
+                    kw = Kw.objects.get(pk=k)
                     if cpct_cnt == 100:
                         break
 
