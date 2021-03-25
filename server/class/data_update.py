@@ -94,9 +94,11 @@ def create_lc():
 
                     if not kw_check[k]:
                         # 다른 예시가 존재하지 않을때
-                        examples = Cpcq.objects.filter(kcq=k) or Cpct.objects.filter(main_kw_id=k)
+                        examples = Cpcq.objects.filter(kcq=k)
                         if not examples.exists():
-                            continue
+                            examples = Cpct.objects.filter(main_kw_id=k)
+                            if not examples.exists():
+                                continue
 
                         kw_check[k] = 1
                         cpct_cnt += 1
@@ -115,12 +117,12 @@ def create_lc():
                         examples = examples[:3]
 
                         Lc.objects.create(
-                            before_kor=None if before else before.kor,
-                            before_eng=None if before else before.eng,
-                            cpct_kor=None if cpct else cpct.kor,
-                            cpct_eng=None if cpct else cpct.eng,
-                            after_kor=None if after else after.kor,
-                            after_eng=None if after else after.eng,
+                            before_kor=before.kor,
+                            before_eng=before.eng,
+                            cpct_kor=cpct.kor,
+                            cpct_eng=cpct.eng,
+                            after_kor=after.kor,
+                            after_eng=after.eng,
                             example="|".join([x.kor for x in examples])
                         )
     # kpop
@@ -132,9 +134,11 @@ def create_lc():
         for song in song_list:
             for cpct in Cpct.objects.filter(cs=song):
                 k = cpct.main_kw.id
-                examples = Cpcq.objects.filter(kcq=k) or Cpct.objects.filter(main_kw_id=k)
+                examples = Cpcq.objects.filter(kcq=k)
                 if not examples.exists():
-                    continue
+                    examples = Cpct.objects.filter(main_kw_id=k)
+                    if not examples.exists():
+                        continue
 
                 kw_check[k] = 1
                 cpct_cnt += 1
@@ -153,12 +157,12 @@ def create_lc():
                 examples = examples[:3]
 
                 Lc.objects.create(
-                    before_kor=None if before else before.kor,
-                    before_eng=None if before else before.eng,
-                    cpct_kor=None if cpct else cpct.kor,
-                    cpct_eng=None if cpct else cpct.eng,
-                    after_kor=None if after else after.kor,
-                    after_eng=None if after else after.eng,
+                    before_kor=before.kor,
+                    before_eng=before.eng,
+                    cpct_kor=cpct.kor,
+                    cpct_eng=cpct.eng,
+                    after_kor=after.kor,
+                    after_eng=after.eng,
                     example="|".join([x.kor for x in examples])
                 )
 
