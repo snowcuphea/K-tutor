@@ -1,7 +1,5 @@
 <template>
   <div class="mypage_body">
-    <v-app-bar>My Page</v-app-bar>
-
     <div>
       <v-container>
         <v-row>

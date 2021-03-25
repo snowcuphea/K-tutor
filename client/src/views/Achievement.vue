@@ -1,8 +1,5 @@
 <template>
   <div>
-    <v-app-bar fixed class="app_bar">
-    </v-app-bar>
-    <br><br>
     <div class="modal-overlay"
       v-if="visible"
       @click="closeModal"
