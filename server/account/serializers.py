@@ -4,7 +4,7 @@ from .models import TestResult, AccessDate
 
 User = get_user_model()
 
-class UserSerializer(serializers.Modelserializer):
+class UserSerializers(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('email', 'password', 'username', 'level', 'exp')
