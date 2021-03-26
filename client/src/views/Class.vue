@@ -77,7 +77,7 @@
       <v-list nav dense>
         <v-subheader>Select Theme</v-subheader>
         <v-list-item-group active-class="deep-purple--text text--accent-4" v-model="drawerGroup">
-
+<!-- 
           <v-list-item @click="resetList">
             <v-list-item-title>(테스트용)리스트 초기화</v-list-item-title>
           </v-list-item>
@@ -89,7 +89,7 @@
           </v-list-item>
           <v-list-item @click="resetSelectClass">
             <v-list-item-title>(테스트용)클래스선택 초기화</v-list-item-title>
-          </v-list-item>
+          </v-list-item> -->
 
 
           <v-list-item v-for="item in typeData" :key="item.type_seq">

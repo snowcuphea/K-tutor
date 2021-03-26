@@ -44,7 +44,7 @@ export default new Vuex.Store({
     
     userName: 'DanceMachine',
     userLevel: 4,
-    userExperience: 39,
+    userExperience: 35,
     userGrade: [30,60,20,70,80,50,30,20,70,90],
 
     userProgress: {

@@ -13,7 +13,7 @@
     </div>
 
     <div class="my-3 d-flex flex-column">
-      <h3>Recent Class Progress</h3>
+      <h3>Recent Learning Progress</h3>
       <ClassProgress :showMore="showMore" />
       <v-btn class="mt-n5 align-self-end" @click="showMore = !showMore"
         v-if="!showMore"
@@ -24,7 +24,7 @@
     </div>
 
     <div>
-      <h3>All Genre Progress</h3>
+      <h3>All Theme Progress</h3>
       <GenreProgress />
     </div>
 

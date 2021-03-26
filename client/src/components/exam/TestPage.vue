@@ -91,7 +91,7 @@
         </v-card>
 
         <v-card elevation="0" class="px-8">
-          <Experience :experience="grade/10"/>
+          <Experience :experience="grade"/>
           <div>
             <h4>Test Result :   {{ grade }}/{{ answers.length * 10 }}</h4>
           </div>
@@ -228,7 +228,7 @@ export default {
         }
       }
       this.showDialog2 = true
-      this.$store.dispatch('gainExperience', this.grade/10)
+      this.$store.dispatch('gainExperience', this.grade)
     },
     myCorrect() {
       const correctList = []
