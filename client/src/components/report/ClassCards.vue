@@ -2,14 +2,13 @@
   <v-container class="classCards">
     <v-card v-for="(card,idx) in userLearned" :key="idx"
     class="mr-3 class-card" elevation="0" tile>
-      <img :src="require(`@/assets/images/poster/${card.img}.jpg`)" alt="읎다" width="100px">
+      <img :src="require(`@/assets/images/poster/${card.img}.jpg`)" alt="읎다" width="100px" height="80px">
       <p class="card-line"> {{ card.line }} </p>
     </v-card>
   </v-container>
 </template>
 
 <script>
-
 
 import { mapState } from 'vuex'
 

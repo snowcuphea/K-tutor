@@ -18,11 +18,11 @@ export default {
       value: this.$store.state.currentPageValue,
       current: this.$store.state.currentPage,
       navs: [
-        {name : "Class", icon: "mdi-heart", path: "Class"},
-        {name : "Test", icon: "mdi-heart", path: "Test"},
-        {name : "Report", icon: "mdi-heart", path: "Report"},
-        {name : "Achieve", icon: "mdi-heart", path: "Achievement"},
-        {name : "MyPage", icon: "mdi-heart", path: "MyPage"},
+        {name : "Class", icon: "mdi-notebook-multiple", path: "Class"},
+        {name : "Test", icon: "mdi-book-edit", path: "Test"},
+        {name : "Report", icon: "mdi-file-chart", path: "Report"},
+        {name : "Achieve", icon: "mdi-trophy", path: "Achievement"},
+        {name : "MyPage", icon: "mdi-account", path: "MyPage"},
       ]
     }
   },

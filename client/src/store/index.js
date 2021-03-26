@@ -66,11 +66,11 @@ export default new Vuex.Store({
 
     userLearned: [
       { title : '태양의 후예', line: '봄바람 휘날리며', img : 'poster1' },
-      { title : '도깨비', line: '흩날리는 벚꽃 잎이', img : 'poster1' },
-      { title : '방탄소년단', line: '울려 퍼질 이 거리를 우우 둘이 걸어요', img : 'poster1' },
+      { title : '도깨비', line: '흩날리는 벚꽃 잎이', img : 'poster7' },
+      { title : '방탄소년단', line: '울려 퍼질 이 거리를 우우 둘이 걸어요', img : 'poster11' },
       { title : '승리호', line: '바람 불면 울렁이는 기분 탓에 나도 모르게', img : 'poster1' },
-      { title : '아이유', line: '바람ㄴ 불면 저편에서', img : 'poster1' },
-      { title : '태양의 후예', line: '봄바람 휘날리며', img : 'poster1' },
+      { title : '아이유', line: '바람ㄴ 불면 저편에서', img : 'poster7' },
+      { title : '태양의 후예', line: '봄바람 휘날리며', img : 'poster11' },
       { title : '도깨비', line: '흩날리는 벚꽃 잎이', img : 'poster1' },
       { title : '방탄소년단', line: '울려 퍼질 이 거리를 우우 둘이 걸어요', img : 'poster1' },
       { title : '승리호', line: '바람 불면 울렁이는 기분 탓에 나도 모르게', img : 'poster1' },
@@ -208,17 +208,17 @@ export default new Vuex.Store({
       state.currentPageValue = changeItem.navValue
     },
     changeExperience ( state, experience ) {
-      state.userExperience += (experience)
+      state.userExperience += experience
       const temp = state.userExperience - (state.userLevel)*10
       if ( state.userExperience >= state.userLevel*10 ) {
         state.userExperience = state.userLevel*10
         setTimeout( function() {
           state.userLevel += 1
           state.userExperience = 0
-        },500)
+        },1500)
         setTimeout( function () {
           state.userExperience += temp
-        }, 500)
+        }, 1500)
       }
     }
   },
@@ -229,7 +229,7 @@ export default new Vuex.Store({
     gainExperience ({ commit }, experience) {
       setTimeout( function() {
         commit('changeExperience', experience )
-      }, 1000)
+      }, 1500)
     }
   },
   modules: {

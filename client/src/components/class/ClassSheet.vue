@@ -1,7 +1,7 @@
 <template>
   <v-container id="classSheet">
     <v-row>
-    <p>클래스시트 : {{classInfo}}</p>
+    <!-- <p>클래스시트 : {{classInfo}}</p> -->
     </v-row>
     <v-row>
     <img :src="require(`@/assets/images/poster/poster${classInfo.cs_seq}.jpg`)" alt="title" class="imgSize">
