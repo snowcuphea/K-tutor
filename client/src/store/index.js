@@ -220,6 +220,10 @@ export default new Vuex.Store({
           state.userExperience += temp
         }, 1500)
       }
+    },
+    changeLastGrade ( state, grade ) {
+      state.userGrade.shift();
+      state.userGrade.push(grade)
     }
   },
   actions: {
@@ -230,6 +234,9 @@ export default new Vuex.Store({
       setTimeout( function() {
         commit('changeExperience', experience )
       }, 1500)
+    },
+    changeLastGrade ({ commit }, grade ) {
+      commit('changeLastGrade', grade)
     }
   },
   modules: {
