@@ -100,5 +100,8 @@
     overflow-y: auto;
   }
 
+  .main::-webkit-scrollbar {
+    display: none;
+  }
 
 </style>
