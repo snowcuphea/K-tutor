@@ -13,3 +13,9 @@ class TestResult(models.Model):
 class AccessDate(models.Model):
     user = article = models.ForeignKey(User, on_delete=models.CASCADE)
     access_at = models.DateField(auto_now_add=True)
+
+class StudiedCpct:
+    pass
+
+class StudiedKw:
+    pass

@@ -1,3 +1,5 @@
+from django.db.models import Max, Count
+
 from rest_framework import status
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -34,7 +36,7 @@ def account_modify_delete(request):
         user.delete()
     return Response(user, status=status.HTTP_200_OK)
 
-# 전체 시험 성적 조회, 등록
+# (유저의) 전체 시험 성적 조회, 등록
 @api_view(['GET', 'POST'])
 @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -46,7 +48,7 @@ def result_list_create(request, user_pk):
             score=request.data['score'],
         )
         data = {
-            'score' : request.data['score']
+            'score': request.data['score']
         }
         serializer = TestResultSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
@@ -56,12 +58,47 @@ def result_list_create(request, user_pk):
         serializer = TestResultSerializer(results, many=True)
         return Response(serializer.data)
 
-# 최고 시험 성적 조회, 최근 시험 성적 조회
+# 최고 시험 성적 조회
+@api_view(['GET'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
+def result_max(request, user_pk):
+    user = get_object_or_404(User, pk=user_pk)
+
+    if request.method == 'GET':
+        result = TestResult.objects.aggregate(max_score=Max('score'))
+        serializer = TestResultSerializer(result)
+        return Response(serializer.data)
+
+#최근 시험 성적 조회
+@api_view(['GET'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
+def result_latest(request, user_pk):
+    user = get_object_or_404(User, pk=user_pk)
+
+    if request.method == 'GET':
+        result = TestResult.objects.last()
+        serializer = TestResultSerializer(result)
+        return Response(serializer.data)
 
 # 접속 날짜 조회
+@api_view(['GET'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
+def access_list(request, user_pk):
+    pass
 
 # 총 접속 날짜 조회
+@api_view(['GET'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
+def access_total(request, user_pk):
+    pass
 
-# 연속으로 며칠 접속했는지 조회
-
-# 최근 학습 카드 조회(시간 역순으로)
+# 연속으로 접속 날짜 조회
+@api_view(['GET'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
+def access_consecutive_max(request, user_pk):
+    pass
