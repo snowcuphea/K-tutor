@@ -1,6 +1,6 @@
 <template>
   <v-container class="head d-flex justify-center">
-    <h1> {{ section }} </h1>
+    <h2> {{ section }} </h2>
   </v-container>
 </template>
 
