@@ -20,12 +20,12 @@
 
     <!-- <v-row v-else> -->
     <v-row v-if="currentClass">
-      <p> 최근클래스정보 : {{currentClass}} </p>
+      <!-- <p> 최근클래스정보 : {{currentClass}} </p> -->
       <ClassSheet :classInfo="currentClass" style="background-color:skyblue" />
     </v-row>
 
     <v-row v-else>
-      <p>디폴트 클래스 정보 : {{defaultClass}} </p>
+      <!-- <p>디폴트 클래스 정보 : {{defaultClass}} </p> -->
       <ClassSheet :classInfo="defaultClass" style="background-color:beige" />
     </v-row>
     <!-- </v-row> -->
@@ -97,7 +97,7 @@
             <v-row justify="center">
               <v-dialog v-model="dialog" fullscreen hide-overlay transition="fab-transition">
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn color="primary" dark v-bind="attrs" v-on="on" @click="selectType(item.cs_type)">
+                  <v-btn text color="primary" dark v-bind="attrs" v-on="on" @click="selectType(item.cs_type)">
                     {{item.type_title}}
                   </v-btn>
                 </template>

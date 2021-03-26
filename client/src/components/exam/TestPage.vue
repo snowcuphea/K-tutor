@@ -288,7 +288,7 @@ export default {
         this.createEmptyList(idx)
       }
       this.myAnswer = this.myAnswers[0]
-      this.correct = new Array(2).fill(0)
+      this.correct = new Array(3).fill(0)
       this.order = 0
       this.targetQuestion = 0
       this.grade = 0
