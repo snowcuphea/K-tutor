@@ -1,60 +1,103 @@
 <template>
   <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
+    <Header class="header" v-if="isNotClass"/>
+    <!-- <h1>안냥</h1> -->
 
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar>
-
-    <v-main>
-      <HelloWorld/>
+    <v-main class="main">
+      <router-view />
     </v-main>
+
+    <Footer/>
+
+
+
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
+  import Header from "@/components/common/Header.vue"
+  import Footer from "@/components/common/Footer.vue"
 
-export default {
-  name: 'App',
 
-  components: {
-    HelloWorld,
-  },
+  export default {
+    name: 'App',
 
-  data: () => ({
-    //
-  }),
-};
+    components: {
+      Header,
+      Footer
+    },
+
+    data: function () {
+      return {
+
+      }
+    },
+
+    computed: {
+      isNotClass() {
+        if (['Class', 'TitleList', 'ClassMain'].includes(this.$route.name)) {
+          return false
+        } else {
+          return true
+        }
+      },
+
+
+      // isNotClass () {
+      //   if (this.$route.name === 'Class') {
+      //     return false
+      //   } else {
+      //     return true
+      //   }
+      // },
+
+    },
+    methods: {
+
+    },
+    created() {
+      // default page
+      const defaultSetting = {
+        navName: "Report",
+        navValue: 2
+      }
+      // default setting
+      if (this.$route.path === "/report") {
+        this.$store.dispatch('changePage', defaultSetting)
+      }
+    }
+  };
 </script>
+
+<style>
+  @import "./assets/css/mycss.css";
+
+  @font-face {
+    font-family: 'RIDIBatang';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.0/RIDIBatang.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'SeoulHangangM';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/SeoulHangangM.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  * {
+    font-family: "RIDIBatang", sans-serif;
+  }
+
+  .header{
+    min-height:70px;
+  }
+
+  .main{
+    height: 10px;
+    overflow-y: auto;
+  }
+
+
+</style>
