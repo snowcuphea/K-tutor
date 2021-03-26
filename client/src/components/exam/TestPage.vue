@@ -139,6 +139,7 @@ export default {
   },
   data() {
     return {
+      N: 3,
       targetQuestion : 0,
       showDialog2 : false,
       questions: [
@@ -153,11 +154,11 @@ export default {
         lines_en : ["There are questions that only have one sentence."]}
       ],
       answers: [ "나는 오늘 저녁으로 고기를 먹었어.", "너무 좋아, 나도 벚꽃 보러 가고 싶었어.","이렇게 한줄로만 나오는 문제도 있다."],
-      myAnswers: new Array(3).fill([]),
+      myAnswers: new Array(this.N).fill([]),
       myAnswer: "",
       order: 0,
       checked: [],
-      correct: new Array(3).fill(0),
+      correct: new Array(this.N).fill(0),
       grade: 0
 
     }
@@ -288,7 +289,7 @@ export default {
         this.createEmptyList(idx)
       }
       this.myAnswer = this.myAnswers[0]
-      this.correct = new Array(3).fill(0)
+      this.correct = new Array(this.N).fill(0)
       this.order = 0
       this.targetQuestion = 0
       this.grade = 0

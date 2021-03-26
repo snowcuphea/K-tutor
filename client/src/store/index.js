@@ -215,10 +215,10 @@ export default new Vuex.Store({
         setTimeout( function() {
           state.userLevel += 1
           state.userExperience = 0
-        },2000)
+        },1500)
         setTimeout( function () {
           state.userExperience += temp
-        }, 500)
+        }, 1500)
       }
     }
   },
@@ -229,7 +229,7 @@ export default new Vuex.Store({
     gainExperience ({ commit }, experience) {
       setTimeout( function() {
         commit('changeExperience', experience )
-      }, 1000)
+      }, 1500)
     }
   },
   modules: {
