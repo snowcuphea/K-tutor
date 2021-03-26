@@ -227,11 +227,11 @@ def create_lc():
 def add_meaning_to_lc():
     path = os.getcwd()
     lcs = Lc.objects.all()
-    model = w2v.load(path + "\data\pandas\model")
+    model = w2v.load(path + "/data/pandas/model")
     kkma = Kkma()
     for i, lc in enumerate(lcs):
-        if i == 10:
-            break
+        if lc.meaning:
+            continue
         meanings = request_dict(lc.main_kw.content)
         if not meanings:
             lc.delete()
@@ -240,7 +240,7 @@ def add_meaning_to_lc():
         similarity = []
         main_sentence = [w for w in kkma.pos(lc.cpct_kor) if w[1] in ['NNG', 'VV', 'VA', 'MAJ', 'XR']]
         main_sentence = ["+".join(w) for w in main_sentence]
-        for meaning in meanings:
+        for j, meaning in enumerate(meanings):
             definitions_morph = [w for w in kkma.pos(meaning[1]) if w[1] in ['NNG', 'VV', 'VA', 'MAJ', 'XR']]
             definitions_morph = ["+".join(w) for w in definitions_morph]
             temp_similarity = []
@@ -251,24 +251,26 @@ def add_meaning_to_lc():
                     except:
                         continue
             if not temp_similarity:
-                similarity.append(0)
+                similarity.append((j, 0))
             else:
-                similarity.append(np.mean(sorted(temp_similarity[:20],reverse=True)))
-        meaning = meaning[similarity.index(max(similarity))]
-        lc.main_kw_word = meaning[0]
-        lc.meaning = meaning[1]
+                similarity.append((j, np.mean(temp_similarity)))
+        similarity.sort(key=lambda x:-x[1])
+        meaning = "|".join([meanings[x[0]][1] for n, x in enumerate(similarity) if n <= 2])
+        lc.main_kw_word = meanings[0][0]
+        lc.meaning = meaning
         main_splited = lc.cpct_kor.split()
         find = False
         for i, word in enumerate(main_splited):
             word_morph = [w for w in kkma.pos(word) if w[1] in ['NNG', 'VV', 'VA', 'MAJ', 'XR']]
             word_morph = ["+".join(w) for w in word_morph]
-            if lc.main_kw in word_morph:
+            if lc.main_kw.content in word_morph:
                 lc.main_kw_index = i
                 find = True
                 break
         if not find:
             lc.delete()
-        lc.save()
+        else:
+            lc.save()
 
 
 pos_dict = {
@@ -300,7 +302,10 @@ def request_dict(word):
         }
         doc = requests.get(url, param).content.decode("utf-8")
         soup = BeautifulSoup(doc, 'html.parser')
-        word_con = soup.find('word')
+        try:
+            word_con = soup.find('word').get_text()
+        except:
+            continue
         res = [(word_con, x.get_text()) for x in soup.findAll('definition')]
         meanings.extend(res)
 
