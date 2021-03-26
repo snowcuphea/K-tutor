@@ -91,6 +91,7 @@
         </v-card>
 
         <v-card elevation="0" class="px-8">
+          <Experience :experience="grade/10"/>
           <div>
             <h4>Test Result :   {{ grade }}/{{ answers.length * 10 }}</h4>
           </div>
@@ -108,7 +109,6 @@
               <p>My Answer : {{ wrong.myAnswer }} </p>
             </div>
           </div>
-          <Experience :experience="grade/10"/>
         </v-card>
         
         <v-spacer></v-spacer>
