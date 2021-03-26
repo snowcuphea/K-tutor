@@ -1,26 +1,32 @@
 from rest_framework import serializers
-from .models import Cs, Cpct, Kw, Cpcq
+from .models import Cs, Cpct, Kw, Cpcq, Lc
 
 
-class CsSerializers(serializers.ModelSerializer):
+class CsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cs
         fields = ('name', 'type', 'level')
 
 
-class CpctSerializers(serializers.Modelserializer):
+class CpctSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cpct
         fields = ('kor', 'eng', 'level')
 
 
-class KwSerializers(serializers.ModelSerializer):
+class KwSerializer(serializers.ModelSerializer):
     class Meta:
         model = Kw
         fields = ('content', 'count')
 
 
-class CpcqSerializers(serializers.ModelSerializer):
+class CpcqSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cpcq
         fields = ('kor', 'eng', 'kcq')
+
+
+class LcSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Lc
+        fields = '__all__'

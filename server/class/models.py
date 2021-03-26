@@ -15,8 +15,8 @@ class Cs(models.Model):
 class Cpct(models.Model):
     kor = models.TextField()
     eng = models.TextField()
-    main_kw = models.ForeignKey(Kw, on_delete=models.PROTECT)
-    cs = models.ForeignKey(Cs, on_delete=models.PROTECT)
+    main_kw = models.ForeignKey(Kw, on_delete=models.CASCADE)
+    cs = models.ForeignKey(Cs, on_delete=models.CASCADE)
 
 
 class Cpcq(models.Model):
@@ -26,6 +26,11 @@ class Cpcq(models.Model):
 
 
 class Lc(models.Model):
+    cs = models.ForeignKey(Cs, on_delete=models.CASCADE)
+    main_kw_index = models.IntegerField(null=True)
+    main_kw_word = models.TextField(null=True)
+    main_kw = models.ForeignKey(Kw, on_delete=models.CASCADE)
+    meaning = models.TextField(null=True)
     before_kor = models.TextField()
     before_eng = models.TextField()
     cpct_kor = models.TextField()
