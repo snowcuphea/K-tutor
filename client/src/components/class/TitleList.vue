@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-row class="d-flex justify-center my-2">
+    <v-row class="d-flex justify-center mb-2">
     <h3> K-{{currentType}} List</h3>
     </v-row>
     <v-row class="d-flex flex-column">
@@ -41,7 +41,8 @@
     methods: {
       selectClass(item){
         console.log(item)
-        this.$store.state.currentClass = item
+        this.$store.dispatch('changeCurrentClass', item)
+        // this.$store.state.currentClass = item
         this.$emit("closeDialog")
         console.log("selected Class!!!!!!!:::::", item.cs_title)
         

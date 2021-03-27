@@ -1,9 +1,6 @@
 <template>
   <div id="class">
     <v-app-bar-nav-icon class="nav-icon" @click="drawer = !drawer" />
-    <v-container class="head d-flex justify-center">
-      <h2> Class </h2>
-    </v-container>
 
     <v-navigation-drawer v-model="drawer" absolute temporary >
       <v-list
@@ -29,7 +26,7 @@
           <v-btn icon @click="dialog = false">
             <v-icon>mdi-close</v-icon>
           </v-btn>
-          <!-- <v-toolbar-title>{{ selectedType }} List</v-toolbar-title> -->
+          <v-toolbar-title>{{ selectedType }} List</v-toolbar-title>
           <v-toolbar-items>
           </v-toolbar-items>
         </v-toolbar>
@@ -109,7 +106,7 @@ export default {
   left: 1em;
 }
 
-.head {
+.class-head {
   height: 60px;
   border-bottom: 1px solid;
 }

@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <Header class="header" v-if="isNotClass"/>
+    <Header class="header" />
     <!-- <h1>안냥</h1> -->
 
     <v-main class="main">

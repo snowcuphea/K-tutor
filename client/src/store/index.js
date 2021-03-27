@@ -199,7 +199,6 @@ export default new Vuex.Store({
         (re) => re.cs_type === state.currentType
       )
       return list
-
     }
   },
   mutations: {
@@ -224,6 +223,9 @@ export default new Vuex.Store({
     changeLastGrade ( state, grade ) {
       state.userGrade.shift();
       state.userGrade.push(grade)
+    },
+    changeCurrentClass ( state, item) {
+      state.currentClass =item
     }
   },
   actions: {
@@ -237,6 +239,9 @@ export default new Vuex.Store({
     },
     changeLastGrade ({ commit }, grade ) {
       commit('changeLastGrade', grade)
+    },
+    changeCurrentClass ({ commit }, item ) {
+      commit('changeCurrentClass', item)
     }
   },
   modules: {

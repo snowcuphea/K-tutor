@@ -30,7 +30,7 @@
     </v-row>
     <!-- </v-row> -->
 
-
+<!-- 
     <v-row justify="center">
       <v-dialog v-model="dialog" fullscreen hide-overlay transition="fab-transition">
         <template v-slot:activator="{ on, attrs }">
@@ -70,7 +70,7 @@
           </v-list>
         </v-card>
       </v-dialog>
-    </v-row>
+    </v-row> -->
 
 
     <v-navigation-drawer v-model="drawer" absolute temporary >
