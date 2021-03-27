@@ -90,7 +90,7 @@
           <h3>Test Report</h3>
         </v-card>
 
-        <v-card elevation="0" class="px-8">
+        <v-card tile elevation="0" class="px-8">
           <Experience :experience="grade"/>
           <div>
             <h4>Test Result :   {{ grade }}/{{ answers.length * 10 }}</h4>
@@ -113,7 +113,7 @@
         
         <v-spacer></v-spacer>
 
-        <v-card class="mb-3 d-flex justify-center" elevation="0">
+        <v-card tile class="mb-3 d-flex justify-center" elevation="0">
           <v-btn
             color="primary"
             text
@@ -147,8 +147,8 @@ export default {
         lines_kr : ["오늘 저녁에 뭐 먹었어?", "나는 오늘 저녁으로 고기를 먹었어.","오, 맛있었니?"],
         lines_en : ["What did you have for dinner?", "I had proteins for dinner.","Wow, how was it?"]},
         {source : "도깨비", 
-        lines_kr : ["나랑 벚꽃축제 갈래?", "너무 좋아 나도 벚꽃 보러 가고 싶었어.","그러면 토요일 어때?"],
-        lines_en : ["Do you want to go to the cherry blossom festival with me?", "Yes, I would love to go see cherry blossoms.","Saturday sounds good?"]},
+        lines_kr : ["나랑 벚꽃축제 갈래?", "너무 좋아, 나도 벚꽃 보러 가고 싶었어.","그러면 토요일 어때?"],
+        lines_en : ["Wanna visit the cherry blossom festival with me?", "Yes, I would love to go see cherry blossoms.","Saturday sounds good?"]},
         {source : "뉴스",
         lines_kr : ["이렇게 한줄로만 나오는 문제도 있다."],
         lines_en : ["There are questions that only have one sentence."]}

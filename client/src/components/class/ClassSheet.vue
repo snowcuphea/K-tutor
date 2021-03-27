@@ -52,6 +52,8 @@ import StudyPage from "@/components/class/StudyPage.vue"
     },
     methods: {
       startClass() {
+        // 서버에 요청을 보내서 해당 학습 내용을 받아온다
+        this.$store.dispatch('getLessonInfo')
         this.openStudyPage = !this.openStudyPage
       },
       endClass() {

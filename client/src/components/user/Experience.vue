@@ -6,10 +6,10 @@
       <p class="mb-0">{{ userExperience }}/{{ userLevel*10 }}</p>
     </div>
     <v-progress-linear
-      :value="progress">
+      :value="progress" height="10">
     </v-progress-linear>
     <div>
-      <p v-if="experience != -1" class="text-end">+{{ experience }}</p>
+      <p v-if="experience != -1" class="text-end">+{{ experience }} exp</p>
     </div>
   </v-container>
 </template>

@@ -116,6 +116,7 @@ export default {
   top: 0;
   height: 60px;
   border-bottom: 1px solid;
+  z-index: 49;
 }
 
 </style>
