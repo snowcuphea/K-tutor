@@ -1,8 +1,11 @@
 <template>
   <div id="class">
     <v-app-bar-nav-icon class="nav-icon" @click="drawer = !drawer" />
+    <v-container class="class-head d-flex justify-center">
+      <h2> Class </h2>
+    </v-container>
 
-    <v-navigation-drawer v-model="drawer" absolute temporary >
+    <v-navigation-drawer v-model="drawer" absolute temporary style="z-index:99;">
       <v-list
         nav
         dense
@@ -104,9 +107,13 @@ export default {
   position: fixed;
   top: 0.8em;
   left: 1em;
+  z-index: 50;
 }
 
 .class-head {
+  position: sticky;
+  background-color: white;
+  top: 0;
   height: 60px;
   border-bottom: 1px solid;
 }
