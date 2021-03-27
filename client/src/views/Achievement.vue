@@ -125,6 +125,10 @@ export default {
   height: 500px;
 }
 
+#achieve_body::-webkit-scrollbar {
+  display: none;
+}
+
 .modal-overlay {
   display: flex;
   align-items: center;

@@ -1,6 +1,6 @@
 <template>
   <v-bottom-navigation class="foot-nav" :value="value">
-    <v-btn  v-for="(nav,idx) in navs" :key="idx" color="" class="mt-2" plain @click="goTo(nav, idx)">
+    <v-btn v-for="(nav,idx) in navs" :key="idx" color="" class="mt-2" plain @click="goTo(nav, idx)">
       <span>{{ nav.name }}</span>
       <v-icon>{{ nav.icon }}</v-icon>
     </v-btn>
@@ -59,6 +59,7 @@ export default {
 
 .foot-nav {
   border-top: 1px solid;
+  height: 4.5em !important;
 }
 
 </style>

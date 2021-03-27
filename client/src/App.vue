@@ -91,7 +91,8 @@
   }
 
   .header{
-    min-height:70px;
+    min-height:60px;
+    max-height:60px;
   }
 
   .main{
@@ -99,5 +100,8 @@
     overflow-y: auto;
   }
 
+  .main::-webkit-scrollbar {
+    display: none;
+  }
 
 </style>
