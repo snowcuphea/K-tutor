@@ -42,6 +42,7 @@
       selectClass(item){
         console.log(item)
         this.$store.state.currentClass = item
+        this.$emit("closeDialog")
         console.log("selected Class!!!!!!!:::::", item.cs_title)
         
       }
