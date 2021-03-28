@@ -4,7 +4,9 @@
       <v-btn @click="startClass()"> 학습하기 </v-btn>
     </v-row>
     <v-row>
-    <img :src="require(`@/assets/images/poster/poster${classInfo.cs_seq}.jpg`)" alt="title" class="imgSize">
+      <v-col>
+      <img :src="require(`@/assets/images/poster/poster${classInfo.cs_seq}.jpg`)" alt="title" class="imgSize">
+      </v-col>
     </v-row>
 
     <v-row>
@@ -69,10 +71,9 @@ import StudyPage from "@/components/class/StudyPage.vue"
 </script>
 
 <style scoped>
-.imgSize {
+  .imgSize {
     /* max-width: 15vh; */
     /* height: 50vh; */
     width: 100%;
   }
-
 </style>
