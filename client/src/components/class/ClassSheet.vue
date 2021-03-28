@@ -1,15 +1,25 @@
 <template>
   <v-container id="classSheet">
     <v-row>
-      <v-col>
-        <span> {{currentClass.cs_title}} </span>
-        <!-- <span> {{getCurrentClassLearnedKeword}} </span> -->
+      <v-col class="d-flex justify-center">
+        <h2> {{currentClass.cs_title}} </h2>
+        <!-- <span> 여기에 나중에 영어이름도 넣기 </span> -->
+        
       </v-col>
     </v-row>
 
     <v-row>
       <v-col>
         <img :src="require(`@/assets/images/poster/poster${classInfo.cs_seq}.jpg`)" alt="title" class="imgSize">
+      </v-col>
+    </v-row>
+
+    <v-row >
+      <v-col >
+        <span v-if="currentClass.cs_level == 1">Difficulty: Beginner</span>
+        <span v-else-if="currentClass.cs_level == 2">Difficulty: Intermediate</span>
+        <span v-else-if="currentClass.cs_level == 3">Difficulty: Advanced</span>
+        <span v-else>Difficulty: Basic</span>
       </v-col>
     </v-row>
 
@@ -46,7 +56,7 @@
               </v-col>
               <v-col cols="1" xs="1" class="d-flex align-center">
                 <!-- item.cs_seq가 getCurrentClassLearnedKeword의 cs_seq에 있는지 검사해서 완료여부도 넣어야됨 -->
-                <span v-if="item.cs_seq">O</span> 
+                <span v-if="checkCompleted(item)">O</span> 
                 <span v-else>X</span> 
               </v-col>
             </v-row>
@@ -93,6 +103,12 @@
       endClass() {
         this.openStudyPage = !this.openStudyPage
       },
+      checkCompleted(item) {
+        // if item.cs_seq in getCurrentClassLearnedKeword.cs_
+        console.log(item)
+        return true
+
+      }
 
     },
     computed: {
