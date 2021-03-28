@@ -34,7 +34,7 @@
 
     computed: {
       isNotClass() {
-        if (['Class', 'TitleList', 'ClassMain','Login'].includes(this.$route.name)) {
+        if (['Class', 'TitleList', 'ClassMain','Login','Home'].includes(this.$route.name)) {
           return false
         } else {
           return true
@@ -42,7 +42,7 @@
       },
 
       isNotMain() {
-        if (['Login'].includes(this.$route.name)) {
+        if (['Login','Home'].includes(this.$route.name)) {
           return false
         } else {
           return true
@@ -72,7 +72,6 @@
         this.$store.dispatch('changePage', defaultSetting)
       }
 
-      console.log(this.$route.path)
     }
   };
 </script>

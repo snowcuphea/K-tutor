@@ -35,15 +35,15 @@
               <v-spacer></v-spacer>
               <div v-for="(line, idx) in lessonInfo.lines_kr" :key="idx">
                 <div v-if="idx%2 == 0" class="pb-2">
-                  <p> A: {{ lessonInfo.lines_kr[idx] }} </p>
-                  <p> A: {{ lessonInfo.lines_en[idx] }} </p>
+                  <p><span v-if="lessonInfo.type !== 'pop'">A: </span>{{ lessonInfo.lines_kr[idx] }} </p>
+                  <p><span v-if="lessonInfo.type !== 'pop'">A: </span>{{ lessonInfo.lines_en[idx] }} </p>
                 </div>
                 <div v-else class="pb-2">
-                  <p> B: {{ lessonInfo.lines_kr[idx] }} </p>
-                  <p> B: {{ lessonInfo.lines_en[idx] }} </p>
+                  <p><span v-if="lessonInfo.type !== 'pop'">B: </span>{{ lessonInfo.lines_kr[idx] }} </p>
+                  <p><span v-if="lessonInfo.type !== 'pop'">B: </span>{{ lessonInfo.lines_en[idx] }} </p>
                 </div>
               </div>
-              <div class="d-flex justify-end mt-n3">
+              <div class="d-flex justify-end mt-n3 lesson-source">
                 <span> Source : {{ lessonInfo.title }} </span>
               </div>
             </v-card>
@@ -88,20 +88,20 @@
             <v-card tile height="70%" elevation="0">
               <div v-for="(line, idx) in lessonInfo.lines_kr" :key="idx">
                 <div v-if="idx%2 == 0" class="pb-4">
-                  <p class="pb-2"> A: {{ lessonInfo.lines_kr[idx] }} </p>
-                  <p> A: {{ lessonInfo.lines_en[idx] }} </p>
+                  <p class="pb-2"><span v-if="lessonInfo.type !== 'pop'">A: </span>{{ lessonInfo.lines_kr[idx] }} </p>
+                  <p><span v-if="lessonInfo.type !== 'pop'">A: </span>{{ lessonInfo.lines_en[idx] }} </p>
                 </div>
                 <div v-else class="pb-4">
-                  <p class="pb-2"> B: {{ myAnswer }} </p>
+                  <p class="pb-2"><span v-if="lessonInfo.type !== 'pop'">B: </span>{{ myAnswer }} </p>
                   <p class="answer-correct mt-n2"
                    v-if="isCorrect()"> Correct, you may proceed. </p>
                   <p class="answer-wrong mt-n2"
                    v-else-if="isCorrect() == false && pass !== null"
                   >Incorrect, try again.</p>
-                  <p> B: {{ lessonInfo.lines_en[idx] }} </p>
+                  <p><span v-if="lessonInfo.type !== 'pop'">B: </span>{{ lessonInfo.lines_en[idx] }} </p>
                 </div>
               </div>
-              <div class="d-flex justify-end mt-n3">
+              <div class="d-flex justify-end mt-n3 lesson-source">
                 <span> Source : {{ lessonInfo.title }} </span>
               </div>
 
@@ -319,7 +319,7 @@ export default {
   margin-bottom: 0 !important;
 }
 
-.step1 span {
+.lesson-source span {
   color: grey;
   font-size: 0.7em;
 }
@@ -332,7 +332,7 @@ export default {
   margin-bottom: 0 !important;
 }
 
-.step3 span {
+.lesson-source span {
   color: grey;
   font-size: 0.7em;
 }

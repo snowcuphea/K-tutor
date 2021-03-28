@@ -8,13 +8,15 @@ import MyPage from '../views/MyPage.vue'
 import Report from '../views/Report.vue'
 import Login from '../views/user/Login.vue'
 import Signup from '../views/user/Signup.vue'
-
+import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
+    name: 'Home',
+    component: Home,
   },
   {
     path: '/login',
