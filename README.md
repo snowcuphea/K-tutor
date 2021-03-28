@@ -1,73 +1,87 @@
 # A303 - 말뭉치
 
+<div align=center>
+    <img src="https://img.shields.io/badge/platform-mobile-green">
+    <img src="https://img.shields.io/badge/framwork-Vue-42b883">
+    <img src="https://img.shields.io/badge/framework-django-blue">
+    <img src="https://img.shields.io/badge/database-MariaDB-9cf">
+    <img src="https://img.shields.io/badge/server-AWS-yellow">
+    <img src="https://img.shields.io/badge/language-python%2C javascript-yellowgreen">
+    <img src="https://img.shields.io/badge/swagger-valid-brightgreen">
+</div>
 
 
-### 회원가입 / 기초 설문
 
-- 회원가입하고 나서 설문정도로 넣는다.
-  - 일상회화 / 비즈니스 대화 / 등등...
 
-### 난이도
 
-- 처음에 난이도를 1로 다 설정한다. 나중에 수정
-- 구어체/문어체가 쉬우니까 먼저 그걸로 가져온다.
-- 한국어 능력 시험이 레벨별로 되어있으니까 그거 단어장 참고해서 난이도 설정
+## 목차
 
-### 학습 리스트
+### 팀원소개 
 
-- 영화 : 반도, 부산행, 승리호
-- 드라마 : 도깨비, 사랑의불시착, 사이코지만 괜찮아, 이태원클라스
-- kpop : 블랙핑크, BTS
-- 뉴스 : 말뭉치
+### 프로젝트 기획
 
-### 학습 플로우
+### 프로젝트 소개
 
-학습리스트 → 드라마제목 선택 → 랜덤으로단어카드→ 다음/목록으로 → ...
+### 기술스택
 
-- 유저가 본 단어는 visit처리를 해서 다음 랜덤때 안나온다.
-- 유저가 본 단어는 마이페이지에서 다시 확인 가능하다.
+### Convention 
 
-### 데이터 분석
 
-1. 단어 형태 분석
-2. 형태소 분석까지 해서 → 사랑해, 사랑하다, 사랑하니 같은 걸로 묶을 수 있게 해야해
-3. 관용구
 
-### 학습카드
 
-1. 단어에 대한 선택권을 주지 않는다. (2차적인 선택)
-2. 맨 처음에는 장면이랑 그에대한 대사(한글)을 보여준다. 밑에 영어번역본을 통째로 (앞, 뒤 통째로)
-3. 핵심을 빈칸으로 보여준다.
-4. 그 다음 장에서 동사 원형이랑 예시 이런 정보를 보여준다.
-5. 발음듣기
 
-- 네이버 clova 한국어 쓰면 자연스럽게 읽어줌
+## 팀원소개
 
-### 마이페이지
 
-1. 내가 지금까지 봤던 단어들 확인
-2. 그 리스트에서 또 카드 볼 수 있고
-3. 내 정보 확인
-   - 등급
-   - 업적, 뱃지
-     - 카드 100개를 확인했다!
-     - 태양의후예 다 봤다 등등
 
-### 테스트
+## 프로젝트 기획
 
-1. 내가 지금까지 본 단어 리스트에서 테스트가 나온다.
-2. 선택지를 주고, 번호를 선택하는 퀴즈
 
-- 답 제외하고 나머지는 랜덤 단어 가져오기
 
-1. 띄어쓰기 기준으로 잘라서 순서대로 배치
+## 프로젝트 소개
 
-### 추가기능
 
-- 소셜로그인
-- 오답노트
-  - 틀린 문제를 확인할 수 있다.
 
-### Story Board
+## 기술스택
 
-- https://docs.google.com/presentation/d/1ST61xl2AEwgeZ_4NORf3zai0MY5jEQjtcHHnvImUxcY/edit?usp=sharing
+### Bigdata 분석
+
+| python 라이브러리 | Version | Comment                                |
+| :---------------: | :-----: | :------------------------------------- |
+|       axios       | 0.21.1  | 서버로 요청을 보내기 위해 사용         |
+|    vue-router     |  3.5.1  | 요청 URL에 따라 브라우저에서 돔을 변경 |
+
+### Backend 구성 요소
+
+| 기술 스택  |   Version   | Comment                                    |
+| :--------: | :---------: | :----------------------------------------- |
+|  OpenJDK   |     11      | Java                                       |
+| SpringBoot |    2.4.2    | Rest API 웹 애플리케이션 개발              |
+|   Maven    |    4.0.0    | 프로젝트를 빌드하고 라이브러리를 관리 도구 |
+|  MongoDB   |    4.4.3    | DB                                         |
+|    JPA     |    2.1.2    | 서버와 DB의 연동을 위해 사용               |
+|   Ubuntu   | 20.04.2 LTS | 서비스 제공을 위해 리눅스 서버 구축        |
+|   Docker   |   20.10.2   | 컨테이너화 된 애플리케이션 관리            |
+|   Nginx    |   1.19.6    | Vue 클라이언트 웹 서버 사용                |
+
+|  Django 라이브러리  | Version | Comment                     |
+| :-----------------: | :-----: | :-------------------------- |
+|     Spring Web      |    -    | Rest API 서버 구축          |
+|      WebSocket      |    -    | 소켓 서버 구축              |
+| Spring Data MongoDB |    -    | MongoDB 연결                |
+|   Spring Data JPA   |    -    | DB와의 연결 관리            |
+|       Lombok        |    -    | Getter, Setter 등 빠른 구현 |
+
+### Frontend 구성 요소
+
+| Vue 라이브러리 | Version | Comment                                |
+| :------------: | :-----: | :------------------------------------- |
+|     axios      | 0.21.1  | 서버로 요청을 보내기 위해 사용         |
+|   vue-router   |  3.5.1  | 요청 URL에 따라 브라우저에서 돔을 변경 |
+|      vuex      |  3.6.2  | 상태 관리를 위해 사용                  |
+|    vuetify     |  2.4.7  | UI 구성을 위해 사용                    |
+|    chart.js    |  2.9.4  | 파형을 나타내기 위한 라이브러리        |
+
+
+
+## Convention
