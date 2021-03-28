@@ -9,6 +9,15 @@
 <script>
 export default {
   created() {
+    // default page
+    const defaultSetting = {
+      navName: "Report",
+      navValue: 2
+    }
+    // default setting
+    this.$store.dispatch('changePage', defaultSetting)
+
+
     setTimeout(() => {
       this.$router.push({path: '/report'})
     }, 1500);
