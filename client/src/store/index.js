@@ -93,10 +93,12 @@ export default new Vuex.Store({
       { title : '승리호', line: '바람 불면 울렁이는 기분 탓에 나도 모르게', img : 'poster1' },
       { title : '아이유', line: '바람ㄴ 불면 저편에서', img : 'poster1' },
     ],
+    
+    lessonInfo: {},
 
     studyCnt: 100,
     contiDay: 9,
-
+  
     items: [
       {
         title: '빛나는 트로피',
@@ -270,7 +272,7 @@ export default new Vuex.Store({
         type: 'drama',
         title: '태양의 후예',
         img: 'poster1',
-        keyword: '싶어',
+        keyword_kr: '싶어',
         keyword_en: 'to want',
         lines_kr: [
           "나랑 벚꽃축제 갈래?",  
@@ -283,10 +285,12 @@ export default new Vuex.Store({
           "Saturday sounds good?"
         ],
         example_kr: [
-          "제주도 가고 싶다."
+          "제주도 가고 싶다.",
+          "예제2"
         ],
         example_en: [
-          "Want to visit Jeju Island."
+          "Want to visit Jeju Island.",
+          "example2"
         ]
       }
       state.lessonInfo = lessonForm
