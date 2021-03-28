@@ -56,7 +56,7 @@
         </v-card>
         
         <v-card tile height="10%" elevation="0"
-         class="d-flex justify-end align-center" >
+         class="d-flex justify-end align-center pr-5" >
           <v-btn text plain @click="previousQuestion" v-if="targetQuestion != 0">
             previous
           </v-btn>

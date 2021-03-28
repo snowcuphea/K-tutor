@@ -7,7 +7,7 @@
       transition="slide-x-reverse-transition"
       scrollable
     >
-      <v-card height="100%" width="100" tile>
+      <v-card height="100%" width="100%" tile>
         <v-btn
           icon
           class="close-dialog"
@@ -40,7 +40,7 @@
         </v-card>
 
         <v-card tile height="13%" elevation="0"
-         class="d-flex justify-end align-center" >
+         class="d-flex justify-end align-center pr-5" >
           <v-btn text plain @click="currentStep -= 1" v-if="currentStep != 1">
             previous
           </v-btn>
