@@ -79,6 +79,7 @@ export default new Vuex.Store({
 
     studyCnt: 100,
     contiDay: 9,
+
     items: [
       {
         title: '빛나는 트로피',
@@ -199,9 +200,9 @@ export default new Vuex.Store({
         (re) => re.cs_type === state.currentType
       )
       return list
-
     }
   },
+
   mutations: {
     changeCurrentPage ( state , changeItem ) {
       state.currentPage = changeItem.navName
@@ -224,8 +225,39 @@ export default new Vuex.Store({
     changeLastGrade ( state, grade ) {
       state.userGrade.shift();
       state.userGrade.push(grade)
+    },
+    changeCurrentClass ( state, item) {
+      state.currentClass =item
+    },
+    getLessonInfo ( state ) {
+      // axios 요청 보내서 state에 저장
+      const lessonForm = {
+        type: 'drama',
+        title: '태양의 후예',
+        img: 'poster1',
+        keyword: '싶어',
+        keyword_en: 'to want',
+        lines_kr: [
+          "나랑 벚꽃축제 갈래?",  
+          "너무 좋아, 나도 벚꽃 보러 가고 싶었어.", 
+          "그러면 토요일 어때?"
+        ],
+        lines_en:  [
+          "Wanna visit the cherry blossom festival with me?", 
+          "Yes, I would love to go see cherry blossoms.",
+          "Saturday sounds good?"
+        ],
+        example_kr: [
+          "제주도 가고 싶다."
+        ],
+        example_en: [
+          "Want to visit Jeju Island."
+        ]
+      }
+      state.lessonInfo = lessonForm
     }
   },
+
   actions: {
     changePage ({ commit }, changeItem ) {
       commit('changeCurrentPage', changeItem)
@@ -237,8 +269,15 @@ export default new Vuex.Store({
     },
     changeLastGrade ({ commit }, grade ) {
       commit('changeLastGrade', grade)
+    },
+    changeCurrentClass ({ commit }, item ) {
+      commit('changeCurrentClass', item)
+    },
+    getLessonInfo ({ commit }) {
+      commit('getLessonInfo')
     }
   },
+
   modules: {
   },
 
