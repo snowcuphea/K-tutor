@@ -45,6 +45,7 @@
         // this.$store.state.currentClass = item
         this.$emit("closeDialog")
         console.log("selected Class!!!!!!!:::::", item.cs_title)
+        this.$store.dispatch("getListCurrentClass", item) //선택한 타이틀의 학습리스트 가져온다.
         
       }
 
@@ -61,8 +62,6 @@
     computed: {
       ...mapState(["currentType"]),
       ...mapGetters(["getCurrentTypeTitleList"]),
-
-
     },
   }
 </script>

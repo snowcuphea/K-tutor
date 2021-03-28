@@ -14,6 +14,8 @@ export default new Vuex.Store({
     currentType: '', //선택한 타입(영화, 드라마, 가수) 
     currentClass:'', //최근 클래스 정보
     defaultClass:{cs_seq:1, cs_title: '싸이코지만괜찮아', cs_type:'drama', cs_level:1}, 
+    classList:[], //title을 선택하면 나오는 학습 리스트
+
 
     allTitleList: [
       {cs_seq:1, cs_title: '싸이코지만괜찮아', cs_type:'drama', cs_level:1},
@@ -46,6 +48,21 @@ export default new Vuex.Store({
     userLevel: 4,
     userExperience: 35,
     userGrade: [30,60,20,70,80,50,30,20,70,90],
+    userLearnedKeword: [ //유저가 학습한 키워드랑 키워드에 대한 정보
+      
+      {learned_seq:1, cpct_seq:1, cs_seq:3, cs_title: '스위트홈', cs_type:'drama', cs_level:3},
+      {learned_seq:1, cpct_seq:1,  cs_seq:4, cs_title: '미스터선샤인', cs_type:'drama', cs_level:2},
+      {learned_seq:2, cpct_seq:2,  cs_seq:4, cs_title: '미스터선샤인', cs_type:'drama', cs_level:2},
+
+      {learned_seq:5, cpct_seq:1,  cs_seq:6, cs_title: '승리호', cs_type:'movie', cs_level:1},
+      {learned_seq:6, cpct_seq:2,  cs_seq:6, cs_title: '승리호', cs_type:'movie', cs_level:1},
+      {learned_seq:7, cpct_seq:3,  cs_seq:6, cs_title: '승리호', cs_type:'movie', cs_level:1},
+
+      {learned_seq:9, cpct_seq:1, cs_seq:11, cs_title: '방탄소년단', cs_type:'pop', cs_level:1},
+      {learned_seq:10, cpct_seq:2, cs_seq:11, cs_title: '방탄소년단', cs_type:'pop', cs_level:1},
+      {learned_seq:11, cpct_seq:3, cs_seq:11, cs_title: '방탄소년단', cs_type:'pop', cs_level:1},
+
+    ],
 
     userProgress: {
       genres: [
@@ -200,7 +217,14 @@ export default new Vuex.Store({
         (re) => re.cs_type === state.currentType
       )
       return list
-    }
+    },
+
+    getCurrentClassLearnedKeword: function (state) {
+      let list = state.userLearnedKeword.filter(
+        (re) => re.cs_seq === state.currentClass.cs_seq
+      )
+      return list
+    },
   },
 
   mutations: {
@@ -228,6 +252,17 @@ export default new Vuex.Store({
     },
     changeCurrentClass ( state, item) {
       state.currentClass =item
+    },
+    getListCurrentClass (state, titleInfo) {
+      //titleInfo.cs_seq로 axios 요청받아서 리스트 받아오기
+      console.log("뮤테이션 getListCurrentClass실행:::", titleInfo)
+      const tempClassList = [
+        {cpct_seq:1, title:titleInfo.cs_title, img:'poster1', keyword:'싶어', keyword_en: 'to want' },
+        {cpct_seq:2, title:titleInfo.cs_title, img:'poster2', keyword:'좋아', keyword_en: 'I like it'},
+        {cpct_seq:3, title:titleInfo.cs_title, img:'poster3', keyword:'사랑해', keyword_en: 'I love you'},
+      ]
+      state.classList = tempClassList
+
     },
     getLessonInfo ( state ) {
       // axios 요청 보내서 state에 저장
@@ -272,6 +307,9 @@ export default new Vuex.Store({
     },
     changeCurrentClass ({ commit }, item ) {
       commit('changeCurrentClass', item)
+    },
+    getListCurrentClass ({ commit }, titleInfo) {
+      commit('getListCurrentClass', titleInfo)
     },
     getLessonInfo ({ commit }) {
       commit('getLessonInfo')
