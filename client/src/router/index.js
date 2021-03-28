@@ -6,12 +6,25 @@ import Test from '../views/Test.vue'
 import Achievement from '../views/Achievement.vue'
 import MyPage from '../views/MyPage.vue'
 import Report from '../views/Report.vue'
+import Login from '../views/user/Login.vue'
+import Signup from '../views/user/Signup.vue'
+
 
 Vue.use(VueRouter)
 
-const routes = [{
+const routes = [
+  {
     path: '/',
-    redirect: '/report',
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login,
+  },
+  {
+    path: '/signup',
+    name: 'Signup',
+    component: Signup,
   },
   {
     path: '/report',

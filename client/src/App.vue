@@ -1,14 +1,13 @@
 <template>
   <v-app>
+
     <Header class="header" v-if="isNotClass"/>
-    <!-- <h1>안냥</h1> -->
 
     <v-main class="main">
       <router-view />
     </v-main>
 
-    <Footer/>
-
+    <Footer v-if="isNotMain"/>
 
 
   </v-app>
@@ -35,13 +34,20 @@
 
     computed: {
       isNotClass() {
-        if (['Class', 'TitleList', 'ClassMain'].includes(this.$route.name)) {
+        if (['Class', 'TitleList', 'ClassMain','Login'].includes(this.$route.name)) {
           return false
         } else {
           return true
         }
       },
 
+      isNotMain() {
+        if (['Login'].includes(this.$route.name)) {
+          return false
+        } else {
+          return true
+        }
+      }
 
       // isNotClass () {
       //   if (this.$route.name === 'Class') {
@@ -65,6 +71,8 @@
       if (this.$route.path === "/report") {
         this.$store.dispatch('changePage', defaultSetting)
       }
+
+      console.log(this.$route.path)
     }
   };
 </script>
