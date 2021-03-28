@@ -56,10 +56,11 @@
         </v-card>
         
         <v-card tile height="10%" elevation="0"
-         class="d-flex justify-end align-center pr-5" >
+         class="d-flex align-center px-5" >
           <v-btn text plain @click="previousQuestion" v-if="targetQuestion != 0">
             previous
           </v-btn>
+          <v-spacer></v-spacer>
           <v-btn text plain @click="nextQuestion" v-if="targetQuestion != questions.length - 1">
             next
           </v-btn>
@@ -293,6 +294,7 @@ export default {
       this.order = 0
       this.targetQuestion = 0
       this.grade = 0
+      this.checked = []
     }
   },
   created() {

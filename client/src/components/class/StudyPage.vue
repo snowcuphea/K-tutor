@@ -18,36 +18,119 @@
 
         <v-card tile height="15%" elevation="0"
          class="d-flex justify-center align-center" >
-          <h3>Step {{ currentStep }}. {{ stepName[currentStep] }} </h3>
+          <h2>Step {{ currentStep }}. {{ stepName[currentStep] }} </h2>
 
         </v-card>
 
         <v-card tile height="72%" elevation="0" class="px-5">
-          <div v-if="currentStep == 1">
-            step1
-          </div>
 
-          <div v-else-if="currentStep == 2">
-            step2
-          
-          </div>
+          <!-- step1 -->
+          <v-card class="step1" v-if="currentStep == 1" tile height="100%" elevation="0">
+            <v-card tile height="40%" elevation="0">
+              <img :src="require(`@/assets/images/poster/${lessonInfo.img}.jpg`)"
+               alt="포스터 이미지" height="100%" width="100%">
+            </v-card>
+            <v-card tile height="60%" elevation="0" class="d-flex flex-column pt-2">
+              <v-btn plain icon><v-icon>mdi-volume-high</v-icon></v-btn>
+              <v-spacer></v-spacer>
+              <div v-for="(line, idx) in lessonInfo.lines_kr" :key="idx">
+                <div v-if="idx%2 == 0" class="pb-2">
+                  <p> A: {{ lessonInfo.lines_kr[idx] }} </p>
+                  <p> A: {{ lessonInfo.lines_en[idx] }} </p>
+                </div>
+                <div v-else class="pb-2">
+                  <p> B: {{ lessonInfo.lines_kr[idx] }} </p>
+                  <p> B: {{ lessonInfo.lines_en[idx] }} </p>
+                </div>
+              </div>
+              <div class="d-flex justify-end mt-n3">
+                <span> Source : {{ lessonInfo.title }} </span>
+              </div>
+            </v-card>
+          </v-card>
 
-          <div v-else>
-            step3
-          </div>
+          <!-- step2 -->
+          <v-card class="step2" v-else-if="currentStep == 2" tile height="100%" elevation="0">
+            <v-card tile height="30%" elevation="0" class="d-flex flex-column">
+              <div class="d-flex align-center justify-space-between">
+                <h3>[ Key Sentence ]</h3>
+                <v-btn plain icon class=""><v-icon>mdi-volume-high</v-icon></v-btn>
+              </div>
+              <div class="pl-5 pt-2">
+                <p> {{ lessonInfo.lines_kr[1] }} </p>
+                <p> {{ lessonInfo.lines_en[1] }} </p>
+              </div>
+            </v-card>
+            <v-card tile height="30%" elevation="0" class="pt-4">
+              <div class="d-flex align-center justify-space-between">
+                <h3>[ Key Word ]</h3>
+                <!-- <v-btn plain icon class=""><v-icon>mdi-volume-high</v-icon></v-btn> -->
+              </div>
+              <div class="pl-5 pt-2">
+                <p> {{ lessonInfo.keyword_kr }} </p>
+                <p> {{ lessonInfo.keyword_en }} </p>
+              </div>
+            </v-card>
+            <v-card tile height="40%" elevation="0">
+              <div class="d-flex align-center justify-space-between">
+                <h3>[ Example ]</h3>
+                <v-btn plain icon class=""><v-icon>mdi-volume-high</v-icon></v-btn>
+              </div>
+              <div class="pl-5 pt-2" v-for="(example, idx) in lessonInfo.example_kr" :key="idx">
+                <p>{{ idx+1 }}. {{ lessonInfo.example_kr[idx] }} </p>
+                <p class="pl-4"> {{ lessonInfo.example_en[idx] }} </p>
+              </div>
+            </v-card>
+          </v-card>
+
+          <!-- step3 -->
+          <v-card class="step3" v-else tile height="100%" elevation="0" color="black">
+            <v-card tile height="70%" elevation="0">
+              <div v-for="(line, idx) in lessonInfo.lines_kr" :key="idx">
+                <div v-if="idx%2 == 0" class="pb-4">
+                  <p class="pb-2"> A: {{ lessonInfo.lines_kr[idx] }} </p>
+                  <p> A: {{ lessonInfo.lines_en[idx] }} </p>
+                </div>
+                <div v-else class="pb-4">
+                  <p class="pb-2"> B: {{ myAnswer }} </p>
+                  <p class="answer-correct mt-n2"
+                   v-if="isCorrect()"> Correct, you may proceed. </p>
+                  <p class="answer-wrong mt-n2"
+                   v-else-if="isCorrect() == false && pass !== null"
+                  >Incorrect, try again.</p>
+                  <p> B: {{ lessonInfo.lines_en[idx] }} </p>
+                </div>
+              </div>
+              <div class="d-flex justify-end mt-n3">
+                <span> Source : {{ lessonInfo.title }} </span>
+              </div>
+
+              <div class="d-flex justify-space-between">
+                <v-btn plain icon><v-icon>mdi-volume-high</v-icon></v-btn>
+                <v-btn plain icon @click="empty()"><v-icon>mdi-restart</v-icon></v-btn>
+              </div>
+            </v-card>
+            <v-card tile height="30%" elevation="0">
+              <v-btn v-for="(choice,idx) in choices" :key="idx" 
+              @click="putAnswer(choice)" :disabled="checked.includes(choice)"
+              class="mx-1 my-2"> {{ choice }} </v-btn>
+            </v-card>
+          </v-card>
+
 
 
         </v-card>
 
         <v-card tile height="13%" elevation="0"
-         class="d-flex justify-end align-center pr-5" >
+         class="d-flex align-center px-5" >
           <v-btn text plain @click="currentStep -= 1" v-if="currentStep != 1">
             previous
           </v-btn>
+          <v-spacer></v-spacer>
           <v-btn text plain @click="currentStep += 1" v-if="currentStep != 3">
             next
           </v-btn>
-          <v-btn text plain @click="submitLesson" v-if="currentStep == 3 ">
+          <v-btn text plain @click="submitLesson" v-if="currentStep == 3" :disabled="!pass">
             Finish
           </v-btn>
         </v-card>
@@ -100,6 +183,8 @@ import { mapState } from 'vuex'
 
 import Experience from "@/components/user/Experience.vue"
 
+
+
 export default {
   props: ["openStudyPage"],
   data() {
@@ -108,6 +193,11 @@ export default {
       stepName: [null, "Go Through", "Learn", "Practice"],
       resultDialog: false,
       exp: 0,
+      
+      myAnswer: "",
+      checked: [],
+      order: 0,
+      pass: null,
     }
   },
   components: {
@@ -115,6 +205,7 @@ export default {
   },
   methods:{
     closeStudyPage() {
+      this.defaultSetting()
       this.$emit('closeStudyPage')
     },
     submitLesson() {
@@ -126,18 +217,134 @@ export default {
       console.log("hi")
     },
     endClass() {
-      this.currentStep = 1
+      this.defaultSetting()
       this.resultDialog = !this.resultDialog
       this.$emit('closeStudyPage')
+    },
+    defaultSetting() {
+      this.currentStep = 1
+      this.exp = 0
+      this.order = 0
+      this.myAnswer = ''
+      this.checked = []
+      this.pass = null
+    },
+    empty() {
+      this.order = 0
+      this.checked = []
+      this.pass = null
+      this.createEmptyList()
+    },
+    putAnswer(choice) {
+      const temp = this.myAnswer.split(" ")
+      this.checked.push(choice)
+      temp[this.order] = choice
+      this.order += 1
+      this.myAnswer = temp.join(' ')
+      if (this.order == temp.length -1 ) {
+        if (this.isCorrect()) {
+          this.pass = true
+        } else {
+          this.pass = false
+        }
+      }
+    },
+    isCorrect() {
+      const answer = this.lessonInfo.lines_kr[1].split(' ')
+      const myanswer = this.myAnswer.split(' ')
+      for ( let idx = 0; idx < answer.length ; idx++) {
+        var compare = answer[idx]
+        var myCompare = myanswer[idx]
+        if ( idx == answer.length -1 ) {
+          compare = compare.slice(0, -1)
+        }
+        if ( compare !== myCompare ) {
+          return false
+        }
+      }
+      return true
+    },
+    createEmptyList() {
+      const operators = ['.','!','?']
+      var target = this.lessonInfo.lines_kr[1].split(' ')
+      var new_line = []
+      var last_word = ''
+      target.forEach( function(part, index) {
+        this[index] = '_____'
+      }, new_line)
+      for (var operator of operators) {
+        if (target[target.length - 1 ].slice(-1) === operator) {
+          last_word = operator
+        }
+      }
+      new_line.push(last_word)
+      this.myAnswer = new_line.join(' ')
     }
   },
   computed: {
-    ...mapState([ "lessonInfo" ])
+    ...mapState([ "lessonInfo" ]),
+    choices() {
+      const operators = ['.','!','?']
+      var target = this.lessonInfo.lines_kr[1].split(' ')
+      for (let i = target.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        for (const operator of operators) {
+          if ( target[i].slice(-1) === operator){
+            target[i] = target[i].slice(0,-1)
+          }
+          if ( target[j].slice(-1) === operator){
+            target[j] = target[i].slice(0,-1)
+          }
+        }
+        [target[i], target[j]] = [target[j], target[i]];
+      }
+      return target
+    },
   },
+  watch: {
+    openStudyPage() {
+      this.createEmptyList()
+    }
+  },
+  created() {
+    this.createEmptyList()
+  }
 
 }
 </script>
 
 <style>
+
+.step1 p {
+  margin-bottom: 0 !important;
+}
+
+.step1 span {
+  color: grey;
+  font-size: 0.7em;
+}
+
+.step2 p {
+  margin-bottom: 0 !important;
+}
+
+.step3 p {
+  margin-bottom: 0 !important;
+}
+
+.step3 span {
+  color: grey;
+  font-size: 0.7em;
+}
+
+.answer-correct {
+  color: green;
+  font-size: 0.9em;
+}
+
+.answer-wrong {
+  color: red;
+  font-size: 0.9em;
+}
 
 </style>
