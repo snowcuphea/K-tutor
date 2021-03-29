@@ -45,10 +45,10 @@ class CsViewSet(viewsets.GenericViewSet,
                 "type": "kpop",
                 "level": song_list.filter(name__contains=cs)[0].level
             })
-        cs_list.extend(list(Cs.objects.filter(type=type)))
+        cs_list.extend(Cs.objects.filter(type__in=['drama', 'movie']).values())
         serializer = CsSerializer(data=cs_list, many=True)
-        if serializer.is_valid():
-            return Response(serializer.data, status=status.HTTP_200_OK)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class LcListViewSet(viewsets.GenericViewSet,
