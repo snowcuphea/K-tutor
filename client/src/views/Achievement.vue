@@ -31,6 +31,7 @@
         v-for = "(item, idx) in $store.state.items"
         :key = "idx"
       >
+      
         <appMyModal :modalItem="item" @update="modal" />
 
       </v-col>
