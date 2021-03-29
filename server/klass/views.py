@@ -139,6 +139,7 @@ class LcViewSet(viewsets.GenericViewSet,
         user = request.user
         lc = get_object_or_404(Lc, id=LcId)
         user.learned_lc.add(lc)
+        user.learned_kw.add(lc.main_kw)
         if not Recent_learned_lc.objects.filter(Q(user=user)|Q(lc=lc)).exists():
             Recent_learned_lc.objects.create(user=user, lc=lc)
         return Response("ok", status=status.HTTP_200_OK)
