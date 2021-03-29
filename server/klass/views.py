@@ -35,7 +35,7 @@ class CsViewSet(viewsets.GenericViewSet,
         return cs
 
 
-    def cs_list(self, request):
+    def get(self, request):
         song_list = Cs.objects.filter(type="kpop")
         cs_list_temp = list(set({x.name.split(" - ")[0] for x in song_list}))
         cs_list = []
@@ -68,7 +68,7 @@ class LcListViewSet(viewsets.GenericViewSet,
 
         return lc
 
-    def list(self, request, type, title):
+    def get(self, request, type, title):
         if type != 'kpop':
             cs = get_object_or_404(Cs, name=title)
             lcs = list(Lc.objects.filter(cs=cs).values())
@@ -97,7 +97,7 @@ class LcViewSet(viewsets.GenericViewSet,
 
         return lc
 
-    def get(self, LcId):
+    def get(self, request, LcId):
         lc = get_object_or_404(Lc, id=LcId)
         serializer = LcSerializer(lc)
         serializer.is_valid(raise_exception=True)
