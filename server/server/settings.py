@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'drf_yasg',
 
     'account',
-    'class'
+    'klass'
 
 ]
 
