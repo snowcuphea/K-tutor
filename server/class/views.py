@@ -21,6 +21,21 @@ class CsViewSet(viewsets.GenericViewSet,
                 View):
     serializer_class = CsSerializer
 
+
+    def get_queryset(self):
+        conditions = {
+            'id': self.kwargs.get("id", None),
+            'name__contains': self.request.GET.get('name', None),
+            'type__contains': self.request.GET.get('type', None),
+        }
+        conditions = {key: val for key, val in conditions.items() if val is not None}
+        Cs = Cs.objects.filter(**conditions)
+        if not Cs.exists():
+            raise Http404()
+        return Cs
+
+
+
     def cs_list(self, request, type):
         if type == 'kpop':
             song_list = Cs.objects.filter(cs="kpop")
@@ -43,6 +58,20 @@ class LcListViewSet(viewsets.GenericViewSet,
                 View):
     serializer_class = LcSerializer
 
+
+    def get_queryset(self):
+    	conditions = {
+            'id': self.kwargs.get("music_num", None),
+        }
+        conditions = {key: val for key, val in conditions.items() if val is not None}
+
+        Lc = Lc.objects.filter(**conditions)
+        if not Lc.exists():
+            raise Http404()
+
+        return Cs
+
+
     def list(self, request, type, title):
         if type != 'kpop':
             cs = get_object_or_404(Cs, name=title)
@@ -60,9 +89,21 @@ class LcViewSet(viewsets.GenericViewSet,
                 View):
     serializer_class = LcSerializer
 
+
+    def get_queryset(self):
+    	conditions = {
+            'id': self.kwargs.get("music_num", None),
+        }
+        conditions = {key: val for key, val in conditions.items() if val is not None}
+
+        Lc = Lc.objects.filter(**conditions)
+        if not Lc.exists():
+            raise Http404()
+
+        return Lc
+
+
     def get(self, LcId):
         lc = get_object_or_404(Lc, id=LcId)
         serializers = LcSerializer(lc)
         return Response(serializers.data, status=status.HTTP_200_OK)
-
-
