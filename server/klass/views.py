@@ -43,6 +43,12 @@ class CsViewSet(viewsets.GenericViewSet,
         return cs
 
     def get(self, request):
+        """
+        Cs(Cultural Source의 리스트 제공
+
+        ___
+            - ex) type = "drama" -> 도깨비, 태양의 후예...
+        """
         song_list = Cs.objects.filter(type="kpop")
         cs_list_temp = list(set({x.name.split(" - ")[0] for x in song_list}))
         cs_list = []

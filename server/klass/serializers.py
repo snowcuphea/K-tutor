@@ -6,6 +6,11 @@ class CsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cs
         fields = ('name', 'type', 'level')
+        example = {
+            "name": "도깨비",
+            "type": "drame",
+            "level": 1
+        }
 
 
 class CpctSerializer(serializers.ModelSerializer):
