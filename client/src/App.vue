@@ -1,7 +1,7 @@
 <template>
   <v-app>
+    
     <Header class="header" v-if="isNotClass"/>
-    <!-- <h1>안냥</h1> -->
 
     <v-main class="main">
       <router-view />
