@@ -120,7 +120,7 @@ def access_consecutive_max(request, user_pk):
 @api_view(['GET'])
 @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
-def login(self, request):
+def login(request):
     data = {}
     # consecutive_access_date = serializers.IntegerField()
     user = get_object_or_404(User, username=request.user.username)
@@ -149,9 +149,10 @@ def login(self, request):
         css = Cs.objects.filter(type=type)
         lcs = Lc.objects.filter(cs__in=css)
         progress[type] = [
-            lcs.filter(learned_user=user),
+            lcs.filter(learned_user=user).count(),
             lcs.count()
         ]
     data['progress'] = progress
     serializer = ReportSearializer(data=data)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    if serializer.is_valid():
+        return Response(serializer.data, status=status.HTTP_200_OK)
