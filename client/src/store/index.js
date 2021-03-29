@@ -9,6 +9,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    loginUserInfo:'',
+
     currentPage: '', //밑 navbar에서 선택한 페이지
     currentPageValue: 2, //밑 navbar에서 선택한 index
     currentType: '', //선택한 타입(영화, 드라마, 가수) 
@@ -230,6 +232,36 @@ export default new Vuex.Store({
   },
 
   mutations: {
+    // setToken: function () {
+    //   const token = localStorage.getItem('jwt')
+
+    //   const config = {
+    //     headers: {
+    //       Authorization: `JWT ${token}`
+    //     }
+    //   }
+    //   return config
+    // },
+
+    // LOGIN (state, userData) {
+    //   localStorage.setItem('jwt', userData.token)
+    //   state.loginUserInfo = userData
+
+    // },
+    LOGOUT ( state ){
+      state.loginUserInfo = ''
+      state.currentPage = ''
+      state.currentPageValue = 2
+      state.currentType = ''
+      state.currentClass =''
+      state.classList = []
+      state.userName = ''
+      state.userLevel = 1
+      state.userExperience = 0
+      state.userGrade = []
+      state.userLearnedKeword = []
+    },
+  
     changeCurrentPage ( state , changeItem ) {
       state.currentPage = changeItem.navName
       state.currentPageValue = changeItem.navValue
@@ -298,6 +330,24 @@ export default new Vuex.Store({
   },
 
   actions: {
+    // Login({ commit }, user){
+    //   axios.post(`${SERVER_URL}/ktutor/login/`, user)
+    //   .then(res => {
+    //     commit("LOGIN", res.data)
+    //   })
+    //   .catch(err => {
+    //     console.log("로그인 에러", err)
+    //   })
+
+    // },
+    logout ( {commit} ){
+      commit('LOGOUT')
+    },
+    signup({ commit }) {
+      context.commit("SIGNUP")
+    },
+    
+
     changePage ({ commit }, changeItem ) {
       commit('changeCurrentPage', changeItem)
     },
@@ -318,6 +368,7 @@ export default new Vuex.Store({
     getLessonInfo ({ commit }) {
       commit('getLessonInfo')
     }
+
   },
 
   modules: {

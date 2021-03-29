@@ -34,7 +34,7 @@
 
     computed: {
       isNotClass() {
-        if (['Class', 'TitleList', 'ClassMain','Login','Home'].includes(this.$route.name)) {
+        if (['Class', 'TitleList', 'ClassMain','Login','Home', 'Signup'].includes(this.$route.name)) {
           return false
         } else {
           return true
@@ -42,7 +42,7 @@
       },
 
       isNotMain() {
-        if (['Login','Home'].includes(this.$route.name)) {
+        if (['Login','Home', 'Signup'].includes(this.$route.name)) {
           return false
         } else {
           return true

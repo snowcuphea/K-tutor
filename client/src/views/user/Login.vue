@@ -10,35 +10,35 @@
     <v-row style="height:60vh" class="d-flex align-center">
       <v-col>
 
-      <v-row class="mx-5">
-        <!-- <v-col cols="4" class="d-flex align-end justify-end">
+        <v-row class="mx-5">
+          <!-- <v-col cols="4" class="d-flex align-end justify-end">
         <span>Email :</span>
       </v-col> -->
-        <v-col>
-          <v-text-field label="Email" :rules="rulesEmail" hide-details="auto" v-model="userCredentials.userEmail">
-          </v-text-field>
-        </v-col>
-      </v-row>
-      <v-row class="mx-5">
-        <!-- <v-col cols="4" class="d-flex align-end justify-end">
+          <v-col>
+            <v-text-field label="Email" :rules="rulesEmail" hide-details="auto" v-model="userCredentials.userEmail">
+            </v-text-field>
+          </v-col>
+        </v-row>
+        <v-row class="mx-5">
+          <!-- <v-col cols="4" class="d-flex align-end justify-end">
         <span >Password :</span>
       </v-col> -->
-        <v-col>
-          <v-text-field label="Password" :rules="rulesPassword" hide-details="auto"
-            v-model="userCredentials.userPassword"></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row class="mx-5 my-5">
-        <v-col>
-          <v-btn block large>LOGIN</v-btn>
-          <div class="d-flex justify-space-between my-2">
-            <a href="#" @click="goToSignup">Join</a>
-            <a href="#" @click="goToFindPassword">forgot password</a>
-          </div>
+          <v-col>
+            <v-text-field label="Password" :rules="rulesPassword" hide-details="auto"
+              v-model="userCredentials.userPassword"></v-text-field>
+          </v-col>
+        </v-row>
+        <v-row class="mx-5 my-5">
+          <v-col>
+            <v-btn block large>LOGIN</v-btn>
+            <div class="d-flex justify-space-between my-2">
+              <a href="#" @click="goToSignup">Join</a>
+              <a href="#" @click="goToFindPassword">forgot password</a>
+            </div>
 
-        </v-col>
-      </v-row>
-</v-col>
+          </v-col>
+        </v-row>
+      </v-col>
     </v-row>
 
 
@@ -73,8 +73,8 @@
 
     methods: {
 
-      login: function () {
-        this.$store.dispatch("LOGIN", this.userCredentials)
+      login() {
+        this.$store.dispatch("Login", this.userCredentials)
           .then(() => {
             this.$router.push({
               name: 'Report'
@@ -84,13 +84,13 @@
           })
       },
 
-      goToSignup: function () {
+      goToSignup() {
         this.$router.push({
-              name: 'Signup'
-            })
+          name: 'Signup'
+        })
       },
 
-      goToFindPassword: function () {
+      goToFindPassword() {
 
       },
 
