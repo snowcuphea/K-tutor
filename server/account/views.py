@@ -1,6 +1,8 @@
 from django.views import View
 from django.db.models import Max, Count
 from django.shortcuts import get_object_or_404
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema, no_body
 
 from rest_framework import status
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
@@ -37,9 +39,9 @@ class SignupViewSet(viewsets.GenericViewSet,
 
         ___
         """
-        if User.objects.filter(username=request.data.username).exists():
+        if User.objects.filter(username=request.data['username']).exists():
             return Response("이미 가입된 이메일 입니다.", status=status.HTTP_302_FOUND)
-        if User.objects.filter(nickname=request.data.nickname).exists():
+        if User.objects.filter(nickname=request.data['nickname']).exists():
             return Response("이미 가입된 닉네임 입니다.", status=status.HTTP_302_FOUND)
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -57,6 +59,9 @@ class UserViewSet(viewsets.GenericViewSet,
     permission_classes = (IsAuthenticated,)
 
     # 정보 수정
+    @swagger_auto_schema(responses=no_body, manual_parameters=[
+        openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
+                          type=openapi.TYPE_STRING)])
     def put(self, request):
         """
         Modify User Info
@@ -65,9 +70,9 @@ class UserViewSet(viewsets.GenericViewSet,
         """
         # 회원 수정한 정보를 request.data에 담았다고 가정
         user = request.user
-        if User.objects.filter(username=request.data.username).exists():
+        if User.objects.filter(username=request.data['username']).exists():
             return Response("이미 가입된 이메일 입니다.", status=status.HTTP_302_FOUND)
-        if User.objects.filter(nickname=request.data.nickname).exists():
+        if User.objects.filter(nickname=request.data['nickname']).exists():
             return Response("이미 가입된 닉네임 입니다.", status=status.HTTP_302_FOUND)
         user.set_password(request.data.password)
         user.nickname = request.data.nickname
@@ -75,6 +80,9 @@ class UserViewSet(viewsets.GenericViewSet,
         return Response(user, status=status.HTTP_200_OK)
 
     # 회원 탈퇴
+    @swagger_auto_schema(responses=no_body, manual_parameters=[
+        openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
+                          type=openapi.TYPE_STRING)])
     def delete(self, request):
         """
         Delete User
@@ -93,6 +101,9 @@ class LoginViewSet(viewsets.GenericViewSet,
     authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = (IsAuthenticated,)
 
+    @swagger_auto_schema(responses=no_body, manual_parameters=[
+        openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
+                          type=openapi.TYPE_STRING)])
     def get(self, request):
         """
         Get User Report

@@ -3,6 +3,8 @@ from functools import reduce
 
 from django.http import Http404
 from django.views import View
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema, no_body
 from rest_framework import status, viewsets, mixins
 from rest_framework.decorators import api_view
 from rest_framework.generics import get_object_or_404
@@ -81,6 +83,9 @@ class LcListViewSet(viewsets.GenericViewSet,
             raise Http404()
         return lc
 
+    @swagger_auto_schema(responses=no_body, manual_parameters=[
+        openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
+                          type=openapi.TYPE_STRING)])
     def get(self, request, type, title):
         """
         Cs(Cultural Source) List
@@ -124,6 +129,9 @@ class LcViewSet(viewsets.GenericViewSet,
 
         return lc
 
+    @swagger_auto_schema(manual_parameters=[
+        openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
+                          type=openapi.TYPE_STRING)])
     def get(self, request, LcId):
         """
         Get Lc
@@ -135,11 +143,20 @@ class LcViewSet(viewsets.GenericViewSet,
         serializer = LcSerializer(lc)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @swagger_auto_schema(responses=no_body, manual_parameters=[
+        openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
+                          type=openapi.TYPE_STRING)])
     def done(self, request, LcId):
+        """
+        User Learned Lc, Kw
+
+        ___
+            - <int:LcId>
+        """
         user = request.user
         lc = get_object_or_404(Lc, id=LcId)
         user.learned_lc.add(lc)
         user.learned_kw.add(lc.main_kw)
-        if not Recent_learned_lc.objects.filter(Q(user=user)|Q(lc=lc)).exists():
+        if not Recent_learned_lc.objects.filter(Q(user=user) | Q(lc=lc)).exists():
             Recent_learned_lc.objects.create(user=user, lc=lc)
         return Response("ok", status=status.HTTP_200_OK)
