@@ -11,11 +11,11 @@ class User(AbstractUser):
 
 
 class TestResult(models.Model):
-    user = article = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     score = models.IntegerField()
     test_at = models.DateField(auto_now=True)
 
 
 class AccessDate(models.Model):
-    user = article = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     access_at = models.DateField(auto_now_add=True)
