@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-dialog
-      v-model="openStudyPage"
+      v-model="openQuizPage"
       fullscreen
       hide-overlay
       transition="slide-x-reverse-transition"
@@ -11,98 +11,37 @@
         <v-btn
           icon
           class="close-dialog"
-          @click="closeStudyPage"
+          @click="closeQuizPage"
         >
           <v-icon>mdi-close</v-icon>
         </v-btn>
 
         <v-card tile height="15%" elevation="0"
          class="d-flex justify-center align-center" >
-          <h2>Step {{ currentStep }}. {{ stepName[currentStep] }} </h2>
+          <h2>[ {{ currentProblem + 1 }}/5  ]</h2>
 
         </v-card>
 
         <v-card tile height="72%" elevation="0" class="px-5">
-
-          <!-- step1 -->
-          <v-card class="step1" v-if="currentStep == 1" tile height="100%" elevation="0">
-            <v-card tile height="40%" elevation="0">
-              <img :src="require(`@/assets/images/poster/${lessonInfo.img}.jpg`)"
-               alt="포스터 이미지" height="100%" width="100%">
-            </v-card>
-            <v-card tile height="60%" elevation="0" class="d-flex flex-column pt-2">
-              <v-btn plain icon><v-icon>mdi-volume-high</v-icon></v-btn>
-              <v-spacer></v-spacer>
-              <div v-for="(line, idx) in lessonInfo.lines_kr" :key="idx">
-                <div v-if="idx%2 == 0" class="pb-2">
-                  <p><span v-if="lessonInfo.type !== 'pop'">A: </span>{{ lessonInfo.lines_kr[idx] }} </p>
-                  <p><span v-if="lessonInfo.type !== 'pop'">A: </span>{{ lessonInfo.lines_en[idx] }} </p>
-                </div>
-                <div v-else class="pb-2">
-                  <p><span v-if="lessonInfo.type !== 'pop'">B: </span>{{ lessonInfo.lines_kr[idx] }} </p>
-                  <p><span v-if="lessonInfo.type !== 'pop'">B: </span>{{ lessonInfo.lines_en[idx] }} </p>
-                </div>
-              </div>
-              <div class="d-flex justify-end mt-n3 lesson-source">
-                <span> Source : {{ lessonInfo.title }} </span>
-              </div>
-            </v-card>
-          </v-card>
-
-          <!-- step2 -->
-          <v-card class="step2" v-else-if="currentStep == 2" tile height="100%" elevation="0">
-            <v-card tile height="30%" elevation="0" class="d-flex flex-column">
-              <div class="d-flex align-center justify-space-between">
-                <h3>[ Key Sentence ]</h3>
-                <v-btn plain icon class=""><v-icon>mdi-volume-high</v-icon></v-btn>
-              </div>
-              <div class="pl-5 pt-2">
-                <p> {{ lessonInfo.lines_kr[1] }} </p>
-                <p> {{ lessonInfo.lines_en[1] }} </p>
-              </div>
-            </v-card>
-            <v-card tile height="30%" elevation="0" class="pt-4">
-              <div class="d-flex align-center justify-space-between">
-                <h3>[ Key Word ]</h3>
-                <!-- <v-btn plain icon class=""><v-icon>mdi-volume-high</v-icon></v-btn> -->
-              </div>
-              <div class="pl-5 pt-2">
-                <p> {{ lessonInfo.keyword_kr }} </p>
-                <p> {{ lessonInfo.keyword_en }} </p>
-              </div>
-            </v-card>
-            <v-card tile height="40%" elevation="0">
-              <div class="d-flex align-center justify-space-between">
-                <h3>[ Example ]</h3>
-                <v-btn plain icon class=""><v-icon>mdi-volume-high</v-icon></v-btn>
-              </div>
-              <div class="pl-5 pt-2" v-for="(example, idx) in lessonInfo.example_kr" :key="idx">
-                <p>{{ idx+1 }}. {{ lessonInfo.example_kr[idx] }} </p>
-                <p class="pl-4"> {{ lessonInfo.example_en[idx] }} </p>
-              </div>
-            </v-card>
-          </v-card>
-
-          <!-- step3 -->
-          <v-card class="step3" v-else tile height="100%" elevation="0" color="black">
+          <v-card class="quiz" tile height="100%" elevation="0" color="black">
             <v-card tile height="70%" elevation="0">
-              <div v-for="(line, idx) in lessonInfo.lines_kr" :key="idx">
+              <div v-for="(line, idx) in quizInfo.quizzes[currentProblem].lines_kr" :key="idx">
                 <div v-if="idx%2 == 0" class="pb-4">
-                  <p class="pb-2"><span v-if="lessonInfo.type !== 'pop'">A: </span>{{ lessonInfo.lines_kr[idx] }} </p>
-                  <p><span v-if="lessonInfo.type !== 'pop'">A: </span>{{ lessonInfo.lines_en[idx] }} </p>
+                  <p class="pb-2"><span v-if="quizInfo.type !== 'pop'">A: </span>{{ quizInfo.quizzes[currentProblem].lines_kr[idx] }} </p>
+                  <p><span v-if="quizInfo.type !== 'pop'">A: </span>{{ quizInfo.quizzes[currentProblem].lines_en[idx] }} </p>
                 </div>
                 <div v-else class="pb-4">
-                  <p class="pb-2"><span v-if="lessonInfo.type !== 'pop'">B: </span>{{ myAnswer }} </p>
+                  <p class="pb-2"><span v-if="quizInfo.type !== 'pop'">B: </span>{{ myAnswer }} </p>
                   <p class="answer-correct mt-n2"
                    v-if="isCorrect()"> Correct, you may proceed. </p>
                   <p class="answer-wrong mt-n2"
                    v-else-if="isCorrect() == false && pass !== null"
                   >Incorrect, try again.</p>
-                  <p><span v-if="lessonInfo.type !== 'pop'">B: </span>{{ lessonInfo.lines_en[idx] }} </p>
+                  <p><span v-if="quizInfo.type !== 'pop'">B: </span>{{ quizInfo.quizzes[currentProblem].lines_en[idx] }} </p>
                 </div>
               </div>
               <div class="d-flex justify-end mt-n3 lesson-source">
-                <span> Source : {{ lessonInfo.title }} </span>
+                <span> Source : {{ quizInfo.title }} </span>
               </div>
 
               <div class="d-flex justify-space-between">
@@ -117,20 +56,15 @@
             </v-card>
           </v-card>
 
-
-
         </v-card>
 
         <v-card tile height="13%" elevation="0"
          class="d-flex align-center px-5" >
-          <v-btn text plain @click="currentStep -= 1" v-if="currentStep != 1">
-            previous
-          </v-btn>
           <v-spacer></v-spacer>
-          <v-btn text plain @click="currentStep += 1" v-if="currentStep != 3">
+          <v-btn text plain @click="nextProblem" v-if="currentProblem != 4" :disabled="!pass">
             next
           </v-btn>
-          <v-btn text plain @click="submitLesson" v-if="currentStep == 3" :disabled="!pass">
+          <v-btn text plain @click="submitQuiz" v-if="currentProblem == 4" :disabled="!pass">
             Finish
           </v-btn>
         </v-card>
@@ -161,14 +95,6 @@
         >
           Stop
         </v-btn>
-        <v-btn
-          color="primary"
-          text
-          @click="nextLesson"
-          class="d-flex justify-center"
-        >
-          More
-        </v-btn>
       </v-card>
 
     </v-dialog>
@@ -186,11 +112,10 @@ import Experience from "@/components/user/Experience.vue"
 
 
 export default {
-  props: ["openStudyPage"],
+  props: ["openQuizPage"],
   data() {
     return {
-      currentStep: 1,
-      stepName: [null, "Go Through", "Learn", "Practice"],
+      currentProblem: 0,
       resultDialog: false,
       exp: 0,
       
@@ -204,25 +129,29 @@ export default {
     Experience
   },
   methods:{
-    closeStudyPage() {
+    closeQuizPage() {
       this.defaultSetting()
-      this.$emit('closeStudyPage')
+      this.$emit('closeQuizPage')
     },
-    submitLesson() {
+    nextProblem() {
+      this.currentProblem += 1
+      this.checked = []
+      this.pass = null
+      this.order = 0
+      this.createEmptyList()
+    },
+    submitQuiz() {
       this.resultDialog = !this.resultDialog
-      this.exp = 3
+      this.exp = 5
       // this.$store.dispatch('gainExperience', this.exp)
-    },
-    nextLesson() {
-      console.log("hi")
     },
     endClass() {
       this.defaultSetting()
       this.resultDialog = !this.resultDialog
-      this.$emit('closeStudyPage')
+      this.$emit('closeQuizPage')
     },
     defaultSetting() {
-      this.currentStep = 1
+      this.currentProblem = 0
       this.exp = 0
       this.order = 0
       this.myAnswer = ''
@@ -250,7 +179,7 @@ export default {
       }
     },
     isCorrect() {
-      const answer = this.lessonInfo.lines_kr[1].split(' ')
+      const answer = this.quizInfo.quizzes[this.currentProblem].lines_kr[1].split(' ')
       const myanswer = this.myAnswer.split(' ')
       for ( let idx = 0; idx < answer.length ; idx++) {
         var compare = answer[idx]
@@ -266,7 +195,7 @@ export default {
     },
     createEmptyList() {
       const operators = ['.','!','?']
-      var target = this.lessonInfo.lines_kr[1].split(' ')
+      var target = this.quizInfo.quizzes[this.currentProblem].lines_kr[1].split(' ')
       var new_line = []
       var last_word = ''
       target.forEach( function(part, index) {
@@ -282,10 +211,10 @@ export default {
     }
   },
   computed: {
-    ...mapState([ "lessonInfo" ]),
+    ...mapState([ "quizInfo" ]),
     choices() {
       const operators = ['.','!','?']
-      var target = this.lessonInfo.lines_kr[1].split(' ')
+      var target = this.quizInfo.quizzes[this.currentProblem].lines_kr[1].split(' ')
       for (let i = target.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         for (const operator of operators) {
@@ -315,15 +244,7 @@ export default {
 
 <style>
 
-.step1 p {
-  margin-bottom: 0 !important;
-}
-
-.step2 p {
-  margin-bottom: 0 !important;
-}
-
-.step3 p {
+.quiz p {
   margin-bottom: 0 !important;
 }
 
