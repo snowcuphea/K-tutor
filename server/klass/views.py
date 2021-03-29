@@ -1,14 +1,20 @@
+import operator
+from functools import reduce
+
 from django.http import Http404
 from django.views import View
 from rest_framework import status, viewsets, mixins
 from rest_framework.decorators import api_view
 from rest_framework.generics import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from .data_update import *
 from .serializers import *
 
 from account.models import Recent_learned_lc
+from django.db.models import Q
 
 
 @api_view(['GET'])
@@ -36,7 +42,6 @@ class CsViewSet(viewsets.GenericViewSet,
             raise Http404()
         return cs
 
-
     def get(self, request):
         song_list = Cs.objects.filter(type="kpop")
         cs_list_temp = list(set({x.name.split(" - ")[0] for x in song_list}))
@@ -57,6 +62,8 @@ class LcListViewSet(viewsets.GenericViewSet,
                     mixins.ListModelMixin,
                     View):
     serializer_class = LcSerializer
+    authentication_classes = JSONWebTokenAuthentication
+    permission_classes = IsAuthenticated
 
     def get_queryset(self):
         conditions = {
@@ -67,7 +74,6 @@ class LcListViewSet(viewsets.GenericViewSet,
         lc = Lc.objects.filter(**conditions)
         if not lc.exists():
             raise Http404()
-
         return lc
 
     def get(self, request, type, title):
@@ -77,7 +83,12 @@ class LcListViewSet(viewsets.GenericViewSet,
         else:
             css = Cs.objects.filter(name__contains=title)
             lcs = list(Lc.objects.filter(cs__in=css).values())
-        serializer = LcSerializer(data=lcs, many=True)
+        user = request.user
+        lcs_dict = [lc.__dict__ for lc in lcs]
+        for lc in lcs_dict:
+            lc['already_learned'] = True if Lc.objects.filter(Q(learned_user=user) | Q(id=lc.id)).exists() else False
+
+        serializer = LcSerializer(data=lcs_dict, many=True)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -86,6 +97,8 @@ class LcViewSet(viewsets.GenericViewSet,
                 mixins.ListModelMixin,
                 View):
     serializer_class = LcSerializer
+    authentication_classes = JSONWebTokenAuthentication
+    permission_classes = IsAuthenticated
 
     def get_queryset(self):
         conditions = {
@@ -102,12 +115,11 @@ class LcViewSet(viewsets.GenericViewSet,
     def get(self, request, LcId):
         lc = get_object_or_404(Lc, id=LcId)
         serializer = LcSerializer(lc)
-        serializer.is_valid(raise_exception=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
 
     def done(self, request, LcId):
         user = request.user
         lc = get_object_or_404(Lc, id=LcId)
         user.learned_lc.add(Lc)
+        user.save()
         Recent_learned_lc.objects.create(user=user, lc=lc)

@@ -28,9 +28,10 @@ class CpcqSerializer(serializers.ModelSerializer):
 
 class LcSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField()
+    already_learned = serializers.BooleanField()
     class Meta:
         model = Lc
         fields = (
             "id", "cs_id", "main_kw_index", "main_kw_word", "main_kw_id", "meaning", "before_kor", "before_eng",
-            "cpct_kor", "cpct_eng", "after_kor", "after_eng", "example"
+            "cpct_kor", "cpct_eng", "after_kor", "after_eng", "example", "already_learned"
         )
