@@ -95,6 +95,7 @@ export default new Vuex.Store({
     ],
     
     lessonInfo: {},
+    quizInfo: {},
 
     studyCnt: 100,
     contiDay: 9,
@@ -294,6 +295,35 @@ export default new Vuex.Store({
         ]
       }
       state.lessonInfo = lessonForm
+    },
+    getQuizInfo ( state ) {
+      const quizForm = {
+        type: 'drama',
+        title : '태양의 후예',
+        quizzes: [
+          {
+            lines_kr : ["오늘 저녁에 뭐 먹었어?", "나는 오늘 저녁으로 고기를 먹었어.","오, 맛있었니?"],
+            lines_en : ["What did you have for dinner?", "I had proteins for dinner.","Wow, how was it?"]
+          },
+          {
+            lines_kr : ["나랑 벚꽃축제 갈래?", "너무 좋아, 나도 벚꽃 보러 가고 싶었어.","그러면 토요일 어때?"],
+            lines_en : ["Wanna visit the cherry blossom festival with me?", "Yes, I would love to go see cherry blossoms.","Saturday sounds good?"]
+          },
+          {
+            lines_kr : ["오늘 저녁에 뭐 먹었어?", "나는 오늘 저녁으로 고기를 먹었어.","오, 맛있었니?"],
+            lines_en : ["What did you have for dinner?", "I had proteins for dinner.","Wow, how was it?"]
+          },
+          {
+            lines_kr : ["나랑 벚꽃축제 갈래?", "너무 좋아, 나도 벚꽃 보러 가고 싶었어.","그러면 토요일 어때?"],
+            lines_en : ["Wanna visit the cherry blossom festival with me?", "Yes, I would love to go see cherry blossoms.","Saturday sounds good?"]
+          },
+          {
+            lines_kr : ["나랑 벚꽃축제 갈래?", "너무 좋아, 나도 벚꽃 보러 가고 싶었어.","그러면 토요일 어때?"],
+            lines_en : ["Wanna visit the cherry blossom festival with me?", "Yes, I would love to go see cherry blossoms.","Saturday sounds good?"]
+          },
+        ]
+      }
+      state.quizInfo = quizForm
     }
   },
 
@@ -317,6 +347,9 @@ export default new Vuex.Store({
     },
     getLessonInfo ({ commit }) {
       commit('getLessonInfo')
+    },
+    getQuizInfo ({ commit }) {
+      commit('getQuizInfo')
     }
   },
 

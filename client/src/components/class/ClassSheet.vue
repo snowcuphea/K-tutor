@@ -36,6 +36,9 @@
       </v-col>
     </v-row>
 
+    <v-row>
+      <v-btn @click="startQuiz()"> quiz </v-btn>
+    </v-row>
 
     <v-row>
       <v-col>
@@ -65,17 +68,15 @@
       </v-col>
     </v-row>
 
-    <v-row>
-      <v-btn @click="startClass()"> 학습하기 </v-btn>
-    </v-row>
-
     <StudyPage :openStudyPage="openStudyPage" @closeStudyPage="endClass" />
+    <QuizPage :openQuizPage="openQuizPage" @closeQuizPage="endQuiz" />
+
   </v-container>
 </template>
 
 <script>
   import StudyPage from "@/components/class/StudyPage.vue"
-
+  import QuizPage from "@/components/class/QuizPage.vue"
 
   import {
     mapState, mapGetters
@@ -84,10 +85,12 @@
   export default {
     name: "ClassSheet",
     components: {
-      StudyPage
+      StudyPage,
+      QuizPage
     },
     data: () => ({
       openStudyPage: false,
+      openQuizPage: false,
 
     }),
     props: {
@@ -107,7 +110,14 @@
         // if item.cs_seq in getCurrentClassLearnedKeword.cs_
         console.log(item)
         return true
-
+      },
+      startQuiz() {
+        // 서버에 요청을 보내서 퀴즈 받아오기
+        this.$store.dispatch('getQuizInfo')
+        this.openQuizPage =!this.openQuizPage
+      },
+      endQuiz() {
+        this.openQuizPage = !this.openQuizPage
       }
 
     },
