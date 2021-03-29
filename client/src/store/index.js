@@ -9,6 +9,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    loginUserInfo:'',
+
     currentPage: '', //밑 navbar에서 선택한 페이지
     currentPageValue: 2, //밑 navbar에서 선택한 index
     currentType: '', //선택한 타입(영화, 드라마, 가수) 
@@ -95,6 +97,7 @@ export default new Vuex.Store({
     ],
     
     lessonInfo: {},
+    quizInfo: {},
 
     studyCnt: 100,
     contiDay: 9,
@@ -230,6 +233,36 @@ export default new Vuex.Store({
   },
 
   mutations: {
+    // setToken: function () {
+    //   const token = localStorage.getItem('jwt')
+
+    //   const config = {
+    //     headers: {
+    //       Authorization: `JWT ${token}`
+    //     }
+    //   }
+    //   return config
+    // },
+
+    // LOGIN (state, userData) {
+    //   localStorage.setItem('jwt', userData.token)
+    //   state.loginUserInfo = userData
+
+    // },
+    LOGOUT ( state ){
+      state.loginUserInfo = ''
+      state.currentPage = ''
+      state.currentPageValue = 2
+      state.currentType = ''
+      state.currentClass =''
+      state.classList = []
+      state.userName = ''
+      state.userLevel = 1
+      state.userExperience = 0
+      state.userGrade = []
+      state.userLearnedKeword = []
+    },
+  
     changeCurrentPage ( state , changeItem ) {
       state.currentPage = changeItem.navName
       state.currentPageValue = changeItem.navValue
@@ -294,10 +327,53 @@ export default new Vuex.Store({
         ]
       }
       state.lessonInfo = lessonForm
+    },
+    getQuizInfo ( state ) {
+      const quizForm = {
+        type: 'drama',
+        title : '태양의 후예',
+        quizzes: [
+          {
+            lines_kr : ["오늘 저녁에 뭐 먹었어?", "나는 오늘 저녁으로 고기를 먹었어.","오, 맛있었니?"],
+            lines_en : ["What did you have for dinner?", "I had proteins for dinner.","Wow, how was it?"]
+          },
+          {
+            lines_kr : ["나랑 벚꽃축제 갈래?", "너무 좋아, 나도 벚꽃 보러 가고 싶었어.","그러면 토요일 어때?"],
+            lines_en : ["Wanna visit the cherry blossom festival with me?", "Yes, I would love to go see cherry blossoms.","Saturday sounds good?"]
+          },
+          {
+            lines_kr : ["오늘 저녁에 뭐 먹었어?", "나는 오늘 저녁으로 고기를 먹었어.","오, 맛있었니?"],
+            lines_en : ["What did you have for dinner?", "I had proteins for dinner.","Wow, how was it?"]
+          },
+          {
+            lines_kr : ["나랑 벚꽃축제 갈래?", "너무 좋아, 나도 벚꽃 보러 가고 싶었어.","그러면 토요일 어때?"],
+            lines_en : ["Wanna visit the cherry blossom festival with me?", "Yes, I would love to go see cherry blossoms.","Saturday sounds good?"]
+          },
+          {
+            lines_kr : ["나랑 벚꽃축제 갈래?", "너무 좋아, 나도 벚꽃 보러 가고 싶었어.","그러면 토요일 어때?"],
+            lines_en : ["Wanna visit the cherry blossom festival with me?", "Yes, I would love to go see cherry blossoms.","Saturday sounds good?"]
+          },
+        ]
+      }
+      state.quizInfo = quizForm
     }
   },
 
   actions: {
+    // Login({ commit }, user){
+    //   axios.post(`${SERVER_URL}/ktutor/login/`, user)
+    //   .then(res => {
+    //     commit("LOGIN", res.data)
+    //   })
+    //   .catch(err => {
+    //     console.log("로그인 에러", err)
+    //   })
+
+    // },
+    logout ( {commit} ){
+      commit('LOGOUT')
+    },
+
     changePage ({ commit }, changeItem ) {
       commit('changeCurrentPage', changeItem)
     },
@@ -317,7 +393,11 @@ export default new Vuex.Store({
     },
     getLessonInfo ({ commit }) {
       commit('getLessonInfo')
+    },
+    getQuizInfo ({ commit }) {
+      commit('getQuizInfo')
     }
+
   },
 
   modules: {
