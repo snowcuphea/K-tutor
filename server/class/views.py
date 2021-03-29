@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.views import View
 from rest_framework import status, viewsets, mixins
 from rest_framework.decorators import api_view
@@ -21,7 +22,20 @@ class CsViewSet(viewsets.GenericViewSet,
                 View):
     serializer_class = CsSerializer
 
-    def list(self, request):
+    def get_queryset(self):
+        conditions = {
+            'id': self.kwargs.get("id", None),
+            'name__contains': self.request.GET.get('name', None),
+            'type__contains': self.request.GET.get('type', None),
+        }
+        conditions = {key: val for key, val in conditions.items() if val is not None}
+        cs = Cs.objects.filter(**conditions)
+        if not cs.exists():
+            raise Http404()
+        return cs
+
+
+    def cs_list(self, request):
         song_list = Cs.objects.filter(cs="kpop")
         cs_list_temp = list(set({x.name.split(" - ")[0] for x in song_list}))
         cs_list = []
@@ -41,6 +55,18 @@ class LcListViewSet(viewsets.GenericViewSet,
                     View):
     serializer_class = LcSerializer
 
+    def get_queryset(self):
+        conditions = {
+            'id': self.kwargs.get("music_num", None),
+        }
+        conditions = {key: val for key, val in conditions.items() if val is not None}
+
+        lc = Lc.objects.filter(**conditions)
+        if not lc.exists():
+            raise Http404()
+
+        return lc
+
     def list(self, request, type, title):
         if type != 'kpop':
             cs = get_object_or_404(Cs, name=title)
@@ -57,6 +83,18 @@ class LcViewSet(viewsets.GenericViewSet,
                 mixins.ListModelMixin,
                 View):
     serializer_class = LcSerializer
+
+    def get_queryset(self):
+        conditions = {
+            'id': self.kwargs.get("music_num", None),
+        }
+        conditions = {key: val for key, val in conditions.items() if val is not None}
+
+        lc = Lc.objects.filter(**conditions)
+        if not lc.exists():
+            raise Http404()
+
+        return lc
 
     def get(self, LcId):
         lc = get_object_or_404(Lc, id=LcId)
