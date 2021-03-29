@@ -102,6 +102,8 @@
                 console.log(error)
               }
             )
+            this.$router.push({name:'Report'})
+            this.$store.state.currentPage = 'Report'
           },
           (error) => {
             console.log(error)
