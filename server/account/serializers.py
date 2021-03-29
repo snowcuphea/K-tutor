@@ -1,13 +1,11 @@
-from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from .models import TestResult, AccessDate
+from .models import *
 
-User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('email', 'password', 'username', 'level', 'exp')
+        fields = ('id', 'password', 'nickname', 'level', 'exp', 'consecutive_access')
 
 
 class TestResultSerializer(serializers.ModelSerializer):
@@ -19,7 +17,7 @@ class TestResultSerializer(serializers.ModelSerializer):
 class AccessDateSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccessDate
-        fields = ('access_at')
+        fields = ('user', 'access_at')
 
 
 class ReportSearializer(serializers.Serializer):
@@ -28,3 +26,9 @@ class ReportSearializer(serializers.Serializer):
     recent_learned_lc = serializers.ListField()
     recent_lc_progress = serializers.DictField()
     progress = serializers.DictField()
+
+
+# class AchievementSerializer(serializers.Modelserializer):
+#     class Meta:
+#         model = Acheivement
+#         fields = ('title', 'content', 'image_on', 'image_off')

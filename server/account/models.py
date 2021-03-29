@@ -1,8 +1,9 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.base_user import AbstractUser
 from django.db import models
 
 
 class User(AbstractUser):
+    nickname = models.CharField(max_length=30)
     level = models.IntegerField(default=1)
     exp = models.IntegerField(default=0)
     consecutive_acess = models.IntegerField(default=1)
@@ -25,3 +26,10 @@ class Recent_learned_lc(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     lc = models.ForeignKey('klass.Lc', on_delete=models.CASCADE)
     learned_at = models.DateField(auto_now_add=True)
+
+# class Acheivement(models.Model):
+#     title = models.CharField(max_length=100)
+#     content = models.TextField()
+#     image_on = models.TextField()
+#     image_off = models.TextField()
+#     achieved = models.ManyToManyField(User, related_name='achieved')
