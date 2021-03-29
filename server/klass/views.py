@@ -120,6 +120,7 @@ class LcViewSet(viewsets.GenericViewSet,
     def done(self, request, LcId):
         user = request.user
         lc = get_object_or_404(Lc, id=LcId)
-        user.learned_lc.add(Lc)
+        user.learned_lc.add(lc)
         user.save()
         Recent_learned_lc.objects.create(user=user, lc=lc)
+        return Response("ok", status=status.HTTP_200_OK)
