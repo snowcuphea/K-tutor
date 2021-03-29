@@ -5,7 +5,7 @@ from .models import *
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'password', 'nickname', 'level', 'exp', 'consecutive_access')
+        fields = ('id', 'username', 'password', 'nickname', 'level', 'exp', 'consecutive_access')
 
 
 class TestResultSerializer(serializers.ModelSerializer):
@@ -26,7 +26,6 @@ class ReportSearializer(serializers.Serializer):
     recent_learned_lc = serializers.ListField()
     recent_lc_progress = serializers.DictField()
     progress = serializers.DictField()
-
 
 # class AchievementSerializer(serializers.Modelserializer):
 #     class Meta:

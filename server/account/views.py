@@ -2,7 +2,7 @@ from django.views import View
 from django.db.models import Max, Count
 from django.shortcuts import get_object_or_404
 from drf_yasg import openapi
-from drf_yasg.utils import swagger_auto_schema, no_body
+from drf_yasg.utils import swagger_auto_schema
 
 from rest_framework import status
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
@@ -46,8 +46,8 @@ class SignupViewSet(viewsets.GenericViewSet,
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-        user.username = request.data['username']
         user.set_password(request.data.get('password'))
+        user.username = request.data['username']
         user.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -60,7 +60,7 @@ class UserViewSet(viewsets.GenericViewSet,
     permission_classes = (IsAuthenticated,)
 
     # 정보 수정
-    @swagger_auto_schema(responses=no_body, manual_parameters=[
+    @swagger_auto_schema(responses={200: ""}, manual_parameters=[
         openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
                           type=openapi.TYPE_STRING)])
     def put(self, request):
@@ -81,7 +81,7 @@ class UserViewSet(viewsets.GenericViewSet,
         return Response(user, status=status.HTTP_200_OK)
 
     # 회원 탈퇴
-    @swagger_auto_schema(responses=no_body, manual_parameters=[
+    @swagger_auto_schema(responses={200: ""}, manual_parameters=[
         openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
                           type=openapi.TYPE_STRING)])
     def delete(self, request):
@@ -102,7 +102,7 @@ class LoginViewSet(viewsets.GenericViewSet,
     authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = (IsAuthenticated,)
 
-    @swagger_auto_schema(responses=no_body, manual_parameters=[
+    @swagger_auto_schema(responses={200: ""}, manual_parameters=[
         openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
                           type=openapi.TYPE_STRING)])
     def get(self, request):
