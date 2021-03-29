@@ -35,8 +35,8 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('kor', models.TextField()),
                 ('eng', models.TextField()),
-                ('cs', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='class.cs')),
-                ('main_kw', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='class.kw')),
+                ('cs', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='klass.cs')),
+                ('main_kw', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='klass.kw')),
             ],
         ),
         migrations.CreateModel(
@@ -45,7 +45,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('kor', models.TextField()),
                 ('eng', models.TextField()),
-                ('kcq', models.ManyToManyField(related_name='contained_cpcq', to='class.Kw')),
+                ('kcq', models.ManyToManyField(related_name='contained_cpcq', to='klass.Kw')),
             ],
         ),
     ]

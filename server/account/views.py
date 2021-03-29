@@ -1,6 +1,5 @@
 from django.views import View
 from rest_framework import status, viewsets, mixins
-from rest_framework.decorators import api_view
 from django.db.models import Max, Count
 
 from rest_framework import status
@@ -10,9 +9,12 @@ from rest_framework.response import Response
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from .models import TestResult, AccessDate
-from .serializers import UserSerializer, User, TestResultSerializer
+from .serializers import UserSerializer, User, TestResultSerializer, ReportSearializer
+from klass.models import *
 
 from django.shortcuts import get_object_or_404
+
+from datetime import date, timedelta
 
 
 # 회원 가입
@@ -118,3 +120,47 @@ def access_consecutive_max(request, user_pk):
 class LoginViewSet(viewsets.GenericViewSet,
                    mixins.ListModelMixin,
                    View):
+    serializer_class = ReportSearializer
+
+    @authentication_classes([JSONWebTokenAuthentication])
+    @permission_classes([IsAuthenticated])
+    def login(self, request):
+        data = {}
+        # consecutive_access_date = serializers.IntegerField()
+        user = request.user
+        if not AccessDate.objects.filter(user=user).filter(access_at=date.today()).exists():
+            AccessDate.objects.create(user=user)
+
+        if AccessDate.objects.filter(user=user).filter(access_at=date.today() - timedelta(days=1)):
+            user.consecutive_acess += 1
+            user.save()
+        data['consecutive_access_date'] = user.consecutive_acess
+
+        # learned_lc_cnt = serializers.IntegerField()
+        data['learned_lc_cnt'] = user.learned_lc.all().count()
+
+        # recent_learned_lc = serializers.ListField()
+        data['recent_learned_lc'] = list(user.learned_lc.all())
+
+        # recent_lc_progress = serializers.DictField()
+        recent_lc_progress = dict()
+        for lc in list(user.learned_lc.all()):
+            if lc.cs.name not in recent_lc_progress:
+                recent_lc_progress[lc.cs.name] = [
+                    Lc.objects.filter(cs__name=lc.cs.name).filter(learned_user=user).count(),
+                    Lc.objects.filter(cs__name=lc.cs.name).count()
+                ]
+        data['recent_lc_progress'] = recent_lc_progress
+
+        # progress = serializers.DictField()
+        progress = dict()
+        for type in ['drama', 'movie', 'kpop']:
+            css = Cs.objects.filter(type=type)
+            lcs = Lc.objects.filter(cs__in=css)
+            progress[type] = [
+                lcs.filter(learned_user=user),
+                lcs.count()
+            ]
+        data['progress'] = progress
+        serializer = ReportSearializer(data=data)
+        return Response(serializer.data, status=status.HTTP_200_OK)

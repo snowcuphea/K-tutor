@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 
-app_name = 'class'
+app_name = 'klass'
 
 urlpatterns = [
     path('updateDB/', views.updateDB),

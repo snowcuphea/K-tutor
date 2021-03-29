@@ -18,3 +18,11 @@ class AccessDateSerializer(serializers.Modelserializer):
     class Meta:
         model = AccessDate
         fields = ('access_at')
+
+
+class ReportSearializer(serializers.Serializer):
+    consecutive_access_date = serializers.IntegerField()
+    learned_lc_cnt = serializers.IntegerField()
+    recent_learned_lc = serializers.ListField()
+    recent_lc_progress = serializers.DictField()
+    progress = serializers.DictField()
