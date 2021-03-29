@@ -46,6 +46,7 @@ class SignupViewSet(viewsets.GenericViewSet,
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
+        user.username = request.data['username']
         user.set_password(request.data.get('password'))
         user.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
