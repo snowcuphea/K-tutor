@@ -71,14 +71,13 @@ class LcListViewSet(viewsets.GenericViewSet,
     def list(self, request, type, title):
         if type != 'kpop':
             cs = get_object_or_404(Cs, name=title)
-            lcs = Lc.objects.filter(cs=cs)
-            serializer = LcSerializer(data=lcs, many=True)
+            lcs = list(Lc.objects.filter(cs=cs).values())
         else:
             css = Cs.objects.filter(name__contains=title)
-            lcs = Lc.objects.filter(cs__in=css)
-            serializer = LcSerializer(data=lcs, many=True)
-        if serializer.is_valid():
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            lcs = list(Lc.objects.filter(cs__in=css).values())
+        serializer = LcSerializer(data=lcs, many=True)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class LcViewSet(viewsets.GenericViewSet,
@@ -101,5 +100,5 @@ class LcViewSet(viewsets.GenericViewSet,
     def get(self, LcId):
         lc = get_object_or_404(Lc, id=LcId)
         serializer = LcSerializer(lc)
-        if serializer.is_valid():
-            return Response(serializer.data, status=status.HTTP_200_OK)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
