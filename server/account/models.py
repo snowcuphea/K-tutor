@@ -3,7 +3,7 @@ from django.db import models
 
 
 class User(AbstractUser):
-    nickname = models.CharField(max_length=30)
+    nickname = models.CharField(max_length=30, default="temp_nick")
     level = models.IntegerField(default=1)
     exp = models.IntegerField(default=0)
     consecutive_access = models.IntegerField(default=1)
