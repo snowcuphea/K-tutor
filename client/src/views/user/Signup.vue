@@ -92,6 +92,9 @@
       signup() {
         if (this.$refs.form.validate()) {
           console.log("signup Success")
+          this.$router.push({
+                name: "Login"
+              })
 
           // let signupInfo = {
           //   username: this.userCredentials.userEmail,
@@ -130,7 +133,7 @@
     computed: {
       passwordConfirmation() {
         return [
-          value => value === this.userCredentials.userPassword || 'Confirm your password'
+          value => value === this.userCredentials.userPassword || 'Confirm your password.'
         ]
       },
     }

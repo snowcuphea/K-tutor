@@ -373,10 +373,6 @@ export default new Vuex.Store({
     logout ( {commit} ){
       commit('LOGOUT')
     },
-    signup({ commit }) {
-      context.commit("SIGNUP")
-    },
-    
 
     changePage ({ commit }, changeItem ) {
       commit('changeCurrentPage', changeItem)
