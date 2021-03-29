@@ -30,7 +30,7 @@
         </v-row>
         <v-row class="mx-5 my-5">
           <v-col>
-            <v-btn block large>LOGIN</v-btn>
+            <v-btn block large @click="login">LOGIN</v-btn>
             <div class="d-flex justify-space-between my-2">
               <a href="#" @click="goToSignup">Join</a>
               <a href="#" @click="goToFindPassword">forgot password</a>
@@ -54,6 +54,9 @@
 </template>
 
 <script>
+  import { getToken, getInfo } from "@/api/account.js"
+  import { getClassList } from "@/api/klass.js"
+
   export default {
     name: "Login",
     data: () => ({
@@ -68,20 +71,39 @@
       userCredentials: {
         userEmail: "",
         userPassword: "",
-      }
+      },
     }),
 
     methods: {
-
+      
       login() {
-        this.$store.dispatch("Login", this.userCredentials)
-          .then(() => {
-            this.$router.push({
-              name: 'Report'
-            })
-            this.userCredentials.userEmail = ""
-            this.userCredentials.userPassword = ""
-          })
+        localStorage.setItem("jwt", "")
+
+        getToken(
+          this.userCredentials,
+          (response) => {
+            localStorage.setItem("jwt", response.data.token)
+            getInfo(
+              (response) => {
+                console.log(response.data)
+              },
+              (error) => {
+                console.log(error)
+              }
+            )
+            getClassList(
+              (response) => {
+                console.log(response.data)
+              },
+              (error) => {
+                console.log(error)
+              }
+            )
+          },
+          (error) => {
+            console.log(error)
+          }
+        )
       },
 
       goToSignup() {
