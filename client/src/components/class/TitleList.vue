@@ -1,7 +1,7 @@
 <template>
   <v-container>
-    <v-row class="d-flex justify-center my-2">
-    <h3> K-{{genre}} List</h3>
+    <v-row class="d-flex justify-center mb-2">
+    <h3> K-{{currentType}} List</h3>
     </v-row>
     <v-row class="d-flex flex-column">
       <v-col>
@@ -9,10 +9,10 @@
         @click="selectClass(item)">
           <v-card-text>
             <v-row>
-              <v-col cols="4" xs="6" style="" class="d-flex justify-center">
+              <v-col cols="5" xs="6" style="" class="d-flex justify-center">
                 <img :src="require(`@/assets/images/poster/poster${item.cs_seq}.jpg`)" alt="title" class="imgSize">
               </v-col>
-              <v-col cols="8" xs="6" class="d-flex align-center">
+              <v-col cols="7" xs="6" class="d-flex align-center">
                 <h3 class="text--primary">{{item.cs_title}}</h3>
               </v-col>
             </v-row>
@@ -41,32 +41,27 @@
     methods: {
       selectClass(item){
         console.log(item)
-        this.$store.state.currentClass = item
-        console.log("go To selected Class!!!!!!!:::::", item.cs_title)
-        this.$router.push({
-          name: 'Class'
-        })
-
-
+        this.$store.dispatch('changeCurrentClass', item)
+        // this.$store.state.currentClass = item
+        this.$emit("closeDialog")
+        console.log("selected Class!!!!!!!:::::", item.cs_title)
+        this.$store.dispatch("getListCurrentClass", item) //선택한 타이틀의 학습리스트 가져온다.
+        
       }
 
 
     },
-    props: {
-      genre: [Object, String],
+    // props: {
+    //   genre: [Object, String],
 
-    },
+    // },
 
     created() {
-      console.log("")
-
 
     },
     computed: {
-      ...mapState(["dramaList", "movieList", "popList"]),
+      ...mapState(["currentType"]),
       ...mapGetters(["getCurrentTypeTitleList"]),
-
-
     },
   }
 </script>

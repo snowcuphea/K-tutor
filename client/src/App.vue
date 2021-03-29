@@ -1,14 +1,12 @@
 <template>
   <v-app>
-    
     <Header class="header" v-if="isNotClass"/>
 
     <v-main class="main">
       <router-view />
     </v-main>
 
-    <Footer/>
-
+    <Footer v-if="isNotMain"/>
 
 
   </v-app>
@@ -35,13 +33,20 @@
 
     computed: {
       isNotClass() {
-        if (['Class', 'TitleList', 'ClassMain'].includes(this.$route.name)) {
+        if (['Class', 'TitleList', 'ClassMain','Login','Home'].includes(this.$route.name)) {
           return false
         } else {
           return true
         }
       },
 
+      isNotMain() {
+        if (['Login','Home'].includes(this.$route.name)) {
+          return false
+        } else {
+          return true
+        }
+      }
 
       // isNotClass () {
       //   if (this.$route.name === 'Class') {
@@ -56,15 +61,6 @@
 
     },
     created() {
-      // default page
-      const defaultSetting = {
-        navName: "Report",
-        navValue: 2
-      }
-      // default setting
-      if (this.$route.path === "/report") {
-        this.$store.dispatch('changePage', defaultSetting)
-      }
     }
   };
 </script>
@@ -91,7 +87,8 @@
   }
 
   .header{
-    min-height:70px;
+    min-height:60px;
+    max-height:60px;
   }
 
   .main{
@@ -99,5 +96,8 @@
     overflow-y: auto;
   }
 
+  .main::-webkit-scrollbar {
+    display: none;
+  }
 
 </style>

@@ -28,19 +28,19 @@
             <p>Listen carefully and select the correct words in order.</p>
             <div v-for="(line, idx) in questions[targetQuestion].lines_kr" :key="idx">
               <div v-if="questions[targetQuestion].lines_kr.length == 3">
-                <p v-if="idx%2 == 0"> A: {{ line }} </p>
-                <p v-else> B: {{ myAnswer }} </p>
+                <p v-if="idx%2 == 0"><span v-if="questions[targetQuestion].type !== 'pop'">A: </span>{{ line }} </p>
+                <p v-else><span v-if="questions[targetQuestion].type !== 'pop'">B: </span>{{ myAnswer }} </p>
               </div>
               <div v-else>
-                <p> A: {{ myAnswer }}</p>
+                <p><span v-if="questions[targetQuestion].type !== 'pop'">A: </span>{{ myAnswer }}</p>
               </div>
             </div>
 
-            <div class="d-flex justify-end">
-              <p> Source : {{questions[targetQuestion].source }} </p>
+            <div class="d-flex justify-end mt-n3 test-page">
+              <span> Source : {{questions[targetQuestion].source }} </span>
             </div>
 
-            <div class="d-flex justify-space-between">
+            <div class="d-flex justify-space-between mt-2">
               <v-btn plain icon><v-icon>mdi-volume-high</v-icon></v-btn>
               <v-btn plain icon @click="empty(targetQuestion)"><v-icon>mdi-restart</v-icon></v-btn>
             </div>
@@ -56,10 +56,11 @@
         </v-card>
         
         <v-card tile height="10%" elevation="0"
-         class="d-flex justify-end align-center" >
+         class="d-flex align-center px-5" >
           <v-btn text plain @click="previousQuestion" v-if="targetQuestion != 0">
             previous
           </v-btn>
+          <v-spacer></v-spacer>
           <v-btn text plain @click="nextQuestion" v-if="targetQuestion != questions.length - 1">
             next
           </v-btn>
@@ -90,7 +91,8 @@
           <h3>Test Report</h3>
         </v-card>
 
-        <v-card elevation="0" class="px-8">
+        <v-card tile elevation="0" class="px-8">
+          <Experience :experience="grade"/>
           <div>
             <h4>Test Result :   {{ grade }}/{{ answers.length * 10 }}</h4>
           </div>
@@ -108,12 +110,11 @@
               <p>My Answer : {{ wrong.myAnswer }} </p>
             </div>
           </div>
-          <Experience :experience="grade/10"/>
         </v-card>
         
         <v-spacer></v-spacer>
 
-        <v-card class="mb-3 d-flex justify-center" elevation="0">
+        <v-card tile class="mb-3 d-flex justify-center" elevation="0">
           <v-btn
             color="primary"
             text
@@ -139,25 +140,29 @@ export default {
   },
   data() {
     return {
+      N: 4,
       targetQuestion : 0,
       showDialog2 : false,
       questions: [
-        {source : "태양의 후예", 
+        {source : "태양의 후예", type: "drama",
         lines_kr : ["오늘 저녁에 뭐 먹었어?", "나는 오늘 저녁으로 고기를 먹었어.","오, 맛있었니?"],
         lines_en : ["What did you have for dinner?", "I had proteins for dinner.","Wow, how was it?"]},
-        {source : "도깨비", 
-        lines_kr : ["나랑 벚꽃축제 갈래?", "너무 좋아 나도 벚꽃 보러 가고 싶었어.","그러면 토요일 어때?"],
-        lines_en : ["Do you want to go to the cherry blossom festival with me?", "Yes, I would love to go see cherry blossoms.","Saturday sounds good?"]},
-        {source : "뉴스",
+        {source : "도깨비", type: "movie",
+        lines_kr : ["나랑 벚꽃축제 갈래?", "너무 좋아, 나도 벚꽃 보러 가고 싶었어.","그러면 토요일 어때?"],
+        lines_en : ["Wanna visit the cherry blossom festival with me?", "Yes, I would love to go see cherry blossoms.","Saturday sounds good?"]},
+        {source : "에일리 - 어느 날 우연히", type: "pop",  
+        lines_kr : ["만약에 너에게 전활 걸면", "쓰다만 메시지를 보내면","무작정 찾아가서 널 본다면"],
+        lines_en : ["Wanna visit the cherry blossom festival with me?", "Yes, I would love to go see cherry blossoms.","Saturday sounds good?"]},
+        {source : "대화체", type: "chat",
         lines_kr : ["이렇게 한줄로만 나오는 문제도 있다."],
         lines_en : ["There are questions that only have one sentence."]}
       ],
-      answers: [ "나는 오늘 저녁으로 고기를 먹었어.", "너무 좋아, 나도 벚꽃 보러 가고 싶었어.","이렇게 한줄로만 나오는 문제도 있다."],
-      myAnswers: new Array(3).fill([]),
+      answers: [ "나는 오늘 저녁으로 고기를 먹었어.", "너무 좋아, 나도 벚꽃 보러 가고 싶었어.", "쓰다만 메시지를 보내면","이렇게 한줄로만 나오는 문제도 있다."],
+      myAnswers: new Array(this.N).fill([]),
       myAnswer: "",
       order: 0,
       checked: [],
-      correct: new Array(3).fill(0),
+      correct: new Array(this.N).fill(0),
       grade: 0
 
     }
@@ -227,7 +232,7 @@ export default {
         }
       }
       this.showDialog2 = true
-      this.$store.dispatch('gainExperience', this.grade/10)
+      this.$store.dispatch('gainExperience', this.grade)
     },
     myCorrect() {
       const correctList = []
@@ -288,10 +293,11 @@ export default {
         this.createEmptyList(idx)
       }
       this.myAnswer = this.myAnswers[0]
-      this.correct = new Array(2).fill(0)
+      this.correct = new Array(this.N).fill(0)
       this.order = 0
       this.targetQuestion = 0
       this.grade = 0
+      this.checked = []
     }
   },
   created() {
@@ -321,5 +327,10 @@ export default {
 </script>
 
 <style>
+
+.test-page span {
+  color: grey;
+  font-size: 0.7em;
+}
 
 </style>

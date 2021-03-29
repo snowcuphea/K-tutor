@@ -1,17 +1,32 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Class from '../views/Class.vue'
-import ClassMain from '../views/class/ClassMain.vue'
+import Class from '../views/Class2.vue'
+// import ClassMain from '../views/class/ClassMain.vue'
 import Test from '../views/Test.vue'
 import Achievement from '../views/Achievement.vue'
 import MyPage from '../views/MyPage.vue'
 import Report from '../views/Report.vue'
+import Login from '../views/user/Login.vue'
+import Signup from '../views/user/Signup.vue'
+import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
 
-const routes = [{
+const routes = [
+  {
     path: '/',
-    redirect: '/report',
+    name: 'Home',
+    component: Home,
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login,
+  },
+  {
+    path: '/signup',
+    name: 'Signup',
+    component: Signup,
   },
   {
     path: '/report',
@@ -22,18 +37,18 @@ const routes = [{
     path: '/class',
     name: 'Class',
     component: Class,
-    children: [
-      {
-        path: '',
-        redirect: 'classmain'
-      },
-      {
-        path: 'classmain',
-        name: 'ClassMain',
-        component: ClassMain
-      },
+    // children: [
+    //   {
+    //     path: '',
+    //     redirect: 'classmain'
+    //   },
+    //   {
+    //     path: 'classmain',
+    //     name: 'ClassMain',
+    //     component: ClassMain
+    //   },
 
-    ],
+    // ],
   },
 
   {
