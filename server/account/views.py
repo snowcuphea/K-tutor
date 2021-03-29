@@ -1,9 +1,11 @@
-from rest_framework import status
+from django.views import View
+from rest_framework import status, viewsets, mixins
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import UserSerializers, User
 
 from django.shortcuts import get_object_or_404
+
 
 @api_view(['PUT', 'DELETE'])
 def account_modify_delete(request):
@@ -15,3 +17,9 @@ def account_modify_delete(request):
     elif request.method == 'DELETE':
         user.delete()
     return Response(user, status=status.HTTP_200_OK)
+
+
+class LoginViewSet(viewsets.GenericViewSet,
+                   mixins.ListModelMixin,
+                   View):
+
