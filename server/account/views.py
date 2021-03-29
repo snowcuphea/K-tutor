@@ -117,50 +117,41 @@ def access_consecutive_max(request, user_pk):
     pass
 
 
-class LoginViewSet(viewsets.GenericViewSet,
-                   mixins.ListModelMixin,
-                   View):
-    serializer_class = ReportSearializer
-
-    @authentication_classes([JSONWebTokenAuthentication])
-    @permission_classes([IsAuthenticated])
-    def login(self, request):
-        data = {}
-        # consecutive_access_date = serializers.IntegerField()
-        user = request.user
-        if not AccessDate.objects.filter(user=user).filter(access_at=date.today()).exists():
-            AccessDate.objects.create(user=user)
-
-        if AccessDate.objects.filter(user=user).filter(access_at=date.today() - timedelta(days=1)):
-            user.consecutive_acess += 1
-            user.save()
-        data['consecutive_access_date'] = user.consecutive_acess
-
-        # learned_lc_cnt = serializers.IntegerField()
-        data['learned_lc_cnt'] = user.learned_lc.all().count()
-
-        # recent_learned_lc = serializers.ListField()
-        data['recent_learned_lc'] = list(user.learned_lc.all())
-
-        # recent_lc_progress = serializers.DictField()
-        recent_lc_progress = dict()
-        for lc in list(user.learned_lc.all()):
-            if lc.cs.name not in recent_lc_progress:
-                recent_lc_progress[lc.cs.name] = [
-                    Lc.objects.filter(cs__name=lc.cs.name).filter(learned_user=user).count(),
-                    Lc.objects.filter(cs__name=lc.cs.name).count()
-                ]
-        data['recent_lc_progress'] = recent_lc_progress
-
-        # progress = serializers.DictField()
-        progress = dict()
-        for type in ['drama', 'movie', 'kpop']:
-            css = Cs.objects.filter(type=type)
-            lcs = Lc.objects.filter(cs__in=css)
-            progress[type] = [
-                lcs.filter(learned_user=user),
-                lcs.count()
+@api_view(['GET'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
+def login(self, request):
+    data = {}
+    # consecutive_access_date = serializers.IntegerField()
+    user = get_object_or_404(User, username=request.user.username)
+    if not AccessDate.objects.filter(user=user).filter(access_at=date.today()).exists():
+        AccessDate.objects.create(user=user)
+    if AccessDate.objects.filter(user=user).filter(access_at=date.today() - timedelta(days=1)):
+        user.consecutive_acess += 1
+        user.save()
+    data['consecutive_access_date'] = user.consecutive_acess
+    # learned_lc_cnt = serializers.IntegerField()
+    data['learned_lc_cnt'] = user.learned_lc.all().count()
+    # recent_learned_lc = serializers.ListField()
+    data['recent_learned_lc'] = list(user.learned_lc.all())
+    # recent_lc_progress = serializers.DictField()
+    recent_lc_progress = dict()
+    for lc in list(user.learned_lc.all()):
+        if lc.cs.name not in recent_lc_progress:
+            recent_lc_progress[lc.cs.name] = [
+                Lc.objects.filter(cs__name=lc.cs.name).filter(learned_user=user).count(),
+                Lc.objects.filter(cs__name=lc.cs.name).count()
             ]
-        data['progress'] = progress
-        serializer = ReportSearializer(data=data)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    data['recent_lc_progress'] = recent_lc_progress
+    # progress = serializers.DictField()
+    progress = dict()
+    for type in ['drama', 'movie', 'kpop']:
+        css = Cs.objects.filter(type=type)
+        lcs = Lc.objects.filter(cs__in=css)
+        progress[type] = [
+            lcs.filter(learned_user=user),
+            lcs.count()
+        ]
+    data['progress'] = progress
+    serializer = ReportSearializer(data=data)
+    return Response(serializer.data, status=status.HTTP_200_OK)
