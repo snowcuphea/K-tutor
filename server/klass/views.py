@@ -44,10 +44,9 @@ class CsViewSet(viewsets.GenericViewSet,
 
     def get(self, request):
         """
-        Cs(Cultural Source의 리스트 제공
+        Cs(Cultural Source) List
 
         ___
-            - ex) type = "drama" -> 도깨비, 태양의 후예...
         """
         song_list = Cs.objects.filter(type="kpop")
         cs_list_temp = list(set({x.name.split(" - ")[0] for x in song_list}))
@@ -83,6 +82,13 @@ class LcListViewSet(viewsets.GenericViewSet,
         return lc
 
     def get(self, request, type, title):
+        """
+        Cs(Cultural Source) List
+
+        ___
+            - <str:type>: drama, kpop, movie
+            - <str:title>: 사이코지만괜찮아, 갓세븐...
+        """
         if type != 'kpop':
             cs = get_object_or_404(Cs, name=title)
             lcs = list(Lc.objects.filter(cs=cs).values())
@@ -119,6 +125,12 @@ class LcViewSet(viewsets.GenericViewSet,
         return lc
 
     def get(self, request, LcId):
+        """
+        Get Lc
+
+        ___
+            - <int:LcId>
+        """
         lc = get_object_or_404(Lc, id=LcId)
         serializer = LcSerializer(lc)
         return Response(serializer.data, status=status.HTTP_200_OK)

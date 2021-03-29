@@ -144,7 +144,8 @@ AUTH_USER_MODEL = 'account.User'
 import datetime
 
 JWT_AUTH = {
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
+    # 자동 로그인
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=10000),
 }
 
 SWAGGER_SETTINGS = {
