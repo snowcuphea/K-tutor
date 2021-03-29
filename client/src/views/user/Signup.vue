@@ -1,5 +1,17 @@
 <template>
   <v-container>
+    <v-row>
+      <v-col>
+        <v-btn
+          icon
+          class="goToLogin"
+          @click="goToLogin"
+        >
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+
+      </v-col>
+    </v-row>
 
     <v-row>
       <v-col class="d-flex justify-center">
@@ -127,6 +139,10 @@
 
 
 
+      },
+
+      goToLogin() { //뒤로가기
+        this.$router.go(-1)
       }
 
     },
