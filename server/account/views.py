@@ -25,15 +25,12 @@ def logout(request):
     pass
 
 
-class UserViewSet(viewsets.GenericViewSet,
-                  mixins.ListModelMixin,
-                  View):
+class SignupViewSet(viewsets.GenericViewSet,
+                    mixins.ListModelMixin,
+                    View):
     serializer_class = UserSerializer
-    authentication_classes = (JSONWebTokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
 
     # 회원 가입
-    @permission_classes([AllowAny])
     def post(self, request):
         """
         Signup
@@ -50,6 +47,14 @@ class UserViewSet(viewsets.GenericViewSet,
         user.set_password(request.data.get('password'))
         user.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class UserViewSet(viewsets.GenericViewSet,
+                  mixins.ListModelMixin,
+                  View):
+    serializer_class = UserSerializer
+    authentication_classes = (JSONWebTokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     # 정보 수정
     def put(self, request):
