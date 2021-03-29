@@ -62,8 +62,8 @@ class LcListViewSet(viewsets.GenericViewSet,
                     mixins.ListModelMixin,
                     View):
     serializer_class = LcSerializer
-    authentication_classes = JSONWebTokenAuthentication
-    permission_classes = IsAuthenticated
+    authentication_classes = (JSONWebTokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         conditions = {
@@ -97,8 +97,8 @@ class LcViewSet(viewsets.GenericViewSet,
                 mixins.ListModelMixin,
                 View):
     serializer_class = LcSerializer
-    authentication_classes = JSONWebTokenAuthentication
-    permission_classes = IsAuthenticated
+    authentication_classes = (JSONWebTokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         conditions = {
