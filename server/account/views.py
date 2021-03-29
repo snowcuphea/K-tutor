@@ -8,8 +8,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
-from .models import TestResult, AccessDate
-from .serializers import UserSerializer, User, TestResultSerializer, ReportSearializer
+from .models import *
+from .serializers import *
 from klass.models import *
 
 from django.shortcuts import get_object_or_404
@@ -122,8 +122,11 @@ def access_consecutive_max(request, user_pk):
 @permission_classes([IsAuthenticated])
 def login(request):
     data = {}
-    # consecutive_access_date = serializers.IntegerField()
     user = get_object_or_404(User, username=request.user.username)
+    # 최근 학습 데이터 갱신
+    Recent_learned_lc.objects.filter(user=user).filter(learned_at__lt=date.today() - timedelta(days=7)).delete()
+
+    # consecutive_access_date = serializers.IntegerField()
     if not AccessDate.objects.filter(user=user).filter(access_at=date.today()).exists():
         AccessDate.objects.create(user=user)
     if AccessDate.objects.filter(user=user).filter(access_at=date.today() - timedelta(days=1)):
@@ -133,7 +136,7 @@ def login(request):
     # learned_lc_cnt = serializers.IntegerField()
     data['learned_lc_cnt'] = user.learned_lc.all().count()
     # recent_learned_lc = serializers.ListField()
-    data['recent_learned_lc'] = list(user.learned_lc.all())
+    data['recent_learned_lc'] = list(user.learned_lc.all().order_by('-pk'))
     # recent_lc_progress = serializers.DictField()
     recent_lc_progress = dict()
     for lc in list(user.learned_lc.all()):

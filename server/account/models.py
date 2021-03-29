@@ -13,9 +13,15 @@ class User(AbstractUser):
 class TestResult(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     score = models.IntegerField()
-    test_at = models.DateField(auto_now=True)
+    test_at = models.DateField(auto_now_add=True)
 
 
 class AccessDate(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     access_at = models.DateField(auto_now_add=True)
+
+
+class Recent_learned_lc(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    lc = models.ForeignKey('klass.Lc', on_delete=models.CASCADE)
+    learned_at = models.DateField(auto_now_add=True)

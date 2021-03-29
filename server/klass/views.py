@@ -8,6 +8,8 @@ from rest_framework.response import Response
 from .data_update import *
 from .serializers import *
 
+from account.models import Recent_learned_lc
+
 
 @api_view(['GET'])
 def updateDB(request):
@@ -102,3 +104,10 @@ class LcViewSet(viewsets.GenericViewSet,
         serializer = LcSerializer(lc)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+    def done(self, request, LcId):
+        user = request.user
+        lc = get_object_or_404(Lc, id=LcId)
+        user.learned_lc.add(Lc)
+        Recent_learned_lc.objects.create(user=user, lc=lc)

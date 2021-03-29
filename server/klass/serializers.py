@@ -27,6 +27,7 @@ class CpcqSerializer(serializers.ModelSerializer):
 
 
 class LcSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
     class Meta:
         model = Lc
         fields = (
