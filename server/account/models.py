@@ -3,8 +3,8 @@ from django.db import models
 
 
 class User(AbstractUser):
-    level = models.IntegerField()
-    exp = models.IntegerField()
+    level = models.IntegerField(default=1)
+    exp = models.IntegerField(default=0)
     consecutive_acess = models.IntegerField(default=1)
     learned_lc = models.ManyToManyField('klass.Lc', related_name='learned_user')
     learned_kw = models.ManyToManyField('klass.kw', related_name='learned_user')
