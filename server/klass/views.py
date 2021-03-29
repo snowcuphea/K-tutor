@@ -21,7 +21,7 @@ from django.db.models import Q
 def updateDB(request):
     # update()
     # create_lc()
-    add_meaning_to_lc()
+    # add_meaning_to_lc()
     return Response("OK", status=status.HTTP_200_OK)
 
 
@@ -121,6 +121,6 @@ class LcViewSet(viewsets.GenericViewSet,
         user = request.user
         lc = get_object_or_404(Lc, id=LcId)
         user.learned_lc.add(lc)
-        user.save()
-        Recent_learned_lc.objects.create(user=user, lc=lc)
+        if not Recent_learned_lc.objects.filter(Q(user=user)|Q(lc=lc)).exists():
+            Recent_learned_lc.objects.create(user=user, lc=lc)
         return Response("ok", status=status.HTTP_200_OK)
