@@ -133,6 +133,10 @@
         return (this.getCurrentClassLearnedKeword.length) / (this.classList.length) * 100
       },
     },
+    created() {
+      this.$store.dispatch('getLessonInfo')
+      this.$store.dispatch('getQuizInfo')
+    }
   }
 </script>
 
