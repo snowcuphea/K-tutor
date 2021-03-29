@@ -21,26 +21,24 @@ class CsViewSet(viewsets.GenericViewSet,
                 View):
     serializer_class = CsSerializer
 
-    def cs_list(self, request, type):
-        if type == 'kpop':
-            song_list = Cs.objects.filter(cs="kpop")
-            cs_list_temp = list(set({x.name.split(" - ")[0] for x in song_list}))
-            cs_list = []
-            for cs in cs_list_temp:
-                cs_list.append({
-                    "name": cs,
-                    "type": "kpop",
-                    "level": song_list.filter(name__contains=cs)[0].level
-                })
-        else:
-            cs_list = Cs.objects.filter(type=type)
+    def list(self, request):
+        song_list = Cs.objects.filter(cs="kpop")
+        cs_list_temp = list(set({x.name.split(" - ")[0] for x in song_list}))
+        cs_list = []
+        for cs in cs_list_temp:
+            cs_list.append({
+                "name": cs,
+                "type": "kpop",
+                "level": song_list.filter(name__contains=cs)[0].level
+            })
+        cs_list.extend(list(Cs.objects.filter(type=type)))
         serializer = CsSerializer(data=cs_list, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class LcListViewSet(viewsets.GenericViewSet,
-                mixins.ListModelMixin,
-                View):
+                    mixins.ListModelMixin,
+                    View):
     serializer_class = LcSerializer
 
     def list(self, request, type, title):
@@ -64,5 +62,3 @@ class LcViewSet(viewsets.GenericViewSet,
         lc = get_object_or_404(Lc, id=LcId)
         serializers = LcSerializer(lc)
         return Response(serializers.data, status=status.HTTP_200_OK)
-
-
