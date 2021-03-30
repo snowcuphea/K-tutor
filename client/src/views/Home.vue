@@ -7,6 +7,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   created() {
     // default page
@@ -19,8 +21,15 @@ export default {
 
 
     setTimeout(() => {
-      this.$router.push({path: '/report'})
+      if (this.isLogin){
+        this.$router.push({path: '/report'})
+      } else {
+        this.$router.push({path: '/login'})
+      }
     }, 1500);
+  },
+  computed: {
+    ...mapState(['isLogin'])
   }
 }
 </script>

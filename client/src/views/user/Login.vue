@@ -90,7 +90,13 @@
 
             getInfo(
               (response) => {
-                console.log(response.data)
+                console.log("레포트정보", response.data)
+                this.$store.dispatch('addUserEmail', this.userCredentials.userEmail )
+
+                this.userCredentials.userEmail = ""
+                this.userCredentials.userPassword = ""
+
+                this.$store.dispatch('getReportInfo', response.data)
               },
               (error) => {
                 console.log(error)
@@ -98,7 +104,7 @@
             )
             getClassList(
               (response) => {
-                console.log("로긴하고나서 getClassList 이제 dispatch해야징",response.data)
+                // console.log("로긴하고나서 getClassList 이제 dispatch해야징",response.data)
                 this.$store.dispatch('getClassList', response.data)
               
               },
@@ -114,9 +120,6 @@
           }
 
         )
-        this.userCredentials.userEmail = ""
-        this.userCredentials.userPassword = ""
-
       },
 
       goToSignup() {

@@ -1,7 +1,7 @@
 <template>
   <v-container class="px-5 d-flex flex-column">
     <div class="d-flex flex-column">
-      <h3> {{ userName }}'s Study Report </h3>
+      <h3> {{ nickName }}'s Study Report </h3>
       <Experience :experience="-1" />
       <p class="px-3"> Studied for <span> {{ contiDay }} </span> days in a row! </p>
       <p class="px-3"> Studied <span> {{ studyCnt }} </span> lesson cards. </p>
@@ -53,7 +53,7 @@ export default {
     GenreProgress
   },
   computed: {
-    ...mapState(['userName', 'userLevel','contiDay','studyCnt'])
+    ...mapState(['nickName','contiDay','studyCnt'])
   }
 }
 </script>
