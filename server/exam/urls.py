@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 
-app_name = 'klass'
+app_name = 'exam'
 
 urlpatterns = [
     path('report', views.ExamReportViewSet.as_view({"get": "get"})),
