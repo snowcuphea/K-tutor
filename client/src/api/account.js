@@ -26,4 +26,17 @@ function getInfo( success, fail ) {
     .catch(fail)
 }
 
-export { getToken, getInfo }
+function signup(user, success, fail ){
+  const accountInfo = {
+    username: user.userEmail,
+    password: user.userPassword,
+    nickname: user.nickname
+  }
+
+  instance
+    .put("account/signup", accountInfo)
+    .then(success)
+    .catch(fail);
+}
+
+export { getToken, getInfo, signup }
