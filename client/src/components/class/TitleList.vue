@@ -5,15 +5,15 @@
     </v-row>
     <v-row class="d-flex flex-column">
       <v-col>
-        <v-card class="my-1 mx-2" v-for="item in getCurrentTypeTitleList" :key="item.cs_seq"
+        <v-card class="my-1 mx-2" v-for="item in getCurrentTypeTitleList" :key="item.name"
         @click="selectClass(item)">
           <v-card-text>
             <v-row>
               <v-col cols="5" xs="6" style="" class="d-flex justify-center">
-                <img :src="require(`@/assets/images/poster/poster${item.cs_seq}.jpg`)" alt="title" class="imgSize">
+                <!-- <img :src="require(`@/assets/images/poster/poster${item.cs_seq}.jpg`)" alt="title" class="imgSize"> -->
               </v-col>
               <v-col cols="7" xs="6" class="d-flex align-center">
-                <h3 class="text--primary">{{item.cs_title}}</h3>
+                <h3 class="text--primary">{{item.name}}</h3>
               </v-col>
             </v-row>
           </v-card-text>
@@ -44,7 +44,7 @@
         this.$store.dispatch('changeCurrentClass', item)
         // this.$store.state.currentClass = item
         this.$emit("closeDialog")
-        console.log("selected Class!!!!!!!:::::", item.cs_title)
+        console.log("selected Class!!!!!!!:::::", item.name)
         this.$store.dispatch("getListCurrentClass", item) //선택한 타이틀의 학습리스트 가져온다.
         
       }

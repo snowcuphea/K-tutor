@@ -10,15 +10,16 @@
 
     <v-row>
       <v-col>
-        <img :src="require(`@/assets/images/poster/poster${classInfo.cs_seq}.jpg`)" alt="title" class="imgSize">
+        <!-- <img :src="require(`@/assets/images/poster/poster${classInfo.cs_seq}.jpg`)" alt="title" class="imgSize"> -->
+        <img :src="require(`@/assets/images/poster/poster1.jpg`)" alt="title" class="imgSize">
       </v-col>
     </v-row>
 
     <v-row >
       <v-col >
-        <span v-if="currentClass.cs_level == 1">Difficulty: Beginner</span>
-        <span v-else-if="currentClass.cs_level == 2">Difficulty: Intermediate</span>
-        <span v-else-if="currentClass.cs_level == 3">Difficulty: Advanced</span>
+        <span v-if="currentClass.cs_level == '0'">Difficulty: Beginner</span>
+        <span v-else-if="currentClass.cs_level == '1'">Difficulty: Intermediate</span>
+        <span v-else-if="currentClass.cs_level == '2'">Difficulty: Advanced</span>
         <span v-else>Difficulty: Basic</span>
       </v-col>
     </v-row>
@@ -133,6 +134,10 @@
         return (this.getCurrentClassLearnedKeword.length) / (this.classList.length) * 100
       },
     },
+    created() {
+      this.$store.dispatch('getLessonInfo')
+      this.$store.dispatch('getQuizInfo')
+    }
   }
 </script>
 

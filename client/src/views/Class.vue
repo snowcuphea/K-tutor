@@ -15,8 +15,8 @@
           v-model="selectedIdx"
           active-class="deep-purple--text text--accent-4"
         >
-          <v-list-item v-for="(type, idx) in typeData" :key="idx" @click="selectType(type)">
-            <v-list-item-title>{{ type.type_title }}</v-list-item-title>
+          <v-list-item v-for="(typeItem, idx) in typeData" :key="idx" @click="selectType(typeItem)">
+            <v-list-item-title>{{ typeItem.name }}</v-list-item-title>
           </v-list-item>
 
         </v-list-item-group>
@@ -66,27 +66,27 @@ export default {
       typeData: [
         {
           type_seq: 1,
-          cs_type: "movie",
-          type_title: "K-Movie"
+          type: "movie",
+          name: "K-Movie"
         },
         {
           type_seq: 2,
-          cs_type: "drama",
-          type_title: "K-Drama"
+          type: "drama",
+          name: "K-Drama"
         },
         {
           type_seq: 3,
-          cs_type: "pop",
-          type_title: "K-Pop"
+          type: "kpop",
+          name: "K-Pop"
         },
       ],
 
     }
   },
   methods: {
-    selectType( type ) {
-      this.selectedType = type.type_title
-      this.$store.state.currentType = type.cs_type
+    selectType( typeItem ) {
+      this.selectedType = typeItem.name
+      this.$store.state.currentType = typeItem.type
     }
   },
   watch: {
@@ -96,8 +96,12 @@ export default {
     }
   },
   computed: {
-    ...mapState(["currentClass", "defaultClass"])
-  }
+    ...mapState(["currentClass", "defaultClass", "allTitleList"])
+  },
+  created() {
+    console.log(this.allTitleList)
+
+  },
 }
 </script>
 

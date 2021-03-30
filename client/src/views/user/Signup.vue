@@ -26,7 +26,7 @@
           <v-row class="mx-5">
             <v-col>
               <v-text-field label="Email" :rules="rulesEmail" hide-details="auto" type="text"
-                v-model="userCredentials.userEmail">
+                v-model="signupCredentials.userEmail">
               </v-text-field>
             </v-col>
           </v-row>
@@ -34,7 +34,7 @@
           <v-row class="mx-5">
             <v-col>
               <v-text-field label="Nickname" :rules="rulesNickname" hide-details="auto"
-                v-model="userCredentials.userNickname"></v-text-field>
+                v-model="signupCredentials.userNickname"></v-text-field>
             </v-col>
           </v-row>
 
@@ -42,7 +42,7 @@
           <v-row class="mx-5">
             <v-col>
               <v-text-field label="Password" :rules="rulesPassword" hide-details="auto" type="password"
-                v-model="userCredentials.userPassword"></v-text-field>
+                v-model="signupCredentials.userPassword"></v-text-field>
             </v-col>
           </v-row>
 
@@ -50,7 +50,7 @@
           <v-row class="mx-5">
             <v-col>
               <v-text-field label="Password Confirm" :rules="passwordConfirmation" hide-details="auto" type="password"
-                v-model="userCredentials.userPasswordConfirm"></v-text-field>
+                v-model="signupCredentials.userPasswordConfirm"></v-text-field>
             </v-col>
           </v-row>
 
@@ -87,7 +87,7 @@
         value => !!value || 'Required.',
         value => (value && value.length >= 3) || 'Min 3 characters',
       ],
-      userCredentials: {
+      signupCredentials: {
         userEmail: "",
         userPassword: "",
         userPasswordConfirm: "",
@@ -97,9 +97,7 @@
 
 
     }),
-    created() {
-
-    },
+    
     methods: {
       signup() {
         if (this.$refs.form.validate()) {
@@ -146,10 +144,21 @@
       }
 
     },
+    created() {
+
+        this.signupCredentials.userEmail = ""
+        this.signupCredentials.userPassword= ""
+        this.signupCredentials.userPasswordConfirm= ""
+        this.signupCredentials.userNickname= ""
+
+     
+
+
+    },
     computed: {
       passwordConfirmation() {
         return [
-          value => value === this.userCredentials.userPassword || 'Confirm your password.'
+          value => value === this.signupCredentials.userPassword || 'Confirm your password.'
         ]
       },
     }
