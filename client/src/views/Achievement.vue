@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container>
     <div class="modal-overlay"
       v-if="visible"
       @click="closeModal"
@@ -24,7 +24,7 @@
 
     </div>
 
-    <v-container class="wrap d-flex flex-wrap" style="height: 60vh;" id="achieve_body">
+    <div class="wrap d-flex flex-column" style="height: 60vh;" id="achieve_body">
 
       <!-- <v-list
         v-for = "(item,idx) in $store.state.items"
@@ -32,17 +32,20 @@
       >
 
       </v-list> -->
-      <v-col
-        v-for = "(item, idx) in $store.state.items"
-        :key = "idx"
-      >
-      
-        <appMyModal :modalItem="item" @update="modal" />
+        <div
+          v-for = "(item, idx) in $store.state.items"
+          :key = "idx"
+        >
+          <v-row>
+            <appMyModal :modalItem="item" @update="modal" />
 
-        <v-divider></v-divider>
+          </v-row>
 
-      </v-col>
-    </v-container>
+          <!-- <v-divider></v-divider> -->
+
+        </div>
+
+    </div>
     <div>
       <v-container>
         <v-flex>업적 달성률</v-flex>
@@ -96,7 +99,7 @@
       </div>
     </v-expand-transition> -->
     
-  </div>
+  </v-container>
 </template>
 
 <script>
