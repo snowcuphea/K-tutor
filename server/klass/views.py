@@ -102,9 +102,9 @@ class LcListViewSet(viewsets.GenericViewSet,
             lcs = list(Lc.objects.filter(cs__in=css).values())
         user = request.user
         for lc in lcs:
-            lc['already_learned'] = True if Lc.objects.filter(Q(learned_user=user) | Q(id=lc.id)).exists() else False
+            lc['already_learned'] = True if Lc.objects.filter(Q(learned_user=user) | Q(id=lc['id'])).exists() else False
 
-        serializer = LcSerializer(data=lcs_dict, many=True)
+        serializer = LcSerializer(data=lcs, many=True)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
