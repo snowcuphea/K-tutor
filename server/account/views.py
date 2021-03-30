@@ -122,8 +122,7 @@ class LoginViewSet(viewsets.GenericViewSet,
         if AccessDate.objects.filter(user=user).filter(access_at=date.today() - timedelta(days=1)):
             user.consecutive_acess += 1
             user.save()
-        data['user'] = user.__dict__
-        data['consecutive_access_date'] = user.consecutive_access
+        data['user'] = user.serializable_value()
         # learned_lc_cnt = serializers.IntegerField()
         data['learned_lc_cnt'] = user.learned_lc.all().count()
         # recent_learned_lc = serializers.ListField()
