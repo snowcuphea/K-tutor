@@ -88,25 +88,25 @@ class ExamViewSet(viewsets.GenericViewSet,
                 ExamResult.objects.filter(user=request.user)[0].delete()
             return Response("ok", status=status.HTTP_200_OK)
 
-    class ExamReportViewSet(viewsets.GenericViewSet,
-                            mixins.ListModelMixin,
-                            View):
-        serializer_class = ExamResultSerializer
-        permission_classes = (IsAuthenticated,)
-        authentication_classes = (JSONWebTokenAuthentication,)
 
-        @swagger_auto_schema(manual_parameters=[
-            openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
-                              type=openapi.TYPE_STRING)])
-        def get(self, request):
-            """
-            Get Exam Report
+class ExamReportViewSet(viewsets.GenericViewSet,
+                        mixins.ListModelMixin,
+                        View):
+    serializer_class = ExamResultSerializer
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (JSONWebTokenAuthentication,)
 
-            ___
-            """
-            serializer = ExamResultSerializer(
-                data=ExamResult.objects.filter(user=request.user).values(),
-                many=True
-            )
-            serializer.is_valid(raise_exception=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+    @swagger_auto_schema(manual_parameters=[
+        openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
+                          type=openapi.TYPE_STRING)])
+    def get(self, request):
+        """
+        Get Exam Report
+        ___
+        """
+        serializer = ExamResultSerializer(
+            data=ExamResult.objects.filter(user=request.user).values(),
+            many=True
+        )
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
