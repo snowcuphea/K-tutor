@@ -87,19 +87,19 @@
           (response) => {
             localStorage.setItem("jwt", response.data.token)
             
-
             getInfo(
               (response) => {
-                console.log("레포트정보", response.data)
+                // console.log("레포트정보", response.data)
                 this.$store.dispatch('addUserEmail', this.userCredentials.userEmail )
 
                 this.userCredentials.userEmail = ""
                 this.userCredentials.userPassword = ""
 
                 this.$store.dispatch('getReportInfo', response.data)
+                
               },
               (error) => {
-                console.log(error)
+                console.log("account/login 에러", error)
               }
             )
             getClassList(

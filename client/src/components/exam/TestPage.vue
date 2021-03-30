@@ -141,11 +141,11 @@ export default {
   },
   data() {
     return {
-      N: 4,
+      N: this.$store.state.testQuestions.length,
       targetQuestion : 0,
       showDialog2 : false,
       questions: this.$store.state.testQuestions,
-      answers: [ "나는 오늘 저녁으로 고기를 먹었어.", "너무 좋아, 나도 벚꽃 보러 가고 싶었어.", "쓰다만 메시지를 보내면","이렇게 한줄로만 나오는 문제도 있다."],
+      answers: [],
       myAnswers: new Array(this.N).fill([]),
       myAnswer: "",
       order: 0,
@@ -289,7 +289,17 @@ export default {
     }
   },
   created() {
+
+    for (let answer of this.testQuestions) {
+      if ( answer.lines_kr.length == 3 ) {
+        this.answers.push(answer.lines_kr[1])
+      } else {
+        this.answers.push(answer.lines_kr[0])
+      }
+    }
+
     this.defaultSetting()
+
   },
   computed: {
     ...mapState([ "testQuestions" ]),
@@ -311,7 +321,7 @@ export default {
       return target
     },
 
-  }
+  },
 }
 </script>
 
