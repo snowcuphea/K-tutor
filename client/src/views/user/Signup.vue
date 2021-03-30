@@ -2,11 +2,7 @@
   <v-container>
     <v-row>
       <v-col>
-        <v-btn
-          icon
-          class="goToLogin"
-          @click="goToLogin"
-        >
+        <v-btn icon class="goToLogin" @click="goToLogin">
           <v-icon>mdi-close</v-icon>
         </v-btn>
 
@@ -46,7 +42,7 @@
             </v-col>
           </v-row>
 
-          
+
           <v-row class="mx-5">
             <v-col>
               <v-text-field label="Password Confirm" :rules="passwordConfirmation" hide-details="auto" type="password"
@@ -54,7 +50,7 @@
             </v-col>
           </v-row>
 
-          
+
 
           <v-row class="mx-5 my-5">
             <v-col>
@@ -68,7 +64,9 @@
 </template>
 
 <script>
-  // import axios from "axios"
+  import {
+    signUp
+  } from "@/api/account.js"
 
   export default {
     name: 'Signup',
@@ -97,14 +95,27 @@
 
 
     }),
-    
+
     methods: {
       signup() {
         if (this.$refs.form.validate()) {
-          console.log("signup Success")
-          this.$router.push({
+
+          signUp(
+            this.signupCredentials,
+            (res) => {
+              console.log(res)
+              console.log("signup Success")
+              alert("You joined Malmoong-chi successfully! (´▽`ʃ♡ƪ)")
+              this.$router.push({
                 name: "Login"
               })
+            },
+            (err) => {
+              console.log("회원가입실패", err)
+            }
+
+          )
+
 
           // let signupInfo = {
           //   username: this.userCredentials.userEmail,
@@ -146,12 +157,12 @@
     },
     created() {
 
-        this.signupCredentials.userEmail = ""
-        this.signupCredentials.userPassword= ""
-        this.signupCredentials.userPasswordConfirm= ""
-        this.signupCredentials.userNickname= ""
+      this.signupCredentials.userEmail = ""
+      this.signupCredentials.userPassword = ""
+      this.signupCredentials.userPasswordConfirm = ""
+      this.signupCredentials.userNickname = ""
 
-     
+
 
 
     },
