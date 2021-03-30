@@ -153,10 +153,14 @@ def result_latest(request, user_pk):
 @permission_classes([IsAuthenticated])
 def level_up(request):
     user = get_object_or_404(User, username=request.user.username)
+    if user.level == 15:
+        return Response(user, status=status.HTTP_200_OK)
     user.exp += request.data.exp
     if required_exp[user.level - 1] < user.exp:
         user.exp -= required_exp[user.level - 1]
         user.level += 1
+        if user.level == 15:
+            user.exp = 0
     user.save()
 
     return Response(user, status=status.HTTP_200_OK)
@@ -173,5 +177,7 @@ def acheivement_list_info(request):
         users_achievements = user.achievement_set.all()
         serializer = AchievementSerializer(users_achievements, many=True)
         return Response(serializer.data)
-    else:
-        pass
+    # else:
+    #     achievement = request.data['achievement_id']
+    #     users_achievements = user.achievement_set.filter(achieved=)
+    #     return Response()
