@@ -5,7 +5,7 @@ from .models import *
 class ExamResultSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExamResult
-        field = '__all__'
+        fields = '__all__'
 
 
 class ExamSerializer(serializers.Serializer):
@@ -13,4 +13,4 @@ class ExamSerializer(serializers.Serializer):
     cs = serializers.CharField(max_length=100)
 
     class Meta:
-        field = '__all__'
+        fields = '__all__'
