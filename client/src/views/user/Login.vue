@@ -112,11 +112,13 @@
                 console.log("클래스 리스트를 가져오지 못하였어...",error)
               }
             )
+            alert("Welcome!")
             this.$router.push({name:'Report'})
             this.$store.state.currentPage = 'Report'
           },
           (error) => {
             console.log(error)
+            alert("Please check your Email or Password.")
           }
 
         )
