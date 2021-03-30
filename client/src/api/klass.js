@@ -30,9 +30,10 @@ function getLessonList( klass, success, fail ) {
 function getLessonInfo( lessonId, success, fail ) {
 
   instance.defaults.headers['Authorization'] = "jwt " + window.localStorage.getItem('jwt')
+   
 
   instance
-    .get(`lc/${lessonId}`)
+    .get(`klass/lc/${lessonId}`)
     .then(success)
     .catch(fail)
 
@@ -43,7 +44,7 @@ function sendLessonInfo( lessonId, success, fail ) {
   instance.defaults.headers['Authorization'] = "jwt " + window.localStorage.getItem('jwt')
 
   instance
-   .post(`lc/${lessonId}`, lessonId)
+   .post(`klass/lc/${lessonId}`, lessonId)
    .then(success)
    .catch(fail)
 }

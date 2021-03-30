@@ -37,6 +37,7 @@ export default {
   },
   methods: {
     startTest() {
+      this.$store.dispatch( "getTestQuestions" )
       this.showDialog = !this.showDialog
     }
   },

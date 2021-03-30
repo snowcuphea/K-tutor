@@ -2,7 +2,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from "vuex-persistedstate"
-import {getLessonList } from "@/api/klass.js"
+import {getLessonList, getLessonInfo } from "@/api/klass.js"
 
 
 Vue.use(Vuex)
@@ -20,8 +20,8 @@ export default new Vuex.Store({
     currentPage: '', //밑 navbar에서 선택한 페이지
     currentPageValue: 2, //밑 navbar에서 선택한 index
     currentType: '', //선택한 타입(영화, 드라마, 가수) 
-    currentClass:'', //최근 클래스 정보
-    defaultClass:{cs_seq:1, cs_title: '싸이코지만괜찮아', cs_type:'drama', cs_level:1}, 
+    currentClass:{name: '사랑의불시착', type:'drama', level:1}, //최근 클래스 정보
+    defaultClass:{name: '사랑의불시착', type:'drama', level:1}, 
     classList:[], //title을 선택하면 나오는 학습 리스트
 
 
@@ -280,22 +280,19 @@ export default new Vuex.Store({
       state.userGrade.shift();
       state.userGrade.push(grade)
     },
-    changeCurrentClass ( state, item) {
+    CHANGECURRENTCLASS ( state, item) {
       state.currentClass =item
+      // console.log("뮤ㄴ=텡이션 현재커렌트클래스",state.currentClass )
     },
     GETLISTCURRENTCLASS (state, resclassList) {
       //titleInfo.cs_seq로 axios 요청받아서 리스트 받아오기
-      console.log("뮤테이션 getListCurrentClass실행:::", resclassList)
-      const tempClassList = [
-        {cpct_seq:1, title:state.currentClass.name, img:'poster1', keyword:'싶어', keyword_en: 'to want' },
-        {cpct_seq:2, title:state.currentClass.name, img:'poster2', keyword:'좋아', keyword_en: 'I like it'},
-        {cpct_seq:3, title:state.currentClass.name, img:'poster3', keyword:'사랑해', keyword_en: 'I love you'},
-      ]
-      state.classList = tempClassList
-      // state.classList = resclassList
+      // console.log("뮤테이션 getListCurrentClass실행:::", resclassList)
+      state.classList = resclassList
+      console.log("현재 클래스 리스트는?", state.classList)
 
     },
-    getLessonInfo ( state ) {
+    GETLESSONINFO ( state, item ) {
+      console.log("받아온 레슨인포", item)
       // axios 요청 보내서 state에 저장
       const lessonForm = {
         type: 'drama',
@@ -323,6 +320,7 @@ export default new Vuex.Store({
         ]
       }
       state.lessonInfo = lessonForm
+      console.log("레슨인포수정해떵0", item)
     },
     getQuizInfo ( state ) {
       const quizForm = {
@@ -434,7 +432,7 @@ export default new Vuex.Store({
       commit('changeLastGrade', grade)
     },
     changeCurrentClass ({ commit }, item ) {
-      commit('changeCurrentClass', item)
+      commit('CHANGECURRENTCLASS', item)
     },
     getListCurrentClass ({ commit }, selectedItem) {
       let selectedClassInfo ={
@@ -447,6 +445,7 @@ export default new Vuex.Store({
         (res) => {
           console.log("getLessonList 액션즈 실행", res.data)
           commit('GETLISTCURRENTCLASS',res.data )
+          commit('CHANGECURRENTCLASS',selectedItem )
         },
         (err) => {
           console.log("getLessonList 액션즈 실패", err)
@@ -455,8 +454,22 @@ export default new Vuex.Store({
       )
       
     },
-    getLessonInfo ({ commit }) {
-      commit('getLessonInfo')
+    getLessonInfoByItem ({ commit }, itemId) {
+      getLessonInfo(
+        itemId,
+        (res) => {
+          console.log("getLessonInfoByItem뮤테이션",res.data)
+          commit('GETLESSONINFO', res.data)
+
+        },
+        (err) => {
+          console.log("asdfsadfsdad,ItemId", itemId)
+          console.log("getLessonInfoByItem뮤테이션에러", err)
+
+        }
+
+      )
+      
     },
     getQuizInfo ({ commit }) {
       commit('getQuizInfo')

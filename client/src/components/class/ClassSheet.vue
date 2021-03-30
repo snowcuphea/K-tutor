@@ -2,7 +2,7 @@
   <v-container id="classSheet">
     <v-row>
       <v-col class="d-flex justify-center">
-        <h2> {{currentClass.cs_title}} </h2>
+        <h2> {{currentClass.name}} </h2>
         <!-- <span> 여기에 나중에 영어이름도 넣기 </span> -->
         
       </v-col>
@@ -43,19 +43,19 @@
 
     <v-row>
       <v-col>
-        <v-card class="my-1 mx-2" v-for="(item,idx) in classList" :key="item.keyword" @click="startClass()">
+        <v-card class="my-1 mx-2" v-for="(item,idx) in classList" :key="item.main_kw_word" @click="startClass(item)">
           <v-card-text>
             <v-row>
               <v-col cols="1" xs="1" class="d-flex justify-center align-center">
                 <span>{{idx+1}}</span>
               </v-col>
               <v-col cols="3" xs="4" style="" class="d-flex justify-center">
-                <img :src="require(`@/assets/images/poster/${item.img}.jpg`)" alt="keyword" class="imgSize">
+                <img :src="require(`@/assets/images/poster/poster8.jpg`)" alt="keyword" class="imgSize">
               </v-col>
               <v-col cols="7" xs="6" class="d-flex align-center">
                 <div class="d-flex flex-column">
-                  <h3 class="text--primary my-1"> {{item.keyword}}</h3>
-                  <span class="my-1"> {{item.keyword_en}} -{{item.title}}中-</span>
+                  <h3 class="text--primary my-1"> {{item.main_kw_word}}</h3>
+                  <span class="my-1"> (영어번역필요) -{{item.title}}中-</span>
                 </div>
               </v-col>
               <v-col cols="1" xs="1" class="d-flex align-center">
@@ -99,17 +99,19 @@
 
     },
     methods: {
-      startClass() {
+      startClass(item) {
         // 서버에 요청을 보내서 해당 학습 내용을 받아온다
-        this.$store.dispatch('getLessonInfo')
+        // this.$store.dispatch('changeCurrentClass', item)
+        this.$store.dispatch('getLessonInfoByItem',item.id )
+
         this.openStudyPage = !this.openStudyPage
       },
       endClass() {
         this.openStudyPage = !this.openStudyPage
       },
-      checkCompleted(item) {
+      checkCompleted() {
         // if item.cs_seq in getCurrentClassLearnedKeword.cs_
-        console.log(item)
+        // console.log(item)
         return true
       },
       startQuiz() {
@@ -135,8 +137,13 @@
       },
     },
     created() {
-      this.$store.dispatch('getLessonInfo')
+      // this.$store.dispatch('getLessonInfo')
       this.$store.dispatch('getQuizInfo')
+      if (this.currentClass) {
+        this.$store.dispatch('getListCurrentClass',this.currentClass )
+      } else {
+        this.$store.dispatch('getListCurrentClass',this.defaultClass )
+      }
     }
   }
 </script>

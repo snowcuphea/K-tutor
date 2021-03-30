@@ -106,12 +106,17 @@
               console.log(res)
               console.log("signup Success")
               alert("You joined Malmoong-chi successfully! (´▽`ʃ♡ƪ)")
+              this.userCredentials.userEmail = ''
+              this.userCredentials.userPassword = ''
+              this.userCredentials.userPasswordConfirm = ''
+              this.userCredentials.userNickname = ''
               this.$router.push({
                 name: "Login"
               })
             },
             (err) => {
               console.log("회원가입실패", err)
+              alert("Please check your information again.")
             }
 
           )
@@ -136,7 +141,7 @@
           //   })
           //   .catch((err) => {
           //     console.log(err)
-          //     alert("회원가입 정보가 올바르지 않습니다.")
+          //     
           //   })
 
 
