@@ -2,8 +2,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from "vuex-persistedstate"
-import {getLessonList, getLessonInfo } from "@/api/klass.js"
-
+import { getLessonList, getLessonInfo } from "@/api/klass.js"
+// import { getExamReport } from "@/api/exam.js"
 
 Vue.use(Vuex)
 
@@ -371,10 +371,13 @@ export default new Vuex.Store({
     },
     GETTESTGRADES ( state ) {
       const gradeForm = {
-        date : [
-          "31","1","2","3","4","4","4","5","5","6"
+        dates : [
+          "2021-03-31 23:32:32","2021-03-31 23:32:32","2021-03-31 23:32:32",
+          "2021-03-31 23:32:32","2021-03-31 23:32:32","2021-03-31 23:32:32",
+          "2021-03-31 23:32:32","2021-03-31 23:32:32","2021-03-31 23:32:32",
+          "2021-03-31 23:32:32"
         ],
-        scores : [
+        grades : [
           20,30,50,70,30,50,70,80,90,50
         ]
       }
@@ -475,9 +478,27 @@ export default new Vuex.Store({
       commit('getQuizInfo')
     },
     getTestQuestions ({ commit } ) {
+      // getExamProblems(
+      //   (res) => {
+      //     console.log(res.data)
+      //   },
+      //   (err) => {
+      //     console.log(err.data)
+      //   }
+      // )
       commit('GETTESTQUESTIONS')
     },
     getTestGrades ({ commit }) {
+
+      // getExamReport(
+      //   (res) => {
+      //     console.log(res)
+      //   },
+      //   (err) => {
+      //     console.log(err)
+      //   }
+      // )
+
       commit( 'GETTESTGRADES' )
     },
     getReportInfo( { commit }, reportData ) {

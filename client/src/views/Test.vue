@@ -56,6 +56,8 @@ export default {
   created() {
     // 시험 내용 요청 보내서 store에 저장
     this.$store.dispatch( "getTestQuestions" )
+    this.$store.dispatch( "getTestGrades" )
+    
   }
 
 
