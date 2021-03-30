@@ -36,11 +36,16 @@ export default {
             fontSize: 16,
           },
           tooltips:{
+            displayColors: false,
+            titleAlign: "center",
             callbacks: {
-              label: function(tooltipItem) {
-                console.log(tooltipItem)
-                return String(tooltipItem.xLabel) + Number(tooltipItem.value)
-              }
+              title: function(tooltipItem) {
+                const date = tooltipItem[0].xLabel.split(' ')
+                console.log(date)
+                const ymd = date[0][5]+date[0][6] + "/" + date[0][8]+date[0][9] + "/" + date[0][2]+date[0][3]
+                const time = date[1][0]+date[1][1] + ":" + date[1][3] + date[1][4]
+                return ymd + " " + time
+              },
             }
           },
           legend: {
@@ -64,6 +69,11 @@ export default {
                 scaleLabel: {
                   display: true,
                   labelString: 'date (M/D)'
+                },
+                ticks: {
+                  callback(data) {
+                    return data[5]+data[6] + "/" + data[8]+data[9]
+                  }
                 }
               }
             ]

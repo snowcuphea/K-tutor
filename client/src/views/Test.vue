@@ -3,7 +3,7 @@
     <div class="d-flex flex-column">
       <h3> Report Card </h3>
       <GradeChart />
-      <p>Average of last 10 exams: {{ average }} </p>
+      <p class="mt-2">Average of last 10 exams: {{ average }} </p>
     </div>
 
     <Experience :experience="-1" />
