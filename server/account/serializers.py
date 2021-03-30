@@ -27,6 +27,8 @@ class ReportSearializer(serializers.Serializer):
     recent_learned_lc = serializers.ListField()
     recent_lc_progress = serializers.DictField()
     progress = serializers.DictField()
+    class Meta:
+        fields = ('user', 'consecutive_access_date', 'learned_lc_cnt', 'recent_learned_lc', 'recent_lc_progress', 'progress')
 
 # class AchievementSerializer(serializers.Modelserializer):
 #     class Meta:
