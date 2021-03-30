@@ -92,7 +92,7 @@
         </v-card>
 
         <v-card tile elevation="0" class="px-8">
-          <Experience :experience="grade"/>
+          <Experience :experience="grade/10"/>
           <div>
             <h4>Test Result :   {{ grade }}/{{ answers.length * 10 }}</h4>
           </div>
@@ -132,6 +132,7 @@
 
 <script>
 import Experience from "@/components/user/Experience.vue"
+import { mapState } from "vuex"
 
 export default {
   props: ['showDialog'],
@@ -143,20 +144,7 @@ export default {
       N: 4,
       targetQuestion : 0,
       showDialog2 : false,
-      questions: [
-        {source : "태양의 후예", type: "drama",
-        lines_kr : ["오늘 저녁에 뭐 먹었어?", "나는 오늘 저녁으로 고기를 먹었어.","오, 맛있었니?"],
-        lines_en : ["What did you have for dinner?", "I had proteins for dinner.","Wow, how was it?"]},
-        {source : "도깨비", type: "movie",
-        lines_kr : ["나랑 벚꽃축제 갈래?", "너무 좋아, 나도 벚꽃 보러 가고 싶었어.","그러면 토요일 어때?"],
-        lines_en : ["Wanna visit the cherry blossom festival with me?", "Yes, I would love to go see cherry blossoms.","Saturday sounds good?"]},
-        {source : "에일리 - 어느 날 우연히", type: "pop",  
-        lines_kr : ["만약에 너에게 전활 걸면", "쓰다만 메시지를 보내면","무작정 찾아가서 널 본다면"],
-        lines_en : ["Wanna visit the cherry blossom festival with me?", "Yes, I would love to go see cherry blossoms.","Saturday sounds good?"]},
-        {source : "대화체", type: "chat",
-        lines_kr : ["이렇게 한줄로만 나오는 문제도 있다."],
-        lines_en : ["There are questions that only have one sentence."]}
-      ],
+      questions: this.$store.state.testQuestions,
       answers: [ "나는 오늘 저녁으로 고기를 먹었어.", "너무 좋아, 나도 벚꽃 보러 가고 싶었어.", "쓰다만 메시지를 보내면","이렇게 한줄로만 나오는 문제도 있다."],
       myAnswers: new Array(this.N).fill([]),
       myAnswer: "",
@@ -232,7 +220,7 @@ export default {
         }
       }
       this.showDialog2 = true
-      this.$store.dispatch('gainExperience', this.grade)
+      this.$store.dispatch('gainExperience', this.grade/10)
     },
     myCorrect() {
       const correctList = []
@@ -304,6 +292,7 @@ export default {
     this.defaultSetting()
   },
   computed: {
+    ...mapState([ "testQuestions" ]),
     choices() {
       const operators = ['.','!','?']
       var target = this.answers[this.targetQuestion].split(' ')

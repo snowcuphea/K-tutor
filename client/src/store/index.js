@@ -27,7 +27,17 @@ export default new Vuex.Store({
     userName: 'DanceMachine',
     userLevel: 4,
     userExperience: 35,
-    userGrade: [30,60,20,70,80,50,30,20,70,90],
+    userGrade: {
+      dates : [
+        "2021-03-31 23:32:32","2021-03-31 23:32:32","2021-03-31 23:32:32",
+        "2021-03-31 23:32:32","2021-03-31 23:32:32","2021-03-31 23:32:32",
+        "2021-03-31 23:32:32","2021-03-31 23:32:32","2021-03-31 23:32:32",
+        "2021-03-31 23:32:32"
+      ],
+      grades : [
+        20,30,50,70,30,50,70,80,90,50
+      ]
+    },
     userLearnedKeword: [ //유저가 학습한 키워드랑 키워드에 대한 정보
       
       {learned_seq:1, cpct_seq:1, cs_seq:3, cs_title: '스위트홈', cs_type:'drama', cs_level:3},
@@ -76,7 +86,7 @@ export default new Vuex.Store({
     
     lessonInfo: {},
     quizInfo: {},
-
+    testQuestions: [],
     studyCnt: 100,
     contiDay: 9,
   
@@ -338,6 +348,36 @@ export default new Vuex.Store({
         ]
       }
       state.quizInfo = quizForm
+    },
+    GETTESTQUESTIONS ( state ) {
+      const testForm = [
+        {source : "태양의 후예", type: "drama",
+        lines_kr : ["오늘 저녁에 뭐 먹었어?", "나는 오늘 저녁으로 고기를 먹었어.","오, 맛있었니?"],
+        lines_en : ["What did you have for dinner?", "I had proteins for dinner.","Wow, how was it?"]},
+        {source : "도깨비", type: "movie",
+        lines_kr : ["나랑 벚꽃축제 갈래?", "너무 좋아, 나도 벚꽃 보러 가고 싶었어.","그러면 토요일 어때?"],
+        lines_en : ["Wanna visit the cherry blossom festival with me?", "Yes, I would love to go see cherry blossoms.","Saturday sounds good?"]},
+        {source : "에일리 - 어느 날 우연히", type: "pop",  
+        lines_kr : ["만약에 너에게 전활 걸면", "쓰다만 메시지를 보내면","무작정 찾아가서 널 본다면"],
+        lines_en : ["Wanna visit the cherry blossom festival with me?", "Yes, I would love to go see cherry blossoms.","Saturday sounds good?"]},
+        {source : "대화체", type: "chat",
+        lines_kr : ["이렇게 한줄로만 나오는 문제도 있다."],
+        lines_en : ["There are questions that only have one sentence."]}
+      ]
+
+      state.testQuestions = testForm
+    },
+    GETTESTGRADES ( state ) {
+      const gradeForm = {
+        date : [
+          "31","1","2","3","4","4","4","5","5","6"
+        ],
+        scores : [
+          20,30,50,70,30,50,70,80,90,50
+        ]
+      }
+
+      state.userGrade = gradeForm
     }
   },
 
@@ -397,6 +437,12 @@ export default new Vuex.Store({
     },
     getQuizInfo ({ commit }) {
       commit('getQuizInfo')
+    },
+    getTestQuestions ({ commit } ) {
+      commit('GETTESTQUESTIONS')
+    },
+    getTestGrades ({ commit }) {
+      commit( 'GETTESTGRADES' )
     }
 
   },
