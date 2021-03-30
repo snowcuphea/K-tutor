@@ -1,6 +1,5 @@
 <template>
   <v-app>
-
     <Header class="header" v-if="isNotClass"/>
 
     <v-main class="main">

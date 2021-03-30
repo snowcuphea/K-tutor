@@ -24,14 +24,22 @@
 
     </div>
 
-    <v-container class="wrap d-flex flex-wrap main_img" id="achieve_body">
+    <v-container class="wrap d-flex flex-wrap" style="height: 60vh;" id="achieve_body">
+
+      <!-- <v-list
+        v-for = "(item,idx) in $store.state.items"
+        :key = "idx"
+      >
+
+      </v-list> -->
       <v-col
-        rows
-        cols="4"
         v-for = "(item, idx) in $store.state.items"
         :key = "idx"
       >
+      
         <appMyModal :modalItem="item" @update="modal" />
+
+        <v-divider></v-divider>
 
       </v-col>
     </v-container>

@@ -11,7 +11,11 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    loginUserInfo:'',
+    isLogin: false,
+    userEmail: null,
+    nickName: null,
+    userLevel: 1,
+    userExperience: 0,
 
     currentPage: '', //밑 navbar에서 선택한 페이지
     currentPageValue: 2, //밑 navbar에서 선택한 index
@@ -24,9 +28,6 @@ export default new Vuex.Store({
     allTitleList: [], //{level:"0", name:"소녀시대", type:"kpop"} 형태
     //type은 kpop, drama, movie 세 가지 
     
-    userName: 'DanceMachine',
-    userLevel: 4,
-    userExperience: 35,
     userGrade: {
       dates : [
         "2021-03-31 23:32:32","2021-03-31 23:32:32","2021-03-31 23:32:32",
@@ -54,22 +55,17 @@ export default new Vuex.Store({
 
     ],
 
-    userProgress: {
-      genres: [
-        { type : 'kmovie', total : 58, done : 45 },
-        { type: 'kdrama', total : 80, done : 57 },
-        { type : 'kpop', total : 94, done : 89 }
-      ],
-      class: [
-        { title: '태양의 후예', total : 100, done : 35},
-        { title: '도깨비', total : 100, done : 87},
-        { title: '승리호', total : 43, done : 23},
-        { title: '사이코지만 괜찮아', total : 100, done : 64},
-        { title: '기생충', total : 100, done : 64},
-        { title: '박효신', total : 87, done : 64},
-        { title: '방탄소년단', total : 70, done : 64},
-      ]
-    },
+    progress: [],
+
+    recent_learned_lc: [
+      { title: '태양의 후예', total : 100, done : 35},
+      { title: '도깨비', total : 100, done : 87},
+      { title: '승리호', total : 43, done : 23},
+      { title: '사이코지만 괜찮아', total : 100, done : 64},
+      { title: '기생충', total : 100, done : 64},
+      { title: '박효신', total : 87, done : 64},
+      { title: '방탄소년단', total : 70, done : 64},
+    ],
 
     userLearned: [
       { title : '태양의 후예', line: '봄바람 휘날리며', img : 'poster1' },
@@ -95,21 +91,29 @@ export default new Vuex.Store({
         title: '빛나는 트로피',
         src: require('@/assets/img/score.png'),
         contents: 'test에서 만점을 5회 달성하셨습니다',
+        max_num: 5,
+        num: 3
       },
       {
         title: '출석왕',
         src: require('@/assets/img/award.png'),
         contents: '30일 동안 매일 출석',
+        max_num: 30,
+        num: 5
       },
       {
         title: '오늘만 사는 사람',
         src: require('@/assets/img/hardworker.png'),
         contents: '하루에 카드 30개 학습',
+        max_num: 30,
+        num: 10
       },
       {
         title: '초보',
         src: require('@/assets/img/jun.png'),
         contents: '1개의 작품 학습 완료',
+        max_num: 1,
+        num: 0
       },
       {
         title: '명예 한국인',
@@ -238,7 +242,7 @@ export default new Vuex.Store({
 
     // },
     LOGOUT ( state ){
-      state.loginUserInfo = ''
+      state.isLogin = false
       state.currentPage = ''
       state.currentPageValue = 2
       state.currentType = ''
@@ -376,6 +380,25 @@ export default new Vuex.Store({
       }
 
       state.userGrade = gradeForm
+    },
+    GETREPORTINFO ( state, report ) {
+      const progressForm = [
+        {type: "Drama", done: report.progress.drama[0] , total: report.progress.drama[1] },
+        {type: "Kpop", done: report.progress.kpop[0] , total: report.progress.kpop[1] },
+        {type: "Movie", done: report.progress.movie[0] , total: report.progress.movie[1] }
+      ]
+      state.progress = progressForm
+      // state.recent_learned_lc = report.recent_learned_lc
+      state.isLogin = true
+      state.nickName = report.user.nickname
+      state.userLevel = report.user.level
+      state.userExperience = report.user.exp
+
+
+    },
+    ADDUSEREMAIL ( state, userEmail ) {
+      console.log(userEmail)
+      state.userEmail = userEmail
     }
   },
 
@@ -456,7 +479,14 @@ export default new Vuex.Store({
     },
     getTestGrades ({ commit }) {
       commit( 'GETTESTGRADES' )
-    }
+    },
+    getReportInfo( { commit }, reportData ) {
+      commit( 'GETREPORTINFO', reportData )
+    },
+    addUserEmail( { commit }, userEmail ) {
+      console.log(userEmail)
+      commit ( 'ADDUSEREMAIL', userEmail )
+    } 
 
   },
 
