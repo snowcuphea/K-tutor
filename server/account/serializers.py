@@ -21,6 +21,7 @@ class AccessDateSerializer(serializers.ModelSerializer):
 
 
 class ReportSearializer(serializers.Serializer):
+    user = serializers.DictField
     consecutive_access_date = serializers.IntegerField()
     learned_lc_cnt = serializers.IntegerField()
     recent_learned_lc = serializers.ListField()
