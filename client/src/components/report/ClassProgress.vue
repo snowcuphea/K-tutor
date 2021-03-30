@@ -6,7 +6,7 @@
         <v-col cols="4">
           <p> {{ cls.title }} </p>
         </v-col>
-
+        
         <v-col>
           <p class="mb-0 text-end"> {{ cls.done }}/{{ cls.total }} </p>
           <v-progress-linear :value="percentage(cls)"></v-progress-linear>
@@ -31,7 +31,7 @@ export default {
 
       const newList = []
 
-      for ( var cls of this.userProgress.class ){
+      for ( var cls of this.recent_learned_lc ){
         const form = {
           title: cls.title, 
           total: cls.total, 
@@ -55,7 +55,7 @@ export default {
 
   },
   computed: {
-    ...mapState(['userProgress'])
+    ...mapState(['recent_learned_lc'])
   }
 }
 </script>
