@@ -15,7 +15,7 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from .data_update import *
 from .serializers import *
 
-from account.models import Recent_learned_lc
+from account.models import RecentLearnedLc
 from django.db.models import Q
 
 
@@ -102,7 +102,7 @@ class LcListViewSet(viewsets.GenericViewSet,
             lcs = list(Lc.objects.filter(cs__in=css).values())
         user = request.user
         for lc in lcs:
-            lc['already_learned'] = True if Lc.objects.filter(Q(learned_user=user) | Q(id=lc['id'])).exists() else False
+            lc['already_learned'] = True if Lc.objects.filter(Q(learned_user=user) & Q(id=lc['id'])).exists() else False
 
         serializer = LcSerializer(data=lcs, many=True)
         serializer.is_valid(raise_exception=True)
@@ -156,6 +156,6 @@ class LcViewSet(viewsets.GenericViewSet,
         lc = get_object_or_404(Lc, id=LcId)
         user.learned_lc.add(lc)
         user.learned_kw.add(lc.main_kw)
-        if not Recent_learned_lc.objects.filter(Q(user=user) | Q(lc=lc)).exists():
-            Recent_learned_lc.objects.create(user=user, lc=lc)
+        if not RecentLearnedLc.objects.filter(Q(user=user) | Q(lc=lc)).exists():
+            RecentLearnedLc.objects.create(user=user, lc=lc)
         return Response("ok", status=status.HTTP_200_OK)

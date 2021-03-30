@@ -40,9 +40,9 @@ class SignupViewSet(viewsets.GenericViewSet,
         ___
         """
         if User.objects.filter(username=request.data['username']).exists():
-            return Response("이미 가입된 이메일 입니다.", status=status.HTTP_302_FOUND)
+            return Response("이미 가입된 이메일 입니다.", status=status.HTTP_406_NOT_ACCEPTABLE_)
         if User.objects.filter(nickname=request.data['nickname']).exists():
-            return Response("이미 가입된 닉네임 입니다.", status=status.HTTP_302_FOUND)
+            return Response("이미 가입된 닉네임 입니다.", status=status.HTTP_406_NOT_ACCEPTABLE_)
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
@@ -114,7 +114,7 @@ class LoginViewSet(viewsets.GenericViewSet,
         data = {}
         user = get_object_or_404(User, username=request.user.username)
         # 최근 학습 데이터 갱신
-        Recent_learned_lc.objects.filter(user=user).filter(learned_at__lt=date.today() - timedelta(days=7)).delete()
+        RecentLearnedLc.objects.filter(user=user).filter(learned_at__lt=date.today() - timedelta(days=7)).delete()
 
         # consecutive_access_date = serializers.IntegerField()
         if not AccessDate.objects.filter(user=user).filter(access_at=date.today()).exists():

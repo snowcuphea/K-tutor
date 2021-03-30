@@ -22,7 +22,7 @@ class AccessDate(models.Model):
     access_at = models.DateField(auto_now_add=True)
 
 
-class Recent_learned_lc(models.Model):
+class RecentLearnedLc(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     lc = models.ForeignKey('klass.Lc', on_delete=models.CASCADE)
     learned_at = models.DateField(auto_now_add=True)
