@@ -77,6 +77,7 @@ class ExamViewSet(viewsets.GenericViewSet,
     def post(self, request):
         """
         Send exam result to DB.
+        
         ___
         """
         ExamResult.objects.create(
@@ -101,7 +102,7 @@ class ExamReportViewSet(viewsets.GenericViewSet,
     def get(self, request):
         """
         Get Exam Report
-        
+
         ___
         """
         serializer = ExamResultSerializer(
