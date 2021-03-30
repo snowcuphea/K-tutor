@@ -211,7 +211,7 @@ export default {
     submitLesson() {
       this.resultDialog = !this.resultDialog
       this.exp = 3
-      // this.$store.dispatch('gainExperience', this.exp)
+      this.$store.dispatch('gainExperience', this.exp)
     },
     nextLesson() {
       console.log("hi")

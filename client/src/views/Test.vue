@@ -3,13 +3,13 @@
     <div class="d-flex flex-column">
       <h3> Report Card </h3>
       <GradeChart />
-      <p>Average of last 10 exams: {{ average }} </p>
+      <p class="mt-2">Average of last 10 exams: {{ average }} </p>
     </div>
 
     <Experience :experience="-1" />
 
     <div class="d-flex justify-center">
-      <v-btn class="mt-5" @click="showDialog = !showDialog">시험보기</v-btn>
+      <v-btn class="mt-5" @click="startTest">시험보기</v-btn>
     </div>
 
     <TestPage :showDialog="showDialog" @hideDialog="showDialog = !showDialog"/>
@@ -35,19 +35,27 @@ export default {
       showDialog: false,
     }
   },
+  methods: {
+    startTest() {
+      this.showDialog = !this.showDialog
+    }
+  },
   computed: {
     ...mapState([ "userGrade" ]),
 
     average() {
       var total = 0
-      this.userGrade.forEach(element => {
+      this.userGrade.grades.forEach(element => {
         total += element
       });
 
       return total/10
     }
-
   },
+  created() {
+    // 시험 내용 요청 보내서 store에 저장
+    this.$store.dispatch( "getTestQuestions" )
+  }
 
 
 }

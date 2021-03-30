@@ -86,6 +86,8 @@
           this.userCredentials,
           (response) => {
             localStorage.setItem("jwt", response.data.token)
+            
+
             getInfo(
               (response) => {
                 console.log(response.data)
@@ -96,10 +98,12 @@
             )
             getClassList(
               (response) => {
-                console.log(response.data)
+                console.log("로긴하고나서 getClassList 이제 dispatch해야징",response.data)
+                this.$store.dispatch('getClassList', response.data)
+              
               },
               (error) => {
-                console.log(error)
+                console.log("클래스 리스트를 가져오지 못하였어...",error)
               }
             )
             this.$router.push({name:'Report'})
@@ -108,7 +112,11 @@
           (error) => {
             console.log(error)
           }
+
         )
+        this.userCredentials.userEmail = ""
+        this.userCredentials.userPassword = ""
+
       },
 
       goToSignup() {
