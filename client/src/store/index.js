@@ -107,21 +107,29 @@ export default new Vuex.Store({
         title: '빛나는 트로피',
         src: require('@/assets/img/score.png'),
         contents: 'test에서 만점을 5회 달성하셨습니다',
+        max_num: 5,
+        num: 3
       },
       {
         title: '출석왕',
         src: require('@/assets/img/award.png'),
         contents: '30일 동안 매일 출석',
+        max_num: 30,
+        num: 5
       },
       {
         title: '오늘만 사는 사람',
         src: require('@/assets/img/hardworker.png'),
         contents: '하루에 카드 30개 학습',
+        max_num: 30,
+        num: 10
       },
       {
         title: '초보',
         src: require('@/assets/img/jun.png'),
         contents: '1개의 작품 학습 완료',
+        max_num: 1,
+        num: 0
       },
       {
         title: '명예 한국인',

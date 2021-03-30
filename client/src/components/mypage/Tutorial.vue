@@ -1,0 +1,52 @@
+<template>
+  <v-container>
+    <v-dialog
+      v-model="showTutorial"
+      fullscreen
+    >
+      <v-card>
+        <h2 class="head d-flex justify-center" style="padding: 12px; background-color: white;"> Tutorial </h2>
+        <v-btn
+          icon
+          class="close-dialog"
+          @click="hideDialog"
+        >
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+
+        
+        <v-carousel :show-arrows="false" hide-delimiters>
+          <v-carousel-item
+            v-for="(it,i) in tutorialItems"
+            :key="i"
+          >
+            <v-img :src="it" class="page_img"></v-img>
+          </v-carousel-item>
+        </v-carousel>
+
+      </v-card>
+
+    </v-dialog>
+
+  
+  </v-container>
+
+</template>
+
+<script>
+export default {
+  props: ['showTutorial'],
+  data: () => ({
+    tutorialItems: [require('@/assets/img/mypage/1.png'), require('@/assets/img/mypage/2.png'), require('@/assets/img/mypage/3.png'), require('@/assets/img/mypage/4.png'), require('@/assets/img/mypage/5.png')],    
+  }),
+  methods: {
+    hideDialog () {
+      this.$emit('hideTutorial')
+    }
+  }
+}
+</script>
+
+<style>
+
+</style>

@@ -1,161 +1,116 @@
 <template>
-  <div>
-    <div class="page-modal-overlay"
-      v-if="visible"
-      @click="closeModal"
-      >
-      <div class="page-modal-window">
-
-        <v-carousel :show-arrows="false" hide-delimiters>
-          <v-carousel-item
-            v-for="(it,i) in item.src"
-            :key="i"
-          >
-            <v-img :src="it" class="page_img"></v-img>
-          </v-carousel-item>
-        </v-carousel>
-      </div>
-
-    </div>
-    <div class="mypage_body">
-      <v-container>
-        <v-row>
-          <v-col cols="6">
-            <v-avatar size="150" class="my_avatar">
-              <img
-                src="@/assets/img/mypage/man.png"
-              >
-            </v-avatar>
-            
-          </v-col>
-          <v-col cols="6">
-            <div class="my_info">
-              <p>test1</p>
-              <v-btn
-                icon
-                class="my_info_icon"
-              >
-                <v-icon>mdi-cog-outline</v-icon>
-              </v-btn>
-              <br>
-              <p>test1@test1.com</p>
-
-            </div>
-
-          </v-col>
-        </v-row>
-      </v-container>
-
-      <div>
-               
-        <v-list
-          v-for = "(item, idx) in myPageItems"
-          :key = "idx"
-        >
-
-          <appMyPageDetail :pageDetailItem="item" @pageUpdate="pageDetail" />
-
-        </v-list>
-        <div @click="ask">
-          <v-list style="padding-left: 16px; padding-top: 16px; padding-bottom: 16px; margin-bottom: 5%;">
-            문의하기
-          </v-list>
-
-        </div>
-        <div
-          class="page-modal-overlay"
-          v-if="askVisible"
-        >
-          <v-btn
-            style ="top: -45%; right: -10px;"
-          >
-            <v-icon @click="closeAsk">mdi-close</v-icon>
-          </v-btn>
-          <v-card style="width:80%;">
-            <div class="ask-modal-window">
-              
-              <v-text-field
-                label="name"            
-                placeholder="please enter your name"
-              ></v-text-field>
-              <v-text-field
-                label="email"            
-                placeholder="please enter your eamil ex) asd@asd.com"
-              ></v-text-field>
-              <v-textarea
-                label="contents"            
-                placeholder="Please fill out your inquiry"
-              ></v-textarea>
-              <v-btn
-                class="mr-4"
-                @click="submit"
-              >
-                submit
-              </v-btn>
-              <v-btn @click="clear">
-                clear
-              </v-btn>
-            </div>
-
-          </v-card>
-
-            
-
-        </div>
-
-      </div>
-
-      <v-row class="delete_icon">
-        <v-col cols="4">
-          <v-btn color="red">
-            Delete
-          </v-btn>
+ 
+  <div class="mypage_body">
+    <v-container>
+      <v-row>
+        <v-col cols="6">
+          <v-avatar size="150" class="my_avatar">
+            <img
+              src="@/assets/img/mypage/man.png"
+            >
+          </v-avatar>
+          
         </v-col>
-        <v-col class="logout_icon" cols="4">
-          <v-btn color="red lighten-2">
-            Logout
-          </v-btn>
+        <v-col cols="6">
+          <div class="my_info">
+            <p>test1</p>
+            <v-btn
+              icon
+              class="my_info_icon"
+            >
+              <v-icon>mdi-cog-outline</v-icon>
+            </v-btn>
+            <br>
+            <p>test1@test1.com</p>
+
+          </div>
+
         </v-col>
       </v-row>
+    </v-container>
 
+    <div>
+              
+      <v-list
+        v-for = "(item, idx) in myPageItems"
+        :key = "idx"
+        
+      >
+        <v-list-item
+          @click="showDialog(item)"
+        >
+          {{ item.title }}
+        </v-list-item>
+
+      </v-list>
+      
     </div>
+
+    <v-row class="delete_icon">
+      <v-col cols="4">
+        <v-btn color="red">
+          Delete
+        </v-btn>
+      </v-col>
+      <v-col class="logout_icon" cols="4">
+        <v-btn color="red lighten-2">
+          Logout
+        </v-btn>
+      </v-col>
+    </v-row>
+
+    
+    <Tutorial :showTutorial="showTutorial" @hideTutorial="showTutorial = !showTutorial"/>
+    <Notice :showNotice="showNotice" @hideTutorial="showNotice = !showNotice"/>
+    <Inquiry :showInquiry="showInquiry" @hideTutorial="showInquiry = !showInquiry"/>
+    <TermsOfUse :showTermsOfUse="showTermsOfUse" @hideTutorial="showTermsOfUse = !showTermsOfUse"/>
+    <OpenSource :showOpenSource="showOpenSource" @hideTutorial="showOpenSource = !showOpenSource"/>
+
   </div>
+  
 </template>
 
 <script>
-import MyPageDetail from '../components/mypage/MyPageDetail'
+import Tutorial from '../components/mypage/Tutorial'
+import Notice from '../components/mypage/Notice'
+import Inquiry from '../components/mypage/Inquiry'
+import TermsOfUse from '../components/mypage/TermsOfUse'
+import OpenSource from '../components/mypage/OpenSource'
 
 export default {
   components: {
-    appMyPageDetail: MyPageDetail
+    Tutorial,
+    Notice,
+    Inquiry,
+    TermsOfUse,
+    OpenSource
+
   },
   data: () => ({
     myPageItems: [
       {
         title: 'Tutorial',
-        src: [require('@/assets/img/mypage/1.png'), require('@/assets/img/mypage/2.png'), require('@/assets/img/mypage/3.png'), require('@/assets/img/mypage/4.png'), require('@/assets/img/mypage/5.png')],
-        contents: '',
       },
       {
-        title: '공지사항',
-        contents: '공지사항 내용',
+        title: 'Notice',
       },
       {
-        title: '문의하기',
-        contents: 'ssafy로 ㄱㄱ',
+        title: 'Inquiry',
       },
-      // {
-      //   title: '이용약관',
-      //   contents: '??',
-      // },
       {
-        title: '오픈소스 정보',
-        contents: '',
+        title: 'TermsOfUse',
+      },
+      {
+        title: 'OpenSource',
       },
     ],
     visible: false,
-    askVisible: false,
-   
+    showTutorial: false,
+    showNotice: false,
+    showInquiry: false,
+    showTermsOfUse: false,
+    showOpenSource: false,
+
   }),
   methods: {
     pageDetail (pageDetailItem) {
@@ -165,13 +120,25 @@ export default {
     closeModal () {
       this.visible = !this.visible
     },
-    ask () {
-      this.askVisible = !this.askVisible
-    },
-    closeAsk () {
-      this.askVisible = !this.askVisible
-    },
-    
+    showDialog (item) {
+      if (item.title == 'Tutorial') {
+        this.showTutorial = !this.showTutorial
+      }
+      else if (item.title == 'Notice') {
+        this.showNotice = !this.showNotice
+      }
+      else if (item.title == 'Inquiry') {
+        this.showInquiry = !this.showInquiry
+      }
+      else if (item.title == 'TermsOfUse') {
+        this.showTermsOfUse = !this.showTermsOfUse
+      }
+      else {
+        this.showOpenSource = !this.showOpenSource
+      }
+    }
+
+  
   },
  
 
@@ -181,21 +148,15 @@ export default {
 <style>
 
 .page-modal-overlay {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   position: fixed;
   z-index: 1;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: white;
 }
 
-.page-modal-window {
-  width: 80%;
-}
 
 .page_img {
   height: 100%;
@@ -257,6 +218,11 @@ export default {
 
 .delete_icon {
   justify-content: space-around;
+}
+
+.send_icons {
+  justify-content: flex-end;
+  margin-right: 10%;
 }
 
 </style>
