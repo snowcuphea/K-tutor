@@ -71,22 +71,21 @@ class ExamViewSet(viewsets.GenericViewSet,
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-        @swagger_auto_schema(responses={200: "ok"}, manual_parameters=[
-            openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
-                              type=openapi.TYPE_STRING)])
-        def post(self, request):
-            """
-            Send exam result to DB.
-
-            ___
-            """
-            ExamResult.objects.create(
-                user=request.user,
-                score=request.data['score']
-            )
-            while ExamResult.objects.filter(user=request.user).count() > 10:
-                ExamResult.objects.filter(user=request.user)[0].delete()
-            return Response("ok", status=status.HTTP_200_OK)
+    @swagger_auto_schema(responses={200: "ok"}, manual_parameters=[
+        openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
+                          type=openapi.TYPE_STRING)])
+    def post(self, request):
+        """
+        Send exam result to DB.
+        ___
+        """
+        ExamResult.objects.create(
+            user=request.user,
+            score=request.data['score']
+        )
+        while ExamResult.objects.filter(user=request.user).count() > 10:
+            ExamResult.objects.filter(user=request.user)[0].delete()
+        return Response("ok", status=status.HTTP_200_OK)
 
 
 class ExamReportViewSet(viewsets.GenericViewSet,
@@ -102,6 +101,7 @@ class ExamReportViewSet(viewsets.GenericViewSet,
     def get(self, request):
         """
         Get Exam Report
+        
         ___
         """
         serializer = ExamResultSerializer(
