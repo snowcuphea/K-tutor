@@ -1,14 +1,14 @@
-from django.contrib.auth.base_user import AbstractUser
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
 class User(AbstractUser):
-    nickname = models.CharField(max_length=30)
     level = models.IntegerField(default=1)
     exp = models.IntegerField(default=0)
-    consecutive_acess = models.IntegerField(default=1)
+    consecutive_access = models.IntegerField(default=1)
     learned_lc = models.ManyToManyField('klass.Lc', related_name='learned_user')
     learned_kw = models.ManyToManyField('klass.kw', related_name='learned_user')
+    # achieved = models.ManyToManyField(Achievement, related_name='achieved')
 
 
 class TestResult(models.Model):
@@ -27,9 +27,9 @@ class Recent_learned_lc(models.Model):
     lc = models.ForeignKey('klass.Lc', on_delete=models.CASCADE)
     learned_at = models.DateField(auto_now_add=True)
 
-# class Acheivement(models.Model):
-#     title = models.CharField(max_length=100)
-#     content = models.TextField()
-#     image_on = models.TextField()
-#     image_off = models.TextField()
-#     achieved = models.ManyToManyField(User, related_name='achieved')
+
+class Achievement(models.Model):
+    title = models.CharField(max_length=100)
+    content = models.TextField()
+    image = models.TextField()
+    # achieved = models.ManyToManyField(User)

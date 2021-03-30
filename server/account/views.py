@@ -11,9 +11,10 @@ from rest_framework import status, viewsets, mixins
 
 from datetime import date, timedelta
 
+from .models import *
 from .serializers import *
 from klass.models import *
-from .models import *
+
 
 required_exp = [10, 20, 30, 50, 70,
                 100, 150, 200, 250, 300,
@@ -21,6 +22,7 @@ required_exp = [10, 20, 30, 50, 70,
 
 
 # 로그아웃
+@api_view(['POST'])
 def logout(request):
     pass
 
@@ -150,7 +152,14 @@ def result_latest(request, user_pk):
 @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
 def level_up(request):
-    pass
+    user = get_object_or_404(User, username=request.user.username)
+    user.exp += request.data.exp
+    if required_exp[user.level - 1] < user.exp:
+        user.exp -= required_exp[user.level - 1]
+        user.level += 1
+    user.save()
+
+    return Response(user, status=status.HTTP_200_OK)
 
 
 # 업적 정보 가져오기, 업적 달성
@@ -158,4 +167,11 @@ def level_up(request):
 @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
 def acheivement_list_info(request):
-    pass
+    user = get_object_or_404(User, username=request.user.username)
+
+    if request.method == 'GET':
+        users_achievements = user.achievement_set.all()
+        serializer = AchievementSerializer(users_achievements, many=True)
+        return Response(serializer.data)
+    else:
+        pass

@@ -28,7 +28,7 @@ class ReportSearializer(serializers.Serializer):
     progress = serializers.DictField()
 
 
-# class AchievementSerializer(serializers.Modelserializer):
-#     class Meta:
-#         model = Acheivement
-#         fields = ('title', 'content', 'image_on', 'image_off')
+class AchievementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Acheivement
+        fields = ('title', 'content', 'image_on', 'image_off')
