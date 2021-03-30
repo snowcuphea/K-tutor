@@ -7,7 +7,7 @@ function getAchieve( success, fail ) {
   instance.defaults.headers['Authorization'] = "jwt " + window.localStorage.getItem('jwt')
 
   instance
-    .get("/achievements")
+    .get("achievements")
     .then(success)
     .catch(fail)
 }
@@ -17,7 +17,7 @@ function getAchieve( success, fail ) {
 //   instance.defaults.headers['Authorization'] = "jwt " + window.localStorage.getItem('jwt')
 
 //   instance
-//     .post("/achievements")
+//     .post("achievements")
 //     .then(success)
 //     .catch(fail)
 // }
