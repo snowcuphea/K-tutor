@@ -8,5 +8,7 @@ urlpatterns = [
     path('modify_delete', views.account_modify_delete),
     path('api/token', obtain_jwt_token),
     # path('login', views.LoginViewSet.as_view({"get": "login"}))
-    path('login', views.login)
+    path('login', views.login),
+    path('get_exp', views.get_exp),
+    path('achievements', views.achievement_list_unlock)
 ]

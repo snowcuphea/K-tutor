@@ -8,7 +8,6 @@ class User(AbstractUser):
     consecutive_access = models.IntegerField(default=1)
     learned_lc = models.ManyToManyField('klass.Lc', related_name='learned_user')
     learned_kw = models.ManyToManyField('klass.kw', related_name='learned_user')
-    # achieved = models.ManyToManyField(Achievement, related_name='achieved')
 
 
 class TestResult(models.Model):
@@ -30,6 +29,11 @@ class Recent_learned_lc(models.Model):
 
 class Achievement(models.Model):
     title = models.CharField(max_length=100)
-    content = models.TextField()
+    content = models.CharField(max_length=200)
     image = models.TextField()
-    # achieved = models.ManyToManyField(User)
+    condition = models.IntegerField(default=0)
+
+class UserUnlockedAchievement(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    achievement = models.ForeignKey(Achievement, on_delete=models.CASCADE)
+    status = models.IntegerField(default=0)

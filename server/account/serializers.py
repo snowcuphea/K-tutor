@@ -5,7 +5,7 @@ from .models import *
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'password', 'nickname', 'level', 'exp', 'consecutive_access')
+        fields = '__all__'
 
 
 class TestResultSerializer(serializers.ModelSerializer):
@@ -30,5 +30,11 @@ class ReportSearializer(serializers.Serializer):
 
 class AchievementSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Acheivement
-        fields = ('title', 'content', 'image_on', 'image_off')
+        model = Achievement
+        fields = '__all__'
+
+
+class UserAchievementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserUnlockedAchievement
+        fields = '__all__'

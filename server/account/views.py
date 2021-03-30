@@ -67,9 +67,9 @@ def login(request):
     if not AccessDate.objects.filter(user=user).filter(access_at=date.today()).exists():
         AccessDate.objects.create(user=user)
     if AccessDate.objects.filter(user=user).filter(access_at=date.today() - timedelta(days=1)):
-        user.consecutive_acess += 1
+        user.consecutive_access += 1
         user.save()
-    data['consecutive_access_date'] = user.consecutive_acess
+    data['consecutive_access_date'] = user.consecutive_access
     # learned_lc_cnt = serializers.IntegerField()
     data['learned_lc_cnt'] = user.learned_lc.all().count()
     # recent_learned_lc = serializers.ListField()
@@ -147,37 +147,33 @@ def result_latest(request, user_pk):
         return Response(serializer.data)
 
 
-# 레벨업 관련
+# 경험치 획득, 레벨업
 @api_view(['POST'])
 @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
-def level_up(request):
-    user = get_object_or_404(User, username=request.user.username)
+def get_exp(request):
+    user = request.user
     if user.level == 15:
-        return Response(user, status=status.HTTP_200_OK)
-    user.exp += request.data.exp
-    if required_exp[user.level - 1] < user.exp:
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    user.exp += request.data['exp']
+    if required_exp[user.level - 1] <= user.exp:
         user.exp -= required_exp[user.level - 1]
         user.level += 1
         if user.level == 15:
             user.exp = 0
     user.save()
-
-    return Response(user, status=status.HTTP_200_OK)
+    serializer = UserSerializer(user)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 # 업적 정보 가져오기, 업적 달성
 @api_view(['GET', 'POST'])
 @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
-def acheivement_list_info(request):
-    user = get_object_or_404(User, username=request.user.username)
-
+def achievement_list_unlock(request):
+    user = request.user
     if request.method == 'GET':
-        users_achievements = user.achievement_set.all()
-        serializer = AchievementSerializer(users_achievements, many=True)
+        users_achievements = UserUnlockedAchievement.objects.filter(user=user)
+        serializer = UserAchievementSerializer(users_achievements, many=True)
         return Response(serializer.data)
-    # else:
-    #     achievement = request.data['achievement_id']
-    #     users_achievements = user.achievement_set.filter(achieved=)
-    #     return Response()
