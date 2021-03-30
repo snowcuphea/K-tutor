@@ -1,33 +1,33 @@
 <template>
   <div>
     <!-- <v-list> -->
-      <!-- <v-row> -->
-    <v-col cols="4">
-      <v-img
-        width="100%"
-        height="100%"
-        :src="modalItem.src"
-        @click="modalClick"
-      />
-    </v-col>
-    <v-col cols="8">
-      {{ modalItem.title }}<br><br>
-      <v-progress-linear
-        style="width: 90%"
-        color="light-blue"
-        height="13"
-        :value="modalItem.num*100/modalItem.max_num"
-        striped
-      >
-        <h6>
-          {{ modalItem.num }} / {{ modalItem.max_num }}
+      <v-row style="margin-bottom: 0.5%; margin-top: 0.5%;">
+        <v-col cols="4">
+          <v-img
+            width="100%"
+            height="100%"
+            :src="modalItem.src"
+            @click="modalClick"
+          />
+        </v-col>
+        <v-col cols="8">
+          {{ modalItem.title }}<br><br>
+          <v-progress-linear
+            style="width: 90%"
+            color="light-blue"
+            height="13"
+            :value="modalItem.num*100/modalItem.max_num"
+            striped
+          >
+            <h6>
+              {{ modalItem.num }} / {{ modalItem.max_num }}
 
-        </h6>
-      </v-progress-linear>
+            </h6>
+          </v-progress-linear>
 
-    </v-col>
+        </v-col>
 
-      <!-- </v-row> -->
+      </v-row>
 
     <!-- </v-list> -->
   </div>

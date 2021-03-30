@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <div>
     <v-dialog
       v-model="showInquiry"
       fullscreen
@@ -73,7 +73,7 @@
       </v-card>
 
     </v-dialog>
-  </v-container>
+  </div>
 </template>
 
 <script>

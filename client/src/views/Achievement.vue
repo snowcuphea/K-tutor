@@ -32,18 +32,17 @@
       >
 
       </v-list> -->
-        <div
-          v-for = "(item, idx) in $store.state.items"
-          :key = "idx"
-        >
-          <v-row>
-            <appMyModal :modalItem="item" @update="modal" />
+      <div
+        v-for = "(item, idx) in $store.state.items"
+        :key = "idx"
+      >
 
-          </v-row>
+        <appMyModal :modalItem="item" @update="modal" />
 
-          <!-- <v-divider></v-divider> -->
 
-        </div>
+        <v-divider></v-divider>
+
+      </div>
 
     </div>
     <div>

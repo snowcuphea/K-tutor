@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <div>
     <v-dialog
       v-model="showNotice"
       fullscreen
@@ -24,7 +24,7 @@
       </v-card>
       
     </v-dialog>
-  </v-container>
+  </div>
 
 </template>
 
