@@ -88,7 +88,7 @@ class LcListViewSet(viewsets.GenericViewSet,
                           type=openapi.TYPE_STRING)])
     def get(self, request, type, title):
         """
-        Cs(Cultural Source) List
+        Lc(Learning Card) List
 
         ___
             - <str:type>: drama, kpop, movie
@@ -101,8 +101,7 @@ class LcListViewSet(viewsets.GenericViewSet,
             css = Cs.objects.filter(name__contains=title)
             lcs = list(Lc.objects.filter(cs__in=css).values())
         user = request.user
-        lcs_dict = [lc.__dict__ for lc in lcs]
-        for lc in lcs_dict:
+        for lc in lcs:
             lc['already_learned'] = True if Lc.objects.filter(Q(learned_user=user) | Q(id=lc.id)).exists() else False
 
         serializer = LcSerializer(data=lcs_dict, many=True)
