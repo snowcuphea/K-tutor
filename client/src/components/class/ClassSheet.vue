@@ -144,8 +144,9 @@
       // } else {
       //   this.$store.dispatch('getListCurrentClass',this.defaultClass )
       // }
-      this.$store.dispatch('getListCurrentClass',this.currentClass )
 
+      this.$store.dispatch('getListCurrentClass',this.currentClass )
+      
     }
   }
 </script>
