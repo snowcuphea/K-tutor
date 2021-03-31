@@ -151,24 +151,35 @@ class LoginViewSet(viewsets.GenericViewSet,
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-# 경험치 획득, 레벨업
-@api_view(['POST'])
-@authentication_classes([JSONWebTokenAuthentication])
-@permission_classes([IsAuthenticated])
-def get_exp(request):
-    user = request.user
-    if user.level == 15:
+class GetexpViewSet(viewsets.GenericViewSet,
+                   mixins.ListModelMixin,
+                   View):
+    serializer_class = UserSerializer
+    authentication_classes = (JSONWebTokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    @swagger_auto_schema(responses={200: ""}, manual_parameters=[
+        openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
+                          type=openapi.TYPE_STRING)])
+    def post(self, request):
+        """
+        Gain Exp
+
+        ___
+        """
+        user = request.user
+        if user.level == 15:
+            serializer = UserSerializer(user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        user.exp += request.data['exp']
+        if required_exp[user.level - 1] <= user.exp:
+            user.exp -= required_exp[user.level - 1]
+            user.level += 1
+            if user.level == 15:
+                user.exp = 0
+        user.save()
         serializer = UserSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    user.exp += request.data['exp']
-    if required_exp[user.level - 1] <= user.exp:
-        user.exp -= required_exp[user.level - 1]
-        user.level += 1
-        if user.level == 15:
-            user.exp = 0
-    user.save()
-    serializer = UserSerializer(user)
-    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 # 업적 정보 가져오기, 업적 달성
