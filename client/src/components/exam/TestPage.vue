@@ -220,6 +220,7 @@ export default {
         }
       }
       this.showDialog2 = true
+      this.$store.dispatch('sendExamResult', this.grade)
       this.$store.dispatch('gainExperience', this.grade/10)
     },
     myCorrect() {

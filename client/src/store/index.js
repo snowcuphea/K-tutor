@@ -3,7 +3,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from "vuex-persistedstate"
 import { getLessonList, getLessonInfo } from "@/api/klass.js"
-import { getExamProblems, getExamReport } from "@/api/exam.js"
+import { getExamProblems, getExamReport, sendExamResult } from "@/api/exam.js"
 
 Vue.use(Vuex)
 
@@ -276,10 +276,6 @@ export default new Vuex.Store({
         }, 1500)
       }
     },
-    CHANGELASTGRADE ( state, grade ) {
-      state.userGrade.shift();
-      state.userGrade.push(grade)
-    },
     CHANGECURRENTCLASS ( state, item) {
       state.currentClass =item
       // console.log("뮤ㄴ=텡이션 현재커렌트클래스",state.currentClass )
@@ -401,7 +397,7 @@ export default new Vuex.Store({
     },
     ADDUSEREMAIL ( state, userEmail ) {
       state.userEmail = userEmail
-    }
+    },
   },
 
   actions: {
@@ -429,9 +425,6 @@ export default new Vuex.Store({
       setTimeout( function() {
         commit('CHANGEEXPERIENCE', experience )
       }, 1500)
-    },
-    changeLastGrade ({ commit }, grade ) {
-      commit('CHANGELASTGRADE', grade)
     },
     changeCurrentClass ({ commit }, item ) {
       commit('CHANGECURRENTCLASS', item)
@@ -505,7 +498,21 @@ export default new Vuex.Store({
     },
     addUserEmail( { commit }, userEmail ) {
       commit ( 'ADDUSEREMAIL', userEmail )
-    } 
+    },
+    sendExamResult( { commit }, grade ) {
+      
+      sendExamResult(
+        grade,
+        (res) => {
+          console.log(res)
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
+      
+      console.log(commit)
+    }
 
   },
 
