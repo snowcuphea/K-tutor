@@ -281,7 +281,7 @@ export default new Vuex.Store({
       state.userGrade.push(grade)
     },
     CHANGECURRENTCLASS ( state, item) {
-      state.currentClass =item
+      state.currentClass = item
       // console.log("뮤ㄴ=텡이션 현재커렌트클래스",state.currentClass )
     },
     GETLISTCURRENTCLASS (state, resclassList) {
@@ -469,8 +469,9 @@ export default new Vuex.Store({
           console.log("getLessonInfoByItem뮤테이션에러", err)
 
         }
-
       )
+      // 임시로 요청 실패해도 커밋 보내지게
+      commit('GETLESSONINFO', itemId)
       
     },
     getQuizInfo ({ commit }) {
