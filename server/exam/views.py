@@ -36,7 +36,7 @@ class ExamViewSet(viewsets.GenericViewSet,
         pro_list = []
 
         learned_lc = user.learned_lc.all()
-        for lc in random.sample(learned_lc, 4):
+        for lc in random.sample(list(learned_lc), 4):
             pro_list.append({
                 "problem": {
                     "before": lc.before_kor,
@@ -47,7 +47,7 @@ class ExamViewSet(viewsets.GenericViewSet,
             })
 
         learned_kw = user.learned_kw.all()
-        for kw in random.sample(learned_kw, 3):
+        for kw in random.sample(list(learned_kw), 3):
             lc = random.choice(Lc.objects.filter(main_kw=kw))
             pro_list.append({
                 "problem": {
@@ -58,7 +58,7 @@ class ExamViewSet(viewsets.GenericViewSet,
                 "cs": lc.cs.name
             })
 
-        for kw in random.sample(learned_kw, 3):
+        for kw in random.sample(list(learned_kw), 3):
             cpcq = random.choice(Cpcq.objects.filter(kcq=kw))
             pro_list.append({
                 "problem": {
