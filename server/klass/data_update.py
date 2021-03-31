@@ -232,7 +232,7 @@ def add_meaning_to_lc():
     for i, lc in enumerate(lcs):
         if lc.meaning:
             continue
-        meanings = request_dict(lc.main_kw.content)
+        meanings = request_dict(lc.main_kw.content_kor)
         if not meanings:
             lc.delete()
             continue
@@ -263,7 +263,7 @@ def add_meaning_to_lc():
         for i, word in enumerate(main_splited):
             word_morph = [w for w in kkma.pos(word) if w[1] in ['NNG', 'VV', 'VA', 'MAJ', 'XR']]
             word_morph = ["+".join(w) for w in word_morph]
-            if lc.main_kw.content in word_morph:
+            if lc.main_kw.content_kor in word_morph:
                 lc.main_kw_index = i
                 find = True
                 break

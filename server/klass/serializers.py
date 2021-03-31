@@ -17,7 +17,7 @@ class CpctSerializer(serializers.ModelSerializer):
 class KwSerializer(serializers.ModelSerializer):
     class Meta:
         model = Kw
-        fields = ('content', 'count')
+        fields = ('content_kor', 'content_eng', 'count')
 
 
 class CpcqSerializer(serializers.ModelSerializer):

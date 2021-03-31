@@ -114,12 +114,12 @@ class LoginViewSet(viewsets.GenericViewSet,
         data = {}
         user = get_object_or_404(User, username=request.user.username)
         # 최근 학습 데이터 갱신
-        RecentLearnedLc.objects.filter(user=user).filter(learned_at__lt=date.today() - timedelta(days=7)).delete()
+        RecentLearnedLc.objects.filter(Q(user=user) & Q(learned_at__lt=date.today() - timedelta(days=7))).delete()
 
         # consecutive_access_date = serializers.IntegerField()
-        if not AccessDate.objects.filter(user=user).filter(access_at=date.today()).exists():
+        if not AccessDate.objects.filter(Q(user=user) & Q(access_at=date.today())).exists():
             AccessDate.objects.create(user=user)
-            if AccessDate.objects.filter(user=user).filter(access_at=date.today() - timedelta(days=1)):
+            if AccessDate.objects.filter(Q(user=user) & Q(access_at=date.today() - timedelta(days=1))):
                 user.consecutive_access += 1
                 user.save()
         data['user'] = {
