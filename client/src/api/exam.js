@@ -5,6 +5,8 @@ const instance = createInstance()
 
 function getExamProblems( success, fail ) {
 
+  instance.defaults.headers['Authorization'] = "jwt " + window.localStorage.getItem('jwt')
+
   instance
     .get("exam")
     .then(success)

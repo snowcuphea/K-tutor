@@ -2,8 +2,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from "vuex-persistedstate"
-import {getLessonList, getLessonInfo } from "@/api/klass.js"
-
+import { getLessonList, getLessonInfo } from "@/api/klass.js"
+import { getExamProblems, getExamReport, sendExamResult } from "@/api/exam.js"
 
 Vue.use(Vuex)
 
@@ -21,7 +21,7 @@ export default new Vuex.Store({
     currentPageValue: 2, //밑 navbar에서 선택한 index
     currentType: '', //선택한 타입(영화, 드라마, 가수) 
     currentClass:{name: '사랑의불시착', type:'drama', level:1}, //최근 클래스 정보
-    defaultClass:{name: '사랑의불시착', type:'drama', level:1}, 
+    defaultClass:'', 
     classList:[], //title을 선택하면 나오는 학습 리스트
 
 
@@ -83,7 +83,7 @@ export default new Vuex.Store({
     lessonInfo: {},
     quizInfo: {},
     testQuestions: [],
-    studyCnt: 100,
+    studyCnt: 0,
     contiDay: 9,
   
     items: [
@@ -242,27 +242,31 @@ export default new Vuex.Store({
 
     // },
     LOGOUT ( state ){
+      localStorage.removeItem("jwt")
+      // localStorage.setItem("jwt", "")
       state.isLogin = false
+      state.userEmail= null,
+      state.nickName= null,
+      state.userLevel= 1,
+      state.userExperience= 0,
       state.currentPage = ''
       state.currentPageValue = 2
       state.currentType = ''
       state.currentClass =''
       state.classList = []
-      state.userName = ''
-      state.userLevel = 1
-      state.userExperience = 0
       state.userGrade = []
       state.userLearnedKeword = []
+
     },
     GETCLASSLIST(state, titlelist){
       state.allTitleList = titlelist
     },
   
-    changeCurrentPage ( state , changeItem ) {
+    CHANGECURRENTPAGE ( state , changeItem ) {
       state.currentPage = changeItem.navName
       state.currentPageValue = changeItem.navValue
     },
-    changeExperience ( state, experience ) {
+    CHANGEEXPERIENCE ( state, experience ) {
       state.userExperience += experience
       const temp = state.userExperience - (state.userLevel)*10
       if ( state.userExperience >= state.userLevel*10 ) {
@@ -276,12 +280,8 @@ export default new Vuex.Store({
         }, 1500)
       }
     },
-    changeLastGrade ( state, grade ) {
-      state.userGrade.shift();
-      state.userGrade.push(grade)
-    },
     CHANGECURRENTCLASS ( state, item) {
-      state.currentClass =item
+      state.currentClass = item
       // console.log("뮤ㄴ=텡이션 현재커렌트클래스",state.currentClass )
     },
     GETLISTCURRENTCLASS (state, resclassList) {
@@ -293,25 +293,26 @@ export default new Vuex.Store({
     },
     GETLESSONINFO ( state, item ) {
       console.log("받아온 레슨인포", item)
+      console.log("받아오고 현재 currnetClass", state.currentClass)
       // axios 요청 보내서 state에 저장
       const lessonForm = {
-        type: 'drama',
-        title: '태양의 후예',
+        type: state.currentClass.type,
+        title: state.currentClass.name,
         img: 'poster1',
-        keyword_kr: '싶어',
-        keyword_en: 'to want',
+        keyword_kr: item.main_kw_word,
+        keyword_en: "(영어번역필요)",
         lines_kr: [
-          "나랑 벚꽃축제 갈래?",  
-          "너무 좋아, 나도 벚꽃 보러 가고 싶었어.", 
-          "그러면 토요일 어때?"
+          item.before_kor,  
+          item.cpct_kor, 
+          item.after_kor
         ],
         lines_en:  [
-          "Wanna visit the cherry blossom festival with me?", 
-          "Yes, I would love to go see cherry blossoms.",
-          "Saturday sounds good?"
+          item.before_eng,  
+          item.cpct_eng, 
+          item.after_eng
         ],
         example_kr: [
-          "제주도 가고 싶다.",
+          item.example,
           "예제2"
         ],
         example_en: [
@@ -320,9 +321,9 @@ export default new Vuex.Store({
         ]
       }
       state.lessonInfo = lessonForm
-      console.log("레슨인포수정해떵0", item)
+      console.log("레슨인포수정해떵0", state.lessonInfo)
     },
-    getQuizInfo ( state ) {
+    GETQUIZINFO ( state ) {
       const quizForm = {
         type: 'drama',
         title : '태양의 후예',
@@ -371,10 +372,13 @@ export default new Vuex.Store({
     },
     GETTESTGRADES ( state ) {
       const gradeForm = {
-        date : [
-          "31","1","2","3","4","4","4","5","5","6"
+        dates : [
+          "2021-03-31 23:32:32","2021-03-31 23:32:32","2021-03-31 23:32:32",
+          "2021-03-31 23:32:32","2021-03-31 23:32:32","2021-03-31 23:32:32",
+          "2021-03-31 23:32:32","2021-03-31 23:32:32","2021-03-31 23:32:32",
+          "2021-03-31 23:32:32"
         ],
-        scores : [
+        grades : [
           20,30,50,70,30,50,70,80,90,50
         ]
       }
@@ -393,13 +397,11 @@ export default new Vuex.Store({
       state.nickName = report.user.nickname
       state.userLevel = report.user.level
       state.userExperience = report.user.exp
-
-
+      state.studyCnt = report.learned_lc_cnt
     },
     ADDUSEREMAIL ( state, userEmail ) {
-      console.log(userEmail)
       state.userEmail = userEmail
-    }
+    },
   },
 
   actions: {
@@ -421,15 +423,12 @@ export default new Vuex.Store({
     },
 
     changePage ({ commit }, changeItem ) {
-      commit('changeCurrentPage', changeItem)
+      commit('CHANGECURRENTPAGE', changeItem)
     },
     gainExperience ({ commit }, experience) {
       setTimeout( function() {
-        commit('changeExperience', experience )
+        commit('CHANGEEXPERIENCE', experience )
       }, 1500)
-    },
-    changeLastGrade ({ commit }, grade ) {
-      commit('changeLastGrade', grade)
     },
     changeCurrentClass ({ commit }, item ) {
       commit('CHANGECURRENTCLASS', item)
@@ -467,26 +466,58 @@ export default new Vuex.Store({
           console.log("getLessonInfoByItem뮤테이션에러", err)
 
         }
-
       )
+      // // 임시로 요청 실패해도 커밋 보내지게
+      // commit('GETLESSONINFO', itemId)
       
     },
     getQuizInfo ({ commit }) {
-      commit('getQuizInfo')
+      commit('GETQUIZINFO')
     },
     getTestQuestions ({ commit } ) {
+      getExamProblems(
+        (res) => {
+          console.log(res.data)
+        },
+        (err) => {
+          console.log(err.data)
+        }
+      )
       commit('GETTESTQUESTIONS')
     },
     getTestGrades ({ commit }) {
+
+      getExamReport(
+        (res) => {
+          console.log(res)
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
+
       commit( 'GETTESTGRADES' )
     },
     getReportInfo( { commit }, reportData ) {
       commit( 'GETREPORTINFO', reportData )
     },
     addUserEmail( { commit }, userEmail ) {
-      console.log(userEmail)
       commit ( 'ADDUSEREMAIL', userEmail )
-    } 
+    },
+    sendExamResult( { commit }, grade ) {
+      
+      sendExamResult(
+        grade,
+        (res) => {
+          console.log(res)
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
+      
+      console.log(commit)
+    }
 
   },
 

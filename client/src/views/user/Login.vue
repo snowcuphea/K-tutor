@@ -28,7 +28,7 @@
         <v-row class="mx-5">
           <v-col>
             <v-text-field label="Password" :rules="rulesPassword" hide-details="auto" type="password"
-              v-model="userCredentials.userPassword"></v-text-field>
+              v-model="userCredentials.userPassword" @keyup.enter="login"></v-text-field>
           </v-col>
         </v-row>
         <v-row class="mx-5 my-5">
@@ -87,19 +87,19 @@
           (response) => {
             localStorage.setItem("jwt", response.data.token)
             
-
             getInfo(
               (response) => {
-                console.log("레포트정보", response.data)
+                // console.log("레포트정보", response.data)
                 this.$store.dispatch('addUserEmail', this.userCredentials.userEmail )
 
                 this.userCredentials.userEmail = ""
                 this.userCredentials.userPassword = ""
 
                 this.$store.dispatch('getReportInfo', response.data)
+                
               },
               (error) => {
-                console.log(error)
+                console.log("account/login 에러", error)
               }
             )
             getClassList(
@@ -112,11 +112,13 @@
                 console.log("클래스 리스트를 가져오지 못하였어...",error)
               }
             )
+            alert("Welcome!")
             this.$router.push({name:'Report'})
             this.$store.state.currentPage = 'Report'
           },
           (error) => {
             console.log(error)
+            alert("Please check your Email or Password.")
           }
 
         )

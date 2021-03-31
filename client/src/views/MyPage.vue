@@ -64,7 +64,7 @@
         </v-btn>
       </v-col>
       <v-col class="logout_icon" cols="4">
-        <v-btn color="red lighten-2">
+        <v-btn color="red lighten-2" @click="logout">
           Logout
         </v-btn>
       </v-col>
@@ -166,7 +166,21 @@ export default {
       }
       else {
         return require('@/assets/img/mypage/man.png')
-      }
+      }},
+    logout(){
+      this.$store.dispatch("logout")
+      .then( ()=>{
+        alert("You have been logged out.")
+     
+        this.$router.push({
+          name: 'Login'
+        })
+
+      })
+      .catch( () => {
+      
+      })
+      
     }
 
   
