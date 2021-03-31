@@ -99,8 +99,7 @@ export default {
     ...mapState(["currentClass", "defaultClass", "allTitleList"])
   },
   created() {
-    console.log(this.allTitleList)
-    
+    // console.log("클래스에서 this.currentClass", this.currentClass)
 
   },
 }
