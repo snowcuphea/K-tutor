@@ -4,11 +4,13 @@
     <v-container>
       <v-row>
         <v-col cols="6">
-          <v-avatar size="150" class="my_avatar">
-            <img
-              src="@/assets/img/mypage/man.png"
-            >
-          </v-avatar>
+          <div>
+            <v-avatar size="150" class="my_avatar">
+              <img
+                :src="myImgSource()"
+              >
+            </v-avatar>
+          </div>
           
         </v-col>
         <v-col cols="6" class="d-flex align-center">
@@ -51,7 +53,7 @@
       <v-list-item style="background: white">
         Logout
       </v-list-item>
-      <a href="" class="d-flex justify-end">Delete</a>
+      <a href="" class="d-flex justify-center">Delete Account</a>
       
     </div>
 
@@ -119,7 +121,7 @@ export default {
     showInquiry: false,
     showTermsOfUse: false,
     showOpenSource: false,
-
+    tempLevel: 15,
   }),
   methods: {
     pageDetail (pageDetailItem) {
@@ -144,6 +146,26 @@ export default {
       }
       else {
         this.showOpenSource = !this.showOpenSource
+      }
+    },
+    myImgSource () {
+      if (this.tempLevel > 14) {
+        return require('@/assets/img/mypage/sejong-the-great.png')
+      }
+      else if (this.tempLevel > 11) {
+        return require('@/assets/img/mypage/korea.png')
+      }
+      else if (this.tempLevel > 8) {
+        return require('@/assets/img/mypage/empress.png')
+      }
+      else if (this.tempLevel > 5) {
+        return require('@/assets/img/mypage/emperor.png')
+      }
+      else if (this.tempLevel > 2) {
+        return require('@/assets/img/mypage/woman.png')
+      }
+      else {
+        return require('@/assets/img/mypage/man.png')
       }
     }
 

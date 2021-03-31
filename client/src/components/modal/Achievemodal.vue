@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     modalClick() {
-      this.$emit('update',this.modalItem)
+      this.$emit('update2',this.modalItem)
     },
   },
 }

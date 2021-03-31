@@ -23,94 +23,103 @@
       </div>
 
     </div>
+    <div class="main_progressbar" style="width:95%;">
+      <v-row>
+        <v-col
+          cols="8"
+          class="d-flex flex-column"
+        >
+          <h6>업적 달성률</h6>
 
-    <div class="wrap d-flex flex-column" style="height: 60vh;" id="achieve_body">
-
-      <!-- <v-list
-        v-for = "(item,idx) in $store.state.items"
-        :key = "idx"
-      >
-
-      </v-list> -->
-      <div
-        v-for = "(item, idx) in $store.state.items"
-        :key = "idx"
-      >
-
-        <appMyModal :modalItem="item" @update="modal" />
-
-
-        <v-divider></v-divider>
-
-      </div>
-
-    </div>
-    <div>
-      <v-container>
-        <v-flex>업적 달성률</v-flex>
-      </v-container>
-      <v-container>
-        <v-row style="margin-left: 5px">
           <v-progress-linear
-            style="width: 60%"
             color="light-blue"
             height="10"
             value="30"
             striped
-          ></v-progress-linear>
-          
-          <v-flex text-right style="margin-right: 10px">
-            <div>9 / 30</div>
+          >
 
-          </v-flex>
-        </v-row>
-      </v-container>
+          </v-progress-linear>
 
+        </v-col>
+        <v-col
+          cols="4"
+        >
+          <div class="d-flex justify-end">
+            <v-btn
+              icon
+              plain
+              :color="viewlist===false ? 'secondary' : 'primary'"
+            >
+              <v-icon @click="viewList">mdi-view-list</v-icon>
+            </v-btn>
+            <v-btn
+              icon
+              plain
+              :color="viewcalendar===false ? 'secondary' : 'primary'"
+            >
+              <v-icon @click="viewCalendar">mdi-calendar-range</v-icon>
+            </v-btn>
+
+          </div>
+
+        </v-col>
+      </v-row>
     </div>
+    <div>
+      <v-container>
 
-    
-    <!-- <v-card-actions>
-      <v-spacer></v-spacer>
+        <div class="wrap d-flex flex-column" v-if="viewlist">
 
-      <v-btn
-        icon
-        @click="show = !show"
-      >
-        <v-icon>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
-      </v-btn>
-    </v-card-actions>
-    <v-expand-transition>
-      <div v-show="show">
-        <v-divider></v-divider>
-
-        <v-container class="d-flex flex-wrap">
-          <v-col
-            rows
-            cols="4"
+          <div
             v-for = "(item, idx) in $store.state.items"
             :key = "idx"
-
           >
+
             <appMyModal :modalItem="item" @update="modal" />
 
-          </v-col>
-        </v-container>
-      </div>
-    </v-expand-transition> -->
+
+            <v-divider></v-divider>
+
+          </div>
+
+        </div>
+        <div v-if="viewcalendar">
+          
+          <v-row
+            class="d-flex wrap"
+
+          >
+            <v-col
+              cols="4"
+              v-for = "(item,idx) in $store.state.items"
+              :key = "idx"
+            >
+              <appMyModal2 :modalItem="item" @update2="modal" />
+
+            </v-col>
+          </v-row>
+
+        </div>
+      </v-container>
+    </div>
     
   </v-container>
 </template>
 
 <script>
 import Achievemodal from '../components/modal/Achievemodal'
+import Achievemodal2 from '../components/modal/Achievemodal2'
 
 export default {
   name: "Achievement",
   components: {
-    appMyModal: Achievemodal
+    appMyModal: Achievemodal,
+    appMyModal2: Achievemodal2
   },
   data: () => ({
     visible: false,
+    viewlist: true,
+    viewcalendar: false,
   }),
   methods: {
     modal (modalItem) {
@@ -119,12 +128,34 @@ export default {
     },
     closeModal () {
       this.visible = !this.visible
+    },
+    viewList () {
+      if (this.viewlist == false) {
+        this.viewlist = !this.viewlist
+        this.viewcalendar = !this.viewcalendar
+      }
+      console.log(this.viewlist)
+      console.log(this.viewcalendar)
+
+    },
+    viewCalendar () {
+      if (this.viewcalendar == false) {
+        this.viewcalendar = !this.viewcalendar
+        this.viewlist = !this.viewlist
+      }
+      console.log(this.viewlist)
+      console.log(this.viewcalendar)
+
     }
   }
 }
 </script>
 
 <style>
+
+.main_progressbar {
+  position: fixed;
+}
 
 .app_bar {
   text-align: center;
