@@ -1,5 +1,5 @@
 from django.views import View
-from django.db.models import Max, Count
+from django.db.models import Max, Count, Q
 from django.shortcuts import get_object_or_404
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -119,9 +119,9 @@ class LoginViewSet(viewsets.GenericViewSet,
         # consecutive_access_date = serializers.IntegerField()
         if not AccessDate.objects.filter(user=user).filter(access_at=date.today()).exists():
             AccessDate.objects.create(user=user)
-        if AccessDate.objects.filter(user=user).filter(access_at=date.today() - timedelta(days=1)):
-            user.consecutive_access += 1
-            user.save()
+            if AccessDate.objects.filter(user=user).filter(access_at=date.today() - timedelta(days=1)):
+                user.consecutive_access += 1
+                user.save()
         data['user'] = {
             'nickname': user.nickname,
             'level': user.level,
