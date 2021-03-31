@@ -1,3 +1,5 @@
+import random
+
 import requests
 
 import pandas as pd
@@ -315,5 +317,5 @@ def request_dict(word):
 def updateLc():
     lcs = Lc.objects.all()
     for lc in lcs:
-        lc.main_kw = Cpct.objects.get(kor=lc.cpct_kor).main_kw
-        lc.save()
+        examples = lc.main_kw.contained_cpcq.all()
+        lc.example_kor = "|".join(random.sample(examples, 3))
