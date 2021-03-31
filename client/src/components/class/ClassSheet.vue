@@ -17,9 +17,9 @@
 
     <v-row >
       <v-col >
-        <span v-if="currentClass.cs_level == '0'">Difficulty: Beginner</span>
-        <span v-else-if="currentClass.cs_level == '1'">Difficulty: Intermediate</span>
-        <span v-else-if="currentClass.cs_level == '2'">Difficulty: Advanced</span>
+        <span v-if="currentClass.level == '0'">Difficulty: Beginner</span>
+        <span v-else-if="currentClass.level == '1'">Difficulty: Intermediate</span>
+        <span v-else-if="currentClass.level == '2'">Difficulty: Advanced</span>
         <span v-else>Difficulty: Basic</span>
       </v-col>
     </v-row>
@@ -139,11 +139,12 @@
     created() {
       this.$store.dispatch('getLessonInfoByItem', this.classList[0].id )
       this.$store.dispatch('getQuizInfo')
-      if (this.currentClass) {
-        this.$store.dispatch('getListCurrentClass',this.currentClass )
-      } else {
-        this.$store.dispatch('getListCurrentClass',this.defaultClass )
-      }
+      // if (this.currentClass) {
+      //   this.$store.dispatch('getListCurrentClass',this.currentClass )
+      // } else {
+      //   this.$store.dispatch('getListCurrentClass',this.defaultClass )
+      // }
+      this.$store.dispatch('getListCurrentClass',this.currentClass )
 
     }
   }

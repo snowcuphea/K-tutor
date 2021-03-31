@@ -21,7 +21,7 @@ export default new Vuex.Store({
     currentPageValue: 2, //밑 navbar에서 선택한 index
     currentType: '', //선택한 타입(영화, 드라마, 가수) 
     currentClass:{name: '사랑의불시착', type:'drama', level:1}, //최근 클래스 정보
-    defaultClass:{name: '사랑의불시착', type:'drama', level:1}, 
+    defaultClass:'', 
     classList:[], //title을 선택하면 나오는 학습 리스트
 
 
@@ -242,17 +242,21 @@ export default new Vuex.Store({
 
     // },
     LOGOUT ( state ){
+      localStorage.removeItem("jwt")
+      // localStorage.setItem("jwt", "")
       state.isLogin = false
+      state.userEmail= null,
+      state.nickName= null,
+      state.userLevel= 1,
+      state.userExperience= 0,
       state.currentPage = ''
       state.currentPageValue = 2
       state.currentType = ''
       state.currentClass =''
       state.classList = []
-      state.userName = ''
-      state.userLevel = 1
-      state.userExperience = 0
       state.userGrade = []
       state.userLearnedKeword = []
+
     },
     GETCLASSLIST(state, titlelist){
       state.allTitleList = titlelist
@@ -289,25 +293,26 @@ export default new Vuex.Store({
     },
     GETLESSONINFO ( state, item ) {
       console.log("받아온 레슨인포", item)
+      console.log("받아오고 현재 currnetClass", state.currentClass)
       // axios 요청 보내서 state에 저장
       const lessonForm = {
-        type: 'drama',
-        title: '태양의 후예',
+        type: state.currentClass.type,
+        title: state.currentClass.name,
         img: 'poster1',
-        keyword_kr: '싶어',
-        keyword_en: 'to want',
+        keyword_kr: item.main_kw_word,
+        keyword_en: "(영어번역필요)",
         lines_kr: [
-          "나랑 벚꽃축제 갈래?",  
-          "너무 좋아, 나도 벚꽃 보러 가고 싶었어.", 
-          "그러면 토요일 어때?"
+          item.before_kor,  
+          item.cpct_kor, 
+          item.after_kor
         ],
         lines_en:  [
-          "Wanna visit the cherry blossom festival with me?", 
-          "Yes, I would love to go see cherry blossoms.",
-          "Saturday sounds good?"
+          item.before_eng,  
+          item.cpct_eng, 
+          item.after_eng
         ],
         example_kr: [
-          "제주도 가고 싶다.",
+          item.example,
           "예제2"
         ],
         example_en: [
@@ -316,7 +321,7 @@ export default new Vuex.Store({
         ]
       }
       state.lessonInfo = lessonForm
-      console.log("레슨인포수정해떵0", item)
+      console.log("레슨인포수정해떵0", state.lessonInfo)
     },
     GETQUIZINFO ( state ) {
       const quizForm = {
@@ -462,8 +467,8 @@ export default new Vuex.Store({
 
         }
       )
-      // 임시로 요청 실패해도 커밋 보내지게
-      commit('GETLESSONINFO', itemId)
+      // // 임시로 요청 실패해도 커밋 보내지게
+      // commit('GETLESSONINFO', itemId)
       
     },
     getQuizInfo ({ commit }) {
