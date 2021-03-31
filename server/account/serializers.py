@@ -5,7 +5,7 @@ from .models import *
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'password', 'nickname', 'level', 'exp', 'consecutive_access')
+        fields = '__all__'
 
 
 class TestResultSerializer(serializers.ModelSerializer):
@@ -27,7 +27,18 @@ class ReportSearializer(serializers.Serializer):
     recent_lc_progress = serializers.DictField()
     progress = serializers.DictField()
 
-# class AchievementSerializer(serializers.Modelserializer):
-#     class Meta:
-#         model = Acheivement
-#         fields = ('title', 'content', 'image_on', 'image_off')
+
+class AchievementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Achievement
+        fields = '__all__'
+
+
+class UserAchievementSerializer(serializers.Serializer):
+    user_id = serializers.IntegerField()
+    achievement_id = serializers.IntegerField()
+    status = serializers.IntegerField()
+    title = serializers.CharField()
+    content = serializers.CharField()
+    image = serializers.CharField()
+    condition = serializers.IntegerField()

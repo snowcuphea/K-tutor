@@ -32,9 +32,14 @@ class RecentLearnedLc(models.Model):
     lc = models.ForeignKey('klass.Lc', on_delete=models.CASCADE)
     learned_at = models.DateField(auto_now_add=True)
 
-# class Acheivement(models.Model):
-#     title = models.CharField(max_length=100)
-#     content = models.TextField()
-#     image_on = models.TextField()
-#     image_off = models.TextField()
-#     achieved = models.ManyToManyField(User, related_name='achieved')
+
+class Achievement(models.Model):
+    title = models.CharField(max_length=100)
+    content = models.CharField(max_length=200)
+    image = models.TextField()
+    condition = models.IntegerField(default=0)
+
+class UserUnlockedAchievement(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    achievement = models.ForeignKey(Achievement, on_delete=models.CASCADE)
+    status = models.IntegerField(default=0)

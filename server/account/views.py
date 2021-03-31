@@ -13,18 +13,13 @@ from rest_framework import status, viewsets, mixins
 
 from datetime import date, timedelta
 
+from .models import *
 from .serializers import *
 from klass.models import *
-from .models import *
 
 required_exp = [10, 20, 30, 50, 70,
                 100, 150, 200, 250, 300,
                 400, 500, 600, 750, 1000]
-
-
-# 로그아웃
-def logout(request):
-    pass
 
 
 class SignupViewSet(viewsets.GenericViewSet,
@@ -92,7 +87,7 @@ class UserViewSet(viewsets.GenericViewSet,
         """
         user = request.user
         user.delete()
-        return Response(user, status=status.HTTP_200_OK)
+        return Response("deleted", status=status.HTTP_200_OK)
 
 
 class LoginViewSet(viewsets.GenericViewSet,
@@ -156,66 +151,54 @@ class LoginViewSet(viewsets.GenericViewSet,
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-# (유저의) 전체 시험 성적 조회, 등록
-@api_view(['GET', 'POST'])
-@authentication_classes([JSONWebTokenAuthentication])
-@permission_classes([IsAuthenticated])
-def result_list_create(request, user_pk):
-    user = get_object_or_404(User, pk=user_pk)
-    if request.method == 'POST':
-        TestResult.objects.create(
-            user=user,
-            score=request.data['score'],
-        )
-        data = {
-            'score': request.data['score']
-        }
-        serializer = TestResultSerializer(data=data)
-        if serializer.is_valid(raise_exception=True):
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-    else:
-        results = TestResult.objects.filter(user=user)
-        serializer = TestResultSerializer(results, many=True)
-        return Response(serializer.data)
-
-
-# 최고 시험 성적 조회
-@api_view(['GET'])
-@authentication_classes([JSONWebTokenAuthentication])
-@permission_classes([IsAuthenticated])
-def result_max(request, user_pk):
-    user = get_object_or_404(User, pk=user_pk)
-
-    if request.method == 'GET':
-        result = TestResult.objects.aggregate(max_score=Max('score'))
-        serializer = TestResultSerializer(result)
-        return Response(serializer.data)
-
-
-# 최근 시험 성적 조회
-@api_view(['GET'])
-@authentication_classes([JSONWebTokenAuthentication])
-@permission_classes([IsAuthenticated])
-def result_latest(request, user_pk):
-    user = get_object_or_404(User, pk=user_pk)
-
-    if request.method == 'GET':
-        result = TestResult.objects.last()
-        serializer = TestResultSerializer(result)
-        return Response(serializer.data)
-
-
-# 레벨업 관련
+# 경험치 획득, 레벨업
 @api_view(['POST'])
 @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
-def level_up(request):
-    pass
+def get_exp(request):
+    user = request.user
+    if user.level == 15:
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    user.exp += request.data['exp']
+    if required_exp[user.level - 1] <= user.exp:
+        user.exp -= required_exp[user.level - 1]
+        user.level += 1
+        if user.level == 15:
+            user.exp = 0
+    user.save()
+    serializer = UserSerializer(user)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 # 업적 정보 가져오기, 업적 달성
 @api_view(['GET', 'POST'])
 @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
-def acheivement_list_info(request):
-    pass
+def achievement_list_unlock(request):
+    user = request.user
+    if request.method == 'GET':
+        users_achievements = UserUnlockedAchievement.objects.filter(user=user)
+        users_achievements_list = UserUnlockedAchievement.objects.filter(user=user).values()
+        data_list = []
+        for ua, ual in zip(users_achievements, users_achievements_list):
+            uua_info = []
+            achievement_info = []
+            achievement_info.append({
+                "title": ua.achievement.title,
+                "content": ua.achievement.content,
+                "image": ua.achievement.image,
+                "condition": ua.achievement.condition
+            })
+            uua_info.append({
+                "user_id": ual['user_id'],
+                "achievement_id": ual['achievement_id'],
+                "status": ual['status']
+            })
+            uua_info.extend(achievement_info)
+            uua_info[0].update(uua_info[1])
+            data_list.append(uua_info[0])
+
+        serializer = UserAchievementSerializer(data=data_list, many=True)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data)
