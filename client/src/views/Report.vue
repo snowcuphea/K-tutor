@@ -18,10 +18,10 @@
       <h3>Recent Learning Progress</h3>
       <ClassProgress :showMore="showMore" />
       <v-btn class="mt-n5 align-self-end" @click="showMore = !showMore"
-        v-if="!showMore"
+        v-if="!showMore && recent_lc_progress.length > 3"
         plain text retain-focus-on-click>more</v-btn>
       <v-btn class="mt-n5 align-self-end" @click="showMore = !showMore"
-        v-else
+        v-else-if="showMore && recent_lc_progress.length > 3"
         plain text retain-focus-on-click>less</v-btn>
     </div>
 
@@ -55,7 +55,7 @@ export default {
     GenreProgress
   },
   computed: {
-    ...mapState(['nickName','contiDay','studyCnt'])
+    ...mapState(['nickName','contiDay','studyCnt','recent_lc_progress'])
   }
 }
 </script>

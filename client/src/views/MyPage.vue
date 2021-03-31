@@ -50,7 +50,7 @@
         </v-list-item>
 
       </v-list>
-      <v-list-item style="background: white">
+      <v-list-item style="background: white" @click="logout">
         Logout
       </v-list-item>
       <a href="" class="d-flex justify-center">Delete Account</a>

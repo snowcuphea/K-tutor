@@ -235,7 +235,6 @@ export default new Vuex.Store({
     // },
     LOGOUT ( state ){
       localStorage.removeItem("jwt")
-      // localStorage.setItem("jwt", "")
       state.isLogin = false
       state.userEmail= null,
       state.nickName= null,
@@ -248,6 +247,9 @@ export default new Vuex.Store({
       state.classList = []
       state.userGrade = []
       state.userLearnedKeword = []
+      state.progress = []
+      state.recent_lc_progress = []
+  
 
     },
     GETCLASSLIST(state, titlelist){
