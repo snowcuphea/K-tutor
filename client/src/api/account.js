@@ -26,6 +26,16 @@ function getInfo( success, fail ) {
     .catch(fail)
 }
 
+function deleteUser( success, fail ) {
+
+  instance.defaults.headers['Authorization'] = "jwt " + window.localStorage.getItem('jwt')
+
+  instance
+    .delete("account/modify_delete")
+    .then(success)
+    .catch(fail)
+}
+
 function signUp(user, success, fail ){
   const accountInfo = {
     username: user.userEmail,
@@ -39,4 +49,4 @@ function signUp(user, success, fail ){
     .catch(fail);
 }
 
-export { getToken, getInfo, signUp }
+export { getToken, getInfo, signUp, deleteUser }
