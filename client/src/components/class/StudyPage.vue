@@ -35,12 +35,12 @@
               <v-spacer></v-spacer>
               <div v-for="(line, idx) in lessonInfo.lines_kr" :key="idx">
                 <div v-if="idx%2 == 0" class="pb-2">
-                  <p><span v-if="lessonInfo.type !== 'pop'">A: </span>{{ lessonInfo.lines_kr[idx] }} </p>
-                  <p><span v-if="lessonInfo.type !== 'pop'">A: </span>{{ lessonInfo.lines_en[idx] }} </p>
+                  <p>{{ lessonInfo.lines_kr[idx] }} </p>
+                  <p>{{ lessonInfo.lines_en[idx] }} </p>
                 </div>
                 <div v-else class="pb-2">
-                  <p><span v-if="lessonInfo.type !== 'pop'">B: </span>{{ lessonInfo.lines_kr[idx] }} </p>
-                  <p><span v-if="lessonInfo.type !== 'pop'">B: </span>{{ lessonInfo.lines_en[idx] }} </p>
+                  <p>{{ lessonInfo.lines_kr[idx] }} </p>
+                  <p>{{ lessonInfo.lines_en[idx] }} </p>
                 </div>
               </div>
               <div class="d-flex justify-end mt-n3 lesson-source">
