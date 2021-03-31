@@ -28,7 +28,7 @@
         <v-row class="mx-5">
           <v-col>
             <v-text-field label="Password" :rules="rulesPassword" hide-details="auto" type="password"
-              v-model="userCredentials.userPassword"></v-text-field>
+              v-model="userCredentials.userPassword" @keyup.enter="login"></v-text-field>
           </v-col>
         </v-row>
         <v-row class="mx-5 my-5">

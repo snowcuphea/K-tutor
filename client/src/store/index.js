@@ -83,7 +83,7 @@ export default new Vuex.Store({
     lessonInfo: {},
     quizInfo: {},
     testQuestions: [],
-    studyCnt: 100,
+    studyCnt: 0,
     contiDay: 9,
   
     items: [
@@ -392,8 +392,7 @@ export default new Vuex.Store({
       state.nickName = report.user.nickname
       state.userLevel = report.user.level
       state.userExperience = report.user.exp
-
-
+      state.studyCnt = report.learned_lc_cnt
     },
     ADDUSEREMAIL ( state, userEmail ) {
       state.userEmail = userEmail
