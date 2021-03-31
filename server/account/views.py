@@ -182,13 +182,23 @@ class GetexpViewSet(viewsets.GenericViewSet,
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-# 업적 정보 가져오기, 업적 달성
-@api_view(['GET', 'POST'])
-@authentication_classes([JSONWebTokenAuthentication])
-@permission_classes([IsAuthenticated])
-def achievement_list_unlock(request):
-    user = request.user
-    if request.method == 'GET':
+class AchievementViewSet(viewsets.GenericViewSet,
+                   mixins.ListModelMixin,
+                   View):
+    serializer_class = UserAchievementSerializer
+    authentication_classes = (JSONWebTokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    @swagger_auto_schema(responses={200: ""}, manual_parameters=[
+        openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
+                          type=openapi.TYPE_STRING)])
+    def get(self, request):
+        """
+        Get User's Achievement List
+
+        ___
+        """
+        user = request.user
         users_achievements = UserUnlockedAchievement.objects.filter(user=user)
         users_achievements_list = UserUnlockedAchievement.objects.filter(user=user).values()
         data_list = []
