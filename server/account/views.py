@@ -178,8 +178,8 @@ def get_exp(request):
 def achievement_list_unlock(request):
     user = request.user
     if request.method == 'GET':
-        users_achievements = UserUnlockedAchievement.objects.filter(user=user)
-        users_achievements_list = UserUnlockedAchievement.objects.filter(user=user).values()
+        users_achievements = AchievedManage.objects.filter(user=user)
+        users_achievements_list = AchievedManage.objects.filter(user=user).values()
         data_list = []
         for ua, ual in zip(users_achievements, users_achievements_list):
             uua_info = []

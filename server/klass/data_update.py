@@ -256,7 +256,7 @@ def add_meaning_to_lc():
                 similarity.append((j, np.mean(temp_similarity)))
         similarity.sort(key=lambda x:-x[1])
         meaning = "|".join([meanings[x[0]][1] for n, x in enumerate(similarity) if n <= 2])
-        lc.main_kw_word = meanings[0][0]
+        lc.main_kw_kor = meanings[0][0]
         lc.meaning = meaning
         main_splited = lc.cpct_kor.split()
         find = False
