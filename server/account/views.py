@@ -125,7 +125,8 @@ class LoginViewSet(viewsets.GenericViewSet,
         data['user'] = {
             'nickname': user.nickname,
             'level': user.level,
-            'exp': user.exp
+            'exp': user.exp,
+            'consecutive_access': user.consecutive_access
         }
         # learned_lc_cnt = serializers.IntegerField()
         data['learned_lc_cnt'] = user.learned_lc.all().count()

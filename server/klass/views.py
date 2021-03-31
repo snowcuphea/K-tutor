@@ -138,7 +138,7 @@ class LcViewSet(viewsets.GenericViewSet,
         ___
             - <int:LcId>
         """
-        lc = get_object_or_404(Lc, id=LcId)
+        lc = get_object_or_404(Lc, id=LcId).__dict__
         lc['already_learned'] = True if Lc.objects.filter(Q(learned_user=request.user) & Q(id=lc['id'])).exists() else False
         serializer = LcSerializer(lc)
         return Response(serializer.data, status=status.HTTP_200_OK)
