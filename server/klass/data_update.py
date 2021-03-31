@@ -256,7 +256,7 @@ def add_meaning_to_lc():
                 similarity.append((j, 0))
             else:
                 similarity.append((j, np.mean(temp_similarity)))
-        similarity.sort(key=lambda x:-x[1])
+        similarity.sort(key=lambda x: -x[1])
         meaning = "|".join([meanings[x[0]][1] for n, x in enumerate(similarity) if n <= 2])
         lc.main_kw_kor = meanings[0][0]
         lc.meaning = meaning
@@ -315,7 +315,12 @@ def request_dict(word):
 
 
 def updateLc():
-    lcs = Lc.objects.all()
-    for lc in lcs:
-        examples = lc.main_kw.contained_cpcq.all()
-        lc.example_kor = "|".join(random.sample(examples, 3))
+    kkma = Kkma()
+
+    kws = Kw.objects.all()
+    cpcqs = Cpcq.objects.all()
+
+    for cpcq in cpcqs:
+        for word in kkma.pos(cpcq.kor):
+            if Kw.objects.filter(content_kor="+".join(word)).exists():
+                cpcq.kcq.add(Kw.objects.get(content_kor="+".join(word)))
