@@ -78,7 +78,7 @@ class UserViewSet(viewsets.GenericViewSet,
         user.set_password(request.data['password'])
         user.nickname = request.data['nickname']
         user.save()
-        return Response(user.serializable_value(), status=status.HTTP_200_OK)
+        return Response(user.serializable_value(field_name="username"), status=status.HTTP_200_OK)
 
     # 회원 탈퇴
     @swagger_auto_schema(responses={200: ""}, manual_parameters=[
