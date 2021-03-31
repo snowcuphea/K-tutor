@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-list>
-      <v-row>
+    <!-- <v-list> -->
+      <v-row style="margin-bottom: 0.5%; margin-top: 0.5%;">
         <v-col cols="4">
           <v-img
             width="100%"
@@ -29,7 +29,7 @@
 
       </v-row>
 
-    </v-list>
+    <!-- </v-list> -->
   </div>
   
 </template>
@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     modalClick() {
-      this.$emit('update',this.modalItem)
+      this.$emit('update2',this.modalItem)
     },
   },
 }

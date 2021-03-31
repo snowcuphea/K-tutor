@@ -3,7 +3,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from "vuex-persistedstate"
 import { getLessonList, getLessonInfo } from "@/api/klass.js"
-import { getExamProblems, getExamReport, sendExamResult } from "@/api/exam.js"
+import { getExamProblems, getExamReport } from "@/api/exam.js"
 
 Vue.use(Vuex)
 
@@ -57,15 +57,7 @@ export default new Vuex.Store({
 
     progress: [],
 
-    recent_learned_lc: [
-      { title: '태양의 후예', total : 100, done : 35},
-      { title: '도깨비', total : 100, done : 87},
-      { title: '승리호', total : 43, done : 23},
-      { title: '사이코지만 괜찮아', total : 100, done : 64},
-      { title: '기생충', total : 100, done : 64},
-      { title: '박효신', total : 87, done : 64},
-      { title: '방탄소년단', total : 70, done : 64},
-    ],
+    recent_lc_progress: [],
 
     userLearned: [
       { title : '태양의 후예', line: '봄바람 휘날리며', img : 'poster1' },
@@ -84,7 +76,7 @@ export default new Vuex.Store({
     quizInfo: {},
     testQuestions: [],
     studyCnt: 0,
-    contiDay: 9,
+    contiDay: 0,
   
     items: [
       {
@@ -243,7 +235,6 @@ export default new Vuex.Store({
     // },
     LOGOUT ( state ){
       localStorage.removeItem("jwt")
-      // localStorage.setItem("jwt", "")
       state.isLogin = false
       state.userEmail= null,
       state.nickName= null,
@@ -256,6 +247,9 @@ export default new Vuex.Store({
       state.classList = []
       state.userGrade = []
       state.userLearnedKeword = []
+      state.progress = []
+      state.recent_lc_progress = []
+  
 
     },
     GETCLASSLIST(state, titlelist){
@@ -352,23 +346,24 @@ export default new Vuex.Store({
       }
       state.quizInfo = quizForm
     },
-    GETTESTQUESTIONS ( state ) {
-      const testForm = [
-        {source : "태양의 후예", type: "drama",
-        lines_kr : ["오늘 저녁에 뭐 먹었어?", "나는 오늘 저녁으로 고기를 먹었어.","오, 맛있었니?"],
-        lines_en : ["What did you have for dinner?", "I had proteins for dinner.","Wow, how was it?"]},
-        {source : "도깨비", type: "movie",
-        lines_kr : ["나랑 벚꽃축제 갈래?", "너무 좋아, 나도 벚꽃 보러 가고 싶었어.","그러면 토요일 어때?"],
-        lines_en : ["Wanna visit the cherry blossom festival with me?", "Yes, I would love to go see cherry blossoms.","Saturday sounds good?"]},
-        {source : "에일리 - 어느 날 우연히", type: "pop",  
-        lines_kr : ["만약에 너에게 전활 걸면", "쓰다만 메시지를 보내면","무작정 찾아가서 널 본다면"],
-        lines_en : ["Wanna visit the cherry blossom festival with me?", "Yes, I would love to go see cherry blossoms.","Saturday sounds good?"]},
-        {source : "대화체", type: "chat",
-        lines_kr : ["이렇게 한줄로만 나오는 문제도 있다."],
-        lines_en : ["There are questions that only have one sentence."]}
-      ]
+    GETTESTQUESTIONS ( state , questions ) {
+      let test = []
+      for (let question of questions) {
+        let lines = []
+        if ( question.problem.before) {
+          lines = [question.problem.before, question.problem.main, question.problem.after]
+        } else {
+          lines = [question.problem.main]
+        }
 
-      state.testQuestions = testForm
+        const testForm = {
+          source : question.cs,
+          lines_kr : lines,
+        }
+        test.push(testForm)
+      }
+
+      state.testQuestions = test
     },
     GETTESTGRADES ( state ) {
       const gradeForm = {
@@ -382,7 +377,7 @@ export default new Vuex.Store({
           20,30,50,70,30,50,70,80,90,50
         ]
       }
-
+      
       state.userGrade = gradeForm
     },
     GETREPORTINFO ( state, report ) {
@@ -392,16 +387,29 @@ export default new Vuex.Store({
         {type: "Movie", done: report.progress.movie[0] , total: report.progress.movie[1] }
       ]
       state.progress = progressForm
-      // state.recent_learned_lc = report.recent_learned_lc
       state.isLogin = true
       state.nickName = report.user.nickname
       state.userLevel = report.user.level
       state.userExperience = report.user.exp
       state.studyCnt = report.learned_lc_cnt
+      state.contiDay = report.user.consecutive_access
+
+      
+      console.log(report.recent_learned_lc)
+
+      for (let progress in report.recent_lc_progress) {
+        const lcProgressForm = {
+          title: progress, done: report.recent_lc_progress[progress][0], total: report.recent_lc_progress[progress][1]
+        }
+        state.recent_lc_progress.push(lcProgressForm)
+      }
+
+
     },
     ADDUSEREMAIL ( state, userEmail ) {
       state.userEmail = userEmail
     },
+
   },
 
   actions: {
@@ -474,16 +482,15 @@ export default new Vuex.Store({
     getQuizInfo ({ commit }) {
       commit('GETQUIZINFO')
     },
-    getTestQuestions ({ commit } ) {
+    getTestQuestions ( { commit } ) {
       getExamProblems(
         (res) => {
-          console.log(res.data)
+          commit('GETTESTQUESTIONS', res.data)
         },
         (err) => {
-          console.log(err.data)
+          console.log("시험문제 10개 받아오기", err)
         }
       )
-      commit('GETTESTQUESTIONS')
     },
     getTestGrades ({ commit }) {
 
@@ -492,7 +499,7 @@ export default new Vuex.Store({
           console.log(res)
         },
         (err) => {
-          console.log(err)
+          console.log("최근 성적 10개 받아오기", err)
         }
       )
 
@@ -504,20 +511,7 @@ export default new Vuex.Store({
     addUserEmail( { commit }, userEmail ) {
       commit ( 'ADDUSEREMAIL', userEmail )
     },
-    sendExamResult( { commit }, grade ) {
-      
-      sendExamResult(
-        grade,
-        (res) => {
-          console.log(res)
-        },
-        (err) => {
-          console.log(err)
-        }
-      )
-      
-      console.log(commit)
-    }
+
 
   },
 

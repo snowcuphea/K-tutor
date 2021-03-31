@@ -26,13 +26,13 @@
           <v-card tile height="55%" elevation="0"
           class="px-5">
             <p>Listen carefully and select the correct words in order.</p>
-            <div v-for="(line, idx) in questions[targetQuestion].lines_kr" :key="idx">
+            <div class="px-2" v-for="(line, idx) in questions[targetQuestion].lines_kr" :key="idx">
               <div v-if="questions[targetQuestion].lines_kr.length == 3">
-                <p v-if="idx%2 == 0"><span v-if="questions[targetQuestion].type !== 'pop'">A: </span>{{ line }} </p>
-                <p v-else><span v-if="questions[targetQuestion].type !== 'pop'">B: </span>{{ myAnswer }} </p>
+                <p v-if="idx%2 == 0">{{ line }} </p>
+                <p v-else>{{ myAnswer }} </p>
               </div>
               <div v-else>
-                <p><span v-if="questions[targetQuestion].type !== 'pop'">A: </span>{{ myAnswer }}</p>
+                <p>{{ myAnswer }}</p>
               </div>
             </div>
 
@@ -133,6 +133,8 @@
 <script>
 import Experience from "@/components/user/Experience.vue"
 import { mapState } from "vuex"
+import { sendExamResult } from "@/api/exam.js"
+
 
 export default {
   props: ['showDialog'],
@@ -220,7 +222,17 @@ export default {
         }
       }
       this.showDialog2 = true
-      this.$store.dispatch('sendExamResult', this.grade)
+      sendExamResult(
+        this.grade,
+        (res) => {
+          console.log(res.data)
+          this.$store.dispatch( "getTestGrades" )
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
+
       this.$store.dispatch('gainExperience', this.grade/10)
     },
     myCorrect() {

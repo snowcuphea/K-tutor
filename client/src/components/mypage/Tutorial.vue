@@ -1,5 +1,6 @@
 <template>
-  <v-container>
+  <div>
+
     <v-dialog
       v-model="showTutorial"
       fullscreen
@@ -27,9 +28,9 @@
       </v-card>
 
     </v-dialog>
+  </div>
 
   
-  </v-container>
 
 </template>
 
