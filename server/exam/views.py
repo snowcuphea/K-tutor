@@ -48,7 +48,7 @@ class ExamViewSet(viewsets.GenericViewSet,
 
         learned_kw = user.learned_kw.all()
         for kw in random.sample(list(learned_kw), 3):
-            lc = random.choice(Lc.objects.filter(main_kw=kw))
+            lc = random.choice(Lc.objects.filter(main_kw_kor=kw.content_kor))
             pro_list.append({
                 "problem": {
                     "before": lc.before_kor,
