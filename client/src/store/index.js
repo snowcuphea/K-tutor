@@ -3,7 +3,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from "vuex-persistedstate"
 import { getLessonList, getLessonInfo } from "@/api/klass.js"
-// import { getExamReport } from "@/api/exam.js"
+import { getExamProblems, getExamReport } from "@/api/exam.js"
 
 Vue.use(Vuex)
 
@@ -258,11 +258,11 @@ export default new Vuex.Store({
       state.allTitleList = titlelist
     },
   
-    changeCurrentPage ( state , changeItem ) {
+    CHANGECURRENTPAGE ( state , changeItem ) {
       state.currentPage = changeItem.navName
       state.currentPageValue = changeItem.navValue
     },
-    changeExperience ( state, experience ) {
+    CHANGEEXPERIENCE ( state, experience ) {
       state.userExperience += experience
       const temp = state.userExperience - (state.userLevel)*10
       if ( state.userExperience >= state.userLevel*10 ) {
@@ -276,7 +276,7 @@ export default new Vuex.Store({
         }, 1500)
       }
     },
-    changeLastGrade ( state, grade ) {
+    CHANGELASTGRADE ( state, grade ) {
       state.userGrade.shift();
       state.userGrade.push(grade)
     },
@@ -322,7 +322,7 @@ export default new Vuex.Store({
       state.lessonInfo = lessonForm
       console.log("레슨인포수정해떵0", item)
     },
-    getQuizInfo ( state ) {
+    GETQUIZINFO ( state ) {
       const quizForm = {
         type: 'drama',
         title : '태양의 후예',
@@ -400,7 +400,6 @@ export default new Vuex.Store({
 
     },
     ADDUSEREMAIL ( state, userEmail ) {
-      console.log(userEmail)
       state.userEmail = userEmail
     }
   },
@@ -424,15 +423,15 @@ export default new Vuex.Store({
     },
 
     changePage ({ commit }, changeItem ) {
-      commit('changeCurrentPage', changeItem)
+      commit('CHANGECURRENTPAGE', changeItem)
     },
     gainExperience ({ commit }, experience) {
       setTimeout( function() {
-        commit('changeExperience', experience )
+        commit('CHANGEEXPERIENCE', experience )
       }, 1500)
     },
     changeLastGrade ({ commit }, grade ) {
-      commit('changeLastGrade', grade)
+      commit('CHANGELASTGRADE', grade)
     },
     changeCurrentClass ({ commit }, item ) {
       commit('CHANGECURRENTCLASS', item)
@@ -475,29 +474,29 @@ export default new Vuex.Store({
       
     },
     getQuizInfo ({ commit }) {
-      commit('getQuizInfo')
+      commit('GETQUIZINFO')
     },
     getTestQuestions ({ commit } ) {
-      // getExamProblems(
-      //   (res) => {
-      //     console.log(res.data)
-      //   },
-      //   (err) => {
-      //     console.log(err.data)
-      //   }
-      // )
+      getExamProblems(
+        (res) => {
+          console.log(res.data)
+        },
+        (err) => {
+          console.log(err.data)
+        }
+      )
       commit('GETTESTQUESTIONS')
     },
     getTestGrades ({ commit }) {
 
-      // getExamReport(
-      //   (res) => {
-      //     console.log(res)
-      //   },
-      //   (err) => {
-      //     console.log(err)
-      //   }
-      // )
+      getExamReport(
+        (res) => {
+          console.log(res)
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
 
       commit( 'GETTESTGRADES' )
     },
@@ -505,7 +504,6 @@ export default new Vuex.Store({
       commit( 'GETREPORTINFO', reportData )
     },
     addUserEmail( { commit }, userEmail ) {
-      console.log(userEmail)
       commit ( 'ADDUSEREMAIL', userEmail )
     } 
 
