@@ -151,66 +151,45 @@ class LoginViewSet(viewsets.GenericViewSet,
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class GetexpViewSet(viewsets.GenericViewSet,
-                   mixins.ListModelMixin,
-                   View):
-    serializer_class = UserSerializer
-    authentication_classes = (JSONWebTokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
-
-    @swagger_auto_schema(responses={200: ""}, manual_parameters=[
-        openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
-                          type=openapi.TYPE_STRING)])
-    def post(self, request):
-        """
-        Gain Exp
-
-        ___
-        """
-        user = request.user
-        if user.level == 15:
-            serializer = UserSerializer(user)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        user.exp += request.data['exp']
-        if required_exp[user.level - 1] <= user.exp:
-            user.exp -= required_exp[user.level - 1]
-            user.level += 1
-            if user.level == 15:
-                user.exp = 0
-        user.save()
+# 경험치 획득, 레벨업
+@api_view(['POST'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
+def get_exp(request):
+    user = request.user
+    if user.level == 15:
         serializer = UserSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    user.exp += request.data['exp']
+    if required_exp[user.level - 1] <= user.exp:
+        user.exp -= required_exp[user.level - 1]
+        user.level += 1
+        if user.level == 15:
+            user.exp = 0
+    user.save()
+    serializer = UserSerializer(user)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class AchievementViewSet(viewsets.GenericViewSet,
-                   mixins.ListModelMixin,
-                   View):
-    serializer_class = UserAchievementSerializer
-    authentication_classes = (JSONWebTokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
-
-    @swagger_auto_schema(responses={200: ""}, manual_parameters=[
-        openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
-                          type=openapi.TYPE_STRING)])
-
-    def get(self, request):
-        """
-        Get User's Achievement List
-
-        ___
-        """
-        user = request.user
+# 업적 정보 가져오기, 업적 달성
+@api_view(['GET', 'POST'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
+def achievement_list_unlock(request):
+    user = request.user
+    if request.method == 'GET':
         users_achievements = UserUnlockedAchievement.objects.filter(user=user)
         users_achievements_list = UserUnlockedAchievement.objects.filter(user=user).values()
         data_list = []
         for ua, ual in zip(users_achievements, users_achievements_list):
             uua_info = []
-            achievement_info = [{
+            achievement_info = []
+            achievement_info.append({
                 "title": ua.achievement.title,
                 "content": ua.achievement.content,
                 "image": ua.achievement.image,
                 "condition": ua.achievement.condition
-            }]
+            })
             uua_info.append({
                 "user_id": ual['user_id'],
                 "achievement_id": ual['achievement_id'],
