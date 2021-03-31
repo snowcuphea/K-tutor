@@ -3,8 +3,10 @@
     <div class="d-flex flex-column">
       <h3> {{ nickName }}'s Study Report </h3>
       <Experience :experience="-1" />
-      <p class="px-3"> Studied for <span> {{ contiDay }} </span> days in a row! </p>
-      <p class="px-3"> Studied <span> {{ studyCnt }} </span> lesson cards. </p>
+      <p class="px-3" v-if="contiDay > 5"> Studied for <span style="font-weight: bolder"> {{ contiDay }} </span> days in a row! </p>
+      <p class="px-3" v-else> Studied for <span style="font-weight: bolder"> {{ contiDay }} </span><span v-if="contiDay == 1"> day.</span> <span v-else> days.</span></p>
+      <p class="px-3" v-if="studyCnt"> Studied <span style="font-weight: bolder"> {{ studyCnt }} </span> lesson cards. </p>
+      <p class="px-3" v-else> Try taking a class for the first time! </p>
     </div>
 
     <div>
@@ -16,10 +18,10 @@
       <h3>Recent Learning Progress</h3>
       <ClassProgress :showMore="showMore" />
       <v-btn class="mt-n5 align-self-end" @click="showMore = !showMore"
-        v-if="!showMore"
+        v-if="!showMore && recent_lc_progress.length > 3"
         plain text retain-focus-on-click>more</v-btn>
       <v-btn class="mt-n5 align-self-end" @click="showMore = !showMore"
-        v-else
+        v-else-if="showMore && recent_lc_progress.length > 3"
         plain text retain-focus-on-click>less</v-btn>
     </div>
 
@@ -53,7 +55,7 @@ export default {
     GenreProgress
   },
   computed: {
-    ...mapState(['nickName','contiDay','studyCnt'])
+    ...mapState(['nickName','contiDay','studyCnt','recent_lc_progress'])
   }
 }
 </script>

@@ -1,5 +1,6 @@
 <template>
-  <v-container>
+  <div>
+
     <v-dialog
       v-model="showTermsOfUse"
       fullscreen
@@ -17,14 +18,8 @@
 
       </v-card>
 
-
-
-
-
-
-
     </v-dialog>
-  </v-container>
+  </div>
 </template>
 
 <script>

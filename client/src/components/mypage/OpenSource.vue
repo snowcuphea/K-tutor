@@ -1,5 +1,6 @@
 <template>
-  <v-container>
+  <div>
+
     <v-dialog
       v-model="showOpenSource"
       fullscreen
@@ -33,7 +34,7 @@
       </v-card>
 
     </v-dialog>
-  </v-container>
+  </div>
 </template>
 
 <script>

@@ -4,26 +4,33 @@
     <v-container>
       <v-row>
         <v-col cols="6">
-          <v-avatar size="150" class="my_avatar">
-            <img
-              src="@/assets/img/mypage/man.png"
-            >
-          </v-avatar>
+          <div>
+            <v-avatar size="150" class="my_avatar">
+              <img
+                :src="myImgSource()"
+              >
+            </v-avatar>
+          </div>
           
         </v-col>
-        <v-col cols="6">
-          <div class="my_info">
-            <p>test1</p>
-            <v-btn
-              icon
-              class="my_info_icon"
-            >
-              <v-icon>mdi-cog-outline</v-icon>
-            </v-btn>
-            <br>
-            <p>test1@test1.com</p>
+        <v-col cols="6" class="d-flex align-center">
+          <v-row class="d-flex flex-column">
+            <div class="d-flex align-center">
 
-          </div>
+              <h4>{{ $store.state.nickName }}</h4>
+              <v-btn icon class="my_info_icon">
+                <v-icon>mdi-cog-outline</v-icon>
+              </v-btn>
+            </div>
+            
+            <h4>{{ $store.state.userEmail }}</h4>
+
+
+          </v-row>
+
+
+          <!-- <div class="my_info">
+          </div> -->
 
         </v-col>
       </v-row>
@@ -43,10 +50,14 @@
         </v-list-item>
 
       </v-list>
+      <v-list-item style="background: white" @click="logout">
+        Logout
+      </v-list-item>
+      <a href="" class="d-flex justify-center">Delete Account</a>
       
     </div>
 
-    <v-row class="delete_icon">
+    <!-- <v-row class="delete_icon">
       <v-col cols="4">
         <v-btn color="red">
           Delete
@@ -57,15 +68,15 @@
           Logout
         </v-btn>
       </v-col>
-    </v-row>
+    </v-row> -->
 
     
-    <Tutorial :showTutorial="showTutorial" @hideTutorial="showTutorial = !showTutorial"/>
-    <Notice :showNotice="showNotice" @hideTutorial="showNotice = !showNotice"/>
-    <Inquiry :showInquiry="showInquiry" @hideTutorial="showInquiry = !showInquiry"/>
-    <TermsOfUse :showTermsOfUse="showTermsOfUse" @hideTutorial="showTermsOfUse = !showTermsOfUse"/>
-    <OpenSource :showOpenSource="showOpenSource" @hideTutorial="showOpenSource = !showOpenSource"/>
 
+  <Tutorial :showTutorial="showTutorial" @hideTutorial="showTutorial = !showTutorial"/>
+  <Notice :showNotice="showNotice" @hideTutorial="showNotice = !showNotice"/>
+  <Inquiry :showInquiry="showInquiry" @hideTutorial="showInquiry = !showInquiry"/>
+  <TermsOfUse :showTermsOfUse="showTermsOfUse" @hideTutorial="showTermsOfUse = !showTermsOfUse"/>
+  <OpenSource :showOpenSource="showOpenSource" @hideTutorial="showOpenSource = !showOpenSource"/>
   </div>
   
 </template>
@@ -110,7 +121,7 @@ export default {
     showInquiry: false,
     showTermsOfUse: false,
     showOpenSource: false,
-
+    tempLevel: 15,
   }),
   methods: {
     pageDetail (pageDetailItem) {
@@ -137,6 +148,25 @@ export default {
         this.showOpenSource = !this.showOpenSource
       }
     },
+    myImgSource () {
+      if (this.tempLevel > 14) {
+        return require('@/assets/img/mypage/sejong-the-great.png')
+      }
+      else if (this.tempLevel > 11) {
+        return require('@/assets/img/mypage/korea.png')
+      }
+      else if (this.tempLevel > 8) {
+        return require('@/assets/img/mypage/empress.png')
+      }
+      else if (this.tempLevel > 5) {
+        return require('@/assets/img/mypage/emperor.png')
+      }
+      else if (this.tempLevel > 2) {
+        return require('@/assets/img/mypage/woman.png')
+      }
+      else {
+        return require('@/assets/img/mypage/man.png')
+      }},
     logout(){
       this.$store.dispatch("logout")
       .then( ()=>{
@@ -189,13 +219,8 @@ export default {
   margin-top: 30%;
 }
 
-.my_info_icon {
-  margin-left: 40%;
-  margin-bottom: 3%;
-}
-
 .mypage_body {
-  background-color: whitesmoke;
+  background-color: white;
   height: 100%;
   width: 100%;
 }
@@ -204,18 +229,6 @@ export default {
   margin-top: 5%;
   margin-left: 3%;
   margin-bottom: 10%;
-}
-
-.three_items {
-  margin-bottom: 3%;
-}
-
-.three_icons {
-  margin-right: 0.1%;  
-}
-
-.title_row {
-  justify-content: space-between;
 }
 
 .title_list {

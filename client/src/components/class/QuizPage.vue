@@ -25,19 +25,19 @@
         <v-card tile height="72%" elevation="0" class="px-5">
           <v-card class="quiz" tile height="100%" elevation="0" color="black">
             <v-card tile height="70%" elevation="0">
-              <div v-for="(line, idx) in quizInfo.quizzes[currentProblem].lines_kr" :key="idx">
+              <div class="px-2" v-for="(line, idx) in quizInfo.quizzes[currentProblem].lines_kr" :key="idx">
                 <div v-if="idx%2 == 0" class="pb-4">
-                  <p class="pb-2"><span v-if="quizInfo.type !== 'pop'">A: </span>{{ quizInfo.quizzes[currentProblem].lines_kr[idx] }} </p>
-                  <p><span v-if="quizInfo.type !== 'pop'">A: </span>{{ quizInfo.quizzes[currentProblem].lines_en[idx] }} </p>
+                  <p class="pb-2">{{ quizInfo.quizzes[currentProblem].lines_kr[idx] }} </p>
+                  <p>{{ quizInfo.quizzes[currentProblem].lines_en[idx] }} </p>
                 </div>
                 <div v-else class="pb-4">
-                  <p class="pb-2"><span v-if="quizInfo.type !== 'pop'">B: </span>{{ myAnswer }} </p>
+                  <p class="pb-2">{{ myAnswer }} </p>
                   <p class="answer-correct mt-n2"
                    v-if="isCorrect()"> Correct, you may proceed. </p>
                   <p class="answer-wrong mt-n2"
                    v-else-if="isCorrect() == false && pass !== null"
                   >Incorrect, try again.</p>
-                  <p><span v-if="quizInfo.type !== 'pop'">B: </span>{{ quizInfo.quizzes[currentProblem].lines_en[idx] }} </p>
+                  <p>{{ quizInfo.quizzes[currentProblem].lines_en[idx] }} </p>
                 </div>
               </div>
               <div class="d-flex justify-end mt-n3 lesson-source">

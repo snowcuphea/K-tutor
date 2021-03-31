@@ -31,7 +31,7 @@ export default {
 
       const newList = []
 
-      for ( var cls of this.recent_learned_lc ){
+      for ( var cls of this.recent_lc_progress ){
         const form = {
           title: cls.title, 
           total: cls.total, 
@@ -55,7 +55,7 @@ export default {
 
   },
   computed: {
-    ...mapState(['recent_learned_lc'])
+    ...mapState(['recent_lc_progress'])
   }
 }
 </script>
