@@ -120,7 +120,7 @@ class LoginViewSet(viewsets.GenericViewSet,
         if not AccessDate.objects.filter(user=user).filter(access_at=date.today()).exists():
             AccessDate.objects.create(user=user)
         if AccessDate.objects.filter(user=user).filter(access_at=date.today() - timedelta(days=1)):
-            user.consecutive_acess += 1
+            user.consecutive_access += 1
             user.save()
         data['user'] = {
             'nickname': user.nickname,

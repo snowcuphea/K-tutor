@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+import django.dispatch
 
 
 class User(AbstractUser):
@@ -9,6 +10,10 @@ class User(AbstractUser):
     consecutive_access = models.IntegerField(default=1)
     learned_lc = models.ManyToManyField('klass.Lc', related_name='learned_user')
     learned_kw = models.ManyToManyField('klass.kw', related_name='learned_user')
+
+    def checkAchievement(self):
+        checkAhvSignal = django.dispatch.Signal(providing_args=['user'])
+        checkAhvSignal.send(sender=self.__class__)
 
 
 class TestResult(models.Model):
