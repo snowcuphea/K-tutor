@@ -175,28 +175,26 @@ def achievement_list_unlock(request):
     user = request.user
     if request.method == 'GET':
         users_achievements = UserUnlockedAchievement.objects.filter(user=user)
-        # users_achievements_list = UserUnlockedAchievement.objects.filter(user=user).values()
-        # data_list = []
-        # for ua, ual in zip(users_achievements, users_achievements_list):
-        #     uua_info = []
-        #     achievement_info = []
-        #     achievement_info.append({
-        #         "title" : ua.achievement.title,
-        #         "content" : ua.achievement.content,
-        #         "image" : ua.achievement.image,
-        #         "condition" : ua.achievement.condition
-        #     })
-        #     uua_info.append({
-        #         "id" : ual['id'],
-        #         "user_id" : ual['user_id'],
-        #         "achievement_id" : ual['achievement_id'],
-        #         "status" : ual['status']
-        #     })
-        #     uua_info.extend(achievement_info)
-        #     uua_info[0].update(uua_info[1])
-        #     data_list.append(uua_info[0])
-        # print(data_list)
-        # serializer = UserAchievementSerializer(data=data_list, many=True)
-        # serializer.is_valid(raise_exception=True)
-        serializer = UserAchievementSerializer(users_achievements, many=True)
+        users_achievements_list = UserUnlockedAchievement.objects.filter(user=user).values()
+        data_list = []
+        for ua, ual in zip(users_achievements, users_achievements_list):
+            uua_info = []
+            achievement_info = []
+            achievement_info.append({
+                "title" : ua.achievement.title,
+                "content" : ua.achievement.content,
+                "image" : ua.achievement.image,
+                "condition" : ua.achievement.condition
+            })
+            uua_info.append({
+                "user_id" : ual['user_id'],
+                "achievement_id" : ual['achievement_id'],
+                "status" : ual['status']
+            })
+            uua_info.extend(achievement_info)
+            uua_info[0].update(uua_info[1])
+            data_list.append(uua_info[0])
+
+        serializer = UserAchievementSerializer(data=data_list, many=True)
+        serializer.is_valid(raise_exception=True)
         return Response(serializer.data)

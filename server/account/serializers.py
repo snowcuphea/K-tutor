@@ -34,7 +34,11 @@ class AchievementSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class UserAchievementSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserUnlockedAchievement
-        fields = '__all__'
+class UserAchievementSerializer(serializers.Serializer):
+    user_id = serializers.IntegerField()
+    achievement_id = serializers.IntegerField()
+    status = serializers.IntegerField()
+    title = serializers.CharField()
+    content = serializers.CharField()
+    image = serializers.CharField()
+    condition = serializers.IntegerField()
