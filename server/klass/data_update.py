@@ -310,3 +310,10 @@ def request_dict(word):
         meanings.extend(res)
 
     return meanings
+
+
+def updateLc():
+    lcs = Lc.objects.all()
+    for lc in lcs:
+        lc.main_kw = Cpct.objects.get(kor=lc.cpct_kor).main_kw
+        lc.save()

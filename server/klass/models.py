@@ -31,6 +31,7 @@ class Lc(models.Model):
     main_kw_index = models.IntegerField(null=True)
     main_kw_kor = models.TextField(null=True)
     main_kw_eng = models.TextField(null=True)
+    main_kw = models.ForeignKey(Kw, on_delete=models.CASCADE)
     meaning = models.TextField(null=True)
     before_kor = models.TextField()
     before_eng = models.TextField()
