@@ -100,7 +100,7 @@ def create_lc():
                 cs.level = i
                 cs.save()
                 cpcts = Cpct.objects.filter(cs=cs)
-                cpct_cnt = 0
+                cpct_cnt = Lc.objects.filter(cs=cs).count()
                 for k in range(kw_index[i], kw_index[i + 1]):
                     kw = Kw.objects.get(pk=k)
                     if cpct_cnt == 100:

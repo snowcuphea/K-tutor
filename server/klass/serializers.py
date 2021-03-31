@@ -33,7 +33,7 @@ class LcSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lc
         fields = (
-            "id", "main_kw_index", "main_kw_kor", "main_kw_eng" "main_kw_id", "meaning", "before_kor",
+            "id", "main_kw_index", "main_kw_kor", "main_kw_eng", "main_kw_id", "meaning", "before_kor",
             "before_eng",
             "cpct_kor", "cpct_eng", "after_kor", "after_eng", "example_kor", "example_eng", "already_learned"
         )
