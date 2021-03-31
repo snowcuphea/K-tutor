@@ -8,7 +8,7 @@ function getExamProblems( success, fail ) {
   instance.defaults.headers['Authorization'] = "jwt " + window.localStorage.getItem('jwt')
 
   instance
-    .get("exam")
+    .get("exam/take")
     .then(success)
     .catch(fail)
 
@@ -18,8 +18,10 @@ function sendExamResult( result, success, fail ) {
 
   instance.defaults.headers['Authorization'] = "jwt " + window.localStorage.getItem('jwt')
 
+  const body = { "score" : result }
+
   instance
-    .post("exam", result)
+    .post("exam/take", body)
     .then(success)
     .catch(fail)
 
