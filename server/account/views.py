@@ -75,8 +75,8 @@ class UserViewSet(viewsets.GenericViewSet,
             return Response("이미 가입된 이메일 입니다.", status=status.HTTP_302_FOUND)
         if User.objects.filter(nickname=request.data['nickname']).exists():
             return Response("이미 가입된 닉네임 입니다.", status=status.HTTP_302_FOUND)
-        user.set_password(request.data.password)
-        user.nickname = request.data.nickname
+        user.set_password(request.data['password'])
+        user.nickname = request.data['nickname']
         user.save()
         return Response(user, status=status.HTTP_200_OK)
 
