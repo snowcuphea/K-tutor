@@ -137,13 +137,14 @@
       },
     },
     created() {
-      // this.$store.dispatch('getLessonInfo')
+      this.$store.dispatch('getLessonInfoByItem', this.classList[0].id )
       this.$store.dispatch('getQuizInfo')
       if (this.currentClass) {
         this.$store.dispatch('getListCurrentClass',this.currentClass )
       } else {
         this.$store.dispatch('getListCurrentClass',this.defaultClass )
       }
+
     }
   }
 </script>
