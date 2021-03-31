@@ -9,7 +9,7 @@ class User(AbstractUser):
     exp = models.IntegerField(default=0)
     consecutive_access = models.IntegerField(default=1)
     learned_lc = models.ManyToManyField('klass.Lc', related_name='learned_user')
-    learned_kw = models.ManyToManyField('klass.kw', related_name='learned_user')
+    learned_kw = models.ManyToManyField('klass.Kw', related_name='learned_user')
 
     def checkAchievement(self):
         checkAhvSignal = django.dispatch.Signal(providing_args=['user'])
