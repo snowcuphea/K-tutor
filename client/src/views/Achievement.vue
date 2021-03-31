@@ -24,6 +24,7 @@
 
     </div>
     <div class="main_progressbar" style="width:95%;">
+
       <v-row>
         <v-col
           cols="8"
@@ -66,41 +67,39 @@
       </v-row>
     </div>
     <div>
-      <v-container>
 
-        <div class="wrap d-flex flex-column" v-if="viewlist">
+      <div class="wrap d-flex flex-column" v-if="viewlist">
 
-          <div
-            v-for = "(item, idx) in $store.state.items"
+        <div
+          v-for = "(item, idx) in $store.state.items"
+          :key = "idx"
+        >
+
+          <appMyModal :modalItem="item" @update="modal" />
+
+
+          <v-divider></v-divider>
+
+        </div>
+
+      </div>
+      <div v-if="viewcalendar">
+        
+        <v-row
+          class="d-flex wrap"
+
+        >
+          <v-col
+            cols="4"
+            v-for = "(item,idx) in $store.state.items"
             :key = "idx"
           >
+            <appMyModal2 :modalItem="item" @update2="modal" />
 
-            <appMyModal :modalItem="item" @update="modal" />
+          </v-col>
+        </v-row>
 
-
-            <v-divider></v-divider>
-
-          </div>
-
-        </div>
-        <div v-if="viewcalendar">
-          
-          <v-row
-            class="d-flex wrap"
-
-          >
-            <v-col
-              cols="4"
-              v-for = "(item,idx) in $store.state.items"
-              :key = "idx"
-            >
-              <appMyModal2 :modalItem="item" @update2="modal" />
-
-            </v-col>
-          </v-row>
-
-        </div>
-      </v-container>
+      </div>
     </div>
     
   </v-container>
