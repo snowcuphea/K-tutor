@@ -3,6 +3,7 @@ from .models import *
 
 
 class ExamResultSerializer(serializers.ModelSerializer):
+    exam_date = serializers.DateTimeField()
     class Meta:
         model = ExamResult
         fields = ('score', 'exam_date')
