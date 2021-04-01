@@ -6,7 +6,7 @@
       <p class="mb-0">{{ userExperience }}/{{ required_exp[this.userLevel] }}</p>
     </div>
     <v-progress-linear
-      :value="progress" height="10">
+      :value="progress" height="10" color="teal accent-4" striped>
     </v-progress-linear>
     <div>
       <p v-if="experience != -1" class="text-end">+{{ experience }} exp</p>

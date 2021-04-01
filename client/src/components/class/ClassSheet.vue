@@ -15,29 +15,33 @@
     </v-row>
 
     <v-row >
-      <v-col >
+      <v-col cols="8" class="d-flex align-center" >
         <span v-if="currentClass.level == '0'">Difficulty: Beginner</span>
         <span v-else-if="currentClass.level == '1'">Difficulty: Intermediate</span>
         <span v-else-if="currentClass.level == '2'">Difficulty: Advanced</span>
         <span v-else>Difficulty: Basic</span>
+      </v-col>
+      <v-col cols="4" class="d-flex justify-end">
+        <v-btn @click="startQuiz()"> quiz </v-btn>
       </v-col>
     </v-row>
 
     <v-row>
       <v-col>
         <div class="d-flex">
-          <p class="mb-1">Learning Progress</p>
+          <p class="mb-1 mr-1">Learning Progress</p>
+           <v-icon>
+            mdi-progress-check
+          </v-icon>
           <v-spacer></v-spacer>
           <p class="mb-0">{{getCurrentClassLearnedKeword.length}}/ {{classList.length}}</p>
         </div>
-        <v-progress-linear :value="progress" height="10">
+        <v-progress-linear :value="progress" height="10" color="teal accent-4" striped>
         </v-progress-linear>
 
       </v-col>
-    </v-row>
-
-    <v-row>
-      <v-btn @click="startQuiz()"> quiz </v-btn>
+    
+      
     </v-row>
 
     <v-row>
@@ -51,16 +55,17 @@
               <v-col cols="3" xs="4" style="" class="d-flex justify-center">
                 <img :src="require(`@/assets/images/poster/poster8.jpg`)" alt="keyword" class="imgSize">
               </v-col>
-              <v-col cols="7" xs="6" class="d-flex align-center">
-                <div class="d-flex flex-column">
+              <v-col cols="6" xs="6" class="d-flex align-center">
+                <div class="d-flex flex-column ">
                   <h3 class="text--primary my-1"> {{item.main_kw_kor}}</h3>
-                  <span class="my-1"> (영어번역필요) {{ item.main_kw_eng }} </span>
+                  <span class=""> (영어번역필요) {{ item.main_kw_eng }} </span>
                 </div>
               </v-col>
-              <v-col cols="1" xs="1" class="d-flex align-center">
+              <v-col cols="2" xs="1" class="d-flex align-center justify-center">
                 <!-- item.cs_seq가 getCurrentClassLearnedKeword의 cs_seq에 있는지 검사해서 완료여부도 넣어야됨 -->
-                <span v-if="checkCompleted(item.id)">O</span> 
-                <span v-else>X</span> 
+                <!-- <v-icon v-if="checkCompleted(item.id)" color="green darken-2">mdi-checkbox-marked-circle</v-icon>  -->
+                <v-icon v-if="checkCompleted(item.id)" color="teal accent-4">mdi-checkbox-marked-circle</v-icon> 
+                <v-icon v-else color="blue-grey darken-2">mdi-checkbox-marked-circle-outline</v-icon> 
               </v-col>
             </v-row>
           </v-card-text>

@@ -10,13 +10,14 @@
         nav
         dense
       >
-        <v-subheader>Select Theme</v-subheader>
+        <v-subheader class="my-3">Select Theme</v-subheader>
         <v-list-item-group
           v-model="selectedIdx"
           active-class="deep-purple--text text--accent-4"
         >
           <v-list-item v-for="(typeItem, idx) in typeData" :key="idx" @click="selectType(typeItem)">
-            <v-list-item-title>{{ typeItem.name }}</v-list-item-title>
+            <!-- <v-list-item-title>{{ typeItem.name }}</v-list-item-title> -->
+            <h3>{{ typeItem.name }}</h3>
           </v-list-item>
 
         </v-list-item-group>
@@ -29,7 +30,6 @@
           <v-btn icon @click="dialog = false">
             <v-icon>mdi-close</v-icon>
           </v-btn>
-          <v-toolbar-title>{{ selectedType }} List</v-toolbar-title>
           <v-toolbar-items>
           </v-toolbar-items>
         </v-toolbar>
