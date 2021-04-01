@@ -185,7 +185,7 @@ class GetexpViewSet(viewsets.GenericViewSet,
 class AchievementViewSet(viewsets.GenericViewSet,
                    mixins.ListModelMixin,
                    View):
-    serializer_class = UserAchievementSerializer
+    serializer_class = AchievedManageSerializer
     authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = (IsAuthenticated,)
 
@@ -199,29 +199,32 @@ class AchievementViewSet(viewsets.GenericViewSet,
         ___
         """
         user = request.user
-        users_achievements = UserUnlockedAchievement.objects.filter(user=user)
-        users_achievements_list = UserUnlockedAchievement.objects.filter(user=user).values()
-        data_list = []
-        for ua, ual in zip(users_achievements, users_achievements_list):
-            uua_info = []
-            achievement_info = []
-            achievement_info.append({
-                "title": ua.achievement.title,
-                "content": ua.achievement.content,
-                "image": ua.achievement.image,
-            })
-            uua_info.append({
-                "user_id": ual['user_id'],
-                "achievement_id": ual['achievement_id'],
-                "status": ual['status']
-            })
-            uua_info.extend(achievement_info)
-            uua_info[0].update(uua_info[1])
-            data_list.append(uua_info[0])
+        achievement_list = Achievement.objects.all()
+        user_achievement = []
 
-        serializer = UserAchievementSerializer(data=data_list, many=True)
+        for al in achievement_list:
+            if AchievedManage.objects.filter(user=user, achievement=al).exists():
+                user_achievement.append({
+                    "achievement_id" : al.id,
+                    "title" : al.title,
+                    "content" : al.content,
+                    "imgurl" : al.imgurl,
+                    "status" : 1
+                })
+            else:
+                user_achievement.append({
+                    "achievement_id": al.id,
+                    "title": al.title,
+                    "content": al.content,
+                    "imgurl": al.imgurl,
+                    "status": 0
+                })
+
+        serializer = AchievedManageSerializer(data=user_achievement, many=True)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data)
+
+
 
     @swagger_auto_schema(responses={200: ""}, manual_parameters=[
         openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
@@ -232,11 +235,9 @@ class AchievementViewSet(viewsets.GenericViewSet,
 
         ___
         """
-        user = get_object_or_404(User, username=request.user.username)
-        relationship = UserUnlockedAchievement.objects.get(
-            user_id=user.id,
-            achievement_id=request.data['achievement'],
-        )
-        relationship.status = 1
-        relationship.save()
-        return Response("updated", status=status.HTTP_200_OK)
+        user = request.user
+        if AchievedManage.objects.filter(user=user, achievement_id=request.data['achievement']).exists():
+            return Response("Already Achieved", status=status.HTTP_302_FOUND)
+        else:
+            AchievedManage.objects.create(user=user, achievement_id=request.data['achievement'])
+            return Response("updated", status=status.HTTP_200_OK)
