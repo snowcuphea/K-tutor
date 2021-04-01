@@ -1,108 +1,159 @@
 <template>
-  <v-container>
-    <div class="modal-overlay"
-      v-if="visible"
-      @click="closeModal"
-      >
-      <div class="modal-window">
+  <div>
+    <v-container class="progress_top">
+    </v-container>
 
-        <v-img 
-          :src="item.src"
-          height="50%"
-          width="50%"
-          padding="0"
-          class="modal_img"
-        />
-        <v-card-text class="modal_title">
-          {{ item.title }}
-        </v-card-text>
-
-        <v-card-text class="modal_contents">
-          {{ item.contents }}
-        </v-card-text>
-      </div>
-
-    </div>
-    <div class="main_progressbar" style="width:95%;">
-
-      <v-row>
-        <v-col
-          cols="8"
-          class="d-flex flex-column"
+    <v-container>
+      <div class="modal-overlay"
+        v-if="visible"
+        @click="closeModal"
         >
-          <h6>업적 달성률</h6>
+        <div class="modal-window">
 
-          <v-progress-linear
-            color="light-blue"
-            height="10"
-            value="30"
-            striped
-          >
+          <v-img 
+            :src="item.src"
+            height="50%"
+            width="50%"
+            padding="0"
+            class="modal_img"
+          />
+          <v-card-text class="modal_title">
+            {{ item.title }}
+          </v-card-text>
 
-          </v-progress-linear>
-
-        </v-col>
-        <v-col
-          cols="4"
-        >
-          <div class="d-flex justify-end">
-            <v-btn
-              icon
-              plain
-              :color="viewlist===false ? 'secondary' : 'primary'"
-            >
-              <v-icon @click="viewList">mdi-view-list</v-icon>
-            </v-btn>
-            <v-btn
-              icon
-              plain
-              :color="viewcalendar===false ? 'secondary' : 'primary'"
-            >
-              <v-icon @click="viewCalendar">mdi-calendar-range</v-icon>
-            </v-btn>
-
-          </div>
-
-        </v-col>
-      </v-row>
-    </div>
-    <div>
-
-      <div class="wrap d-flex flex-column" v-if="viewlist">
-
-        <div
-          v-for = "(item, idx) in $store.state.items"
-          :key = "idx"
-        >
-
-          <appMyModal :modalItem="item" @update="modal" />
-
-
-          <v-divider></v-divider>
-
+          <v-card-text class="modal_contents">
+            {{ item.contents }}
+          </v-card-text>
         </div>
 
       </div>
-      <div v-if="viewcalendar">
-        
-        <v-row
-          class="d-flex wrap"
+      <v-subheader style="padding:0;">
+        <v-container class="progress_top">
 
-        >
+          <v-row style="margin-bottom: 0;">
+            <v-col
+              cols="8"
+              class="d-flex flex-column"
+            >
+              <h6>업적 달성률</h6>
+
+              <v-progress-linear
+                color="light-blue"
+                height="10"
+                value="30"
+                striped
+              >
+
+              </v-progress-linear>
+
+            </v-col>
+            <v-col
+              cols="4"
+            >
+              <div class="d-flex justify-end" style="padding-right: 10%;">
+                <v-btn
+                  icon
+                  plain
+                  :color="viewlist===false ? 'secondary' : 'primary'"
+                >
+                  <v-icon @click="viewList">mdi-view-list</v-icon>
+                </v-btn>
+                <v-btn
+                  icon
+                  plain
+                  :color="viewcalendar===false ? 'secondary' : 'primary'"
+                >
+                  <v-icon @click="viewCalendar">mdi-calendar-range</v-icon>
+                </v-btn>
+                
+              
+              </div>
+
+            </v-col>
+          </v-row>
+        </v-container>
+        <!-- <v-row>
           <v-col
-            cols="4"
-            v-for = "(item,idx) in $store.state.items"
-            :key = "idx"
+            cols="8"
+            class="d-flex flex-column"
           >
-            <appMyModal2 :modalItem="item" @update2="modal" />
+            <h6>업적 달성률</h6>
+
+            <v-progress-linear
+              color="light-blue"
+              height="10"
+              value="30"
+              striped
+            >
+
+            </v-progress-linear>
 
           </v-col>
-        </v-row>
+          <v-col
+            cols="4"
+          >
+            <div class="d-flex justify-end">
+              <v-btn
+                icon
+                plain
+                :color="viewlist===false ? 'secondary' : 'primary'"
+              >
+                <v-icon @click="viewList">mdi-view-list</v-icon>
+              </v-btn>
+              <v-btn
+                icon
+                plain
+                :color="viewcalendar===false ? 'secondary' : 'primary'"
+              >
+                <v-icon @click="viewCalendar">mdi-calendar-range</v-icon>
+              </v-btn>
 
+            </div>
+
+          </v-col>
+        </v-row> -->
+        <!-- <div class="main_progressbar" style="width:90%;">
+
+        </div> -->
+      </v-subheader>
+      <div style="padding-top: 3%;">
+
+        <div class="wrap d-flex flex-column" v-if="viewlist">
+
+          <div
+            v-for = "(item, idx) in $store.state.items"
+            :key = "idx"
+          >
+
+            <appMyModal :modalItem="item" @update="modal" />
+
+
+            <v-divider></v-divider>
+
+          </div>
+
+        </div>
+        <div v-if="viewcalendar">
+          
+          <v-row
+            class="d-flex wrap"
+
+          >
+            <v-col
+              cols="4"
+              v-for = "(item,idx) in $store.state.items"
+              :key = "idx"
+            >
+              <appMyModal2 :modalItem="item" @update2="modal" />
+
+            </v-col>
+          </v-row>
+
+        </div>
       </div>
-    </div>
-    
-  </v-container>
+      
+    </v-container>
+  </div>
 </template>
 
 <script>
@@ -133,30 +184,24 @@ export default {
         this.viewlist = !this.viewlist
         this.viewcalendar = !this.viewcalendar
       }
-      console.log(this.viewlist)
-      console.log(this.viewcalendar)
-
     },
     viewCalendar () {
       if (this.viewcalendar == false) {
         this.viewcalendar = !this.viewcalendar
         this.viewlist = !this.viewlist
       }
-      console.log(this.viewlist)
-      console.log(this.viewcalendar)
-
-    }
-  },
-  created() {
-    this.$store.dispatch('getAchievementList')
+    },
   }
 }
 </script>
 
 <style>
 
-.main_progressbar {
+.progress_top {
   position: fixed;
+  z-index: 5;
+  background-color: white;
+  margin-right: 62;
 }
 
 .app_bar {
@@ -177,7 +222,7 @@ export default {
   align-items: center;
   justify-content: center;
   position: fixed;
-  z-index: 1;
+  z-index: 6;
   top: 0;
   left: 0;
   width: 100%;
