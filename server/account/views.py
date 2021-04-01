@@ -134,6 +134,7 @@ class LoginViewSet(viewsets.GenericViewSet,
                 recent_cs['name'] = recent_cs['name'].split(' - ')[0]
         else:
             recent_cs = Cs.objects.get(pk=1).__dict__
+        del(recent_cs['_state'])
         data['recent_cs'] = recent_cs
         # recent_lc_progress = serializers.DictField()
         recent_lc_progress = dict()
