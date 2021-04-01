@@ -1,3 +1,4 @@
+from django.core.mail import EmailMessage
 from django.views import View
 from django.db.models import Max, Count, Q
 from django.shortcuts import get_object_or_404
@@ -236,3 +237,26 @@ class AchievementViewSet(viewsets.GenericViewSet,
         user = request.user
         user.achieved.add(request.data['AcId'])
         return Response("updated", status=status.HTTP_200_OK)
+
+
+class InquiryViewSet(viewsets.GenericViewSet,
+                         mixins.ListModelMixin,
+                         View):
+    authentication_classes = (JSONWebTokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        """
+        Send inquiry email from user to us.
+
+        ___
+        """
+        user = request.user
+        email = EmailMessage(
+            request['title'],
+            request['content'],
+            from_email=user.email,
+            to="malmoongchi@gmail.com"
+        )
+        email.send()
+        return Response("ok", status=status.HTTP_200_OK)
