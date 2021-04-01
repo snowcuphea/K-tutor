@@ -142,8 +142,13 @@
       logout() {
         this.$store.dispatch("logout")
           .then(() => {
-            alert("You have been logged out.")
-
+            // alert("You have been logged out.")
+            const alertInfo = {
+              status: true,
+              color: "success",
+              content: "You have been logged out."
+            }
+            this.$store.dispatch("showAlert", alertInfo)
             this.$router.push({
               name: 'Login'
             })

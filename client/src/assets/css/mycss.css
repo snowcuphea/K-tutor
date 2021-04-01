@@ -15,3 +15,9 @@
   background-color: #62D2A2;
 
 }
+
+.alert-info {
+  /* position: fixed !important; */
+  top: 1.5em !important;
+  /* width: 90% !important; */
+}

@@ -12,6 +12,13 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    time: null,
+    alert: {
+      status: false,
+      color: "primary",
+      content: "",
+    },
+
     isLogin: false,
     userEmail: null,
     nickName: null,
@@ -46,6 +53,10 @@ export default new Vuex.Store({
     dbLessonInfo: {},
     quizInfo: {},
     testQuestions: [],
+
+    testChance: 2,
+    quizChance: 3,
+
     studyCnt: 0,
     contiDay: 0,
   
@@ -208,6 +219,8 @@ export default new Vuex.Store({
       state.progress = []
       state.recent_lc_progress = []
       state.recent_learned_lc = []
+      state.testChance = 2
+      state.quizChance = 3
     },
 
     GETCLASSLIST(state, titlelist){
@@ -326,6 +339,8 @@ export default new Vuex.Store({
 
     },
     GETREPORTINFO ( state, report ) {
+      // state.time = new Date().getDay()
+      state.time = new Date().getMinutes()
 
       console.log(report)
       state.currentClass = { type: report.recent_cs.type, name: report.recent_cs.name, level: Number(report.recent_cs.level) }
@@ -424,7 +439,36 @@ export default new Vuex.Store({
     //       num: 3
     //     }
     //   }
-    // }
+    // },
+    SHOWALERT ( state, alertInfo ) {
+      
+      var timeout = 2000
+
+      if ( alertInfo.color == "error" || alertInfo.color == "warning" ) {
+        timeout = 3000
+      }
+
+      state.alert = alertInfo
+      setTimeout(() => {
+        state.alert.status = false
+      }, timeout);
+
+    },
+    RESETCHANCE ( state ) {
+      state.quizChance = 3
+      state.testChance = 2
+      console.log("reset 됐어")
+    },
+    CHANGECHANCE ( state, type) {
+      if ( type == "test" ) {
+        state.testChance -= 1
+        console.log(state.testChance)
+      } else {
+        state.quizChance -= 1
+        console.log(state.quizChance)
+      }
+    }
+
 
   },
 
@@ -583,6 +627,15 @@ export default new Vuex.Store({
 
     deleteUser( {commit} ) {
       commit('LOGOUT')
+    },
+    showAlert( {commit}, alertInfo ) {
+      commit("SHOWALERT", alertInfo)
+    },
+    resetChance( { commit } ) {
+      commit('RESETCHANCE')
+    },
+    changeChance( { commit }, type ) {
+      commit('CHANGECHANCE', type)
     }
 
 

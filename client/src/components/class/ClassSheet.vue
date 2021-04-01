@@ -37,7 +37,7 @@
     </v-row>
 
     <v-row>
-      <v-btn @click="startQuiz()"> quiz </v-btn>
+      <v-btn elevation="0" @click="startQuiz()"> Take a Quiz </v-btn>
     </v-row>
 
     <v-row>
@@ -124,11 +124,23 @@
       },
       startQuiz() {
         // 서버에 요청을 보내서 퀴즈 받아오기
-        if ( this.ableQuiz() ) {
+        if ( this.ableQuiz() && this.quizChance != 0) {
           this.$store.dispatch('getQuizInfo')
           this.openQuizPage = !this.openQuizPage
+        } else if ( !this.ableQuiz() && this.quizChance == 0) {
+          const alertInfo = {
+            status: true,
+            color: "warning",
+            content: "Used all quiz coins for today."
+          }
+          this.$store.dispatch("showAlert", alertInfo)
         } else {
-          // 학습카드 5개 공부하면 퀴즈 볼수있다고말해줘
+          const alertInfo = {
+            status: true,
+            color: "warning",
+            content: "Take 5 lessons before taking a quiz."
+          }
+          this.$store.dispatch("showAlert", alertInfo)
         }
       },
       endQuiz() {
@@ -138,7 +150,7 @@
     },
     computed: {
       ...mapState([
-        "currentClass", "defaultClass", "classList",
+        "currentClass", "defaultClass", "classList", "quizChance"
       ]),
       ...mapGetters([
         "getCurrentClassLearnedKeword",

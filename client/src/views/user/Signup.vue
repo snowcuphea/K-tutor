@@ -104,7 +104,15 @@
             (res) => {
               console.log(res)
               console.log("signup Success")
-              alert("You joined Malmoong-chi successfully! (´▽`ʃ♥ƪ)")
+              // alert("You joined Malmoong-chi successfully! (´▽`ʃ♥ƪ)")
+              const alertInfo = {
+                status: true,
+                color: "success",
+                icon: "mdi-home",
+                content: "You joined Malmoong-chi successfully! (´▽`ʃ♥ƪ)"
+              }
+              this.$store.dispatch("showAlert", alertInfo)
+
               this.signupCredentials.userEmail = ''
               this.signupCredentials.userPassword = ''
               this.signupCredentials.userPasswordConfirm = ''
@@ -116,7 +124,13 @@
             (err) => {
               console.log("회원가입실패", err)
               if (err.response.status != undefined) {
-                alert(err.response.data)
+                // alert(err.response.data)
+                const alertInfo = {
+                  status: true,
+                  color: "error",
+                  content: err.response.data
+                }
+                this.$store.dispatch("showAlert", alertInfo)
               } 
             }
           )

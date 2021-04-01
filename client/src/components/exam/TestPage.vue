@@ -50,7 +50,7 @@
           class="px-5 ">
             <v-btn v-for="(choice,idx) in choices" :key="idx" 
             @click="putAnswer(choice)" :disabled="checked.includes(choice)"
-            class="ma-2"> {{ choice }} </v-btn>
+            class="ma-2"> {{ choice.slice(1) }} </v-btn>
           </v-card>
 
         </v-card>
@@ -240,6 +240,7 @@ export default {
 
       this.$store.dispatch('gainExperience', this.grade/10)
       this.$store.dispatch( "getTestGrades" )
+      this.$store.dispatch( "changeChance", "test")
     },
     myCorrect() {
       const correctList = []
@@ -272,7 +273,7 @@ export default {
     putAnswer(choice) {
       const temp = this.myAnswer.split(" ")
       this.checked.push(choice)
-      temp[this.order] = choice
+      temp[this.order] = choice.slice(1)
       this.order += 1
       this.myAnswer = temp.join(' ')
       if (this.order == temp.length ) {
@@ -324,11 +325,15 @@ export default {
     ...mapState([ "testQuestions" ]),
     choices() {
       var target = this.answers[this.targetQuestion].split(' ')
-      for (let i = target.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [target[i], target[j]] = [target[j], target[i]];
+      var newList = []
+      for (var word in target) {
+        newList.push(String(word)+target[word])
       }
-      return target
+      for (let i = newList.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newList[i], newList[j]] = [newList[j], newList[i]];
+      }
+      return newList
     },
 
   },

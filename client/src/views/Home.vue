@@ -10,6 +10,11 @@
 import { mapState } from 'vuex'
 
 export default {
+  data() {
+    return {
+      nowTime: new Date(),
+    }
+  },
   created() {
     // default page
     const defaultSetting = {
@@ -27,9 +32,20 @@ export default {
         this.$router.push({path: '/login'})
       }
     }, 1500);
+
+    // if ( this.nowTime.getDay() !== this.time ) {
+    //   this.nowDay = this.nowTime.getDay()
+    //   this.$store.dispatch( 'resetChance' )
+    // } 
+
+    if ( this.nowTime.getMinutes() !== this.time ) {
+      this.nowDay = this.nowTime.getMinutes()
+      this.$store.dispatch( 'resetChance' )
+    } 
+
   },
   computed: {
-    ...mapState(['isLogin'])
+    ...mapState(['isLogin', 'time'])
   }
 }
 </script>

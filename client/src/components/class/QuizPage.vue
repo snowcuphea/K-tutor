@@ -52,7 +52,7 @@
             <v-card tile height="30%" elevation="0">
               <v-btn v-for="(choice,idx) in choices" :key="idx" 
               @click="putAnswer(choice)" :disabled="checked.includes(choice)"
-              class="mx-1 my-2"> {{ choice }} </v-btn>
+              class="mx-1 my-2"> {{ choice.slice(1) }} </v-btn>
             </v-card>
           </v-card>
 
@@ -90,7 +90,7 @@
         <v-btn
           color=""
           text
-          @click="endClass"
+          @click="endQuiz"
           class="d-flex justify-center"
         >
           Stop
@@ -149,8 +149,9 @@ export default {
       this.resultDialog = !this.resultDialog
       this.exp = 5
       this.$store.dispatch('gainExperience', this.exp)
+      this.$store.dispatch( "changeChance", "quiz")
     },
-    endClass() {
+    endQuiz() {
       this.defaultSetting()
       this.resultDialog = !this.resultDialog
       this.$emit('closeQuizPage')
@@ -172,7 +173,7 @@ export default {
     putAnswer(choice) {
       const temp = this.myAnswer.split(" ")
       this.checked.push(choice)
-      temp[this.order] = choice
+      temp[this.order] = choice.slice(1)
       this.order += 1
       this.myAnswer = temp.join(' ')
       if (this.order == temp.length ) {
@@ -248,11 +249,15 @@ export default {
     ...mapState([ "quizInfo" ]),
     choices() {
       var target = this.quizInfo.quizzes[this.currentProblem].lines_kr[1].split(' ')
-      for (let i = target.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [target[i], target[j]] = [target[j], target[i]];
+      var newList = []
+      for (var word in target) {
+        newList.push(String(word)+target[word])
       }
-      return target
+      for (let i = newList.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newList[i], newList[j]] = [newList[j], newList[i]];
+      }
+      return newList
     },
   },
   watch: {

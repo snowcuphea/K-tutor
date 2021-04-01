@@ -1,16 +1,20 @@
 <template>
   <v-container class="px-5 d-flex flex-column">
+
     <div class="d-flex flex-column">
       <h3> Report Card </h3>
       <GradeChart />
-      <p class="mt-2">Average of last {{ userGrade_score.length }} exams: {{ average }} </p>
+      <p class="mt-2" v-if="average">Average of last {{ userGrade_score.length }} exams: {{ average }} </p>
+      <p class="mt-2" v-else>Take a test to get information.</p>
     </div>
 
     <Experience :experience="-1" />
 
     <div class="d-flex justify-center">
-      <v-btn class="mt-5" @click="startTest">시험보기</v-btn>
+      <v-btn elevation="0" class="mt-5" @click="startTest">Take a Test</v-btn>
     </div>
+
+    <v-btn @click="toggleTime">toggle time</v-btn>
 
     <TestPage :showDialog="showDialog" @hideDialog="showDialog = !showDialog"/>
     
@@ -44,14 +48,32 @@ export default {
       }
     },
     startTest() {
-      if (this.ableTest() ){
+      if (this.ableTest() && this.testChance != 0 ){
         this.$store.dispatch( "getTestQuestions" )
         this.showDialog = !this.showDialog
+      } else if (!this.ableTest() && this.testChance == 0) {
+        const alertInfo = {
+          status: true,
+          color: "warning",
+          content: "Used all test coins for today."
+        }
+        this.$store.dispatch("showAlert", alertInfo)
+      } else {
+        const alertInfo = {
+          status: true,
+          color: "warning",
+          content: "Take 10 lessons before taking a test."
+        }
+        this.$store.dispatch("showAlert", alertInfo)
       }
+    },
+    toggleTime() {
+      const now = new Date()
+      console.log(now)
     }
   },
   computed: {
-    ...mapState([ "userGrade_score", "recent_learned_lc"  ]),
+    ...mapState([ "userGrade_score", "recent_learned_lc", "alert", "testChance"  ]),
 
     average() {
       var total = 0
@@ -59,7 +81,14 @@ export default {
         total += element
       });
 
-      return total/this.userGrade_score.length
+      if (this.userGrade_score.length) {
+        var avg = total/this.userGrade_score.length
+      } else {
+        avg = 0
+      }
+      
+
+      return avg
     }
   },
   created() {

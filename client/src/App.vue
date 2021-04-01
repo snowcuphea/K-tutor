@@ -8,6 +8,14 @@
 
     <Footer v-if="isNotMain"/>
 
+    <v-snackbar
+      class="alert-info"
+      v-model="alert.status"
+      :color="alert.color"
+      top
+    >
+      {{ alert.content }}
+    </v-snackbar>
 
   </v-app>
 </template>
@@ -16,6 +24,7 @@
   import Header from "@/components/common/Header.vue"
   import Footer from "@/components/common/Footer.vue"
 
+  import { mapState } from 'vuex'
 
   export default {
     name: 'App',
@@ -27,11 +36,11 @@
 
     data: function () {
       return {
-
       }
     },
 
     computed: {
+      ...mapState(['alert']),
       isNotClass() {
         if (['Class', 'TitleList', 'ClassMain','Login','Home', 'Signup'].includes(this.$route.name)) {
           return false
@@ -61,7 +70,7 @@
 
     },
     created() {
-    }
+    },
   };
 </script>
 

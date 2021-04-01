@@ -114,13 +114,18 @@
                 console.log("클래스 리스트를 가져오지 못하였어...",error)
               }
             )
-            alert("Welcome!")
-            this.$router.push({name:'Report'})
+            this.$router.push({name:'Home'})
             this.$store.state.currentPage = 'Report'
           },
           (error) => {
             console.log(error)
-            alert("Please check your Email or Password.")
+            const alertInfo = {
+              status: true,
+              color: "error",
+              content: "Please check your Email or Password."
+            }
+            this.$store.dispatch("showAlert", alertInfo)
+            // alert("Please check your Email or Password.")
           }
 
         )
