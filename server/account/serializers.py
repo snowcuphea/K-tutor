@@ -8,12 +8,6 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('username', 'nickname', 'level', 'exp')
 
 
-class TestResultSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TestResult
-        fields = ('score', 'test_at')
-
-
 class AccessDateSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccessDate
@@ -25,6 +19,7 @@ class ReportSearializer(serializers.Serializer):
     learned_lc_cnt = serializers.IntegerField()
     recent_learned_lc = serializers.ListField()
     recent_lc_progress = serializers.DictField()
+    recent_cs = serializers.DictField()
     progress = serializers.DictField()
 
 

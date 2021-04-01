@@ -12,12 +12,6 @@ class User(AbstractUser):
     learned_kw = models.ManyToManyField('klass.Kw', related_name='learned_user')
 
 
-class TestResult(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    score = models.IntegerField()
-    test_at = models.DateField(auto_now_add=True)
-
-
 class AccessDate(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     access_at = models.DateField(auto_now_add=True)

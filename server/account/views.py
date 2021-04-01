@@ -56,7 +56,7 @@ class UserViewSet(viewsets.GenericViewSet,
     permission_classes = (IsAuthenticated,)
 
     # 정보 수정
-    @swagger_auto_schema(responses={200: ""}, manual_parameters=[
+    @swagger_auto_schema(responses={200: "username"}, manual_parameters=[
         openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
                           type=openapi.TYPE_STRING)])
     def put(self, request):
@@ -77,7 +77,7 @@ class UserViewSet(viewsets.GenericViewSet,
         return Response(user.serializable_value(field_name="username"), status=status.HTTP_200_OK)
 
     # 회원 탈퇴
-    @swagger_auto_schema(responses={200: ""}, manual_parameters=[
+    @swagger_auto_schema(responses={200: "deleted"}, manual_parameters=[
         openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
                           type=openapi.TYPE_STRING)])
     def delete(self, request):
@@ -128,6 +128,10 @@ class LoginViewSet(viewsets.GenericViewSet,
         data['learned_lc_cnt'] = user.learned_lc.all().count()
         # recent_learned_lc = serializers.ListField()
         data['recent_learned_lc'] = list(user.learned_lc.all().order_by('-pk').values())
+        recent_cs = Cs.objects.get(pk=data['recent_learned_lc'][0]['cs_id']).__dict__
+        if recent_cs['type'] == 'kpop':
+            recent_cs['name'] = recent_cs['name'].split(' - ')[0]
+        data['recent_cs'] = recent_cs
         # recent_lc_progress = serializers.DictField()
         recent_lc_progress = dict()
         for lc in list(user.learned_lc.all()):
