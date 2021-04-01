@@ -9,7 +9,6 @@ import Report from '../views/Report.vue'
 import Login from '../views/user/Login.vue'
 import Signup from '../views/user/Signup.vue'
 import Home from '../views/Home.vue'
-import TTSOnlyJS from '../views/TTS/TTSOnlyJS.vue'
 
 Vue.use(VueRouter)
 
@@ -38,18 +37,6 @@ const routes = [
     path: '/class',
     name: 'Class',
     component: Class,
-    // children: [
-    //   {
-    //     path: '',
-    //     redirect: 'classmain'
-    //   },
-    //   {
-    //     path: 'classmain',
-    //     name: 'ClassMain',
-    //     component: ClassMain
-    //   },
-
-    // ],
   },
 
   {
@@ -66,11 +53,6 @@ const routes = [
     path: '/mypage',
     name: 'MyPage',
     component: MyPage
-  },
-  {
-    path: '/ttsonlyjs',
-    name: 'TTSOnlyJS',
-    component: TTSOnlyJS,
   },
 
 ]
