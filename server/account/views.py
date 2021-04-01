@@ -36,9 +36,9 @@ class SignupViewSet(viewsets.GenericViewSet,
         ___
         """
         if User.objects.filter(username=request.data['username']).exists():
-            return Response("이미 가입된 이메일 입니다.", status=status.HTTP_406_NOT_ACCEPTABLE)
+            return Response("This email is already registered.", status=status.HTTP_406_NOT_ACCEPTABLE)
         if User.objects.filter(nickname=request.data['nickname']).exists():
-            return Response("이미 가입된 닉네임 입니다.", status=status.HTTP_406_NOT_ACCEPTABLE)
+            return Response("This nickname is already registered.", status=status.HTTP_406_NOT_ACCEPTABLE)
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
@@ -68,9 +68,9 @@ class UserViewSet(viewsets.GenericViewSet,
         # 회원 수정한 정보를 request.data에 담았다고 가정
         user = request.user
         if User.objects.filter(username=request.data['username']).exists():
-            return Response("이미 가입된 이메일 입니다.", status=status.HTTP_302_FOUND)
+            return Response("This email is already registered.", status=status.HTTP_302_FOUND)
         if User.objects.filter(nickname=request.data['nickname']).exists():
-            return Response("이미 가입된 닉네임 입니다.", status=status.HTTP_302_FOUND)
+            return Response("This nickname is already registered.", status=status.HTTP_302_FOUND)
         user.set_password(request.data['password'])
         user.nickname = request.data['nickname']
         user.save()
