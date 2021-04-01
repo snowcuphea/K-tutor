@@ -413,8 +413,17 @@ export default new Vuex.Store({
       state.recent_lc_progress.push(progressForm)
       console.log(state.recent_lc_progress)
     },
-    // SAVEACIEVEMENTLIST ( state ) {
+    // SAVEACIEVEMENTLIST ( state, achievements ) {
 
+    //   for (let achievement of achievements) {
+    //     const achievementForm = {
+    //       title: '빛나는 트로피',
+    //       src: require('@/assets/img/score.png'),
+    //       contents: 'test에서 만점을 5회 달성하셨습니다',
+    //       max_num: 5,
+    //       num: 3
+    //     }
+    //   }
     // }
 
   },
@@ -563,13 +572,13 @@ export default new Vuex.Store({
       getMyAcieve(
         (res) => {
           console.log(res.data)
+          // commit( 'SAVEACIEVEMENTLIST', res.data )
         },
         (err) => {
           console.log(err.data)
         }
       )
       console.log(commit)
-      // commit( 'SAVEACIEVEMENTLIST', )
     },
 
     deleteUser( {commit} ) {

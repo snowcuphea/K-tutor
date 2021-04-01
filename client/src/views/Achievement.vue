@@ -191,6 +191,9 @@ export default {
         this.viewlist = !this.viewlist
       }
     },
+  },
+  created() {
+    this.$store.dispatch('getAchievementList')
   }
 }
 </script>
