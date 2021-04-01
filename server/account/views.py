@@ -204,7 +204,7 @@ class AchievementViewSet(viewsets.GenericViewSet,
         user_achievement = []
 
         for al in achievement_list:
-            if al in user.achieved:
+            if al in user.achieved.all():
                 user_achievement.append({
                     "achievement_id": al.id,
                     "title": al.title,
