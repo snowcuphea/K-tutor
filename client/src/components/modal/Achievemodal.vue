@@ -10,20 +10,39 @@
             @click="modalClick"
           />
         </v-col>
-        <v-col cols="8">
-          {{ modalItem.title }}<br><br>
-          <v-progress-linear
-            style="width: 90%"
-            color="light-blue"
-            height="13"
-            :value="modalItem.num*100/modalItem.max_num"
-            striped
-          >
-            <h6>
-              {{ modalItem.num }} / {{ modalItem.max_num }}
+        <v-col cols="8" class="py-0 pr-0">
+          <v-row class="d-flex flex-column align-items-center">
+            <v-col>
+              <h3>
+                {{ modalItem.title }}
 
-            </h6>
-          </v-progress-linear>
+              </h3>
+
+            </v-col>
+            <v-col>
+              <h5 style="margin:0;">
+                {{ modalItem.contents }}
+
+              </h5>
+
+            </v-col>
+            <v-col>
+              <v-progress-linear
+                style="width: 90%"
+                color="light-blue"
+                height="13"
+                :value="modalItem.num*100/modalItem.max_num"
+                striped
+              >
+                <h6>
+                  {{ modalItem.num }} / {{ modalItem.max_num }}
+
+                </h6>
+              </v-progress-linear>
+
+            </v-col>
+
+          </v-row>
 
         </v-col>
 
@@ -57,5 +76,9 @@ export default {
 </script>
 
 <style>
+
+.title_contents {
+  /* flex-direction: column; */
+}
 
 </style>
