@@ -209,7 +209,6 @@ class AchievementViewSet(viewsets.GenericViewSet,
                 "title": ua.achievement.title,
                 "content": ua.achievement.content,
                 "image": ua.achievement.image,
-                "condition": ua.achievement.condition
             })
             uua_info.append({
                 "user_id": ual['user_id'],
@@ -223,3 +222,21 @@ class AchievementViewSet(viewsets.GenericViewSet,
         serializer = UserAchievementSerializer(data=data_list, many=True)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data)
+
+    @swagger_auto_schema(responses={200: ""}, manual_parameters=[
+        openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
+                          type=openapi.TYPE_STRING)])
+    def post(self, request):
+        """
+        Update user's achievement status
+
+        ___
+        """
+        user = get_object_or_404(User, username=request.user.username)
+        relationship = UserUnlockedAchievement.objects.get(
+            user_id=user.id,
+            achievement_id=request.data['achievement'],
+        )
+        relationship.status = 1
+        relationship.save()
+        return Response("updated", status=status.HTTP_200_OK)
