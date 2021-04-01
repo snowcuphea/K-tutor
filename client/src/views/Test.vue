@@ -3,7 +3,7 @@
     <div class="d-flex flex-column">
       <h3> Report Card </h3>
       <GradeChart />
-      <p class="mt-2">Average of last 10 exams: {{ average }} </p>
+      <p class="mt-2">Average of last {{ userGrade_score.length }} exams: {{ average }} </p>
     </div>
 
     <Experience :experience="-1" />
@@ -36,28 +36,38 @@ export default {
     }
   },
   methods: {
+    ableTest() {
+      if ( this.recent_learned_lc.length > 9 ) {
+        return true
+      } else {
+        return false
+      }
+    },
     startTest() {
-      this.$store.dispatch( "getTestQuestions" )
-      this.showDialog = !this.showDialog
+      if (this.ableTest() ){
+        this.$store.dispatch( "getTestQuestions" )
+        this.showDialog = !this.showDialog
+      }
     }
   },
   computed: {
-    ...mapState([ "userGrade" ]),
+    ...mapState([ "userGrade_score", "recent_learned_lc"  ]),
 
     average() {
       var total = 0
-      this.userGrade.grades.forEach(element => {
+      this.userGrade_score.forEach(element => {
         total += element
       });
 
-      return total/10
+      return total/this.userGrade_score.length
     }
   },
   created() {
     // 시험 내용 요청 보내서 store에 저장
-    this.$store.dispatch( "getTestQuestions" )
-    this.$store.dispatch( "getTestGrades" )
-    
+    if (this.ableTest()) {
+      this.$store.dispatch( "getTestQuestions" )
+    }
+
   }
 
 

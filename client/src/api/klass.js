@@ -50,5 +50,15 @@ function sendLessonInfo( lessonInfo, success, fail ) {
    .catch(fail)
 }
 
+function getQuizInfo( info ,success, fail ) {
 
-export { getClassList, getLessonList, getLessonInfo, sendLessonInfo }
+  instance.defaults.headers['Authorization'] = "jwt " + window.localStorage.getItem('jwt')
+
+  instance
+    .get(`klass/${info.type}/${info.name}/quiz`)
+    .then(success)
+    .catch(fail)
+}
+
+
+export { getClassList, getLessonList, getLessonInfo, sendLessonInfo, getQuizInfo }

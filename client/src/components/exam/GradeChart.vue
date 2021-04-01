@@ -14,11 +14,11 @@ export default {
       gradeChart: {
         type: "line",
         data: {
-          labels: this.$store.state.userGrade.dates,
+          labels: this.$store.state.userGrade_date,
           datasets: [
             {
               label: "Grades",
-              data: this.$store.state.userGrade.grades,
+              data: this.$store.state.userGrade_score,
               backgroundColor: "rgba(0,0,0,0)",
               borderColor: "#36495d",
               borderWidth: 3,
@@ -40,8 +40,7 @@ export default {
             titleAlign: "center",
             callbacks: {
               title: function(tooltipItem) {
-                const date = tooltipItem[0].xLabel.split(' ')
-                console.log(date)
+                const date = tooltipItem[0].xLabel.split('T')
                 const ymd = date[0][5]+date[0][6] + "/" + date[0][8]+date[0][9] + "/" + date[0][2]+date[0][3]
                 const time = date[1][0]+date[1][1] + ":" + date[1][3] + date[1][4]
                 return ymd + " " + time

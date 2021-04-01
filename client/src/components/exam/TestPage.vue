@@ -239,6 +239,7 @@ export default {
       )
 
       this.$store.dispatch('gainExperience', this.grade/10)
+      this.$store.dispatch( "getTestGrades" )
     },
     myCorrect() {
       const correctList = []

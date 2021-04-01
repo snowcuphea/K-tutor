@@ -76,8 +76,8 @@
                 <v-btn plain icon class=""><v-icon>mdi-volume-high</v-icon></v-btn>
               </div>
               <div class="pl-5 pt-2" v-for="(example, idx) in lessonInfo.example_kr" :key="idx">
-                <p>{{ idx+1 }}. {{ lessonInfo.example_kr[idx] }} </p>
-                <p class="pl-4"> {{ lessonInfo.example_en[idx] }} </p>
+                <p>{{ lessonInfo.example_kr[idx] }} </p>
+                <p class="pt-3"> {{ lessonInfo.example_en[idx] }} </p>
               </div>
             </v-card>
           </v-card>
@@ -215,15 +215,15 @@ export default {
       this.resultDialog = !this.resultDialog
       this.exp = 3
       for ( let learned of this.getCurrentClassLearnedKeword ){
-        console.log(this.lessonInfo.id, learned.id)
         if (this.lessonInfo.id == learned.id) {
           this.exp = 0
         }
 
       }
-
-      this.$store.dispatch('gainExperience', this.exp)
-      this.$store.dispatch('sendCompleteLesson', this.currentClassIndex)
+      if ( this.exp !== 0) {
+        this.$store.dispatch('gainExperience', this.exp)
+        this.$store.dispatch('sendCompleteLesson', this.currentClassIndex)
+      }
     },
     nextStep() {
       this.currentStep += 1

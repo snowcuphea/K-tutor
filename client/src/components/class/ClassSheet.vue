@@ -69,7 +69,7 @@
     </v-row>
 
     <StudyPage :openStudyPage="openStudyPage" @closeStudyPage="endClass" />
-    <QuizPage :openQuizPage="openQuizPage" @closeQuizPage="endQuiz" />
+    <QuizPage :openQuizPage="openQuizPage" @closeQuizPage="endQuiz" v-if="ableQuiz()" />
 
   </v-container>
 </template>
@@ -115,10 +115,21 @@
         }
         return false
       },
+      ableQuiz() {
+        if (this.getCurrentClassLearnedKeword.length > 4) {
+          return true
+        } else {
+          return false
+        }
+      },
       startQuiz() {
         // 서버에 요청을 보내서 퀴즈 받아오기
-        this.$store.dispatch('getQuizInfo')
-        this.openQuizPage =!this.openQuizPage
+        if ( this.ableQuiz() ) {
+          this.$store.dispatch('getQuizInfo')
+          this.openQuizPage = !this.openQuizPage
+        } else {
+          // 학습카드 5개 공부하면 퀴즈 볼수있다고말해줘
+        }
       },
       endQuiz() {
         this.openQuizPage = !this.openQuizPage
@@ -140,7 +151,9 @@
     created() {
       // console.log(this.classList)
       this.$store.dispatch('getLessonInfoByItem', 65 )
-      this.$store.dispatch('getQuizInfo')
+      if ( this.ableQuiz() ) {
+        this.$store.dispatch('getQuizInfo')
+      }
 
       this.$store.dispatch('getListCurrentClass',this.currentClass )
       
