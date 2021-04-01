@@ -38,5 +38,5 @@ class AchievedManageSerializer(serializers.Serializer):
     achievement_id = serializers.IntegerField()
     title = serializers.CharField()
     content = serializers.CharField()
-    imgurl = serializers.CharField()
+    imgurl = serializers.CharField(allow_null=True)
     status = serializers.IntegerField()
