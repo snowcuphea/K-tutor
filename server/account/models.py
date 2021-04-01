@@ -36,10 +36,10 @@ class RecentLearnedLc(models.Model):
 class Achievement(models.Model):
     title = models.CharField(max_length=100)
     content = models.CharField(max_length=200)
-    image = models.TextField()
+    imgurl = models.TextField()
+    achieved = models.ManyToManyField(User, related_name="achieved_user", through='AchievedManage')
 
 
-class UserUnlockedAchievement(models.Model):
+class AchievedManage(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     achievement = models.ForeignKey(Achievement, on_delete=models.CASCADE)
-    status = models.IntegerField(default=0)

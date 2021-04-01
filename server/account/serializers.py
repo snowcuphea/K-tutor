@@ -31,13 +31,12 @@ class ReportSearializer(serializers.Serializer):
 class AchievementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Achievement
-        fields = '__all__'
+        fields = ('id', 'title', 'imgurl')
 
 
-class UserAchievementSerializer(serializers.Serializer):
-    user_id = serializers.IntegerField()
+class AchievedManageSerializer(serializers.Serializer):
     achievement_id = serializers.IntegerField()
-    status = serializers.IntegerField()
     title = serializers.CharField()
     content = serializers.CharField()
-    image = serializers.CharField()
+    imgurl = serializers.CharField()
+    status = serializers.IntegerField()
