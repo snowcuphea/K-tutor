@@ -48,127 +48,9 @@ export default new Vuex.Store({
     testQuestions: [],
     studyCnt: 0,
     contiDay: 0,
+
+    AchievementList:[],
   
-    items: [
-      {
-        title: '빛나는 트로피',
-        src: require('@/assets/img/score.png'),
-        contents: 'test에서 만점을 5회 달성하셨습니다',
-        max_num: 5,
-        num: 3
-      },
-      {
-        title: '출석왕',
-        src: require('@/assets/img/award.png'),
-        contents: '30일 동안 매일 출석',
-        max_num: 30,
-        num: 5
-      },
-      {
-        title: '오늘만 사는 사람',
-        src: require('@/assets/img/hardworker.png'),
-        contents: '하루에 카드 30개 학습',
-        max_num: 30,
-        num: 10
-      },
-      {
-        title: '초보',
-        src: require('@/assets/img/jun.png'),
-        contents: '1개의 작품 학습 완료',
-        max_num: 1,
-        num: 0
-      },
-      {
-        title: '명예 한국인',
-        src: require('@/assets/img/korean.png'),
-        contents: '학습률 100% 달성',
-      },
-      {
-        title: '팝스타',
-        src: require('@/assets/img/kpop.png'),
-        contents: 'K-POP 30개 이상 학습 완료',
-      },
-      {
-        title: '만렙',
-        src: require('@/assets/img/level.png'),
-        contents: '레벨 10 달성',
-      },
-      {
-        title: '마스터',
-        src: require('@/assets/img/master.png'),
-        contents: '한 장르의 학습률 100% 달성',
-      },
-      {
-        title: '신생아',
-        src: require('@/assets/img/sign.png'),
-        contents: '계정 생성 완료',
-      },
-      {
-        title: '100수생',
-        src: require('@/assets/img/tester.png'),
-        contents: 'test 100회 완료',
-      },
-      {
-        title: '중수',
-        src: require('@/assets/img/sen.png'),
-        contents: '10개의 작품 학습 완료',
-      },
-      {
-        title: '빛나는 트로피',
-        src: require('@/assets/img/score.png'),
-        contents: 'test에서 만점을 5회 달성하셨습니다',
-      },
-      {
-        title: '출석왕',
-        src: require('@/assets/img/award.png'),
-        contents: '30일 동안 매일 출석',
-      },
-      {
-        title: '오늘만 사는 사람',
-        src: require('@/assets/img/hardworker.png'),
-        contents: '하루에 카드 30개 학습',
-      },
-      {
-        title: '초보',
-        src: require('@/assets/img/jun.png'),
-        contents: '1개의 작품 학습 완료',
-      },
-      {
-        title: '명예 한국인',
-        src: require('@/assets/img/korean.png'),
-        contents: '학습률 100% 달성',
-      },
-      {
-        title: '팝스타',
-        src: require('@/assets/img/kpop.png'),
-        contents: 'K-POP 30개 이상 학습 완료',
-      },
-      {
-        title: '만렙',
-        src: require('@/assets/img/level.png'),
-        contents: '레벨 10 달성',
-      },
-      {
-        title: '마스터',
-        src: require('@/assets/img/master.png'),
-        contents: '한 장르의 학습률 100% 달성',
-      },
-      {
-        title: '뉴비',
-        src: require('@/assets/img/sign.png'),
-        contents: '계정 생성 완료',
-      },
-      {
-        title: '100수생',
-        src: require('@/assets/img/tester.png'),
-        contents: 'test 100회 완료',
-      },
-      {
-        title: '중수',
-        src: require('@/assets/img/sen.png'),
-        contents: '10개의 작품 학습 완료',
-      },
-    ],
   },
   
   getters: {
@@ -208,6 +90,7 @@ export default new Vuex.Store({
       state.progress = []
       state.recent_lc_progress = []
       state.recent_learned_lc = []
+      state.AchievementList = []
     },
 
     GETCLASSLIST(state, titlelist){
@@ -414,23 +297,16 @@ export default new Vuex.Store({
       console.log(state.recent_lc_progress)
     },
     SAVEACIEVEMENTLIST ( state, achievements ) {
-      const achieve_arr = []
+      const achieve_list = []
 
-      // console.log(achievements)
       for (let achievement in achievements) {
-        this.achieve_arr.push({title:achievement.title, content:achievement.content, url:achievement.imgurl})
-
+        const achieve_arr = {
+          title:achievement.title, content:achievement.content, src:require('@/assets/img/score.png'), total:30, done:3
+        }
+        achieve_list.push(achieve_arr)
       }
-      console.log(achieve_arr)
-      // for (let achievement of achievements) {
-      //   const achievementForm = {
-      //     title: achievement
-      //   }
-          // achievementsrc: require('@/assets/img/score.png'),
-          // contents: 'test에서 만점을 5회 달성하셨습니다',
-          // max_num: 5,
-          // num: 3
-        // }
+
+      state.AchievementList = achieve_list
       }
     
 
@@ -580,7 +456,7 @@ export default new Vuex.Store({
       getMyAcieve(
         (res) => {
           console.log(res.data)
-          // commit( 'SAVEACIEVEMENTLIST', res.data )
+          commit( 'SAVEACIEVEMENTLIST', res.data )
         },
         (err) => {
           console.log(err.data)

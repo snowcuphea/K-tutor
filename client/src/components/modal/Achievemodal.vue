@@ -21,7 +21,7 @@
             </v-col>
             <v-col>
               <h5 style="margin:0;">
-                {{ modalItem.contents }}
+                {{ modalItem.content }}
 
               </h5>
 
@@ -31,11 +31,11 @@
                 style="width: 90%"
                 color="light-blue"
                 height="13"
-                :value="modalItem.num*100/modalItem.max_num"
+                :value="modalItem.done*100/modalItem.total"
                 striped
               >
                 <h6>
-                  {{ modalItem.num }} / {{ modalItem.max_num }}
+                  {{ modalItem.done }} / {{ modalItem.total }}
 
                 </h6>
               </v-progress-linear>

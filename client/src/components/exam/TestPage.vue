@@ -41,7 +41,7 @@
             </div>
 
             <div class="d-flex justify-space-between mt-2">
-              <v-btn plain icon @clikc="speech"><v-icon>mdi-volume-high</v-icon></v-btn>
+              <v-btn plain icon @click="speech"><v-icon>mdi-volume-high</v-icon></v-btn>
               <v-btn plain icon @click="empty(targetQuestion)"><v-icon>mdi-restart</v-icon></v-btn>
             </div>
           </v-card>
@@ -311,14 +311,17 @@ export default {
       this.checked = []
     },
     speech() {
-      const text = this.questions[0].lines_kr
+        const text = []
+        if (this.questions[this.targetQuestion].lines_kr.length == 3) {
+          text.push(this.questions[this.targetQuestion].lines_kr[1])
+        }
+        else {
+          text.push(this.questions[this.targetQuestion].lines_kr[0])
+        }
         let speaker=new SpeechSynthesisUtterance(text);
         const findedVoicer = this.voiceList.find((item)=>{
             return item.name == this.selectedVoicer
         }) 
-        console.log(findedVoicer)
-        console.log(speaker)
-
         speaker.voice=findedVoicer;
         speaker.volume=0.5;
         this.textToSpeech.speak(speaker)

@@ -225,9 +225,6 @@ export default {
         const findedVoicer = this.voiceList.find((item)=>{
             return item.name == this.selectedVoicer
         }) 
-        console.log(findedVoicer)
-        console.log(speaker)
-
         speaker.voice=findedVoicer;
         speaker.volume=0.5;
         this.textToSpeech.speak(speaker)

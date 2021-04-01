@@ -121,7 +121,7 @@
         <div class="wrap d-flex flex-column" v-if="viewlist">
 
           <div
-            v-for = "(item, idx) in $store.state.items"
+            v-for = "(item, idx) in $store.state.AchievementList"
             :key = "idx"
           >
 
@@ -141,7 +141,7 @@
           >
             <v-col
               cols="4"
-              v-for = "(item,idx) in $store.state.items"
+              v-for = "(item,idx) in $store.state.AchievementList"
               :key = "idx"
             >
               <appMyModal2 :modalItem="item" @update2="modal" />
