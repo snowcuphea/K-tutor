@@ -198,9 +198,12 @@ class QuizViewSet(viewsets.GenericViewSet,
         for lc in random.sample(list(learned_lc), 5):
             pro_list.append({
                 "problem": {
-                    "before": lc['before_kor'],
-                    "main": lc['cpct_kor'],
-                    "after": lc['after_kor']
+                    "before_kor": lc['before_kor'],
+                    "before_eng": lc['before_eng'],
+                    "main_kor": lc['cpct_kor'],
+                    "main_eng": lc['cpct_eng'],
+                    "after_kor": lc['after_kor'],
+                    "after_eng": lc['after_eng']
                 },
                 "cs": Cs.objects.get(id=lc['cs_id']).name
             })
