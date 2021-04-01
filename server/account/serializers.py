@@ -41,4 +41,3 @@ class UserAchievementSerializer(serializers.Serializer):
     title = serializers.CharField()
     content = serializers.CharField()
     image = serializers.CharField()
-    condition = serializers.IntegerField()

@@ -37,7 +37,7 @@ class Achievement(models.Model):
     title = models.CharField(max_length=100)
     content = models.CharField(max_length=200)
     image = models.TextField()
-    condition = models.IntegerField(default=0)
+
 
 class UserUnlockedAchievement(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
