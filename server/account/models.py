@@ -32,5 +32,5 @@ class RecentLearnedLc(models.Model):
 class Achievement(models.Model):
     title = models.CharField(max_length=100)
     content = models.CharField(max_length=200)
-    imgurl = models.TextField(null=True, blank=True)
+    imgurl = models.TextField(default="Need to add")
     achieved_user = models.ManyToManyField(User, related_name="achieved")

@@ -317,5 +317,7 @@ def request_dict(word):
 def updateLc():
     lcs = Lc.objects.all()
     for lc in lcs:
-        lc.example_kor = random.choice(list(lc.main_kw.contained_cpcq.all()))
+        example = random.choice(list(lc.main_kw.contained_cpcq.all()))
+        lc.example_kor = example.kor
+        lc.example_eng = example.eng
 
