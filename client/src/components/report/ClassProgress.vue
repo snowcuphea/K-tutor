@@ -9,7 +9,7 @@
         
         <v-col>
           <p class="mb-0 text-end"> {{ cls.done }}/{{ cls.total }} </p>
-          <v-progress-linear :value="percentage(cls)"></v-progress-linear>
+          <v-progress-linear :value="percentage(cls)" color="teal accent-4"></v-progress-linear>
         </v-col>
       </v-row>
     </div>

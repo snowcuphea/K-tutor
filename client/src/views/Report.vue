@@ -1,12 +1,42 @@
 <template>
   <v-container class="px-5 d-flex flex-column">
-    <div class="d-flex flex-column">
+    <div class="d-flex flex-column my-3">
       <h3> {{ nickName }}'s Study Report </h3>
+
       <Experience :experience="-1" />
-      <p class="px-3" v-if="contiDay > 5"> Studied for <span style="font-weight: bolder"> {{ contiDay }} </span> days in a row! </p>
-      <p class="px-3" v-else> Studied for <span style="font-weight: bolder"> {{ contiDay }} </span><span v-if="contiDay == 1"> day.</span> <span v-else> days.</span></p>
+
+      <div v-if="contiDay > 5" class="d-flex">
+        <v-icon small>mdi-flare</v-icon>
+        <p class="px-1 mb-0" > Studied for
+          <span style="font-weight: bolder"> {{ contiDay }}</span>
+          days in a row! </p>
+      </div>
+
+      <div v-else class="d-flex align-center">
+        <v-icon small>mdi-flare</v-icon>
+        <p class="px-1 mb-0"> 
+          Studied for <span style="font-weight: bolder"> 
+            {{ contiDay }} </span><span v-if="contiDay == 1"> day.</span> <span v-else> days.</span>
+        </p>
+      </div>
+
+      <div v-if="studyCnt" class="d-flex align-center">
+        <v-icon small>mdi-flare</v-icon>
+        <p class="px-1 mb-0"> 
+         Studied <span style="font-weight: bolder"> {{ studyCnt }} </span> lesson cards.
+        </p>
+      </div>
+
+      <div v-else class="d-flex align-center">
+        <v-icon small>mdi-flare</v-icon>
+        <p class="px-1 mb-0"> 
+         Try taking a class for the first time!
+        </p>
+      </div>
+
+      <!-- <p class="px-3" v-else> Studied for <span style="font-weight: bolder"> {{ contiDay }} </span><span v-if="contiDay == 1"> day.</span> <span v-else> days.</span></p>
       <p class="px-3" v-if="studyCnt"> Studied <span style="font-weight: bolder"> {{ studyCnt }} </span> lesson cards. </p>
-      <p class="px-3" v-else> Try taking a class for the first time! </p>
+      <p class="px-3" v-else> Try taking a class for the first time! </p> -->
     </div>
 
     <div>
