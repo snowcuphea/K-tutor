@@ -15,7 +15,7 @@
     </div>
 
     <div class="my-3 d-flex flex-column">
-      <h3>Recent Learning Progress</h3>
+      <h3>Learning Progress</h3>
       <ClassProgress :showMore="showMore" />
       <v-btn class="mt-n5 align-self-end" @click="showMore = !showMore"
         v-if="!showMore && recent_lc_progress.length > 3"
@@ -26,7 +26,7 @@
     </div>
 
     <div>
-      <h3>All Theme Progress</h3>
+      <h3>All Culture Progress</h3>
       <GenreProgress />
     </div>
 

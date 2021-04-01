@@ -328,7 +328,7 @@ export default new Vuex.Store({
     GETREPORTINFO ( state, report ) {
 
       console.log(report)
-
+      state.currentClass = { type: report.recent_cs.type, name: report.recent_cs.name, level: Number(report.recent_cs.level) }
       const progressForm = [
         {type: "drama", done: report.progress.drama[0] , total: report.progress.drama[1] },
         {type: "kpop", done: report.progress.kpop[0] , total: report.progress.kpop[1] },
@@ -342,7 +342,13 @@ export default new Vuex.Store({
       state.studyCnt = report.learned_lc_cnt
       state.contiDay = report.user.consecutive_access
 
-      for (let idx = 0; idx < 10; idx++) {
+      if ( report.recent_learned_lc.length > 10) {
+        var amount = 10
+      } else {
+        amount = report.recent_learned_lc.length
+      }
+
+      for (let idx = 0; idx < amount; idx++) {
         const lessonCardForm = {
           id: report.recent_learned_lc[idx].id,
           imgurl: report.recent_learned_lc[idx].imgurl,

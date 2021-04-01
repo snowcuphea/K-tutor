@@ -201,7 +201,6 @@ export default {
     createEmptyList() {
       // const operators = ['.','!','?']
       var target = this.quizInfo.quizzes[this.currentProblem].lines_kr[1].split(' ')
-      console.log(target)
       var new_line = []
       // var last_word = ''
       target.forEach( function(part, index) {
@@ -214,7 +213,6 @@ export default {
       // }
       // new_line.push(last_word)
       this.myAnswer = new_line.join(' ')
-      console.log(this.myAnswer)
     }
   },
   computed: {
