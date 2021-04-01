@@ -11,10 +11,6 @@ class User(AbstractUser):
     learned_lc = models.ManyToManyField('klass.Lc', related_name='learned_user')
     learned_kw = models.ManyToManyField('klass.Kw', related_name='learned_user')
 
-    def checkAchievement(self):
-        checkAhvSignal = django.dispatch.Signal(providing_args=['user'])
-        checkAhvSignal.send(sender=self.__class__)
-
 
 class TestResult(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
