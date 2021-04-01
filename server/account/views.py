@@ -178,8 +178,8 @@ class GetexpViewSet(viewsets.GenericViewSet,
             if user.level == 15:
                 user.exp = 0
         user.save()
-        serializer = UserSerializer(user)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        # serializer = UserSerializer(user)
+        return Response('Exp Gained', status=status.HTTP_200_OK)
 
 
 class AchievementViewSet(viewsets.GenericViewSet,
