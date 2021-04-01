@@ -2,8 +2,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from "vuex-persistedstate"
-import { getLessonList, getLessonInfo } from "@/api/klass.js"
+import { getLessonList, getLessonInfo, sendLessonInfo } from "@/api/klass.js"
 import { getExamProblems, getExamReport } from "@/api/exam.js"
+import { getExp, getMyAcieve } from "@/api/account.js"
 
 Vue.use(Vuex)
 
@@ -16,6 +17,10 @@ export default new Vuex.Store({
     nickName: null,
     userLevel: 1,
     userExperience: 0,
+    required_exp: [0, 10, 20, 30, 50, 70,
+      100, 150, 200, 250, 300,
+      400, 500, 600, 750, 1000],
+
 
     currentPage: '', //밑 navbar에서 선택한 페이지
     currentPageValue: 2, //밑 navbar에서 선택한 index
@@ -72,7 +77,9 @@ export default new Vuex.Store({
       { title : '아이유', line: '바람ㄴ 불면 저편에서', img : 'poster1' },
     ],
     
+    currentClassIndex: 0,
     lessonInfo: {},
+    dbLessonInfo: {},
     quizInfo: {},
     testQuestions: [],
     studyCnt: 0,
@@ -209,8 +216,8 @@ export default new Vuex.Store({
     },
 
     getCurrentClassLearnedKeword: function (state) {
-      let list = state.userLearnedKeword.filter(
-        (re) => re.type === state.currentClass.cs_seq
+      let list = state.classList.filter(
+        (re) => re["already_learned"] == true
       )
       return list
     },
@@ -243,7 +250,8 @@ export default new Vuex.Store({
       state.currentPage = ''
       state.currentPageValue = 2
       state.currentType = ''
-      state.currentClass =''
+      // 나중에 최근 학습내역으로 해야하나
+      state.currentClass = {name: '사랑의불시착', type:'drama', level:1}
       state.classList = []
       state.userGrade = []
       state.userLearnedKeword = []
@@ -262,9 +270,9 @@ export default new Vuex.Store({
     },
     CHANGEEXPERIENCE ( state, experience ) {
       state.userExperience += experience
-      const temp = state.userExperience - (state.userLevel)*10
-      if ( state.userExperience >= state.userLevel*10 ) {
-        state.userExperience = state.userLevel*10
+      const temp = state.userExperience - state.required_exp[state.userLevel]
+      if ( state.userExperience >= state.required_exp[state.userLevel] ) {
+        state.userExperience = state.required_exp[state.userLevel]
         setTimeout( function() {
           state.userLevel += 1
           state.userExperience = 0
@@ -282,19 +290,21 @@ export default new Vuex.Store({
       //titleInfo.cs_seq로 axios 요청받아서 리스트 받아오기
       // console.log("뮤테이션 getListCurrentClass실행:::", resclassList)
       state.classList = resclassList
-      console.log("현재 클래스 리스트는?", state.classList)
+      // console.log("현재 클래스 리스트는?", state.classList)
 
     },
     GETLESSONINFO ( state, item ) {
-      console.log("받아온 레슨인포", item)
-      console.log("받아오고 현재 currnetClass", state.currentClass)
+      // console.log("받아온 레슨인포", item)
+      // console.log("받아오고 현재 currnetClass", state.currentClass)
       // axios 요청 보내서 state에 저장
+
       const lessonForm = {
+        id: item.id,
         type: state.currentClass.type,
         title: state.currentClass.name,
         img: 'poster1',
-        keyword_kr: item.main_kw_word,
-        keyword_en: "(영어번역필요)",
+        keyword_kr: item.main_kw_kor,
+        keyword_en: item.main_kw_eng,
         lines_kr: [
           item.before_kor,  
           item.cpct_kor, 
@@ -306,16 +316,15 @@ export default new Vuex.Store({
           item.after_eng
         ],
         example_kr: [
-          item.example,
-          "예제2"
+          item.example_kor,
         ],
         example_en: [
-          "Want to visit Jeju Island.",
-          "example2"
+          item.example_eng
         ]
       }
       state.lessonInfo = lessonForm
-      console.log("레슨인포수정해떵0", state.lessonInfo)
+      state.dbLessonInfo = item
+      // console.log("레슨인포수정해떵0", state.lessonInfo)
     },
     GETQUIZINFO ( state ) {
       const quizForm = {
@@ -382,9 +391,9 @@ export default new Vuex.Store({
     },
     GETREPORTINFO ( state, report ) {
       const progressForm = [
-        {type: "Drama", done: report.progress.drama[0] , total: report.progress.drama[1] },
-        {type: "Kpop", done: report.progress.kpop[0] , total: report.progress.kpop[1] },
-        {type: "Movie", done: report.progress.movie[0] , total: report.progress.movie[1] }
+        {type: "drama", done: report.progress.drama[0] , total: report.progress.drama[1] },
+        {type: "kpop", done: report.progress.kpop[0] , total: report.progress.kpop[1] },
+        {type: "movie", done: report.progress.movie[0] , total: report.progress.movie[1] }
       ]
       state.progress = progressForm
       state.isLogin = true
@@ -409,20 +418,43 @@ export default new Vuex.Store({
     ADDUSEREMAIL ( state, userEmail ) {
       state.userEmail = userEmail
     },
+    CHANGECURRENTCLASSINDEX ( state, idx ) {
+      state.currentClassIndex = idx
+    },
+    SENDCOMPLETELESSON ( state, idx ) {
+
+      if ( state.classList[idx]["already_learned"] == false) {
+
+        for ( let progress of state.recent_lc_progress){
+          if ( progress.title === state.currentClass.name ){
+            progress.done += 1
+          }
+        }
+        
+        for ( let one of state.progress ) {
+          if ( one.type == state.currentClass.type) {
+            one.done += 1
+          }
+        }
+
+        state.classList[idx]["already_learned"] = true
+      }
+    },
+    ADDTOPROGRESSLIST ( state ) {
+      const progressForm = {
+        title: state.currentClass.name, done: 0, total: state.classList.length
+      }
+
+      state.recent_lc_progress.push(progressForm)
+      console.log(state.recent_lc_progress)
+    },
+    // SAVEACIEVEMENTLIST ( state ) {
+
+    // }
 
   },
 
   actions: {
-    // Login({ commit }, user){
-    //   axios.post(`${SERVER_URL}/ktutor/login/`, user)
-    //   .then(res => {
-    //     commit("LOGIN", res.data)
-    //   })
-    //   .catch(err => {
-    //     console.log("로그인 에러", err)
-    //   })
-
-    // },
     logout ( {commit} ){
       commit('LOGOUT')
     },
@@ -437,6 +469,17 @@ export default new Vuex.Store({
       setTimeout( function() {
         commit('CHANGEEXPERIENCE', experience )
       }, 1500)
+
+      getExp(
+        experience,
+        (res) => {
+          console.log(res.data)
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
+
     },
     changeCurrentClass ({ commit }, item ) {
       commit('CHANGECURRENTCLASS', item)
@@ -450,7 +493,7 @@ export default new Vuex.Store({
         selectedClassInfo
         ,
         (res) => {
-          console.log("getLessonList 액션즈 실행", res.data)
+          // console.log("getLessonList 액션즈 실행", res.data)
           commit('GETLISTCURRENTCLASS',res.data )
           commit('CHANGECURRENTCLASS',selectedItem )
         },
@@ -465,7 +508,7 @@ export default new Vuex.Store({
       getLessonInfo(
         itemId,
         (res) => {
-          console.log("getLessonInfoByItem뮤테이션",res.data)
+          // console.log("getLessonInfoByItem뮤테이션",res.data)
           commit('GETLESSONINFO', res.data)
 
         },
@@ -511,6 +554,44 @@ export default new Vuex.Store({
     addUserEmail( { commit }, userEmail ) {
       commit ( 'ADDUSEREMAIL', userEmail )
     },
+    sendCompleteLesson( { commit, state }, idx ) {
+
+      const lessonInfo = {
+        ...state.dbLessonInfo,
+        "already_learned": true,
+      }
+
+      sendLessonInfo(
+        lessonInfo,
+        (res) => {
+          console.log(res.data)
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
+
+      commit( "SENDCOMPLETELESSON", idx )
+    },
+    changeCurrentClassIndex ( { commit }, idx ) {
+      commit( 'CHANGECURRENTCLASSINDEX', idx)
+    },
+    addtoProgressList( { commit } ) {
+      commit( 'ADDTOPROGRESSLIST' )
+    },
+    getAchievementList( {commit } ) {
+
+      getMyAcieve(
+        (res) => {
+          console.log(res.data)
+        },
+        (err) => {
+          console.log(err.data)
+        }
+      )
+      console.log(commit)
+      // commit( 'SAVEACIEVEMENTLIST', )
+    }
 
 
   },

@@ -96,6 +96,7 @@
                 this.userCredentials.userPassword = ""
 
                 this.$store.dispatch('getReportInfo', response.data)
+                this.$store.dispatch('getAchievementList')
                 
               },
               (error) => {

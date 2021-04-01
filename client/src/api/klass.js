@@ -39,12 +39,13 @@ function getLessonInfo( lessonId, success, fail ) {
 
 }
 
-function sendLessonInfo( lessonId, success, fail ) {
+// 학습카드 수강 완료 요청 
+function sendLessonInfo( lessonInfo, success, fail ) {
 
   instance.defaults.headers['Authorization'] = "jwt " + window.localStorage.getItem('jwt')
 
   instance
-   .post(`klass/lc/${lessonId}`, lessonId)
+   .post(`klass/lc/${lessonInfo.id}`, lessonInfo)
    .then(success)
    .catch(fail)
 }
