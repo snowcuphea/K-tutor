@@ -41,15 +41,17 @@
       <v-list-item style="background: white" @click="logout">
         Logout
       </v-list-item>
-      <span class="d-flex justify-center" @click="deleteAccount">Delete Account</span>
+      <span class="d-flex justify-center" @click="showDialog({title: 'DeleteAccount'})">Delete Account</span>
 
     </div>
 
+  
   <Tutorial :showTutorial="showTutorial" @hideTutorial="showTutorial = !showTutorial"/>
   <Notice :showNotice="showNotice" @hideTutorial="showNotice = !showNotice"/>
   <Inquiry :showInquiry="showInquiry" @hideTutorial="showInquiry = !showInquiry"/>
   <TermsOfUse :showTermsOfUse="showTermsOfUse" @hideTutorial="showTermsOfUse = !showTermsOfUse"/>
   <OpenSource :showOpenSource="showOpenSource" @hideTutorial="showOpenSource = !showOpenSource"/>
+  <DeleteAccount :showDeleteAccount="showDeleteAccount" @hideTutorial="showDeleteAccount = !showDeleteAccount"/>
   </div>
 
 </template>
@@ -60,17 +62,16 @@
   import Inquiry from '../components/mypage/Inquiry'
   import TermsOfUse from '../components/mypage/TermsOfUse'
   import OpenSource from '../components/mypage/OpenSource'
-  import {
-    deleteUser
-  } from "@/api/account.js"
-
+  import DeleteAccount from '../components/mypage/DeleteAccount'
+  
   export default {
     components: {
       Tutorial,
       Notice,
       Inquiry,
       TermsOfUse,
-      OpenSource
+      OpenSource,
+      DeleteAccount,
 
     },
     data: () => ({
@@ -89,6 +90,7 @@
         {
           title: 'OpenSource',
         },
+         
       ],
       visible: false,
       showTutorial: false,
@@ -96,6 +98,7 @@
       showInquiry: false,
       showTermsOfUse: false,
       showOpenSource: false,
+      showDeleteAccount: false,
       tempLevel: 15,
     }),
     methods: {
@@ -106,7 +109,7 @@
       closeModal() {
         this.visible = !this.visible
       },
-      showDialog(item) {
+      showDialog(item) { 
         if (item.title == 'Tutorial') {
           this.showTutorial = !this.showTutorial
         } else if (item.title == 'Notice') {
@@ -115,7 +118,9 @@
           this.showInquiry = !this.showInquiry
         } else if (item.title == 'TermsOfUse') {
           this.showTermsOfUse = !this.showTermsOfUse
-        } else {
+        } else if (item.title == 'DeleteAccount'){
+          this.showDeleteAccount = !this.showDeleteAccount
+        }else {
           this.showOpenSource = !this.showOpenSource
         }
       },
@@ -147,29 +152,7 @@
 
       },
 
-      deleteAccount() {
-        deleteUser(
-          (res) => {
-            console.log("deleteAccount(),", res)
-            this.$store.dispatch('deleteUser')
-              .then(() => {
-                alert("Bye...")
-
-                this.$router.push({
-                  name: 'Login'
-                })
-              })
-              .catch(() => {})
-
-          },
-          (err) => {
-            console.log("deleteAccount(),", err)
-
-          }
-
-        )
-
-      }
+     
 
 
     },
