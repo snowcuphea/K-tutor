@@ -93,7 +93,6 @@
 
       }
 
-
     }),
 
     methods: {
@@ -105,60 +104,33 @@
             (res) => {
               console.log(res)
               console.log("signup Success")
-              alert("You joined Malmoong-chi successfully! (´▽`ʃ♡ƪ)")
-              this.userCredentials.userEmail = ''
-              this.userCredentials.userPassword = ''
-              this.userCredentials.userPasswordConfirm = ''
-              this.userCredentials.userNickname = ''
+              alert("You joined Malmoong-chi successfully! (´▽`ʃ♥ƪ)")
+              this.signupCredentials.userEmail = ''
+              this.signupCredentials.userPassword = ''
+              this.signupCredentials.userPasswordConfirm = ''
+              this.signupCredentials.userNickname = ''
               this.$router.push({
                 name: "Login"
               })
             },
             (err) => {
               console.log("회원가입실패", err)
-              alert("Please check your information again.")
+              if (err.response.status != undefined) {
+                alert(err.response.data)
+              } 
             }
-
           )
-
-
-          // let signupInfo = {
-          //   username: this.userCredentials.userEmail,
-          //   password: this.userCredentials.userPassword,
-          //   nickname: this.userCredentials.userNickname,
-          // }
-          // console.log(signupInfo)
-          // axios.post("http://localhost:8080/asdf/signup", signupInfo)
-          //   .then(res => {
-          //     console.log(res)
-          //     alert("회원가입 성공")
-          //     this.$router.push({
-          //       name: "Login"
-          //     })
-          //     this.userCredentials.userEmail = ''
-          //     this.userCredentials.userPassword = ''
-          //     this.userCredentials.userNickname = ''
-          //   })
-          //   .catch((err) => {
-          //     console.log(err)
-          //     
-          //   })
-
 
 
         } else {
           console.log("signup fail..")
         }
 
-
-
-
       },
 
       goToLogin() { //뒤로가기
         this.$router.go(-1)
       }
-
     },
     created() {
 
@@ -166,8 +138,6 @@
       this.signupCredentials.userPassword = ""
       this.signupCredentials.userPasswordConfirm = ""
       this.signupCredentials.userNickname = ""
-
-
 
 
     },
