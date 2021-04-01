@@ -591,7 +591,13 @@ export default new Vuex.Store({
       )
       console.log(commit)
       // commit( 'SAVEACIEVEMENTLIST', )
+    },
+
+    deleteUser( {commit} ) {
+      commit('LOGOUT')
     }
+
+
 
 
   },

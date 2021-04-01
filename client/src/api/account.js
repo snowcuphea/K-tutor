@@ -75,4 +75,4 @@ function getMyAcieve( success, fail ){
 
 }
 
-export { getToken, getInfo, signUp, getExp, getMyAcieve }
+export { getToken, getInfo, signUp, getExp, getMyAcieve, deleteUser }
