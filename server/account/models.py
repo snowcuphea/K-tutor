@@ -11,10 +11,6 @@ class User(AbstractUser):
     learned_lc = models.ManyToManyField('klass.Lc', related_name='learned_user')
     learned_kw = models.ManyToManyField('klass.Kw', related_name='learned_user')
 
-    def checkAchievement(self):
-        checkAhvSignal = django.dispatch.Signal(providing_args=['user'])
-        checkAhvSignal.send(sender=self.__class__)
-
 
 class TestResult(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -36,10 +32,5 @@ class RecentLearnedLc(models.Model):
 class Achievement(models.Model):
     title = models.CharField(max_length=100)
     content = models.CharField(max_length=200)
-    image = models.TextField()
-    condition = models.IntegerField(default=0)
-
-class UserUnlockedAchievement(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    achievement = models.ForeignKey(Achievement, on_delete=models.CASCADE)
-    status = models.IntegerField(default=0)
+    imgurl = models.TextField()
+    achieved_user = models.ManyToManyField(User)

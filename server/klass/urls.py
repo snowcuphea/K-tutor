@@ -8,4 +8,5 @@ urlpatterns = [
     path('cs/list', views.CsViewSet.as_view({"get": "get"})),
     path('<str:type>/<str:title>/list', views.LcListViewSet.as_view({"get": "get"})),
     path('lc/<int:LcId>', views.LcViewSet.as_view({"get": "get", "post": "done"})),
+    path('<str:type>/<str:title>/quiz', views.QuizViewSet.as_view({"get": "get"}))
 ]

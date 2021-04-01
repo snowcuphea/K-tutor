@@ -11,6 +11,7 @@ class Cs(models.Model):
     name = models.CharField(max_length=100)
     type = models.CharField(max_length=10)
     level = models.CharField(max_length=10)
+    imgurl = models.TextField()
 
 
 class Cpct(models.Model):
@@ -29,7 +30,8 @@ class Cpcq(models.Model):
 class Lc(models.Model):
     cs = models.ForeignKey(Cs, on_delete=models.CASCADE)
     main_kw_index = models.IntegerField(null=True)
-    main_kw_word = models.TextField(null=True)
+    main_kw_kor = models.TextField(null=True)
+    main_kw_eng = models.TextField(null=True)
     main_kw = models.ForeignKey(Kw, on_delete=models.CASCADE)
     meaning = models.TextField(null=True)
     before_kor = models.TextField()
@@ -38,4 +40,6 @@ class Lc(models.Model):
     cpct_eng = models.TextField()
     after_kor = models.TextField()
     after_eng = models.TextField()
-    example = models.TextField()
+    example_kor = models.TextField()
+    example_eng = models.TextField(null=True)
+    imgurl = models.TextField()
