@@ -209,6 +209,8 @@ class AchievementViewSet(viewsets.GenericViewSet,
                     "title": al.title,
                     "content": al.content,
                     "imgurl": al.imgurl,
+                    "done": al.done,
+                    "total": al.total,
                     "status": 1
                 })
             else:
@@ -217,6 +219,8 @@ class AchievementViewSet(viewsets.GenericViewSet,
                     "title": al.title,
                     "content": al.content,
                     "imgurl": al.imgurl,
+                    "done": al.done,
+                    "total": al.total,
                     "status": 0
                 })
 
