@@ -46,26 +46,51 @@ class ExamViewSet(viewsets.GenericViewSet,
                 "cs": lc.cs.name
             })
 
-        learned_kw = user.learned_kw.all()
-        for kw in random.sample(list(learned_kw), 3):
-            lc = random.choice(Lc.objects.filter(main_kw=kw))
-            pro_list.append({
+        learned_kw = list(user.learned_kw.all())
+        for kw in random.sample(learned_kw, 3):
+            lc = random.choice(list(Lc.objects.filter(main_kw=kw)))
+            d = {
                 "problem": {
                     "before": lc.before_kor,
                     "main": lc.cpct_kor,
                     "after": lc.after_kor
                 },
                 "cs": lc.cs.name
-            })
+            }
+            if d in pro_list and Lc.objects.filter(main_kw=kw).count() == 1:
+                continue
+            while d in pro_list:
+                lc = random.choice(list(Lc.objects.filter(main_kw=kw)))
+                d = {
+                    "problem": {
+                        "before": lc.before_kor,
+                        "main": lc.cpct_kor,
+                        "after": lc.after_kor
+                    },
+                    "cs": lc.cs.name
+                }
+            pro_list.append(d)
 
-        for kw in random.sample(list(learned_kw), 3):
+        while len(pro_list) < 10:
+            kw = random.choice(learned_kw)
             cpcq = random.choice(Cpcq.objects.filter(kcq=kw))
-            pro_list.append({
+            d = {
                 "problem": {
                     "main": cpcq.kor
                 },
                 "cs": "구어체 말뭉치"
-            })
+            }
+            if d in pro_list and Cpcq.objects.filter(kcq=kw).count() == 1:
+                continue
+            while d in pro_list:
+                cpcq = random.choice(Cpcq.objects.filter(kcq=kw))
+                d = {
+                    "problem": {
+                        "main": cpcq.kor
+                    },
+                    "cs": "구어체 말뭉치"
+                }
+            pro_list.append(d)
 
         serializer = ExamSerializer(data=pro_list, many=True)
         serializer.is_valid(raise_exception=True)

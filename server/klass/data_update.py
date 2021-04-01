@@ -1,3 +1,5 @@
+import random
+
 import requests
 
 import pandas as pd
@@ -100,7 +102,7 @@ def create_lc():
                 cs.level = i
                 cs.save()
                 cpcts = Cpct.objects.filter(cs=cs)
-                cpct_cnt = 0
+                cpct_cnt = Lc.objects.filter(cs=cs).count()
                 for k in range(kw_index[i], kw_index[i + 1]):
                     kw = Kw.objects.get(pk=k)
                     if cpct_cnt == 100:
@@ -254,9 +256,9 @@ def add_meaning_to_lc():
                 similarity.append((j, 0))
             else:
                 similarity.append((j, np.mean(temp_similarity)))
-        similarity.sort(key=lambda x:-x[1])
+        similarity.sort(key=lambda x: -x[1])
         meaning = "|".join([meanings[x[0]][1] for n, x in enumerate(similarity) if n <= 2])
-        lc.main_kw_word = meanings[0][0]
+        lc.main_kw_kor = meanings[0][0]
         lc.meaning = meaning
         main_splited = lc.cpct_kor.split()
         find = False
@@ -310,3 +312,10 @@ def request_dict(word):
         meanings.extend(res)
 
     return meanings
+
+
+def updateLc():
+    lcs = Lc.objects.all()
+    for lc in lcs:
+        lc.example_kor = random.choice(list(lc.main_kw.contained_cpcq.all()))
+

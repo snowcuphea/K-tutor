@@ -5,7 +5,7 @@ from .models import *
 class ExamResultSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExamResult
-        fields = '__all__'
+        fields = ('score', 'exam_date')
 
 
 class ExamSerializer(serializers.Serializer):
