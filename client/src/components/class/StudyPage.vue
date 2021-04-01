@@ -212,10 +212,18 @@ export default {
       if (this.getCurrentClassLearnedKeword.length == 0) {
         this.$store.dispatch('addtoProgressList')
       }
-      this.$store.dispatch('sendCompleteLesson', this.currentClassIndex)
       this.resultDialog = !this.resultDialog
       this.exp = 3
+      for ( let learned of this.getCurrentClassLearnedKeword ){
+        console.log(this.lessonInfo.id, learned.id)
+        if (this.lessonInfo.id == learned.id) {
+          this.exp = 0
+        }
+
+      }
+
       this.$store.dispatch('gainExperience', this.exp)
+      this.$store.dispatch('sendCompleteLesson', this.currentClassIndex)
     },
     nextStep() {
       this.currentStep += 1

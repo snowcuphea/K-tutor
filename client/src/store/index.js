@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import createPersistedState from "vuex-persistedstate"
 import { getLessonList, getLessonInfo, sendLessonInfo } from "@/api/klass.js"
 import { getExamProblems, getExamReport } from "@/api/exam.js"
+import { getExp, getMyAcieve } from "@/api/account.js"
 
 Vue.use(Vuex)
 
@@ -16,6 +17,10 @@ export default new Vuex.Store({
     nickName: null,
     userLevel: 1,
     userExperience: 0,
+    required_exp: [0, 10, 20, 30, 50, 70,
+      100, 150, 200, 250, 300,
+      400, 500, 600, 750, 1000],
+
 
     currentPage: '', //밑 navbar에서 선택한 페이지
     currentPageValue: 2, //밑 navbar에서 선택한 index
@@ -265,9 +270,9 @@ export default new Vuex.Store({
     },
     CHANGEEXPERIENCE ( state, experience ) {
       state.userExperience += experience
-      const temp = state.userExperience - (state.userLevel)*10
-      if ( state.userExperience >= state.userLevel*10 ) {
-        state.userExperience = state.userLevel*10
+      const temp = state.userExperience - state.required_exp[state.userLevel]
+      if ( state.userExperience >= state.required_exp[state.userLevel] ) {
+        state.userExperience = state.required_exp[state.userLevel]
         setTimeout( function() {
           state.userLevel += 1
           state.userExperience = 0
@@ -442,7 +447,10 @@ export default new Vuex.Store({
 
       state.recent_lc_progress.push(progressForm)
       console.log(state.recent_lc_progress)
-    }
+    },
+    // SAVEACIEVEMENTLIST ( state ) {
+
+    // }
 
   },
 
@@ -461,6 +469,17 @@ export default new Vuex.Store({
       setTimeout( function() {
         commit('CHANGEEXPERIENCE', experience )
       }, 1500)
+
+      getExp(
+        experience,
+        (res) => {
+          console.log(res.data)
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
+
     },
     changeCurrentClass ({ commit }, item ) {
       commit('CHANGECURRENTCLASS', item)
@@ -554,11 +573,24 @@ export default new Vuex.Store({
 
       commit( "SENDCOMPLETELESSON", idx )
     },
-    changeCurrentClassIndex ( { commit }, idx) {
+    changeCurrentClassIndex ( { commit }, idx ) {
       commit( 'CHANGECURRENTCLASSINDEX', idx)
     },
-    addtoProgressList( { commit }) {
+    addtoProgressList( { commit } ) {
       commit( 'ADDTOPROGRESSLIST' )
+    },
+    getAchievementList( {commit } ) {
+
+      getMyAcieve(
+        (res) => {
+          console.log(res.data)
+        },
+        (err) => {
+          console.log(err.data)
+        }
+      )
+      console.log(commit)
+      // commit( 'SAVEACIEVEMENTLIST', )
     }
 
 

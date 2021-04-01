@@ -146,6 +146,9 @@ export default {
       console.log(this.viewcalendar)
 
     }
+  },
+  created() {
+    this.$store.dispatch('getAchievementList')
   }
 }
 </script>
