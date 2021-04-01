@@ -202,7 +202,7 @@ class QuizViewSet(viewsets.GenericViewSet,
                     "main": lc['cpct_kor'],
                     "after": lc['after_kor']
                 },
-                "cs": lc.cs.name
+                "cs": Cs.objects.get(id=lc['cs_id']).name
             })
 
         serializer = ExamSerializer(data=pro_list, many=True)
