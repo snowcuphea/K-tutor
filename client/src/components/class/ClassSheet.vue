@@ -4,7 +4,6 @@
       <v-col class="d-flex justify-center">
         <h2> {{currentClass.name}} </h2>
         <!-- <span> 여기에 나중에 영어이름도 넣기 </span> -->
-        
       </v-col>
     </v-row>
 
@@ -43,7 +42,7 @@
 
     <v-row>
       <v-col>
-        <v-card class="my-1 mx-2" v-for="(item,idx) in classList" :key="item.main_kw_word" @click="startClass(item)">
+        <v-card class="my-1 mx-2" v-for="(item,idx) in classList" :key="item.main_kw_word" @click="startClass(item, idx)">
           <v-card-text>
             <v-row>
               <v-col cols="1" xs="1" class="d-flex justify-center align-center">
@@ -54,13 +53,13 @@
               </v-col>
               <v-col cols="7" xs="6" class="d-flex align-center">
                 <div class="d-flex flex-column">
-                  <h3 class="text--primary my-1"> {{item.main_kw_word}}</h3>
-                  <span class="my-1"> (영어번역필요) -{{item.title}}中-</span>
+                  <h3 class="text--primary my-1"> {{item.main_kw_kor}}</h3>
+                  <span class="my-1"> (영어번역필요) {{ item.main_kw_eng }} </span>
                 </div>
               </v-col>
               <v-col cols="1" xs="1" class="d-flex align-center">
                 <!-- item.cs_seq가 getCurrentClassLearnedKeword의 cs_seq에 있는지 검사해서 완료여부도 넣어야됨 -->
-                <span v-if="checkCompleted(item)">O</span> 
+                <span v-if="checkCompleted(item.id)">O</span> 
                 <span v-else>X</span> 
               </v-col>
             </v-row>
@@ -92,27 +91,29 @@
     data: () => ({
       openStudyPage: false,
       openQuizPage: false,
-
     }),
     props: {
       classInfo: [Object, String],
 
     },
     methods: {
-      startClass(item) {
+      startClass(item, idx) {
         // 서버에 요청을 보내서 해당 학습 내용을 받아온다
         // this.$store.dispatch('changeCurrentClass', item)
         this.$store.dispatch('getLessonInfoByItem',item.id )
-
+        this.$store.dispatch('changeCurrentClassIndex', idx)
         this.openStudyPage = !this.openStudyPage
       },
       endClass() {
         this.openStudyPage = !this.openStudyPage
       },
-      checkCompleted() {
-        // if item.cs_seq in getCurrentClassLearnedKeword.cs_
-        // console.log(item)
-        return true
+      checkCompleted(id) {
+        for (let single of this.getCurrentClassLearnedKeword) {
+          if ( single.id == id ) {
+            return true
+          }
+        }
+        return false
       },
       startQuiz() {
         // 서버에 요청을 보내서 퀴즈 받아오기
@@ -137,13 +138,9 @@
       },
     },
     created() {
-      this.$store.dispatch('getLessonInfoByItem', this.classList[0].id )
+      // console.log(this.classList)
+      this.$store.dispatch('getLessonInfoByItem', 65 )
       this.$store.dispatch('getQuizInfo')
-      // if (this.currentClass) {
-      //   this.$store.dispatch('getListCurrentClass',this.currentClass )
-      // } else {
-      //   this.$store.dispatch('getListCurrentClass',this.defaultClass )
-      // }
 
       this.$store.dispatch('getListCurrentClass',this.currentClass )
       

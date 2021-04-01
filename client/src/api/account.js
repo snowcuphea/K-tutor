@@ -49,4 +49,30 @@ function signUp(user, success, fail ){
     .catch(fail);
 }
 
-export { getToken, getInfo, signUp, deleteUser }
+function getExp( exp, success, fail ){
+  
+  instance.defaults.headers['Authorization'] = "jwt " + window.localStorage.getItem('jwt')
+
+  const expInfo = {
+    "exp": exp
+  }
+
+  instance
+    .post("account/get_exp", expInfo)
+    .then(success)
+    .catch(fail)
+
+}
+
+function getMyAcieve( success, fail ){
+
+  instance.defaults.headers['Authorization'] = "jwt " + window.localStorage.getItem('jwt')
+
+  instance
+    .get("account/achievements")
+    .then(success)
+    .catch(fail)
+
+}
+
+export { getToken, getInfo, signUp, getExp, getMyAcieve }
