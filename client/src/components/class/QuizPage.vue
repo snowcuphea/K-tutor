@@ -256,8 +256,7 @@ export default {
     },
   },
   watch: {
-    quizInfo() {
-      console.log("hi")
+    openStudyPage() {
       this.createEmptyList()
     }
   },

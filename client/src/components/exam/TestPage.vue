@@ -41,7 +41,7 @@
             </div>
 
             <div class="d-flex justify-space-between mt-2">
-              <v-btn plain icon><v-icon>mdi-volume-high</v-icon></v-btn>
+              <v-btn plain icon @clikc="speech"><v-icon>mdi-volume-high</v-icon></v-btn>
               <v-btn plain icon @click="empty(targetQuestion)"><v-icon>mdi-restart</v-icon></v-btn>
             </div>
           </v-card>
@@ -153,7 +153,11 @@ export default {
       order: 0,
       checked: [],
       correct: new Array(this.N).fill(0),
-      grade: 0
+      grade: 0,
+
+      selectedVoicer: 'Microsoft SunHi Online (Natural) - Korean (Korea)',
+      voiceList:[],
+      textToSpeech:window.speechSynthesis,
 
     }
   },
@@ -305,9 +309,33 @@ export default {
       this.targetQuestion = 0
       this.grade = 0
       this.checked = []
+    },
+    speech() {
+      const text = this.questions[0].lines_kr
+        let speaker=new SpeechSynthesisUtterance(text);
+        const findedVoicer = this.voiceList.find((item)=>{
+            return item.name == this.selectedVoicer
+        }) 
+        console.log(findedVoicer)
+        console.log(speaker)
+
+        speaker.voice=findedVoicer;
+        speaker.volume=0.5;
+        this.textToSpeech.speak(speaker)
+    },
+    async getVoices(){
+        let interval;
+        return new Promise((resolve)=>{
+            interval=setInterval(()=>{
+                if(this.textToSpeech.getVoices().length){
+                    resolve(this.textToSpeech.getVoices())
+                    clearInterval(interval)
+                }
+            },100)
+        })
     }
   },
-  created() {
+  async created() {
 
     for (let answer of this.testQuestions) {
       if ( answer.lines_kr.length == 3 ) {
@@ -318,6 +346,9 @@ export default {
     }
 
     this.defaultSetting()
+
+    const voicesList=await this.getVoices();
+    this.voiceList = voicesList
 
   },
   computed: {

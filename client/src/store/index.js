@@ -413,18 +413,26 @@ export default new Vuex.Store({
       state.recent_lc_progress.push(progressForm)
       console.log(state.recent_lc_progress)
     },
-    // SAVEACIEVEMENTLIST ( state, achievements ) {
+    SAVEACIEVEMENTLIST ( state, achievements ) {
+      const achieve_arr = []
 
-    //   for (let achievement of achievements) {
-    //     const achievementForm = {
-    //       title: '빛나는 트로피',
-    //       src: require('@/assets/img/score.png'),
-    //       contents: 'test에서 만점을 5회 달성하셨습니다',
-    //       max_num: 5,
-    //       num: 3
-    //     }
-    //   }
-    // }
+      // console.log(achievements)
+      for (let achievement in achievements) {
+        this.achieve_arr.push({title:achievement.title, content:achievement.content, url:achievement.imgurl})
+
+      }
+      console.log(achieve_arr)
+      // for (let achievement of achievements) {
+      //   const achievementForm = {
+      //     title: achievement
+      //   }
+          // achievementsrc: require('@/assets/img/score.png'),
+          // contents: 'test에서 만점을 5회 달성하셨습니다',
+          // max_num: 5,
+          // num: 3
+        // }
+      }
+    
 
   },
 
