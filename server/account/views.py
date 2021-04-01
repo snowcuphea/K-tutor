@@ -240,11 +240,15 @@ class AchievementViewSet(viewsets.GenericViewSet,
 
 
 class InquiryViewSet(viewsets.GenericViewSet,
-                         mixins.ListModelMixin,
-                         View):
+                     mixins.ListModelMixin,
+                     View):
+    serializer_class = UserSerializer
     authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = (IsAuthenticated,)
 
+    @swagger_auto_schema(responses={200: "sended"}, manual_parameters=[
+        openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
+                          type=openapi.TYPE_STRING)])
     def get(self, request):
         """
         Send inquiry email from user to us.
