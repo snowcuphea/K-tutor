@@ -133,7 +133,7 @@ class LoginViewSet(viewsets.GenericViewSet,
             if recent_cs['type'] == 'kpop':
                 recent_cs['name'] = recent_cs['name'].split(' - ')[0]
         else:
-            recent_cs = Cs.objects.get(pk=2)
+            recent_cs = Cs.objects.get(pk=1)
         data['recent_cs'] = recent_cs
         # recent_lc_progress = serializers.DictField()
         recent_lc_progress = dict()
