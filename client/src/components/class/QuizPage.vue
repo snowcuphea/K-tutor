@@ -45,7 +45,7 @@
               </div>
 
               <div class="d-flex justify-space-between">
-                <v-btn plain icon><v-icon>mdi-volume-high</v-icon></v-btn>
+                <v-btn plain icon @click="speech"><v-icon>mdi-volume-high</v-icon></v-btn>
                 <v-btn plain icon @click="empty()"><v-icon>mdi-restart</v-icon></v-btn>
               </div>
             </v-card>
@@ -123,6 +123,11 @@ export default {
       checked: [],
       order: 0,
       pass: null,
+
+      // myText: quizInfo.quizzes[this.currentProblem].lines_kr[1].split(' '),
+      selectedVoicer: 'Microsoft SunHi Online (Natural) - Korean (Korea)',
+      voiceList:[],
+      textToSpeech:window.speechSynthesis,
     }
   },
   components: {
@@ -213,6 +218,30 @@ export default {
       // }
       // new_line.push(last_word)
       this.myAnswer = new_line.join(' ')
+    },
+    speech(){
+        const text = this.quizInfo.quizzes[this.currentProblem].lines_kr[1]
+        let speaker=new SpeechSynthesisUtterance(text);
+        const findedVoicer = this.voiceList.find((item)=>{
+            return item.name == this.selectedVoicer
+        }) 
+        console.log(findedVoicer)
+        console.log(speaker)
+
+        speaker.voice=findedVoicer;
+        speaker.volume=0.5;
+        this.textToSpeech.speak(speaker)
+    },
+    async getVoices(){
+        let interval;
+        return new Promise((resolve)=>{
+            interval=setInterval(()=>{
+                if(this.textToSpeech.getVoices().length){
+                    resolve(this.textToSpeech.getVoices())
+                    clearInterval(interval)
+                }
+            },100)
+        })
     }
   },
   computed: {
@@ -231,9 +260,15 @@ export default {
       this.createEmptyList()
     }
   },
-  created() {
+  //   async created () {
+  //   const voicesList=await this.getVoices();
+  //   this.voiceList = voicesList
+  // },
+  async created() {
     this.createEmptyList()
-  }
+    const voicesList=await this.getVoices();
+    this.voiceList = voicesList
+  },
 
 }
 </script>

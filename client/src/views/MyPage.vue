@@ -26,10 +26,6 @@
 
           </v-row>
 
-
-          <!-- <div class="my_info">
-          </div> -->
-
         </v-col>
       </v-row>
     </v-container>
@@ -49,26 +45,11 @@
 
     </div>
 
-    <!-- <v-row class="delete_icon">
-      <v-col cols="4">
-        <v-btn color="red">
-          Delete
-        </v-btn>
-      </v-col>
-      <v-col class="logout_icon" cols="4">
-        <v-btn color="red lighten-2" @click="logout">
-          Logout
-        </v-btn>
-      </v-col>
-    </v-row> -->
-
-
-
-    <Tutorial :showTutorial="showTutorial" @hideTutorial="showTutorial = !showTutorial" />
-    <Notice :showNotice="showNotice" @hideTutorial="showNotice = !showNotice" />
-    <Inquiry :showInquiry="showInquiry" @hideTutorial="showInquiry = !showInquiry" />
-    <TermsOfUse :showTermsOfUse="showTermsOfUse" @hideTutorial="showTermsOfUse = !showTermsOfUse" />
-    <OpenSource :showOpenSource="showOpenSource" @hideTutorial="showOpenSource = !showOpenSource" />
+  <Tutorial :showTutorial="showTutorial" @hideTutorial="showTutorial = !showTutorial"/>
+  <Notice :showNotice="showNotice" @hideTutorial="showNotice = !showNotice"/>
+  <Inquiry :showInquiry="showInquiry" @hideTutorial="showInquiry = !showInquiry"/>
+  <TermsOfUse :showTermsOfUse="showTermsOfUse" @hideTutorial="showTermsOfUse = !showTermsOfUse"/>
+  <OpenSource :showOpenSource="showOpenSource" @hideTutorial="showOpenSource = !showOpenSource"/>
   </div>
 
 </template>
