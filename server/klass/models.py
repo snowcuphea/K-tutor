@@ -11,6 +11,7 @@ class Cs(models.Model):
     name = models.CharField(max_length=100)
     type = models.CharField(max_length=10)
     level = models.CharField(max_length=10)
+    imgurl = models.TextField()
 
 
 class Cpct(models.Model):
@@ -41,3 +42,4 @@ class Lc(models.Model):
     after_eng = models.TextField()
     example_kor = models.TextField()
     example_eng = models.TextField(null=True)
+    imgurl = models.TextField()

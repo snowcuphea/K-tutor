@@ -14,6 +14,7 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from .data_update import *
 from .serializers import *
+from exam.serializers import *
 
 from account.models import RecentLearnedLc
 from django.db.models import Q
@@ -140,7 +141,8 @@ class LcViewSet(viewsets.GenericViewSet,
             - <int:LcId>
         """
         lc = get_object_or_404(Lc, id=LcId).__dict__
-        lc['already_learned'] = True if Lc.objects.filter(Q(learned_user=request.user) & Q(id=lc['id'])).exists() else False
+        lc['already_learned'] = True if Lc.objects.filter(
+            Q(learned_user=request.user) & Q(id=lc['id'])).exists() else False
         serializer = LcSerializer(lc)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -161,3 +163,48 @@ class LcViewSet(viewsets.GenericViewSet,
         if not RecentLearnedLc.objects.filter(Q(user=user) & Q(lc=lc)).exists():
             RecentLearnedLc.objects.create(user=user, lc=lc)
         return Response("ok", status=status.HTTP_200_OK)
+
+
+class QuizViewSet(viewsets.GenericViewSet,
+                  mixins.ListModelMixin,
+                  View):
+    serializer_class = ExamSerializer
+    authentication_classes = (JSONWebTokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    @swagger_auto_schema(manual_parameters=[
+        openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
+                          type=openapi.TYPE_STRING)])
+    def get(self, request, type, title):
+        """
+        Take Quiz: get 5 problem
+
+        ___
+        """
+        user = request.user
+        if type != 'kpop':
+            cs = get_object_or_404(Cs, name=title)
+            lcs = Lc.objects.filter(cs=cs)
+        else:
+            css = Cs.objects.filter(name__contains=title)
+            lcs = Lc.objects.filter(cs__in=css)
+
+        if lcs.filter(learned_user=user).count() < 5:
+            return Response("Not ready to take quiz. Study more card.", status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        pro_list = []
+
+        learned_lc = list(lcs.filter(learned_user=user).values())
+        for lc in random.sample(list(learned_lc), 5):
+            pro_list.append({
+                "problem": {
+                    "before": lc.before_kor,
+                    "main": lc.cpct_kor,
+                    "after": lc.after_kor
+                },
+                "cs": lc.cs.name
+            })
+
+        serializer = ExamSerializer(data=pro_list, many=True)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

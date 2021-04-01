@@ -315,12 +315,7 @@ def request_dict(word):
 
 
 def updateLc():
-    kkma = Kkma()
+    lcs = Lc.objects.all()
+    for lc in lcs:
+        lc.example_kor = random.choice(list(lc.main_kw.contained_cpcq.all()))
 
-    kws = Kw.objects.all()
-    cpcqs = Cpcq.objects.all()
-
-    for cpcq in cpcqs:
-        for word in kkma.pos(cpcq.kor):
-            if Kw.objects.filter(content_kor="+".join(word)).exists():
-                cpcq.kcq.add(Kw.objects.get(content_kor="+".join(word)))
