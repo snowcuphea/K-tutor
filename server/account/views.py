@@ -151,54 +151,93 @@ class LoginViewSet(viewsets.GenericViewSet,
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-# 경험치 획득, 레벨업
-@api_view(['POST'])
-@authentication_classes([JSONWebTokenAuthentication])
-@permission_classes([IsAuthenticated])
-def get_exp(request):
-    user = request.user
-    if user.level == 15:
+class GetexpViewSet(viewsets.GenericViewSet,
+                   mixins.ListModelMixin,
+                   View):
+    serializer_class = UserSerializer
+    authentication_classes = (JSONWebTokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    @swagger_auto_schema(responses={200: ""}, manual_parameters=[
+        openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
+                          type=openapi.TYPE_STRING)])
+    def post(self, request):
+        """
+        Gain Exp
+
+        ___
+        """
+        user = request.user
+        if user.level == 15:
+            serializer = UserSerializer(user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        user.exp += request.data['exp']
+        if required_exp[user.level - 1] <= user.exp:
+            user.exp -= required_exp[user.level - 1]
+            user.level += 1
+            if user.level == 15:
+                user.exp = 0
+        user.save()
         serializer = UserSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    user.exp += request.data['exp']
-    if required_exp[user.level - 1] <= user.exp:
-        user.exp -= required_exp[user.level - 1]
-        user.level += 1
-        if user.level == 15:
-            user.exp = 0
-    user.save()
-    serializer = UserSerializer(user)
-    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-# 업적 정보 가져오기, 업적 달성
-@api_view(['GET', 'POST'])
-@authentication_classes([JSONWebTokenAuthentication])
-@permission_classes([IsAuthenticated])
-def achievement_list_unlock(request):
-    user = request.user
-    if request.method == 'GET':
-        users_achievements = AchievedManage.objects.filter(user=user)
-        users_achievements_list = AchievedManage.objects.filter(user=user).values()
-        data_list = []
-        for ua, ual in zip(users_achievements, users_achievements_list):
-            uua_info = []
-            achievement_info = []
-            achievement_info.append({
-                "title": ua.achievement.title,
-                "content": ua.achievement.content,
-                "image": ua.achievement.image,
-                "condition": ua.achievement.condition
-            })
-            uua_info.append({
-                "user_id": ual['user_id'],
-                "achievement_id": ual['achievement_id'],
-                "status": ual['status']
-            })
-            uua_info.extend(achievement_info)
-            uua_info[0].update(uua_info[1])
-            data_list.append(uua_info[0])
+class AchievementViewSet(viewsets.GenericViewSet,
+                   mixins.ListModelMixin,
+                   View):
+    serializer_class = AchievedManageSerializer
+    authentication_classes = (JSONWebTokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
-        serializer = UserAchievementSerializer(data=data_list, many=True)
+    @swagger_auto_schema(responses={200: ""}, manual_parameters=[
+        openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
+                          type=openapi.TYPE_STRING)])
+    def get(self, request):
+        """
+        Get User's Achievement List
+
+        ___
+        """
+        user = request.user
+        achievement_list = Achievement.objects.all()
+        user_achievement = []
+
+        for al in achievement_list:
+            if AchievedManage.objects.filter(user=user, achievement=al).exists():
+                user_achievement.append({
+                    "achievement_id" : al.id,
+                    "title" : al.title,
+                    "content" : al.content,
+                    "imgurl" : al.imgurl,
+                    "status" : 1
+                })
+            else:
+                user_achievement.append({
+                    "achievement_id": al.id,
+                    "title": al.title,
+                    "content": al.content,
+                    "imgurl": al.imgurl,
+                    "status": 0
+                })
+
+        serializer = AchievedManageSerializer(data=user_achievement, many=True)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data)
+
+
+
+    @swagger_auto_schema(responses={200: ""}, manual_parameters=[
+        openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
+                          type=openapi.TYPE_STRING)])
+    def post(self, request):
+        """
+        Update user's achievement status
+
+        ___
+        """
+        user = request.user
+        if AchievedManage.objects.filter(user=user, achievement_id=request.data['achievement']).exists():
+            return Response("Already Achieved", status=status.HTTP_302_FOUND)
+        else:
+            AchievedManage.objects.create(user=user, achievement_id=request.data['achievement'])
+            return Response("updated", status=status.HTTP_200_OK)
