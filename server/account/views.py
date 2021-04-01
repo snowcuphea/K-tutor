@@ -257,7 +257,7 @@ class InquiryViewSet(viewsets.GenericViewSet,
     @swagger_auto_schema(responses={200: "sended"}, manual_parameters=[
         openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
                           type=openapi.TYPE_STRING)])
-    def get(self, request):
+    def post(self, request):
         """
         Send inquiry email from user to us.
 
