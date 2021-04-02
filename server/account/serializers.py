@@ -39,4 +39,6 @@ class AchievedManageSerializer(serializers.Serializer):
     title = serializers.CharField()
     content = serializers.CharField()
     imgurl = serializers.CharField()
+    done = serializers.IntegerField()
+    total = serializers.IntegerField()
     status = serializers.IntegerField()
