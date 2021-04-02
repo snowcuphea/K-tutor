@@ -63,7 +63,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'server.urls'
 
 CORS_ALLOWED_ORIGINS = [
-    'http://J4A303.p.ssafy.io:8080',
+    'http://j4a303.p.ssafy.io:8080',
     'http://localhost:8080'
 ]
 
