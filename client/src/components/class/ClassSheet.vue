@@ -121,7 +121,7 @@
         return false
       },
       ableStudy() {
-        if (this.lessonInfo.length) {
+        if (this.lessonInfo.length != 0) {
           return true
         } else {
           return false
