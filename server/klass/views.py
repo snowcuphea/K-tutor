@@ -22,10 +22,10 @@ from django.db.models import Q
 
 @api_view(['GET'])
 def updateDB(request):
-    # update()
+    update()
     # create_lc()
     # add_meaning_to_lc()
-    updateLc()
+    # updateLc()
     return Response("OK", status=status.HTTP_200_OK)
 
 
