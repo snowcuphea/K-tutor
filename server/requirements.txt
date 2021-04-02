@@ -27,7 +27,6 @@ typing-extensions==3.7.4.3
 urllib3==1.26.4
 drf-yasg==1.20.0
 gensim==3.8.3
-drf-yasg-examples=0.1.1
+drf-yasg-examples==0.1.1
 mysqlclient==2.0.3
 gensim==3.8.3
-drf-yasg-examples==0.1.1
