@@ -7,7 +7,6 @@ cached-property==1.5.1
 certifi==2020.12.5
 chardet==4.0.0
 Click==7.0
-cloud-init==20.4
 colorama==0.4.4
 command-not-found==0.3
 configobj==5.0.6
