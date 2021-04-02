@@ -224,7 +224,7 @@ export default new Vuex.Store({
     GETREPORTINFO ( state, report ) {
       // state.time = new Date().getDay()
       state.time = new Date().getMinutes()
-      console.log(report)
+      // console.log(report)
       state.currentClass = { type: report.recent_cs.type, name_kor: report.recent_cs.name_kor, name_eng:report.recent_cs.name_eng ,level: Number(report.recent_cs.level) }
 
       const progressForm = [
@@ -273,7 +273,7 @@ export default new Vuex.Store({
     },
     SENDCOMPLETELESSON ( state, idx ) {
       
-      console.log(state.classList[idx])
+      // console.log(state.classList[idx])
 
       if ( state.classList[idx]["already_learned"] == false) {
 
@@ -309,7 +309,7 @@ export default new Vuex.Store({
       }
 
       state.recent_lc_progress.push(progressForm)
-      console.log(state.recent_lc_progress)
+      // console.log(state.recent_lc_progress)
     },
     SAVEACIEVEMENTLIST ( state, achievements ) {
       const achieve_list = []
@@ -340,7 +340,7 @@ export default new Vuex.Store({
     RESETCHANCE ( state ) {
       state.quizChance = 3
       state.testChance = 2
-      console.log("reset 됐어")
+      // console.log("reset 됐어")
     },
     CHANGECHANCE ( state, type) {
       if ( type == "test" ) {
@@ -390,7 +390,7 @@ export default new Vuex.Store({
       commit('CHANGECURRENTCLASS', item)
     },
     getListCurrentClass ({ commit }, selectedItem) {
-      console.log("selectedItem", selectedItem)
+      // console.log("selectedItem", selectedItem)
       let selectedClassInfo ={
         type : selectedItem.type,
         name_kor: selectedItem.name_kor,
@@ -509,7 +509,6 @@ export default new Vuex.Store({
           console.log(err.data)
         }
       )
-      console.log(commit)
     },
 
     deleteUser( {commit} ) {

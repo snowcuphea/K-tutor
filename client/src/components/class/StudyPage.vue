@@ -237,7 +237,7 @@ export default {
       this.defaultSetting()
       this.resultDialog = !this.resultDialog
       this.$store.dispatch('changeCurrentClassIndex', this.currentClassIndex+1)
-      this.$store.dispatch('getLessonInfoByItem', this.classList[this.currentClassIndex +1].id )
+      this.$store.dispatch('getLessonInfoByItem', this.classList[this.currentClassIndex].id )
     },
     endClass() {
       this.defaultSetting()
