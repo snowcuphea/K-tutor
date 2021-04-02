@@ -32,7 +32,7 @@ export default new Vuex.Store({
     currentPage: '', //밑 navbar에서 선택한 페이지
     currentPageValue: 2, //밑 navbar에서 선택한 index
     currentType: '', //선택한 타입(영화, 드라마, 가수) 
-    currentClass: {name_kor: '사랑의불시착', type:'drama', level:1}, //최근 클래스 정보
+    currentClass: {}, //최근 클래스 정보
     defaultClass:'', 
     classList:[], //title을 선택하면 나오는 학습 리스트
 
@@ -224,7 +224,7 @@ export default new Vuex.Store({
     GETREPORTINFO ( state, report ) {
       // state.time = new Date().getDay()
       state.time = new Date().getMinutes()
-
+      console.log(report)
       state.currentClass = { type: report.recent_cs.type, name_kor: report.recent_cs.name_kor, name_eng:report.recent_cs.name_eng ,level: Number(report.recent_cs.level) }
 
       const progressForm = [
