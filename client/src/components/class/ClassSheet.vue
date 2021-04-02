@@ -1,9 +1,9 @@
 <template>
   <v-container id="classSheet">
     <v-row>
-      <v-col class="d-flex justify-center">
-        <h2> {{currentClass.name}} </h2>
-        <!-- <span> 여기에 나중에 영어이름도 넣기 </span> -->
+      <v-col class="d-flex flex-column justify-center align-center">
+        <h2> {{currentClass.name_kor}} </h2>
+        <h2> {{currentClass.name_eng}} </h2>
       </v-col>
     </v-row>
 

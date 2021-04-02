@@ -226,7 +226,8 @@ export default new Vuex.Store({
       state.time = new Date().getMinutes()
 
       console.log(report)
-      state.currentClass = { type: report.recent_cs.type, name: report.recent_cs.name_kor, level: Number(report.recent_cs.level) }
+      state.currentClass = { type: report.recent_cs.type, name_kor: report.recent_cs.name_kor, name_eng:report.recent_cs.name_eng ,level: Number(report.recent_cs.level) }
+      console.log(state.currentClass)
       const progressForm = [
         {type: "drama", done: report.progress.drama[0] , total: report.progress.drama[1] },
         {type: "kpop", done: report.progress.kpop[0] , total: report.progress.kpop[1] },
