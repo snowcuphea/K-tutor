@@ -75,4 +75,16 @@ function getMyAcieve( success, fail ){
 
 }
 
-export { getToken, getInfo, signUp, getExp, getMyAcieve, deleteUser }
+function sendEmail( mail, success, fail) {
+
+  instance.defaults.headers['Authorization'] = "jwt " + window.localStorage.getItem('jwt')
+
+  instance
+    .post("account/inquiry", mail)
+    .then(success)
+    .catch(fail)
+
+}
+
+
+export { getToken, getInfo, signUp, getExp, getMyAcieve, deleteUser, sendEmail }
