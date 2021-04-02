@@ -14,7 +14,7 @@ services:
     build:
       context: server
       dockerfile: back.Dockerfile
-    command: python3 manage.py runserver 172.26.12.150:8000
+    command: python3 server/manage.py runserver 172.26.12.150:8000
     ports:
       - "8000:8000"
     depends_on:
