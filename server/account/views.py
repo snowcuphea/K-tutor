@@ -271,7 +271,7 @@ class InquiryViewSet(viewsets.GenericViewSet,
         user = request.user
         email = EmailMessage(
             request.data['title'],
-            str(user.email) + "\n " + request.data['content'],
+            body=str(user.username) + "\n " + request.data['content'],
             to=["malmoongchi@gmail.com"]
         )
         email.send()
