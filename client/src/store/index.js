@@ -4,7 +4,7 @@ import Vuex from 'vuex'
 import createPersistedState from "vuex-persistedstate"
 import { getLessonList, getLessonInfo, sendLessonInfo, getQuizInfo } from "@/api/klass.js"
 import { getExamProblems, getExamReport } from "@/api/exam.js"
-import { getExp, getMyAcieve } from "@/api/account.js"
+import { getExp, getMyAcieve, addAchieve } from "@/api/account.js"
 
 Vue.use(Vuex)
 
@@ -314,9 +314,9 @@ export default new Vuex.Store({
     SAVEACIEVEMENTLIST ( state, achievements ) {
       const achieve_list = []
 
-      for (let achievement in achievements) {
+      for (let achievement of achievements) {
         const achieve_arr = {
-          title:achievement.title, content:achievement.content, src:require('@/assets/img/score.png'), total:30, done:3
+          id: achievement.id, title:achievement.title, content:achievement.content, src:require('@/assets/img/score.png'), total:30, done:3
         }
         achieve_list.push(achieve_arr)
       }
@@ -350,11 +350,13 @@ export default new Vuex.Store({
         state.quizChance -= 1
         console.log(state.quizChance)
       }
+    },
+    COMPLETEACHIEVE ( state, achieveId ) {
+      state.AchievementList[achieveId-1].status = 1
+      console.log(state.AchievementList)
     }
 
     
-    
-
   },
 
   actions: {
@@ -500,7 +502,6 @@ export default new Vuex.Store({
 
       getMyAcieve(
         (res) => {
-          console.log(res.data)
           commit( 'SAVEACIEVEMENTLIST', res.data )
         },
         (err) => {
@@ -521,10 +522,25 @@ export default new Vuex.Store({
     },
     changeChance( { commit }, type ) {
       commit('CHANGECHANCE', type)
+    },
+    completeAchieve({ commit }, achieveInfo ) {
+      
+      const achieveForm = {
+        ...achieveInfo,
+        "status": 1,
+      }
+      
+      addAchieve(
+        achieveForm,
+        (res) => {
+          console.log(res.data)
+          commit( "COMPLETEACHIEVE", achieveInfo.id )
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
     }
-
-
-
 
   },
 
