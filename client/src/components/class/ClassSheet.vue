@@ -73,7 +73,7 @@
       </v-col>
     </v-row>
 
-    <StudyPage :openStudyPage="openStudyPage" @closeStudyPage="endClass" v-if="lessonInfo"/>
+    <StudyPage :openStudyPage="openStudyPage" @closeStudyPage="endClass" v-if="ableStudy()"/>
     <QuizPage :openQuizPage="openQuizPage" @closeQuizPage="endQuiz" v-if="ableQuiz()" />
 
   </v-container>
@@ -119,6 +119,13 @@
           }
         }
         return false
+      },
+      ableStudy() {
+        if (this.lessonInfo.length) {
+          return true
+        } else {
+          return false
+        }
       },
       ableQuiz() {
         if (this.getCurrentClassLearnedKeword.length > 4) {
