@@ -32,7 +32,7 @@ export default new Vuex.Store({
     currentPage: '', //밑 navbar에서 선택한 페이지
     currentPageValue: 2, //밑 navbar에서 선택한 index
     currentType: '', //선택한 타입(영화, 드라마, 가수) 
-    currentClass: {name: '사랑의불시착', type:'drama', level:1}, //최근 클래스 정보
+    currentClass: {name_kor: '사랑의불시착', type:'drama', level:1}, //최근 클래스 정보
     defaultClass:'', 
     classList:[], //title을 선택하면 나오는 학습 리스트
 
@@ -94,7 +94,7 @@ export default new Vuex.Store({
       state.currentPageValue = 2
       state.currentType = ''
       // 나중에 최근 학습내역으로 해야하나
-      state.currentClass = {name: '사랑의불시착', type:'drama', level:1}
+      state.currentClass = {name_kor: '사랑의불시착', type:'drama', level:1}
       state.classList = []
       state.userGrade_score = []
       state.userGrade_date = []
@@ -137,7 +137,7 @@ export default new Vuex.Store({
       //titleInfo.cs_seq로 axios 요청받아서 리스트 받아오기
       // console.log("뮤테이션 getListCurrentClass실행:::", resclassList)
       state.classList = resclassList
-      // console.log("현재 클래스 리스트는?", state.classList)
+      console.log("현재 클래스 리스트는?", state.classList)
 
     },
     GETLESSONINFO ( state, item ) {
@@ -148,7 +148,7 @@ export default new Vuex.Store({
       const lessonForm = {
         id: item.id,
         type: state.currentClass.type,
-        title: state.currentClass.name,
+        title: state.currentClass.name_kor,
         img: 'poster1',
         keyword_kr: item.main_kw_kor,
         keyword_en: item.main_kw_eng,
@@ -226,7 +226,7 @@ export default new Vuex.Store({
       state.time = new Date().getMinutes()
 
       console.log(report)
-      state.currentClass = { type: report.recent_cs.type, name: report.recent_cs.name, level: Number(report.recent_cs.level) }
+      state.currentClass = { type: report.recent_cs.type, name: report.recent_cs.name_kor, level: Number(report.recent_cs.level) }
       const progressForm = [
         {type: "drama", done: report.progress.drama[0] , total: report.progress.drama[1] },
         {type: "kpop", done: report.progress.kpop[0] , total: report.progress.kpop[1] },
@@ -278,7 +278,7 @@ export default new Vuex.Store({
       if ( state.classList[idx]["already_learned"] == false) {
 
         for ( let progress of state.recent_lc_progress){
-          if ( progress.title === state.currentClass.name ){
+          if ( progress.title === state.currentClass.name_kor ){
             progress.done += 1
           }
         }
@@ -305,7 +305,7 @@ export default new Vuex.Store({
     },
     ADDTOPROGRESSLIST ( state ) {
       const progressForm = {
-        title: state.currentClass.name, done: 0, total: state.classList.length
+        title: state.currentClass.name_kor, done: 0, total: state.classList.length
       }
 
       state.recent_lc_progress.push(progressForm)
@@ -388,9 +388,10 @@ export default new Vuex.Store({
       commit('CHANGECURRENTCLASS', item)
     },
     getListCurrentClass ({ commit }, selectedItem) {
+      console.log("selectedItem", selectedItem)
       let selectedClassInfo ={
         type : selectedItem.type,
-        title: selectedItem.name,
+        name_kor: selectedItem.name_kor,
       }
       getLessonList(
         selectedClassInfo
@@ -429,7 +430,7 @@ export default new Vuex.Store({
 
       const form = {
         type: state.currentClass.type,
-        name: state.currentClass.name
+        name: state.currentClass.name_kor
       }
 
       getQuizInfo(
