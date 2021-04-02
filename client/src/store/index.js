@@ -32,7 +32,7 @@ export default new Vuex.Store({
     currentPage: '', //밑 navbar에서 선택한 페이지
     currentPageValue: 2, //밑 navbar에서 선택한 index
     currentType: '', //선택한 타입(영화, 드라마, 가수) 
-    currentClass: {name_kor: '사랑의불시착', type:'drama', level:1}, //최근 클래스 정보
+    currentClass: {},
     defaultClass:'', 
     classList:[], //title을 선택하면 나오는 학습 리스트
 
@@ -94,7 +94,7 @@ export default new Vuex.Store({
       state.currentPageValue = 2
       state.currentType = ''
       // 나중에 최근 학습내역으로 해야하나
-      state.currentClass = {name_kor: '사랑의불시착', type:'drama', level:1}
+      state.currentClass = ''
       state.classList = []
       state.userGrade_score = []
       state.userGrade_date = []
