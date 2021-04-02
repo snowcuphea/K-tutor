@@ -139,10 +139,10 @@ class LoginViewSet(viewsets.GenericViewSet,
         # recent_lc_progress = serializers.DictField()
         recent_lc_progress = dict()
         for lc in list(user.learned_lc.all()):
-            if lc.cs.name not in recent_lc_progress:
-                recent_lc_progress[lc.cs.name] = [
-                    Lc.objects.filter(cs__name=lc.cs.name).filter(learned_user=user).count(),
-                    Lc.objects.filter(cs__name=lc.cs.name).count()
+            if lc.cs.name_kor not in recent_lc_progress:
+                recent_lc_progress[lc.cs.name_kor] = [
+                    Lc.objects.filter(cs__name=lc.cs.name_kor).filter(learned_user=user).count(),
+                    Lc.objects.filter(cs__name=lc.cs.name_kor).count()
                 ]
         data['recent_lc_progress'] = recent_lc_progress
         # progress = serializers.DictField()
@@ -254,7 +254,7 @@ class InquiryViewSet(viewsets.GenericViewSet,
     authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = (IsAuthenticated,)
 
-    @swagger_auto_schema(responses={200: "sended"}, manual_parameters=[
+    @swagger_auto_schema(responses={200: "sent"}, manual_parameters=[
         openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
                           type=openapi.TYPE_STRING)])
     def post(self, request):

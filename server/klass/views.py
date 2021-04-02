@@ -53,7 +53,7 @@ class CsViewSet(viewsets.GenericViewSet,
         ___
         """
         song_list = Cs.objects.filter(type="kpop")
-        cs_list_temp = list(set({x.name.split(" - ")[0] for x in song_list}))
+        cs_list_temp = list(set({x.name_kor.split(" - ")[0] for x in song_list}))
         cs_list = []
         for cs in cs_list_temp:
             cs_list.append({
@@ -205,7 +205,7 @@ class QuizViewSet(viewsets.GenericViewSet,
                     "after_kor": lc['after_kor'],
                     "after_eng": lc['after_eng']
                 },
-                "cs": Cs.objects.get(id=lc['cs_id']).name
+                "cs": Cs.objects.get(id=lc['cs_id']).name_kor
             })
 
         serializer = ExamSerializer(data=pro_list, many=True)

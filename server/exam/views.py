@@ -43,7 +43,7 @@ class ExamViewSet(viewsets.GenericViewSet,
                     "main": lc.cpct_kor,
                     "after": lc.after_kor
                 },
-                "cs": lc.cs.name
+                "cs": lc.cs.name_kor
             })
 
         learned_kw = list(user.learned_kw.all())
@@ -55,7 +55,7 @@ class ExamViewSet(viewsets.GenericViewSet,
                     "main": lc.cpct_kor,
                     "after": lc.after_kor
                 },
-                "cs": lc.cs.name
+                "cs": lc.cs.name_kor
             }
             if d in pro_list and Lc.objects.filter(main_kw=kw).count() == 1:
                 continue
@@ -67,7 +67,7 @@ class ExamViewSet(viewsets.GenericViewSet,
                         "main": lc.cpct_kor,
                         "after": lc.after_kor
                     },
-                    "cs": lc.cs.name
+                    "cs": lc.cs.name_kor
                 }
             pro_list.append(d)
 
