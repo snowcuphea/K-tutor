@@ -1,14 +1,18 @@
 <template>
   <div>
-
     <v-img
+      width="100%"
+      height="100%"
+      :src=" require('@/assets/img/kite.png')"
+      @click="modalClick"
+    />
+    <!-- <v-img
         width="100%"
         height="100%"
         :src="modalItem.imgurl"
         @click="modalClick"
-    >
-        
-    </v-img>
+    >   
+    </v-img> -->
 
 
   </div>
