@@ -1,0 +1,14 @@
+version: '3.8.5'
+
+services:
+  db:
+    image: k-tutor
+  django:
+    build: ./server
+    command: python3 manage.py runserver 172.26.12.150:8000
+    volumes:
+      - .:/server
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
