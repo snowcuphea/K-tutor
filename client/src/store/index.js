@@ -137,7 +137,7 @@ export default new Vuex.Store({
       //titleInfo.cs_seq로 axios 요청받아서 리스트 받아오기
       // console.log("뮤테이션 getListCurrentClass실행:::", resclassList)
       state.classList = resclassList
-      console.log("현재 클래스 리스트는?", state.classList)
+      // console.log("현재 클래스 리스트는?", state.classList)
 
     },
     GETLESSONINFO ( state, item ) {
@@ -225,9 +225,8 @@ export default new Vuex.Store({
       // state.time = new Date().getDay()
       state.time = new Date().getMinutes()
 
-      console.log(report)
       state.currentClass = { type: report.recent_cs.type, name_kor: report.recent_cs.name_kor, name_eng:report.recent_cs.name_eng ,level: Number(report.recent_cs.level) }
-      console.log(state.currentClass)
+
       const progressForm = [
         {type: "drama", done: report.progress.drama[0] , total: report.progress.drama[1] },
         {type: "kpop", done: report.progress.kpop[0] , total: report.progress.kpop[1] },
