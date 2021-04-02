@@ -13,7 +13,7 @@
                 <!-- <img :src="require(`@/assets/images/poster/poster${item.cs_seq}.jpg`)" alt="title" class="imgSize"> -->
               </v-col>
               <v-col cols="5" class="d-flex align-center">
-                <h3 class="text--primary">{{item.name}}</h3>
+                <h3 class="text--primary">{{item.name_kor}}</h3>
               </v-col>
               <v-col cols="3" class="d-flex align-center justify-end">
                 <span v-if="item.level == '0'">Beginner</span>
@@ -50,7 +50,7 @@
         this.$store.dispatch('changeCurrentClass', item)
         // this.$store.state.currentClass = item
         this.$emit("closeDialog")
-        console.log("selected Class!!!!!!!:::::", item.name)
+        console.log("selected Class!!!!!!!:::::", item.name_kor)
         this.$store.dispatch("getListCurrentClass", item) //선택한 타이틀의 학습리스트 가져온다.
 
       }
