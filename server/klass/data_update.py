@@ -15,7 +15,7 @@ from .models import Kw, Cs, Cpct, Cpcq, Lc
 def update():
     # kw 업데이트
     path = os.getcwd()
-    kw_data_frame = pd.read_pickle(path + "\data\pandas\kw.pkl")
+    kw_data_frame = pd.read_pickle(path + "/data/pandas/kw.pkl")
     for i, row in kw_data_frame.iterrows():
        if not Kw.objects.filter(content=row.content).exists():
            Kw.objects.create(
@@ -24,7 +24,7 @@ def update():
            )
 
     # cs 업데이트
-    cs_data_frame = pd.read_pickle(path + "\data\pandas\cs.pkl")
+    cs_data_frame = pd.read_pickle(path + "/data/pandas/cs.pkl")
     for i, row in cs_data_frame.iterrows():
        if not Cs.objects.filter(name=row['name']).exists():
            Cs.objects.create(
@@ -59,7 +59,7 @@ def update():
             print(row)
 
     # cpcq, kcq 업데이트
-    cpcq_data_frame = pd.read_pickle(path + "\data\pandas\cpcq.pkl")
+    cpcq_data_frame = pd.read_pickle(path + "/data/pandas/cpcq.pkl")
 
     for i, row in cpcq_data_frame.iterrows():
         cpcq = Cpcq.objects.create(
