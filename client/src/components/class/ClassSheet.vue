@@ -166,7 +166,7 @@
       },
     },
     created() {
-      // console.log(this.classList)
+      console.log(this.classList, this.currentClass)
       this.$store.dispatch('getLessonInfoByItem', 65 )
       if ( this.ableQuiz() ) {
         this.$store.dispatch('getQuizInfo')
