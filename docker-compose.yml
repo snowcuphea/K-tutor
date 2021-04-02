@@ -9,7 +9,10 @@ services:
       - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: emh4baTVMa3SYmSf
+    stdin_open: true
+    tty: true
   server:
+    command: bash -c 'while true; do python3 /root/server/manage.py runserver 172.26.12.150:8000; sleep 2; done'
     container_name: backend
     build:
       context: server
@@ -29,6 +32,8 @@ services:
     build:
       context: client
       dockerfile: front.Dockerfile
+    stdin_open: true
+    tty: true
     expose:
       - 8080
     ports:
