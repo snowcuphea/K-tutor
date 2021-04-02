@@ -9,7 +9,7 @@
 
     <v-row>
       <v-col>
-        <!-- <img :src="require(`@/assets/images/poster/poster${classInfo.cs_seq}.jpg`)" alt="title" class="imgSize"> -->
+        <!-- <img :src="require(imgurl)" alt="title" class="imgSize"> -->
         <img :src="require(`@/assets/images/poster/poster1.jpg`)" alt="title" class="imgSize">
       </v-col>
     </v-row>
@@ -53,7 +53,7 @@
                 <span>{{idx+1}}</span>
               </v-col>
               <v-col cols="3" xs="4" style="" class="d-flex justify-center">
-                <img :src="require(`@/assets/images/poster/poster8.jpg`)" alt="keyword" class="imgSize">
+                <img :src="require(`@/assets/images/poster/poster1.jpg`)" alt="keyword" class="imgSize">
               </v-col>
               <v-col cols="6" xs="6" class="d-flex align-center">
                 <div class="d-flex flex-column ">
