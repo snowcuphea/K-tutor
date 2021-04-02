@@ -17,7 +17,7 @@
 
               <h4>{{ $store.state.nickName }}</h4>
               <v-btn icon class="my_info_icon">
-                <v-icon>mdi-cog-outline</v-icon>
+                <v-icon @click="showDialog('ModifyMyInfo')">mdi-cog-outline</v-icon>
               </v-btn>
             </div>
 
@@ -52,6 +52,7 @@
   <TermsOfUse :showTermsOfUse="showTermsOfUse" @hideTutorial="showTermsOfUse = !showTermsOfUse"/>
   <OpenSource :showOpenSource="showOpenSource" @hideTutorial="showOpenSource = !showOpenSource"/>
   <DeleteAccount :showDeleteAccount="showDeleteAccount" @hideTutorial="showDeleteAccount = !showDeleteAccount"/>
+  <ModifyMyInfo :showModifyMyInfo="showModifyMyInfo" @hideTutorial="showModifyMyInfo = !showModifyMyInfo"/>
   </div>
 
 </template>
@@ -63,6 +64,7 @@
   import TermsOfUse from '../components/mypage/TermsOfUse'
   import OpenSource from '../components/mypage/OpenSource'
   import DeleteAccount from '../components/mypage/DeleteAccount'
+  import ModifyMyInfo from '../components/mypage/ModifyMyInfo'
   
   export default {
     components: {
@@ -72,6 +74,7 @@
       TermsOfUse,
       OpenSource,
       DeleteAccount,
+      ModifyMyInfo,
 
     },
     data: () => ({
@@ -99,6 +102,7 @@
       showTermsOfUse: false,
       showOpenSource: false,
       showDeleteAccount: false,
+      showModifyMyInfo: false,
       tempLevel: 15,
     }),
     methods: {
@@ -120,7 +124,9 @@
           this.showTermsOfUse = !this.showTermsOfUse
         } else if (item.title == 'DeleteAccount'){
           this.showDeleteAccount = !this.showDeleteAccount
-        }else {
+        } else if (item == 'ModifyMyInfo') {
+          this.showModifyMyInfo = !this.showModifyMyInfo
+        } else {
           this.showOpenSource = !this.showOpenSource
         }
       },

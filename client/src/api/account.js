@@ -88,10 +88,16 @@ function addAchieve( achieved, success, fail ){
 
 function sendEmail( mail, success, fail) {
 
+  const mailInfo = {
+    "title": mail.title,
+    "content": mail.content,
+  }
+  console.log(mailInfo)
+
   instance.defaults.headers['Authorization'] = "jwt " + window.localStorage.getItem('jwt')
 
   instance
-    .post("account/inquiry", mail)
+    .post("account/inquiry", mailInfo)
     .then(success)
     .catch(fail)
 

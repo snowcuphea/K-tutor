@@ -27,35 +27,34 @@
               <v-row>
                 <v-col>
                   <v-text-field
-                    label="name"            
-                    placeholder="please enter your name"
+                    label="title"            
+                    placeholder="please enter the title"
                     style="width:80%;"
-                    v-model="form.name"
+                    v-model="form.title"
                   ></v-text-field>
 
                 </v-col>
 
               </v-row>
-              <v-row>
+              <!-- <v-row>
                 <v-col>
                   <v-text-field
                     :rules="rulesEmail"
                     label="email"            
                     placeholder="please enter your eamil ex) asd@asd.com"
                     style="width:80%;"
-                    v-model="form.email"
                   ></v-text-field>
 
                 </v-col>
 
-              </v-row>
+              </v-row> -->
               <v-row>
                 <v-col>
                   <v-textarea
                     label="contents"            
                     placeholder="Please fill out your inquiry"
                     style="width:80%;"
-                    v-model="form.contents"        
+                    v-model="form.content"        
                   ></v-textarea>
 
                 </v-col>
@@ -92,9 +91,8 @@ export default {
       'Confirm your Email.',
     ],
     form: {
-      name: '',
-      email: '',
-      contents: '',
+      title: '',
+      content: '',
     },
   }),
   methods: {
@@ -102,27 +100,19 @@ export default {
       this.$emit('hideTutorial')
     },
     sendemail () {
+      console.log(this.form)
       sendEmail(
         this.form,
         (res) => {
           console.log(res)
-          console.log(this.form)
-          this.form.name = ''
-          this.form.email = ''
-          this.form.contents = ''
+          this.form.title = ''
+          this.form.content = ''
         },
         (err) => {
           console.log('fail', err)
         }
       )
-      console.log(this.form)
     }
-    //   const my_inquiry = []
-    //   my_inquiry.push({name:this.name, email:this.email, contents:this.contents})
-    //   console.log(my_inquiry)
-      // console.log(this.name)
-      // console.log(this.email)
-      // console.log(this.contents)
     }
   }
 </script>
