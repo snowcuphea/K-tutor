@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'drf_yasg',
 
     'account',
-    'klass'
+    'klass',
+    'exam'
 
 ]
 
@@ -62,7 +63,8 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'server.urls'
 
 CORS_ALLOWED_ORIGINS = [
-    'http://J4A303.p.ssafy.io:8080',
+    'http://j4a303.p.ssafy.io:8080',
+    'http://localhost:8080'
 ]
 
 TEMPLATES = [
@@ -129,7 +131,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
@@ -143,5 +145,19 @@ AUTH_USER_MODEL = 'account.User'
 import datetime
 
 JWT_AUTH = {
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
+    # 자동 로그인
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=10000),
 }
+
+SWAGGER_SETTINGS = {
+    'DEFAULT_AUTO_SCHEMA_CLASS': 'drf_yasg_examples.SwaggerAutoSchema',
+}
+
+
+# 이메일
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = '587'
+EMAIL_HOST_USER = 'malmoongchi@gmail.com'
+EMAIL_HOST_PASSWORD = 'k-tutormalmoe'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'malmoongchi@gmail.com'
