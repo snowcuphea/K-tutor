@@ -49,6 +49,23 @@ function signUp(user, success, fail ){
     .catch(fail);
 }
 
+
+function updateUser( user, success, fail ) {
+
+  instance.defaults.headers['Authorization'] = "jwt " + window.localStorage.getItem('jwt')
+
+  const accountInfo = {
+    nickname: user.userNickname,
+    password: user.userPassword
+  }
+
+  instance
+    .put("account/modify_delete", accountInfo)
+    .then(success)
+    .catch(fail)
+}
+
+
 function getExp( exp, success, fail ){
   
   instance.defaults.headers['Authorization'] = "jwt " + window.localStorage.getItem('jwt')
@@ -102,4 +119,4 @@ function sendEmail( mail, success, fail) {
 }
 
 
-export { getToken, getInfo, signUp, getExp, getMyAcieve, addAchieve, deleteUser, sendEmail }
+export { getToken, getInfo, signUp, getExp, getMyAcieve, addAchieve, deleteUser, sendEmail, updateUser }
