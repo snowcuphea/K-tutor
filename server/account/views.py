@@ -45,6 +45,11 @@ class SignupViewSet(viewsets.GenericViewSet,
         user.set_password(request.data.get('password'))
         user.username = request.data['username']
         user.save()
+
+        achievement_list = Achievement.objects.all()
+        for al in achievement_list:
+            AchieveManage.objects.create(user=user, achievement=al, done=0)
+
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
