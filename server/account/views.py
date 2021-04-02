@@ -273,7 +273,7 @@ class InquiryViewSet(viewsets.GenericViewSet,
             request.data['title'],
             request.data['content'],
             from_email=user.email,
-            to="malmoongchi@gmail.com"
+            to=["malmoongchi@gmail.com"]
         )
         email.send()
         return Response("ok", status=status.HTTP_200_OK)
