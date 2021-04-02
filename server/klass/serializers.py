@@ -5,7 +5,7 @@ from .models import Cs, Cpct, Kw, Cpcq, Lc
 class CsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cs
-        fields = ('name', 'type', 'level')
+        fields = ('name_kor', 'name_eng', 'type', 'level')
 
 
 class CpctSerializer(serializers.ModelSerializer):
