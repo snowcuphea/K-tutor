@@ -1,158 +1,279 @@
+from django.core.mail import EmailMessage
 from django.views import View
-from rest_framework import status, viewsets, mixins
-from django.db.models import Max, Count
+from django.db.models import Max, Count, Q
+from django.shortcuts import get_object_or_404
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 
 from rest_framework import status
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
-
-from .models import TestResult, AccessDate
-from .serializers import UserSerializer, User, TestResultSerializer, ReportSearializer
-from klass.models import *
-
-from django.shortcuts import get_object_or_404
+from rest_framework import status, viewsets, mixins
 
 from datetime import date, timedelta
 
+from .models import *
+from .serializers import *
+from klass.models import *
 
-# 회원 가입
-@api_view(['POST'])
-def sign_up(request):
-    serializer = UserSerializer(data=request.data)
+required_exp = [10, 20, 30, 50, 70,
+                100, 150, 200, 250, 300,
+                400, 500, 600, 750, 1000]
 
-    if serializer.is_valid(raise_exception=True):
+
+class SignupViewSet(viewsets.GenericViewSet,
+                    mixins.ListModelMixin,
+                    View):
+    serializer_class = UserSerializer
+
+    # 회원 가입
+    def post(self, request):
+        """
+        Signup
+
+        ___
+        """
+        if User.objects.filter(username=request.data['username']).exists():
+            return Response("This email is already registered.", status=status.HTTP_406_NOT_ACCEPTABLE)
+        if User.objects.filter(nickname=request.data['nickname']).exists():
+            return Response("This nickname is already registered.", status=status.HTTP_406_NOT_ACCEPTABLE)
+        serializer = UserSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
         user = serializer.save()
         user.set_password(request.data.get('password'))
+        user.username = request.data['username']
         user.save()
-    return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-# 정보 수정, 회원 탈퇴
-@api_view(['PUT', 'DELETE'])
-@authentication_classes([JSONWebTokenAuthentication])
-@permission_classes([IsAuthenticated])
-def account_modify_delete(request):
-    # 회원 수정한 정보를 request.data에 담았다고 가정
-    user = get_object_or_404(User, username=request.data['username'])
-    if request.method == 'PUT':
+class UserViewSet(viewsets.GenericViewSet,
+                  mixins.ListModelMixin,
+                  View):
+    serializer_class = UserSerializer
+    authentication_classes = (JSONWebTokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    # 정보 수정
+    @swagger_auto_schema(responses={200: "username"}, manual_parameters=[
+        openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
+                          type=openapi.TYPE_STRING)])
+    def put(self, request):
+        """
+        Modify User Info
+
+        ___
+        """
+        # 회원 수정한 정보를 request.data에 담았다고 가정
+        user = request.user
+        if User.objects.filter(username=request.data['username']).exists():
+            return Response("This email is already registered.", status=status.HTTP_302_FOUND)
+        if User.objects.filter(nickname=request.data['nickname']).exists():
+            return Response("This nickname is already registered.", status=status.HTTP_302_FOUND)
         user.set_password(request.data['password'])
+        user.nickname = request.data['nickname']
         user.save()
-    elif request.method == 'DELETE':
+        return Response(user.serializable_value(field_name="username"), status=status.HTTP_200_OK)
+
+    # 회원 탈퇴
+    @swagger_auto_schema(responses={200: "deleted"}, manual_parameters=[
+        openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
+                          type=openapi.TYPE_STRING)])
+    def delete(self, request):
+        """
+        Delete User
+
+        ___
+        """
+        user = request.user
         user.delete()
-    return Response(user, status=status.HTTP_200_OK)
+        return Response("deleted", status=status.HTTP_200_OK)
 
 
-# (유저의) 전체 시험 성적 조회, 등록
-@api_view(['GET', 'POST'])
-@authentication_classes([JSONWebTokenAuthentication])
-@permission_classes([IsAuthenticated])
-def result_list_create(request, user_pk):
-    user = get_object_or_404(User, pk=user_pk)
-    if request.method == 'POST':
-        TestResult.objects.create(
-            user=user,
-            score=request.data['score'],
-        )
-        data = {
-            'score': request.data['score']
+class LoginViewSet(viewsets.GenericViewSet,
+                   mixins.ListModelMixin,
+                   View):
+    serializer_class = ReportSearializer
+    authentication_classes = (JSONWebTokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    @swagger_auto_schema(responses={200: ""}, manual_parameters=[
+        openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
+                          type=openapi.TYPE_STRING)])
+    def get(self, request):
+        """
+        Get User Report
+
+        ___
+        """
+        data = {}
+        user = get_object_or_404(User, username=request.user.username)
+        # 최근 학습 데이터 갱신
+        RecentLearnedLc.objects.filter(Q(user=user) & Q(learned_at__lt=date.today() - timedelta(days=7))).delete()
+
+        # consecutive_access_date = serializers.IntegerField()
+        if not AccessDate.objects.filter(Q(user=user) & Q(access_at=date.today())).exists():
+            AccessDate.objects.create(user=user)
+            if AccessDate.objects.filter(Q(user=user) & Q(access_at=date.today() - timedelta(days=1))):
+                user.consecutive_access += 1
+                user.save()
+        data['user'] = {
+            'nickname': user.nickname,
+            'level': user.level,
+            'exp': user.exp,
+            'consecutive_access': user.consecutive_access
         }
-        serializer = TestResultSerializer(data=data)
-        if serializer.is_valid(raise_exception=True):
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-    else:
-        results = TestResult.objects.filter(user=user)
-        serializer = TestResultSerializer(results, many=True)
-        return Response(serializer.data)
-
-
-# 최고 시험 성적 조회
-@api_view(['GET'])
-@authentication_classes([JSONWebTokenAuthentication])
-@permission_classes([IsAuthenticated])
-def result_max(request, user_pk):
-    user = get_object_or_404(User, pk=user_pk)
-
-    if request.method == 'GET':
-        result = TestResult.objects.aggregate(max_score=Max('score'))
-        serializer = TestResultSerializer(result)
-        return Response(serializer.data)
-
-
-# 최근 시험 성적 조회
-@api_view(['GET'])
-@authentication_classes([JSONWebTokenAuthentication])
-@permission_classes([IsAuthenticated])
-def result_latest(request, user_pk):
-    user = get_object_or_404(User, pk=user_pk)
-
-    if request.method == 'GET':
-        result = TestResult.objects.last()
-        serializer = TestResultSerializer(result)
-        return Response(serializer.data)
-
-
-# 접속 날짜 조회
-@api_view(['GET'])
-@authentication_classes([JSONWebTokenAuthentication])
-@permission_classes([IsAuthenticated])
-def access_list(request, user_pk):
-    pass
-
-
-# 총 접속 날짜 조회
-@api_view(['GET'])
-@authentication_classes([JSONWebTokenAuthentication])
-@permission_classes([IsAuthenticated])
-def access_total(request, user_pk):
-    pass
-
-
-# 연속으로 접속 날짜 조회
-@api_view(['GET'])
-@authentication_classes([JSONWebTokenAuthentication])
-@permission_classes([IsAuthenticated])
-def access_consecutive_max(request, user_pk):
-    pass
-
-
-@api_view(['GET'])
-@authentication_classes([JSONWebTokenAuthentication])
-@permission_classes([IsAuthenticated])
-def login(request):
-    data = {}
-    # consecutive_access_date = serializers.IntegerField()
-    user = get_object_or_404(User, username=request.user.username)
-    if not AccessDate.objects.filter(user=user).filter(access_at=date.today()).exists():
-        AccessDate.objects.create(user=user)
-    if AccessDate.objects.filter(user=user).filter(access_at=date.today() - timedelta(days=1)):
-        user.consecutive_acess += 1
-        user.save()
-    data['consecutive_access_date'] = user.consecutive_acess
-    # learned_lc_cnt = serializers.IntegerField()
-    data['learned_lc_cnt'] = user.learned_lc.all().count()
-    # recent_learned_lc = serializers.ListField()
-    data['recent_learned_lc'] = list(user.learned_lc.all())
-    # recent_lc_progress = serializers.DictField()
-    recent_lc_progress = dict()
-    for lc in list(user.learned_lc.all()):
-        if lc.cs.name not in recent_lc_progress:
-            recent_lc_progress[lc.cs.name] = [
-                Lc.objects.filter(cs__name=lc.cs.name).filter(learned_user=user).count(),
-                Lc.objects.filter(cs__name=lc.cs.name).count()
+        # learned_lc_cnt = serializers.IntegerField()
+        data['learned_lc_cnt'] = user.learned_lc.all().count()
+        # recent_learned_lc = serializers.ListField()
+        data['recent_learned_lc'] = list(user.learned_lc.all().order_by('-pk').values())
+        if Lc.objects.filter(learned_user=user).exists():
+            recent_cs = Cs.objects.get(pk=data['recent_learned_lc'][0]['cs_id']).__dict__
+            if recent_cs['type'] == 'kpop':
+                recent_cs['name_kor'] = recent_cs['name_kor'].split(' - ')[0]
+                recent_cs['name_eng'] = recent_cs['name_eng'].split(' - ')[0]
+        else:
+            recent_cs = Cs.objects.get(pk=1).__dict__
+        del(recent_cs['_state'])
+        data['recent_cs'] = recent_cs
+        # recent_lc_progress = serializers.DictField()
+        recent_lc_progress = dict()
+        for lc in list(user.learned_lc.all()):
+            if lc.cs.name_kor not in recent_lc_progress:
+                recent_lc_progress[lc.cs.name_kor] = [
+                    Lc.objects.filter(cs__name_kor=lc.cs.name_kor).filter(learned_user=user).count(),
+                    Lc.objects.filter(cs__name_kor=lc.cs.name_kor).count()
+                ]
+        data['recent_lc_progress'] = recent_lc_progress
+        # progress = serializers.DictField()
+        progress = dict()
+        for type in ['drama', 'movie', 'kpop']:
+            css = Cs.objects.filter(type=type)
+            lcs = Lc.objects.filter(cs__in=css)
+            progress[type] = [
+                lcs.filter(learned_user=user).count(),
+                lcs.count()
             ]
-    data['recent_lc_progress'] = recent_lc_progress
-    # progress = serializers.DictField()
-    progress = dict()
-    for type in ['drama', 'movie', 'kpop']:
-        css = Cs.objects.filter(type=type)
-        lcs = Lc.objects.filter(cs__in=css)
-        progress[type] = [
-            lcs.filter(learned_user=user).count(),
-            lcs.count()
-        ]
-    data['progress'] = progress
-    serializer = ReportSearializer(data=data)
-    if serializer.is_valid():
+        data['progress'] = progress
+        serializer = ReportSearializer(data=data)
+        serializer.is_valid(raise_exception=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class GetexpViewSet(viewsets.GenericViewSet,
+                    mixins.ListModelMixin,
+                    View):
+    serializer_class = UserSerializer
+    authentication_classes = (JSONWebTokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    @swagger_auto_schema(responses={200: ""}, manual_parameters=[
+        openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
+                          type=openapi.TYPE_STRING)])
+    def post(self, request):
+        """
+        Gain Exp
+
+        ___
+        """
+        user = request.user
+        if user.level == 15:
+            serializer = UserSerializer(user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        user.exp += request.data['exp']
+        if required_exp[user.level - 1] <= user.exp:
+            user.exp -= required_exp[user.level - 1]
+            user.level += 1
+            if user.level == 15:
+                user.exp = 0
+        user.save()
+        # serializer = UserSerializer(user)
+        return Response('Exp Gained', status=status.HTTP_200_OK)
+
+
+class AchievementViewSet(viewsets.GenericViewSet,
+                         mixins.ListModelMixin,
+                         View):
+    serializer_class = AchievedManageSerializer
+    authentication_classes = (JSONWebTokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    @swagger_auto_schema(manual_parameters=[
+        openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
+                          type=openapi.TYPE_STRING)])
+    def get(self, request):
+        """
+        Get User's Achievement List
+
+        ___
+        """
+        user = request.user
+        achievement_list = Achievement.objects.all()
+        user_achievement = []
+
+        for al in achievement_list:
+            if al in user.achieved.all():
+                user_achievement.append({
+                    "achievement_id": al.id,
+                    "title": al.title,
+                    "content": al.content,
+                    "imgurl": al.imgurl,
+                    "done": al.done,
+                    "total": al.total,
+                    "status": 1
+                })
+            else:
+                user_achievement.append({
+                    "achievement_id": al.id,
+                    "title": al.title,
+                    "content": al.content,
+                    "imgurl": al.imgurl,
+                    "done": al.done,
+                    "total": al.total,
+                    "status": 0
+                })
+
+        serializer = AchievedManageSerializer(data=user_achievement, many=True)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data)
+
+    @swagger_auto_schema(responses={200: "updated"}, manual_parameters=[
+        openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
+                          type=openapi.TYPE_STRING)])
+    def post(self, request):
+        """
+        Update user's achievement status
+
+        ___
+        """
+        user = request.user
+        user.achieved.add(request.data['AcId'])
+        return Response("updated", status=status.HTTP_200_OK)
+
+
+class InquiryViewSet(viewsets.GenericViewSet,
+                     mixins.ListModelMixin,
+                     View):
+    serializer_class = UserSerializer
+    authentication_classes = (JSONWebTokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    @swagger_auto_schema(responses={200: "sent"}, manual_parameters=[
+        openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
+                          type=openapi.TYPE_STRING)])
+    def post(self, request):
+        """
+        Send inquiry email from user to us.
+
+        ___
+        """
+        user = request.user
+        email = EmailMessage(
+            request['title'],
+            request['content'],
+            from_email=user.email,
+            to="malmoongchi@gmail.com"
+        )
+        email.send()
+        return Response("ok", status=status.HTTP_200_OK)

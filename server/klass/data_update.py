@@ -1,3 +1,5 @@
+import random
+
 import requests
 
 import pandas as pd
@@ -83,8 +85,8 @@ def create_lc():
         level_dict = dict()
         for cs in cs_list:
             cpct_list = list(Cpct.objects.filter(cs=cs))
-            level_dict[cs.name] = sum([x.main_kw.id for x in cpct_list]) / len(cpct_list)
-        cs_list = sorted(list(cs_list), key=lambda x: level_dict[x.name])
+            level_dict[cs.name_kor] = sum([x.main_kw.id for x in cpct_list]) / len(cpct_list)
+        cs_list = sorted(list(cs_list), key=lambda x: level_dict[x.name_kor])
 
         cnt_level = [
             cs_cnt // 3 if cs_cnt % 3 == 0 else cs_cnt // 3 + 1,  # end index of beginner
@@ -100,7 +102,7 @@ def create_lc():
                 cs.level = i
                 cs.save()
                 cpcts = Cpct.objects.filter(cs=cs)
-                cpct_cnt = 0
+                cpct_cnt = Lc.objects.filter(cs=cs).count()
                 for k in range(kw_index[i], kw_index[i + 1]):
                     kw = Kw.objects.get(pk=k)
                     if cpct_cnt == 100:
@@ -155,7 +157,7 @@ def create_lc():
                             print(cpct.cs, cpct.kor)
     # kpop
     cs_list = Cs.objects.filter(type="kpop")
-    singer_list = list(set({x.name.split(" - ")[0] for x in cs_list}))
+    singer_list = list(set({x.name_kor.split(" - ")[0] for x in cs_list}))
     for singer in singer_list:
         song_list = Cs.objects.filter(name__contains=singer)
         for song in song_list:
@@ -232,7 +234,7 @@ def add_meaning_to_lc():
     for i, lc in enumerate(lcs):
         if lc.meaning:
             continue
-        meanings = request_dict(lc.main_kw.content)
+        meanings = request_dict(lc.main_kw.content_kor)
         if not meanings:
             lc.delete()
             continue
@@ -254,16 +256,16 @@ def add_meaning_to_lc():
                 similarity.append((j, 0))
             else:
                 similarity.append((j, np.mean(temp_similarity)))
-        similarity.sort(key=lambda x:-x[1])
+        similarity.sort(key=lambda x: -x[1])
         meaning = "|".join([meanings[x[0]][1] for n, x in enumerate(similarity) if n <= 2])
-        lc.main_kw_word = meanings[0][0]
+        lc.main_kw_kor = meanings[0][0]
         lc.meaning = meaning
         main_splited = lc.cpct_kor.split()
         find = False
         for i, word in enumerate(main_splited):
             word_morph = [w for w in kkma.pos(word) if w[1] in ['NNG', 'VV', 'VA', 'MAJ', 'XR']]
             word_morph = ["+".join(w) for w in word_morph]
-            if lc.main_kw.content in word_morph:
+            if lc.main_kw.content_kor in word_morph:
                 lc.main_kw_index = i
                 find = True
                 break
@@ -310,3 +312,12 @@ def request_dict(word):
         meanings.extend(res)
 
     return meanings
+
+
+def updateLc():
+    lcs = Lc.objects.all()
+    for lc in lcs:
+        example = random.choice(list(lc.main_kw.contained_cpcq.all()))
+        lc.example_kor = example.kor
+        lc.example_eng = example.eng
+

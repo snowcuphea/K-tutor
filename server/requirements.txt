@@ -8,7 +8,7 @@ django-extensions==3.1.1
 djangorestframework==3.12.2
 djangorestframework-jwt==1.11.0
 idna==2.10
-JPype1 @ file:///C:/Users/Yeonggilgo/Desktop/working%20dir/s04p23a303/server/JPype1-1.2.0-cp37-cp37m-win_amd64.whl
+JPype1
 konlpy==0.5.2
 lxml==4.6.3
 numpy==1.20.1
@@ -29,3 +29,5 @@ drf-yasg==1.20.0
 gensim==3.8.3
 drf-yasg-examples=0.1.1
 mysqlclient==2.0.3
+gensim==3.8.3
+drf-yasg-examples=0.1.1
