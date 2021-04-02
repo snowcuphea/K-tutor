@@ -270,8 +270,8 @@ class InquiryViewSet(viewsets.GenericViewSet,
         """
         user = request.user
         email = EmailMessage(
-            request['title'],
-            request['content'],
+            request.data['title'],
+            request.data['content'],
             from_email=user.email,
             to="malmoongchi@gmail.com"
         )
