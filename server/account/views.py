@@ -248,8 +248,12 @@ class AchievementViewSet(viewsets.GenericViewSet,
         ___
         """
         user = request.user
-        user.achieved.add(request.data['AcId'])
-        return Response("updated", status=status.HTTP_200_OK)
+        achievement = Achievement.objects.get(id=request.data['Acld'])
+        achievement.done += 1
+        if achievement.done >= achievement.total:
+            user.achieved.add(request.data['AcId'])
+            return Response("Achieved", status=status.HTTP_200_OK)
+        return Response("Updated", status=status.HTTP_200_OK)
 
 
 class InquiryViewSet(viewsets.GenericViewSet,
