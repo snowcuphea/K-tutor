@@ -16,7 +16,7 @@
 
     <v-btn @click="toggleTime">toggle time</v-btn>
 
-    <TestPage :showDialog="showDialog" @hideDialog="showDialog = !showDialog"/>
+    <TestPage :showDialog="showDialog" @hideDialog="showDialog = !showDialog" v-if="ableTest()"/>
     
   </v-container>
 </template>

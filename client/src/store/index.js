@@ -4,7 +4,7 @@ import Vuex from 'vuex'
 import createPersistedState from "vuex-persistedstate"
 import { getLessonList, getLessonInfo, sendLessonInfo, getQuizInfo } from "@/api/klass.js"
 import { getExamProblems, getExamReport } from "@/api/exam.js"
-import { getExp, getMyAcieve } from "@/api/account.js"
+import { getExp, getMyAcieve, addAchieve } from "@/api/account.js"
 
 Vue.use(Vuex)
 
@@ -32,7 +32,7 @@ export default new Vuex.Store({
     currentPage: '', //밑 navbar에서 선택한 페이지
     currentPageValue: 2, //밑 navbar에서 선택한 index
     currentType: '', //선택한 타입(영화, 드라마, 가수) 
-    currentClass: {name: '사랑의불시착', type:'drama', level:1}, //최근 클래스 정보
+    currentClass: {},
     defaultClass:'', 
     classList:[], //title을 선택하면 나오는 학습 리스트
 
@@ -94,7 +94,7 @@ export default new Vuex.Store({
       state.currentPageValue = 2
       state.currentType = ''
       // 나중에 최근 학습내역으로 해야하나
-      state.currentClass = {name: '사랑의불시착', type:'drama', level:1}
+      state.currentClass = ''
       state.classList = []
       state.userGrade_score = []
       state.userGrade_date = []
@@ -148,7 +148,7 @@ export default new Vuex.Store({
       const lessonForm = {
         id: item.id,
         type: state.currentClass.type,
-        title: state.currentClass.name,
+        title: state.currentClass.name_kor,
         img: 'poster1',
         keyword_kr: item.main_kw_kor,
         keyword_en: item.main_kw_eng,
@@ -224,9 +224,9 @@ export default new Vuex.Store({
     GETREPORTINFO ( state, report ) {
       // state.time = new Date().getDay()
       state.time = new Date().getMinutes()
+      // console.log(report)
+      state.currentClass = { type: report.recent_cs.type, name_kor: report.recent_cs.name_kor, name_eng:report.recent_cs.name_eng ,level: Number(report.recent_cs.level) }
 
-      console.log(report)
-      state.currentClass = { type: report.recent_cs.type, name: report.recent_cs.name, level: Number(report.recent_cs.level) }
       const progressForm = [
         {type: "drama", done: report.progress.drama[0] , total: report.progress.drama[1] },
         {type: "kpop", done: report.progress.kpop[0] , total: report.progress.kpop[1] },
@@ -273,12 +273,12 @@ export default new Vuex.Store({
     },
     SENDCOMPLETELESSON ( state, idx ) {
       
-      console.log(state.classList[idx])
+      // console.log(state.classList[idx])
 
       if ( state.classList[idx]["already_learned"] == false) {
 
         for ( let progress of state.recent_lc_progress){
-          if ( progress.title === state.currentClass.name ){
+          if ( progress.title === state.currentClass.name_kor ){
             progress.done += 1
           }
         }
@@ -305,18 +305,18 @@ export default new Vuex.Store({
     },
     ADDTOPROGRESSLIST ( state ) {
       const progressForm = {
-        title: state.currentClass.name, done: 0, total: state.classList.length
+        title: state.currentClass.name_kor, done: 0, total: state.classList.length
       }
 
       state.recent_lc_progress.push(progressForm)
-      console.log(state.recent_lc_progress)
+      // console.log(state.recent_lc_progress)
     },
     SAVEACIEVEMENTLIST ( state, achievements ) {
       const achieve_list = []
 
-      for (let achievement in achievements) {
+      for (let achievement of achievements) {
         const achieve_arr = {
-          title:achievement.title, content:achievement.content, src:require('@/assets/img/score.png'), total:30, done:3
+          id: achievement.id, title:achievement.title, content:achievement.content, src:require('@/assets/img/score.png'), total:30, done:3
         }
         achieve_list.push(achieve_arr)
       }
@@ -340,7 +340,7 @@ export default new Vuex.Store({
     RESETCHANCE ( state ) {
       state.quizChance = 3
       state.testChance = 2
-      console.log("reset 됐어")
+      // console.log("reset 됐어")
     },
     CHANGECHANCE ( state, type) {
       if ( type == "test" ) {
@@ -350,11 +350,13 @@ export default new Vuex.Store({
         state.quizChance -= 1
         console.log(state.quizChance)
       }
+    },
+    COMPLETEACHIEVE ( state, achieveId ) {
+      state.AchievementList[achieveId-1].status = 1
+      console.log(state.AchievementList)
     }
 
     
-    
-
   },
 
   actions: {
@@ -388,9 +390,10 @@ export default new Vuex.Store({
       commit('CHANGECURRENTCLASS', item)
     },
     getListCurrentClass ({ commit }, selectedItem) {
+      // console.log("selectedItem", selectedItem)
       let selectedClassInfo ={
         type : selectedItem.type,
-        title: selectedItem.name,
+        name_kor: selectedItem.name_kor,
       }
       getLessonList(
         selectedClassInfo
@@ -429,7 +432,7 @@ export default new Vuex.Store({
 
       const form = {
         type: state.currentClass.type,
-        name: state.currentClass.name
+        name: state.currentClass.name_kor
       }
 
       getQuizInfo(
@@ -500,14 +503,12 @@ export default new Vuex.Store({
 
       getMyAcieve(
         (res) => {
-          console.log(res.data)
           commit( 'SAVEACIEVEMENTLIST', res.data )
         },
         (err) => {
           console.log(err.data)
         }
       )
-      console.log(commit)
     },
 
     deleteUser( {commit} ) {
@@ -521,10 +522,25 @@ export default new Vuex.Store({
     },
     changeChance( { commit }, type ) {
       commit('CHANGECHANCE', type)
+    },
+    completeAchieve({ commit }, achieveInfo ) {
+      
+      const achieveForm = {
+        ...achieveInfo,
+        "status": 1,
+      }
+      
+      addAchieve(
+        achieveForm,
+        (res) => {
+          console.log(res.data)
+          commit( "COMPLETEACHIEVE", achieveInfo.id )
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
     }
-
-
-
 
   },
 

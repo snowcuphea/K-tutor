@@ -18,10 +18,10 @@ function getLessonList( klass, success, fail ) {
   instance.defaults.headers['Authorization'] = "jwt " + window.localStorage.getItem('jwt')
 
   const type = klass.type
-  const title = klass.title
+  const name_kor = klass.name_kor
 
   instance
-    .get(`klass/${type}/${title}/list`)
+    .get(`klass/${type}/${name_kor}/list`)
     .then(success)
     .catch(fail)
 }

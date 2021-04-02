@@ -1,9 +1,9 @@
 <template>
   <v-container id="classSheet">
     <v-row>
-      <v-col class="d-flex justify-center">
-        <h2> {{currentClass.name}} </h2>
-        <!-- <span> 여기에 나중에 영어이름도 넣기 </span> -->
+      <v-col class="d-flex flex-column justify-center align-center">
+        <h2> {{currentClass.name_kor}} </h2>
+        <h2> {{currentClass.name_eng}} </h2>
       </v-col>
     </v-row>
 
@@ -73,7 +73,7 @@
       </v-col>
     </v-row>
 
-    <StudyPage :openStudyPage="openStudyPage" @closeStudyPage="endClass" />
+    <StudyPage :openStudyPage="openStudyPage" @closeStudyPage="endClass" v-if="lessonInfo"/>
     <QuizPage :openQuizPage="openQuizPage" @closeQuizPage="endQuiz" v-if="ableQuiz()" />
 
   </v-container>
@@ -155,7 +155,7 @@
     },
     computed: {
       ...mapState([
-        "currentClass", "defaultClass", "classList", "quizChance"
+        "currentClass", "defaultClass", "classList", "quizChance", "lessonInfo"
       ]),
       ...mapGetters([
         "getCurrentClassLearnedKeword",
@@ -166,8 +166,6 @@
       },
     },
     created() {
-      // console.log(this.classList)
-      this.$store.dispatch('getLessonInfoByItem', 65 )
       if ( this.ableQuiz() ) {
         this.$store.dispatch('getQuizInfo')
       }

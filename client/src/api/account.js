@@ -75,6 +75,17 @@ function getMyAcieve( success, fail ){
 
 }
 
+function addAchieve( achieved, success, fail ){
+
+  instance.defaults.headers['Authorization'] = "jwt " + window.localStorage.getItem('jwt')
+
+  instance
+    .post("account/achievements", achieved)
+    .then(success)
+    .catch(fail)
+
+}
+
 function sendEmail( mail, success, fail) {
 
   instance.defaults.headers['Authorization'] = "jwt " + window.localStorage.getItem('jwt')
@@ -87,4 +98,4 @@ function sendEmail( mail, success, fail) {
 }
 
 
-export { getToken, getInfo, signUp, getExp, getMyAcieve, deleteUser, sendEmail }
+export { getToken, getInfo, signUp, getExp, getMyAcieve, addAchieve, deleteUser, sendEmail }
