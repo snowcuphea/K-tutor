@@ -37,7 +37,7 @@ class CsViewSet(viewsets.GenericViewSet,
     def get_queryset(self):
         conditions = {
             'id': self.kwargs.get("id", None),
-            'name__contains': self.request.GET.get('name', None),
+            'name_kor__contains': self.request.GET.get('name_kor', None),
             'type__contains': self.request.GET.get('type', None),
         }
         conditions = {key: val for key, val in conditions.items() if val is not None}
@@ -53,13 +53,15 @@ class CsViewSet(viewsets.GenericViewSet,
         ___
         """
         song_list = Cs.objects.filter(type="kpop")
-        cs_list_temp = list(set({x.name_kor.split(" - ")[0] for x in song_list}))
+        cs_list_kor = list(set({x.name_kor.split(" - ")[0] for x in song_list}))
+        cs_list_eng = list(set({x.name_eng.split(" - ")[0] for x in song_list}))
         cs_list = []
-        for cs in cs_list_temp:
+        for kor, eng in zip(cs_list_kor, cs_list_eng):
             cs_list.append({
-                "name": cs,
+                "name_kor": kor,
+                "name_eng": eng,
                 "type": "kpop",
-                "level": song_list.filter(name__contains=cs)[0].level
+                "level": song_list.filter(name__contains=kor)[0].level
             })
         cs_list.extend(Cs.objects.filter(type__in=['drama', 'movie']).values())
         serializer = CsSerializer(data=cs_list, many=True)
@@ -97,10 +99,10 @@ class LcListViewSet(viewsets.GenericViewSet,
             - <str:title>: 사이코지만괜찮아, 갓세븐...
         """
         if type != 'kpop':
-            cs = get_object_or_404(Cs, name=title)
+            cs = get_object_or_404(Cs, name_kor=title)
             lcs = list(Lc.objects.filter(cs=cs).values())
         else:
-            css = Cs.objects.filter(name__contains=title)
+            css = Cs.objects.filter(name_kor__contains=title)
             lcs = list(Lc.objects.filter(cs__in=css).values())
         user = request.user
         for lc in lcs:
@@ -183,10 +185,10 @@ class QuizViewSet(viewsets.GenericViewSet,
         """
         user = request.user
         if type != 'kpop':
-            cs = get_object_or_404(Cs, name=title)
+            cs = get_object_or_404(Cs, name_kor=title)
             lcs = Lc.objects.filter(cs=cs)
         else:
-            css = Cs.objects.filter(name__contains=title)
+            css = Cs.objects.filter(name_kor__contains=title)
             lcs = Lc.objects.filter(cs__in=css)
 
         if lcs.filter(learned_user=user).count() < 5:
