@@ -1,7 +1,7 @@
 <template>
   <v-card height="100%" class="start-home d-flex justify-center align-center">
 
-    <img src="@/assets/logo.svg" height="100px" width="100px" alt="">
+    <img src="@/assets/logo.png" height="100px" width="100px" alt="">
   </v-card>
 
 </template>
@@ -52,7 +52,7 @@ export default {
 <style>
 
 .start-home {
-  background-color: rgb(47, 184, 47) !important;
+  background-color: #62D2A2 !important;
 
 }
 
