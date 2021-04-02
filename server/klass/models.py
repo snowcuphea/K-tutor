@@ -8,7 +8,8 @@ class Kw(models.Model):
 
 
 class Cs(models.Model):
-    name = models.CharField(max_length=100)
+    name_kor = models.CharField(max_length=100)
+    name_eng = models.CharField(max_length=100)
     type = models.CharField(max_length=10)
     level = models.CharField(max_length=10)
     imgurl = models.TextField()

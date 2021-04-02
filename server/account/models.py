@@ -12,12 +12,6 @@ class User(AbstractUser):
     learned_kw = models.ManyToManyField('klass.Kw', related_name='learned_user')
 
 
-class TestResult(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    score = models.IntegerField()
-    test_at = models.DateField(auto_now_add=True)
-
-
 class AccessDate(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     access_at = models.DateField(auto_now_add=True)
@@ -32,7 +26,10 @@ class RecentLearnedLc(models.Model):
 class Achievement(models.Model):
     title = models.CharField(max_length=100)
     content = models.CharField(max_length=200)
-    imgurl = models.TextField()
     done = models.IntegerField(default=0)
-    total = models.IntegerField
+    total = models.IntegerField()
+    imgurl = models.TextField(default="Need to add")
     achieved_user = models.ManyToManyField(User, related_name="achieved")
+    great_kor = models.CharField(max_length=30)
+    great_eng = models.CharField(max_length=30)
+    great_dsc = models.TextField()

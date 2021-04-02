@@ -85,8 +85,8 @@ def create_lc():
         level_dict = dict()
         for cs in cs_list:
             cpct_list = list(Cpct.objects.filter(cs=cs))
-            level_dict[cs.name] = sum([x.main_kw.id for x in cpct_list]) / len(cpct_list)
-        cs_list = sorted(list(cs_list), key=lambda x: level_dict[x.name])
+            level_dict[cs.name_kor] = sum([x.main_kw.id for x in cpct_list]) / len(cpct_list)
+        cs_list = sorted(list(cs_list), key=lambda x: level_dict[x.name_kor])
 
         cnt_level = [
             cs_cnt // 3 if cs_cnt % 3 == 0 else cs_cnt // 3 + 1,  # end index of beginner
@@ -157,7 +157,7 @@ def create_lc():
                             print(cpct.cs, cpct.kor)
     # kpop
     cs_list = Cs.objects.filter(type="kpop")
-    singer_list = list(set({x.name.split(" - ")[0] for x in cs_list}))
+    singer_list = list(set({x.name_kor.split(" - ")[0] for x in cs_list}))
     for singer in singer_list:
         song_list = Cs.objects.filter(name__contains=singer)
         for song in song_list:
@@ -317,5 +317,7 @@ def request_dict(word):
 def updateLc():
     lcs = Lc.objects.all()
     for lc in lcs:
-        lc.example_kor = random.choice(list(lc.main_kw.contained_cpcq.all()))
+        example = random.choice(list(lc.main_kw.contained_cpcq.all()))
+        lc.example_kor = example.kor
+        lc.example_eng = example.eng
 

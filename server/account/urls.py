@@ -9,5 +9,6 @@ urlpatterns = [
     path('api/token', obtain_jwt_token),
     path('login', views.LoginViewSet.as_view({"get": "get"})),
     path('get_exp', views.GetexpViewSet.as_view({"post": "post"})),
-    path('achievements', views.AchievementViewSet.as_view({"get": "get", "post": "post"}))
+    path('achievements', views.AchievementViewSet.as_view({"get": "get", "post": "post"})),
+    path('inquiry', views.InquiryViewSet.as_view({"post": "post"}))
 ]

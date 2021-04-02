@@ -1,3 +1,4 @@
+from django.core.mail import EmailMessage
 from django.views import View
 from django.db.models import Max, Count, Q
 from django.shortcuts import get_object_or_404
@@ -35,9 +36,9 @@ class SignupViewSet(viewsets.GenericViewSet,
         ___
         """
         if User.objects.filter(username=request.data['username']).exists():
-            return Response("이미 가입된 이메일 입니다.", status=status.HTTP_406_NOT_ACCEPTABLE_)
+            return Response("This email is already registered.", status=status.HTTP_406_NOT_ACCEPTABLE)
         if User.objects.filter(nickname=request.data['nickname']).exists():
-            return Response("이미 가입된 닉네임 입니다.", status=status.HTTP_406_NOT_ACCEPTABLE_)
+            return Response("This nickname is already registered.", status=status.HTTP_406_NOT_ACCEPTABLE)
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
@@ -55,7 +56,7 @@ class UserViewSet(viewsets.GenericViewSet,
     permission_classes = (IsAuthenticated,)
 
     # 정보 수정
-    @swagger_auto_schema(responses={200: ""}, manual_parameters=[
+    @swagger_auto_schema(responses={200: "username"}, manual_parameters=[
         openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
                           type=openapi.TYPE_STRING)])
     def put(self, request):
@@ -67,16 +68,16 @@ class UserViewSet(viewsets.GenericViewSet,
         # 회원 수정한 정보를 request.data에 담았다고 가정
         user = request.user
         if User.objects.filter(username=request.data['username']).exists():
-            return Response("이미 가입된 이메일 입니다.", status=status.HTTP_302_FOUND)
+            return Response("This email is already registered.", status=status.HTTP_302_FOUND)
         if User.objects.filter(nickname=request.data['nickname']).exists():
-            return Response("이미 가입된 닉네임 입니다.", status=status.HTTP_302_FOUND)
+            return Response("This nickname is already registered.", status=status.HTTP_302_FOUND)
         user.set_password(request.data['password'])
         user.nickname = request.data['nickname']
         user.save()
         return Response(user.serializable_value(field_name="username"), status=status.HTTP_200_OK)
 
     # 회원 탈퇴
-    @swagger_auto_schema(responses={200: ""}, manual_parameters=[
+    @swagger_auto_schema(responses={200: "deleted"}, manual_parameters=[
         openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
                           type=openapi.TYPE_STRING)])
     def delete(self, request):
@@ -127,13 +128,21 @@ class LoginViewSet(viewsets.GenericViewSet,
         data['learned_lc_cnt'] = user.learned_lc.all().count()
         # recent_learned_lc = serializers.ListField()
         data['recent_learned_lc'] = list(user.learned_lc.all().order_by('-pk').values())
+        if Lc.objects.filter(learned_user=user).exists():
+            recent_cs = Cs.objects.get(pk=data['recent_learned_lc'][0]['cs_id']).__dict__
+            if recent_cs['type'] == 'kpop':
+                recent_cs['name'] = recent_cs['name'].split(' - ')[0]
+        else:
+            recent_cs = Cs.objects.get(pk=1).__dict__
+        del(recent_cs['_state'])
+        data['recent_cs'] = recent_cs
         # recent_lc_progress = serializers.DictField()
         recent_lc_progress = dict()
         for lc in list(user.learned_lc.all()):
-            if lc.cs.name not in recent_lc_progress:
-                recent_lc_progress[lc.cs.name] = [
-                    Lc.objects.filter(cs__name=lc.cs.name).filter(learned_user=user).count(),
-                    Lc.objects.filter(cs__name=lc.cs.name).count()
+            if lc.cs.name_kor not in recent_lc_progress:
+                recent_lc_progress[lc.cs.name_kor] = [
+                    Lc.objects.filter(cs__name=lc.cs.name_kor).filter(learned_user=user).count(),
+                    Lc.objects.filter(cs__name=lc.cs.name_kor).count()
                 ]
         data['recent_lc_progress'] = recent_lc_progress
         # progress = serializers.DictField()
@@ -203,7 +212,7 @@ class AchievementViewSet(viewsets.GenericViewSet,
         user_achievement = []
 
         for al in achievement_list:
-            if al in user.achieved:
+            if al in user.achieved.all():
                 user_achievement.append({
                     "achievement_id": al.id,
                     "title": al.title,
@@ -240,3 +249,30 @@ class AchievementViewSet(viewsets.GenericViewSet,
         user = request.user
         user.achieved.add(request.data['AcId'])
         return Response("updated", status=status.HTTP_200_OK)
+
+
+class InquiryViewSet(viewsets.GenericViewSet,
+                     mixins.ListModelMixin,
+                     View):
+    serializer_class = UserSerializer
+    authentication_classes = (JSONWebTokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    @swagger_auto_schema(responses={200: "sent"}, manual_parameters=[
+        openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
+                          type=openapi.TYPE_STRING)])
+    def post(self, request):
+        """
+        Send inquiry email from user to us.
+
+        ___
+        """
+        user = request.user
+        email = EmailMessage(
+            request['title'],
+            request['content'],
+            from_email=user.email,
+            to="malmoongchi@gmail.com"
+        )
+        email.send()
+        return Response("ok", status=status.HTTP_200_OK)
