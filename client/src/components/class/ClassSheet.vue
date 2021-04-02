@@ -73,7 +73,7 @@
       </v-col>
     </v-row>
 
-    <StudyPage :openStudyPage="openStudyPage" @closeStudyPage="endClass" />
+    <StudyPage :openStudyPage="openStudyPage" @closeStudyPage="endClass" v-if="lessonInfo"/>
     <QuizPage :openQuizPage="openQuizPage" @closeQuizPage="endQuiz" v-if="ableQuiz()" />
 
   </v-container>
@@ -155,7 +155,7 @@
     },
     computed: {
       ...mapState([
-        "currentClass", "defaultClass", "classList", "quizChance"
+        "currentClass", "defaultClass", "classList", "quizChance", "lessonInfo"
       ]),
       ...mapGetters([
         "getCurrentClassLearnedKeword",
@@ -166,8 +166,6 @@
       },
     },
     created() {
-      console.log(this.classList, this.currentClass)
-      this.$store.dispatch('getLessonInfoByItem', 65 )
       if ( this.ableQuiz() ) {
         this.$store.dispatch('getQuizInfo')
       }
