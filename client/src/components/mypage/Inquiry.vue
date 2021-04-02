@@ -30,6 +30,7 @@
                     label="name"            
                     placeholder="please enter your name"
                     style="width:80%;"
+                    v-model="form.name"
                   ></v-text-field>
 
                 </v-col>
@@ -42,6 +43,7 @@
                     label="email"            
                     placeholder="please enter your eamil ex) asd@asd.com"
                     style="width:80%;"
+                    v-model="form.email"
                   ></v-text-field>
 
                 </v-col>
@@ -52,7 +54,8 @@
                   <v-textarea
                     label="contents"            
                     placeholder="Please fill out your inquiry"
-                    style="width:80%;"             
+                    style="width:80%;"
+                    v-model="form.contents"        
                   ></v-textarea>
 
                 </v-col>
@@ -64,12 +67,13 @@
           </v-row>
           <v-row class="send_icons" style="margin-right: 30%;">
             <v-btn
+              @click="sendemail"
             >
               Send
             </v-btn>
             
           </v-row>
-        </v-form> 
+        </v-form>
       </v-card>
 
     </v-dialog>
@@ -77,6 +81,8 @@
 </template>
 
 <script>
+import { sendEmail } from "@/api/account.js"
+
 export default {
   props: ['showInquiry'],
   data: () => ({
@@ -85,13 +91,40 @@ export default {
       value => /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/.test(value) ||
       'Confirm your Email.',
     ],
+    form: {
+      name: '',
+      email: '',
+      contents: '',
+    },
   }),
   methods: {
     hideDialog () {
       this.$emit('hideTutorial')
+    },
+    sendemail () {
+      sendEmail(
+        this.form,
+        (res) => {
+          console.log(res)
+          console.log(this.form)
+          this.form.name = ''
+          this.form.email = ''
+          this.form.contents = ''
+        },
+        (err) => {
+          console.log('fail', err)
+        }
+      )
+      console.log(this.form)
+    }
+    //   const my_inquiry = []
+    //   my_inquiry.push({name:this.name, email:this.email, contents:this.contents})
+    //   console.log(my_inquiry)
+      // console.log(this.name)
+      // console.log(this.email)
+      // console.log(this.contents)
     }
   }
-}
 </script>
 
 <style>
