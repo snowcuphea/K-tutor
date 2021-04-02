@@ -24,7 +24,6 @@ export default {
     // default setting
     this.$store.dispatch('changePage', defaultSetting)
 
-
     setTimeout(() => {
       if (this.isLogin){
         this.$router.push({path: '/report'})

@@ -78,6 +78,12 @@ export default new Vuex.Store({
       )
       return list
     },
+    getCurrentAchieved: function (state) {
+      let list = state.AchievementList.filter(
+        (re) => re["status"] == 1
+      )
+      return list
+    }
   },
 
   mutations: {
@@ -316,11 +322,18 @@ export default new Vuex.Store({
 
       for (let achievement of achievements) {
         const achieve_arr = {
-          id: achievement.id, title:achievement.title, content:achievement.content, src:require('@/assets/img/score.png'), total:30, done:3
+          achievement_id: achievement.achievement_id, 
+          title: achievement.title, 
+          content: achievement.content, 
+          imgurl: require('@/assets/img/score.png'), 
+          done: achievement.done,
+          total: achievement.total, 
+          status: achievement.status
         }
         achieve_list.push(achieve_arr)
       }
       state.AchievementList = achieve_list
+      console.log("store", state.AchievementList)
     },
 
     SHOWALERT ( state, alertInfo ) {
@@ -340,7 +353,7 @@ export default new Vuex.Store({
     RESETCHANCE ( state ) {
       state.quizChance = 3
       state.testChance = 2
-      // console.log("reset 됐어")
+      console.log("reset 됐어")
     },
     CHANGECHANCE ( state, type) {
       if ( type == "test" ) {
@@ -350,6 +363,10 @@ export default new Vuex.Store({
         state.quizChance -= 1
         console.log(state.quizChance)
       }
+    },
+    UPDATEACHIEVEMENT( state, achieveId) {
+      state.AchievementList[achieveId-1].done += 1
+      console.log(state.AchievementList)
     },
     COMPLETEACHIEVE ( state, achieveId ) {
       state.AchievementList[achieveId-1].status = 1
@@ -503,6 +520,7 @@ export default new Vuex.Store({
 
       getMyAcieve(
         (res) => {
+          console.log(res.data)
           commit( 'SAVEACIEVEMENTLIST', res.data )
         },
         (err) => {
@@ -523,25 +541,37 @@ export default new Vuex.Store({
     changeChance( { commit }, type ) {
       commit('CHANGECHANCE', type)
     },
-    completeAchieve({ commit }, achieveInfo ) {
+    completeAchieve({ dispatch, commit, state }, id ) {
       
-      const achieveForm = {
-        ...achieveInfo,
-        "status": 1,
-      }
-      
-      addAchieve(
-        achieveForm,
-        (res) => {
-          console.log(res.data)
-          commit( "COMPLETEACHIEVE", achieveInfo.id )
-        },
-        (err) => {
-          console.log(err)
-        }
-      )
-    }
+      if ( state.AchievementList[id-1].status == 0) {
+        
+        addAchieve(
+          id,
+          (res) => {
+            console.log(res.data)
+            if (res.data ) {
+              if (res.data == "completed") { 
+                commit( "COMPLETEACHIEVE", id )
+                const alertInfo = {
+                  status: true,
+                  color: "success",
+                  content: `Achievement ${state.AchievementList[id-1].title} completed.`
+                }
+                dispatch('showAlert', alertInfo)
+              } else {
+                this.commit( "UPDATEACHIEVEMENT", id)
+              }
+            }
+          },
+          (err) => {
+            console.log(err)
+          }
+        )
 
+      }  else {
+        console.log("이미 달성")
+      }
+    }
   },
 
   modules: {

@@ -4,7 +4,7 @@
     <v-img
         width="100%"
         height="100%"
-        :src="modalItem.src"
+        :src="modalItem.imgurl"
         @click="modalClick"
     >
         

@@ -35,15 +35,16 @@
               cols="8"
               class="d-flex flex-column"
             >
-              <h6>업적 달성률</h6>
+              <h4>Achievement Status</h4>
 
               <v-progress-linear
                 color="light-blue"
-                height="10"
-                value="30"
+                height="15"
+                :value="(getCurrentAchieved.length/9)*100"
                 striped
               >
-
+                <h6>{{ getCurrentAchieved.length }}/9</h6> 
+                  
               </v-progress-linear>
 
             </v-col>
@@ -127,9 +128,6 @@
 
             <appMyModal :modalItem="item" @update="modal" />
 
-
-            <v-divider></v-divider>
-
           </div>
 
         </div>
@@ -159,6 +157,8 @@
 <script>
 import Achievemodal from '../components/modal/Achievemodal'
 import Achievemodal2 from '../components/modal/Achievemodal2'
+
+import { mapGetters } from 'vuex'
 
 export default {
   name: "Achievement",
@@ -194,6 +194,9 @@ export default {
   },
   created() {
     this.$store.dispatch('getAchievementList')
+  },
+  computed: {
+    ...mapGetters(["getCurrentAchieved"])
   }
 }
 </script>
