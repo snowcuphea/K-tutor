@@ -12,7 +12,7 @@ services:
     stdin_open: true
     tty: true
   server:
-    command: bash -c 'while true; do python3 /root/server/manage.py runserver 172.26.12.150:8000; sleep 2; done'
+    command: bash -c 'while true; do python3 ./manage.py runserver 172.26.12.150:8000; sleep 2; done'
     container_name: backend
     build:
       context: server
