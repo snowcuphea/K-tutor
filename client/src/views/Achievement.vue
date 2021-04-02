@@ -1,106 +1,175 @@
 <template>
   <div>
-    <div class="modal-overlay"
-      v-if="visible"
-      @click="closeModal"
-      >
-      <div class="modal-window">
-
-        <v-img 
-          :src="item.src"
-          height="50%"
-          width="50%"
-          padding="0"
-          class="modal_img"
-        />
-        <v-card-text class="modal_title">
-          {{ item.title }}
-        </v-card-text>
-
-        <v-card-text class="modal_contents">
-          {{ item.contents }}
-        </v-card-text>
-      </div>
-
-    </div>
-
-    <v-container class="wrap d-flex flex-wrap main_img" id="achieve_body">
-      <v-col
-        rows
-        cols="4"
-        v-for = "(item, idx) in $store.state.items"
-        :key = "idx"
-      >
-        <appMyModal :modalItem="item" @update="modal" />
-
-      </v-col>
+    <v-container class="progress_top">
     </v-container>
-    <div>
-      <v-container>
-        <v-flex>업적 달성률</v-flex>
-      </v-container>
-      <v-container>
-        <v-row style="margin-left: 5px">
-          <v-progress-linear
-            style="width: 60%"
-            color="light-blue"
-            height="10"
-            value="30"
-            striped
-          ></v-progress-linear>
-          
-          <v-flex text-right style="margin-right: 10px">
-            <div>9 / 30</div>
 
-          </v-flex>
-        </v-row>
-      </v-container>
+    <v-container>
+      <div class="modal-overlay"
+        v-if="visible"
+        @click="closeModal"
+        >
+        <div class="modal-window">
 
-    </div>
+          <v-img 
+            :src="item.src"
+            height="50%"
+            width="50%"
+            padding="0"
+            class="modal_img"
+          />
+          <v-card-text class="modal_title">
+            {{ item.title }}
+          </v-card-text>
 
-    
-    <!-- <v-card-actions>
-      <v-spacer></v-spacer>
+          <v-card-text class="modal_contents">
+            {{ item.contents }}
+          </v-card-text>
+        </div>
 
-      <v-btn
-        icon
-        @click="show = !show"
-      >
-        <v-icon>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
-      </v-btn>
-    </v-card-actions>
-    <v-expand-transition>
-      <div v-show="show">
-        <v-divider></v-divider>
+      </div>
+      <v-subheader style="padding:0;">
+        <v-container class="progress_top">
 
-        <v-container class="d-flex flex-wrap">
+          <v-row style="margin-bottom: 0;">
+            <v-col
+              cols="8"
+              class="d-flex flex-column"
+            >
+              <h6>업적 달성률</h6>
+
+              <v-progress-linear
+                color="light-blue"
+                height="10"
+                value="30"
+                striped
+              >
+
+              </v-progress-linear>
+
+            </v-col>
+            <v-col
+              cols="4"
+            >
+              <div class="d-flex justify-end" style="padding-right: 10%;">
+                <v-btn
+                  icon
+                  plain
+                  :color="viewlist===false ? 'secondary' : 'primary'"
+                >
+                  <v-icon @click="viewList">mdi-view-list</v-icon>
+                </v-btn>
+                <v-btn
+                  icon
+                  plain
+                  :color="viewcalendar===false ? 'secondary' : 'primary'"
+                >
+                  <v-icon @click="viewCalendar">mdi-calendar-range</v-icon>
+                </v-btn>
+                
+              
+              </div>
+
+            </v-col>
+          </v-row>
+        </v-container>
+        <!-- <v-row>
           <v-col
-            rows
-            cols="4"
-            v-for = "(item, idx) in $store.state.items"
-            :key = "idx"
-
+            cols="8"
+            class="d-flex flex-column"
           >
-            <appMyModal :modalItem="item" @update="modal" />
+            <h6>업적 달성률</h6>
+
+            <v-progress-linear
+              color="light-blue"
+              height="10"
+              value="30"
+              striped
+            >
+
+            </v-progress-linear>
 
           </v-col>
-        </v-container>
+          <v-col
+            cols="4"
+          >
+            <div class="d-flex justify-end">
+              <v-btn
+                icon
+                plain
+                :color="viewlist===false ? 'secondary' : 'primary'"
+              >
+                <v-icon @click="viewList">mdi-view-list</v-icon>
+              </v-btn>
+              <v-btn
+                icon
+                plain
+                :color="viewcalendar===false ? 'secondary' : 'primary'"
+              >
+                <v-icon @click="viewCalendar">mdi-calendar-range</v-icon>
+              </v-btn>
+
+            </div>
+
+          </v-col>
+        </v-row> -->
+        <!-- <div class="main_progressbar" style="width:90%;">
+
+        </div> -->
+      </v-subheader>
+      <div style="padding-top: 3%;">
+
+        <div class="wrap d-flex flex-column" v-if="viewlist">
+
+          <div
+            v-for = "(item, idx) in $store.state.AchievementList"
+            :key = "idx"
+          >
+
+            <appMyModal :modalItem="item" @update="modal" />
+
+
+            <v-divider></v-divider>
+
+          </div>
+
+        </div>
+        <div v-if="viewcalendar">
+          
+          <v-row
+            class="d-flex wrap"
+
+          >
+            <v-col
+              cols="4"
+              v-for = "(item,idx) in $store.state.AchievementList"
+              :key = "idx"
+            >
+              <appMyModal2 :modalItem="item" @update2="modal" />
+
+            </v-col>
+          </v-row>
+
+        </div>
       </div>
-    </v-expand-transition> -->
-    
+      
+    </v-container>
   </div>
 </template>
 
 <script>
 import Achievemodal from '../components/modal/Achievemodal'
+import Achievemodal2 from '../components/modal/Achievemodal2'
 
 export default {
   name: "Achievement",
   components: {
-    appMyModal: Achievemodal
+    appMyModal: Achievemodal,
+    appMyModal2: Achievemodal2
   },
   data: () => ({
     visible: false,
+    viewlist: true,
+    viewcalendar: false,
   }),
   methods: {
     modal (modalItem) {
@@ -109,12 +178,34 @@ export default {
     },
     closeModal () {
       this.visible = !this.visible
-    }
+    },
+    viewList () {
+      if (this.viewlist == false) {
+        this.viewlist = !this.viewlist
+        this.viewcalendar = !this.viewcalendar
+      }
+    },
+    viewCalendar () {
+      if (this.viewcalendar == false) {
+        this.viewcalendar = !this.viewcalendar
+        this.viewlist = !this.viewlist
+      }
+    },
+  },
+  created() {
+    this.$store.dispatch('getAchievementList')
   }
 }
 </script>
 
 <style>
+
+.progress_top {
+  position: fixed;
+  z-index: 5;
+  background-color: white;
+  margin-right: 62;
+}
 
 .app_bar {
   text-align: center;
@@ -134,7 +225,7 @@ export default {
   align-items: center;
   justify-content: center;
   position: fixed;
-  z-index: 1;
+  z-index: 6;
   top: 0;
   left: 0;
   width: 100%;

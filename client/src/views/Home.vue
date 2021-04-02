@@ -7,7 +7,14 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
+  data() {
+    return {
+      nowTime: new Date(),
+    }
+  },
   created() {
     // default page
     const defaultSetting = {
@@ -19,8 +26,26 @@ export default {
 
 
     setTimeout(() => {
-      this.$router.push({path: '/report'})
+      if (this.isLogin){
+        this.$router.push({path: '/report'})
+      } else {
+        this.$router.push({path: '/login'})
+      }
     }, 1500);
+
+    // if ( this.nowTime.getDay() !== this.time ) {
+    //   this.nowDay = this.nowTime.getDay()
+    //   this.$store.dispatch( 'resetChance' )
+    // } 
+
+    if ( this.nowTime.getMinutes() !== this.time ) {
+      this.nowDay = this.nowTime.getMinutes()
+      this.$store.dispatch( 'resetChance' )
+    } 
+
+  },
+  computed: {
+    ...mapState(['isLogin', 'time'])
   }
 }
 </script>

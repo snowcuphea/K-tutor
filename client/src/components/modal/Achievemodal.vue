@@ -1,11 +1,54 @@
 <template>
   <div>
-    <v-img
-      width="100%"
-      height="100%"
-      :src="modalItem.src"
-      @click="modalClick"
-    />
+    <!-- <v-list> -->
+      <v-row style="margin-bottom: 0.5%; margin-top: 0.5%;">
+        <v-col cols="4">
+          <v-img
+            width="100%"
+            height="100%"
+            :src="modalItem.src"
+            @click="modalClick"
+          />
+        </v-col>
+        <v-col cols="8" class="py-0 pr-0">
+          <v-row class="d-flex flex-column align-items-center">
+            <v-col>
+              <h3>
+                {{ modalItem.title }}
+
+              </h3>
+
+            </v-col>
+            <v-col>
+              <h5 style="margin:0;">
+                {{ modalItem.content }}
+
+              </h5>
+
+            </v-col>
+            <v-col>
+              <v-progress-linear
+                style="width: 90%"
+                color="light-blue"
+                height="13"
+                :value="modalItem.done*100/modalItem.total"
+                striped
+              >
+                <h6>
+                  {{ modalItem.done }} / {{ modalItem.total }}
+
+                </h6>
+              </v-progress-linear>
+
+            </v-col>
+
+          </v-row>
+
+        </v-col>
+
+      </v-row>
+
+    <!-- </v-list> -->
   </div>
   
 </template>
@@ -26,12 +69,16 @@ export default {
   },
   methods: {
     modalClick() {
-      this.$emit('update',this.modalItem)
+      this.$emit('update2',this.modalItem)
     },
   },
 }
 </script>
 
 <style>
+
+.title_contents {
+  /* flex-direction: column; */
+}
 
 </style>

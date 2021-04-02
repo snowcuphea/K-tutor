@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Class from '../views/Class2.vue'
+import Class from '../views/Class.vue'
 // import ClassMain from '../views/class/ClassMain.vue'
 import Test from '../views/Test.vue'
 import Achievement from '../views/Achievement.vue'
@@ -37,18 +37,6 @@ const routes = [
     path: '/class',
     name: 'Class',
     component: Class,
-    // children: [
-    //   {
-    //     path: '',
-    //     redirect: 'classmain'
-    //   },
-    //   {
-    //     path: 'classmain',
-    //     name: 'ClassMain',
-    //     component: ClassMain
-    //   },
-
-    // ],
   },
 
   {

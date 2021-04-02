@@ -1,211 +1,230 @@
 <template>
+
   <div class="mypage_body">
-    <div>
-      <v-container>
-        <v-row>
-          <v-col cols="6">
+    <v-container>
+      <v-row>
+        <v-col cols="6">
+          <div>
             <v-avatar size="150" class="my_avatar">
-              <img
-                src="@/assets/img/mypage/man.png"
-              >
+              <img :src="myImgSource()">
             </v-avatar>
-            
-          </v-col>
-          <v-col cols="6">
-            <div class="my_info">
-              <p>test1</p>
-              <v-btn
-                icon
-                class="my_info_icon"
-              >
+          </div>
+
+        </v-col>
+        <v-col cols="6" class="d-flex align-center">
+          <v-row class="d-flex flex-column">
+            <div class="d-flex align-center">
+
+              <h4>{{ $store.state.nickName }}</h4>
+              <v-btn icon class="my_info_icon">
                 <v-icon>mdi-cog-outline</v-icon>
               </v-btn>
-              <br>
-              <p>test1@test1.com</p>
-
             </div>
 
-          </v-col>
-        </v-row>
-      </v-container>
-
-      <!-- <v-container class="three_items">
-        <v-row class="three_icons">
-          <v-col
-            cols="4"
-          >
-            <v-card>
-              <v-card-title>하이</v-card-title>
-            </v-card>
-          </v-col>
-          <v-col
-            cols="4"
-          >
-            <v-card>
-              <v-card-title>하이</v-card-title>
-            </v-card>
-          </v-col>
-          <v-col
-            cols="4"
-          >
-            <v-card>
-              <v-card-title>하이</v-card-title>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-container> -->
+            <h4>{{ $store.state.userEmail }}</h4>
 
 
-      <div>
-        <v-list two-line>
-          <v-list-item-group
-            v-for="(item, idx) in items"
-            :key="idx"
-          >
-            <!-- <appMyPage :pageModalItem="item" @pageUpdate="pageModal" /> -->
+          </v-row>
 
-            <v-card-actions>
-
-              <v-row class="title_row">
-                <div class="title_list">
-                  {{ item.title }}
-                </div>
-                  <v-btn
-                    icon
-                    class="title_btn"
-                  >
-
-                  </v-btn>
-                  <!-- <v-btn
-                    icon
-                    @click="show = !show"
-                    class="title_btn"
-                  > -->
-                    <!-- <v-icon>{{ show ? 'mdi-chevron-left' : 'mdi-chevron-right' }}</v-icon> -->
-                    <v-icon>mdi-chevron-right</v-icon>
-                  <!-- </v-btn> -->
-
-              </v-row>
-            </v-card-actions>
-            <!-- <v-expand-transition>
-              <div v-show="show">
-                <v-divider></v-divider>
-
-                {{ item.contents }}                  
-
-              </div>
-            </v-expand-transition> -->
-
-
-          </v-list-item-group>
-     
-        </v-list><br>
-
-      </div>
-
-      <v-row class="delete_icon">
-        <v-col cols="4">
-          <v-btn color="red">
-            Delete
-          </v-btn>
-        </v-col>
-        <v-col class="logout_icon" cols="4">
-          <v-btn color="red lighten-2">
-            Logout
-          </v-btn>
         </v-col>
       </v-row>
+    </v-container>
+
+    <div>
+
+      <v-list v-for="(item, idx) in myPageItems" :key="idx">
+        <v-list-item @click="showDialog(item)">
+          {{ item.title }}
+        </v-list-item>
+
+      </v-list>
+      <v-list-item style="background: white" @click="logout">
+        Logout
+      </v-list-item>
+      <span class="d-flex justify-center" @click="showDialog({title: 'DeleteAccount'})">Delete Account</span>
 
     </div>
+
+  
+  <Tutorial :showTutorial="showTutorial" @hideTutorial="showTutorial = !showTutorial"/>
+  <Notice :showNotice="showNotice" @hideTutorial="showNotice = !showNotice"/>
+  <Inquiry :showInquiry="showInquiry" @hideTutorial="showInquiry = !showInquiry"/>
+  <TermsOfUse :showTermsOfUse="showTermsOfUse" @hideTutorial="showTermsOfUse = !showTermsOfUse"/>
+  <OpenSource :showOpenSource="showOpenSource" @hideTutorial="showOpenSource = !showOpenSource"/>
+  <DeleteAccount :showDeleteAccount="showDeleteAccount" @hideTutorial="showDeleteAccount = !showDeleteAccount"/>
   </div>
+
 </template>
 
 <script>
-// import Mypage from '../components/mypage/Mypage'
+  import Tutorial from '../components/mypage/Tutorial'
+  import Notice from '../components/mypage/Notice'
+  import Inquiry from '../components/mypage/Inquiry'
+  import TermsOfUse from '../components/mypage/TermsOfUse'
+  import OpenSource from '../components/mypage/OpenSource'
+  import DeleteAccount from '../components/mypage/DeleteAccount'
+  
+  export default {
+    components: {
+      Tutorial,
+      Notice,
+      Inquiry,
+      TermsOfUse,
+      OpenSource,
+      DeleteAccount,
 
-export default {
-  // components: {
-  //   appMyPage: Mypage
-  // },
-  data: () => ({
-    items: [
-      {
-        title: 'Tutorial',
-        contents: '',
+    },
+    data: () => ({
+      myPageItems: [{
+          title: 'Tutorial',
+        },
+        {
+          title: 'Notice',
+        },
+        {
+          title: 'Inquiry',
+        },
+        {
+          title: 'TermsOfUse',
+        },
+        {
+          title: 'OpenSource',
+        },
+         
+      ],
+      visible: false,
+      showTutorial: false,
+      showNotice: false,
+      showInquiry: false,
+      showTermsOfUse: false,
+      showOpenSource: false,
+      showDeleteAccount: false,
+      tempLevel: 15,
+    }),
+    methods: {
+      pageDetail(pageDetailItem) {
+        this.item = pageDetailItem
+        this.visible = !this.visible
       },
-      {
-        title: '공지사항',
-        contents: '공지사항 내용',
+      closeModal() {
+        this.visible = !this.visible
       },
-      {
-        title: '문의하기',
-        contents: 'ssafy로 ㄱㄱ',
+      showDialog(item) { 
+        if (item.title == 'Tutorial') {
+          this.showTutorial = !this.showTutorial
+        } else if (item.title == 'Notice') {
+          this.showNotice = !this.showNotice
+        } else if (item.title == 'Inquiry') {
+          this.showInquiry = !this.showInquiry
+        } else if (item.title == 'TermsOfUse') {
+          this.showTermsOfUse = !this.showTermsOfUse
+        } else if (item.title == 'DeleteAccount'){
+          this.showDeleteAccount = !this.showDeleteAccount
+        }else {
+          this.showOpenSource = !this.showOpenSource
+        }
       },
-      {
-        title: '이용약관',
-        contents: '??',
+      myImgSource() {
+        if (this.tempLevel > 14) {
+          return require('@/assets/img/mypage/sejong-the-great.png')
+        } else if (this.tempLevel > 11) {
+          return require('@/assets/img/mypage/korea.png')
+        } else if (this.tempLevel > 8) {
+          return require('@/assets/img/mypage/empress.png')
+        } else if (this.tempLevel > 5) {
+          return require('@/assets/img/mypage/emperor.png')
+        } else if (this.tempLevel > 2) {
+          return require('@/assets/img/mypage/woman.png')
+        } else {
+          return require('@/assets/img/mypage/man.png')
+        }
       },
-    ],
-  }),
-  methods: {
-    pageModal (pageModalItem) {
-      this.item = pageModalItem
-    }
+      logout() {
+        this.$store.dispatch("logout")
+          .then(() => {
+            // alert("You have been logged out.")
+            const alertInfo = {
+              status: true,
+              color: "success",
+              content: "You have been logged out."
+            }
+            this.$store.dispatch("showAlert", alertInfo)
+            this.$router.push({
+              name: 'Login'
+            })
+          })
+          .catch(() => {})
+
+      },
+
+     
+
+
+    },
+
+
   }
-
-}
 </script>
 
 <style>
+  .page-modal-overlay {
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: white;
+  }
 
-.my_info {
-  margin-top: 30%;
-}
 
-.my_info_icon {
-  margin-left: 40%;
-  margin-bottom: 3%;
-}
+  .page_img {
+    height: 100%;
+    width: 100%;
+  }
 
-.mypage_body {
-  background-color: whitesmoke;
-  height: 100%;
-  width: 100%;
-}
+  .ask-modal-window {
+    background-color: white;
+    z-index: 3;
+    width: 100%;
+    margin-right: 30px;
+  }
 
-.my_avatar {
-  margin-top: 5%;
-  margin-left: 3%;
-  margin-bottom: 10%;
-}
+  .my_info {
+    margin-top: 30%;
+  }
 
-.three_items {
-  margin-bottom: 3%;
-}
+  .mypage_body {
+    background-color: white;
+    height: 100%;
+    width: 100%;
+  }
 
-.three_icons {
-  margin-right: 0.1%;  
-}
+  .my_avatar {
+    margin-top: 5%;
+    margin-left: 3%;
+    margin-bottom: 10%;
+  }
 
-.title_row {
-  justify-content: space-between;
-}
+  .title_list {
+    margin-left: 5%;
+    margin-top: 4.5%;
+    margin-bottom: 3%;
+    font-size: 120%;
+    font-weight: bolder;
+  }
 
-.title_list {
-  margin-left: 5%;
-  margin-top: 4.5%;
-  margin-bottom: 3%;
-  font-size: 120%;
-  font-weight: bolder;
-}
+  .title_btn {
+    margin-top: 3%;
+    margin-right: 5%;
+  }
 
-.title_btn {
-  margin-top: 3%;
-  margin-right: 5%;
-}
+  .delete_icon {
+    justify-content: space-around;
+  }
 
-.delete_icon {
-  justify-content: space-around;
-}
-
+  .send_icons {
+    justify-content: flex-end;
+    margin-right: 10%;
+  }
 </style>

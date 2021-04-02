@@ -27,20 +27,19 @@
           <!-- step1 -->
           <v-card class="step1" v-if="currentStep == 1" tile height="100%" elevation="0">
             <v-card tile height="40%" elevation="0">
-              <img :src="require(`@/assets/images/poster/${lessonInfo.img}.jpg`)"
+              <img :src="require(`@/assets/images/poster/poster7.jpg`)"
                alt="포스터 이미지" height="100%" width="100%">
             </v-card>
-            <v-card tile height="60%" elevation="0" class="d-flex flex-column pt-2">
-              <v-btn plain icon><v-icon>mdi-volume-high</v-icon></v-btn>
-              <v-spacer></v-spacer>
+            <v-card tile height="60%" elevation="0" class="d-flex flex-column pt-2 px-2">
+              <v-btn class="mb-4" plain icon @click="speech"><v-icon>mdi-volume-high</v-icon></v-btn>
               <div v-for="(line, idx) in lessonInfo.lines_kr" :key="idx">
                 <div v-if="idx%2 == 0" class="pb-2">
-                  <p><span v-if="lessonInfo.type !== 'pop'">A: </span>{{ lessonInfo.lines_kr[idx] }} </p>
-                  <p><span v-if="lessonInfo.type !== 'pop'">A: </span>{{ lessonInfo.lines_en[idx] }} </p>
+                  <p>{{ lessonInfo.lines_kr[idx] }} </p>
+                  <p>{{ lessonInfo.lines_en[idx] }} </p>
                 </div>
                 <div v-else class="pb-2">
-                  <p><span v-if="lessonInfo.type !== 'pop'">B: </span>{{ lessonInfo.lines_kr[idx] }} </p>
-                  <p><span v-if="lessonInfo.type !== 'pop'">B: </span>{{ lessonInfo.lines_en[idx] }} </p>
+                  <p>{{ lessonInfo.lines_kr[idx] }} </p>
+                  <p>{{ lessonInfo.lines_en[idx] }} </p>
                 </div>
               </div>
               <div class="d-flex justify-end mt-n3 lesson-source">
@@ -54,7 +53,7 @@
             <v-card tile height="30%" elevation="0" class="d-flex flex-column">
               <div class="d-flex align-center justify-space-between">
                 <h3>[ Key Sentence ]</h3>
-                <v-btn plain icon class=""><v-icon>mdi-volume-high</v-icon></v-btn>
+                <v-btn plain icon class="" @click="speech_keysentence"><v-icon>mdi-volume-high</v-icon></v-btn>
               </div>
               <div class="pl-5 pt-2">
                 <p> {{ lessonInfo.lines_kr[1] }} </p>
@@ -74,11 +73,11 @@
             <v-card tile height="40%" elevation="0">
               <div class="d-flex align-center justify-space-between">
                 <h3>[ Example ]</h3>
-                <v-btn plain icon class=""><v-icon>mdi-volume-high</v-icon></v-btn>
+                <v-btn plain icon class="" @click="speech_example"><v-icon>mdi-volume-high</v-icon></v-btn>
               </div>
               <div class="pl-5 pt-2" v-for="(example, idx) in lessonInfo.example_kr" :key="idx">
-                <p>{{ idx+1 }}. {{ lessonInfo.example_kr[idx] }} </p>
-                <p class="pl-4"> {{ lessonInfo.example_en[idx] }} </p>
+                <p>{{ lessonInfo.example_kr[idx] }} </p>
+                <p class="pt-3"> {{ lessonInfo.example_en[idx] }} </p>
               </div>
             </v-card>
           </v-card>
@@ -88,17 +87,17 @@
             <v-card tile height="70%" elevation="0">
               <div v-for="(line, idx) in lessonInfo.lines_kr" :key="idx">
                 <div v-if="idx%2 == 0" class="pb-4">
-                  <p class="pb-2"><span v-if="lessonInfo.type !== 'pop'">A: </span>{{ lessonInfo.lines_kr[idx] }} </p>
-                  <p><span v-if="lessonInfo.type !== 'pop'">A: </span>{{ lessonInfo.lines_en[idx] }} </p>
+                  <p class="pb-2">{{ lessonInfo.lines_kr[idx] }} </p>
+                  <p>{{ lessonInfo.lines_en[idx] }} </p>
                 </div>
                 <div v-else class="pb-4">
-                  <p class="pb-2"><span v-if="lessonInfo.type !== 'pop'">B: </span>{{ myAnswer }} </p>
+                  <p class="pb-2">{{ myAnswer }} </p>
                   <p class="answer-correct mt-n2"
-                   v-if="isCorrect()"> Correct, you may proceed. </p>
+                   v-if="pass"> Correct, you may proceed. </p>
                   <p class="answer-wrong mt-n2"
-                   v-else-if="isCorrect() == false && pass !== null"
+                   v-else-if="pass == false && pass !== null"
                   >Incorrect, try again.</p>
-                  <p><span v-if="lessonInfo.type !== 'pop'">B: </span>{{ lessonInfo.lines_en[idx] }} </p>
+                  <p>{{ lessonInfo.lines_en[idx] }} </p>
                 </div>
               </div>
               <div class="d-flex justify-end mt-n3 lesson-source">
@@ -106,14 +105,14 @@
               </div>
 
               <div class="d-flex justify-space-between">
-                <v-btn plain icon><v-icon>mdi-volume-high</v-icon></v-btn>
+                <v-btn plain icon @click="speech_keysentence"><v-icon>mdi-volume-high</v-icon></v-btn>
                 <v-btn plain icon @click="empty()"><v-icon>mdi-restart</v-icon></v-btn>
               </div>
             </v-card>
             <v-card tile height="30%" elevation="0">
               <v-btn v-for="(choice,idx) in choices" :key="idx" 
               @click="putAnswer(choice)" :disabled="checked.includes(choice)"
-              class="mx-1 my-2"> {{ choice }} </v-btn>
+              class="mx-1 my-2"> {{ choice.slice(1) }} </v-btn>
             </v-card>
           </v-card>
 
@@ -127,7 +126,7 @@
             previous
           </v-btn>
           <v-spacer></v-spacer>
-          <v-btn text plain @click="currentStep += 1" v-if="currentStep != 3">
+          <v-btn text plain @click="nextStep" v-if="currentStep != 3">
             next
           </v-btn>
           <v-btn text plain @click="submitLesson" v-if="currentStep == 3" :disabled="!pass">
@@ -166,6 +165,7 @@
           text
           @click="nextLesson"
           class="d-flex justify-center"
+          v-if="this.currentClassIndex !== classList.length-1"
         >
           More
         </v-btn>
@@ -179,7 +179,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState,mapGetters } from 'vuex'
 
 import Experience from "@/components/user/Experience.vue"
 
@@ -198,6 +198,10 @@ export default {
       checked: [],
       order: 0,
       pass: null,
+
+      selectedVoicer: 'Microsoft SunHi Online (Natural) - Korean (Korea)',
+      voiceList:[],
+      textToSpeech:window.speechSynthesis,
     }
   },
   components: {
@@ -209,12 +213,31 @@ export default {
       this.$emit('closeStudyPage')
     },
     submitLesson() {
+      if (this.getCurrentClassLearnedKeword.length == 0) {
+        this.$store.dispatch('addtoProgressList')
+      }
       this.resultDialog = !this.resultDialog
       this.exp = 3
-      // this.$store.dispatch('gainExperience', this.exp)
+      for ( let learned of this.getCurrentClassLearnedKeword ){
+        if (this.lessonInfo.id == learned.id) {
+          this.exp = 0
+        }
+
+      }
+      if ( this.exp !== 0) {
+        this.$store.dispatch('gainExperience', this.exp)
+        this.$store.dispatch('sendCompleteLesson', this.currentClassIndex)
+      }
+    },
+    nextStep() {
+      this.currentStep += 1
+      this.createEmptyList()
     },
     nextLesson() {
-      console.log("hi")
+      this.defaultSetting()
+      this.resultDialog = !this.resultDialog
+      this.$store.dispatch('changeCurrentClassIndex', this.currentClassIndex+1)
+      this.$store.dispatch('getLessonInfoByItem', this.classList[this.currentClassIndex +1].id )
     },
     endClass() {
       this.defaultSetting()
@@ -238,10 +261,10 @@ export default {
     putAnswer(choice) {
       const temp = this.myAnswer.split(" ")
       this.checked.push(choice)
-      temp[this.order] = choice
+      temp[this.order] = choice.slice(1)
       this.order += 1
       this.myAnswer = temp.join(' ')
-      if (this.order == temp.length -1 ) {
+      if (this.order == temp.length ) {
         if (this.isCorrect()) {
           this.pass = true
         } else {
@@ -252,53 +275,115 @@ export default {
     isCorrect() {
       const answer = this.lessonInfo.lines_kr[1].split(' ')
       const myanswer = this.myAnswer.split(' ')
+      // const operators = ['.','!','?']
       for ( let idx = 0; idx < answer.length ; idx++) {
         var compare = answer[idx]
         var myCompare = myanswer[idx]
-        if ( idx == answer.length -1 ) {
-          compare = compare.slice(0, -1)
-        }
+        // if ( idx == answer.length -1 ) {
+        //   for (var operator of operators) {
+        //     if (compare.slice(-1) === operator) {
+        //       compare = compare.slice(0,-1)
+        //     }
+        //   }
+        // }
         if ( compare !== myCompare ) {
+          console.log(compare, myCompare)
           return false
         }
       }
       return true
     },
     createEmptyList() {
-      const operators = ['.','!','?']
+      // const operators = ['.','!','?']
       var target = this.lessonInfo.lines_kr[1].split(' ')
       var new_line = []
-      var last_word = ''
+      // var last_word = ''
       target.forEach( function(part, index) {
         this[index] = '_____'
       }, new_line)
-      for (var operator of operators) {
-        if (target[target.length - 1 ].slice(-1) === operator) {
-          last_word = operator
-        }
-      }
-      new_line.push(last_word)
+      // for (var operator of operators) {
+      //   if (target[target.length - 1 ].slice(-1) === operator) {
+      //     last_word = operator
+      //   }
+      // }
+      // new_line.push(last_word)
       this.myAnswer = new_line.join(' ')
-    }
+    },
+    speech(){
+          const text = []
+          var cnt = 0
+          while (cnt < 3) {
+            text.push(this.lessonInfo.lines_kr[cnt])
+            cnt += 1
+          }
+          let speaker=new SpeechSynthesisUtterance(text);
+          const findedVoicer = this.voiceList.find((item)=>{
+              return item.name == this.selectedVoicer
+          }) 
+          console.log(findedVoicer)
+          console.log(speaker)
+
+          speaker.voice=findedVoicer;
+          speaker.volume=0.5;
+          this.textToSpeech.speak(speaker)
+      },
+      speech_keysentence(){
+        const text = this.lessonInfo.lines_kr[1]
+        let speaker=new SpeechSynthesisUtterance(text);
+          const findedVoicer = this.voiceList.find((item)=>{
+              return item.name == this.selectedVoicer
+          }) 
+          console.log(findedVoicer)
+          console.log(speaker)
+
+          speaker.voice=findedVoicer;
+          speaker.volume=0.5;
+          this.textToSpeech.speak(speaker)
+      },
+      speech_example(){
+        const text = []
+        var cnt = 0
+        while (cnt < 1) {
+          text.push(this.lessonInfo.example_kr[cnt])
+          cnt += 1
+        }
+        let speaker=new SpeechSynthesisUtterance(text);
+          const findedVoicer = this.voiceList.find((item)=>{
+              return item.name == this.selectedVoicer
+          }) 
+          console.log(findedVoicer)
+          console.log(speaker)
+
+          speaker.voice=findedVoicer;
+          speaker.volume=0.5;
+          this.textToSpeech.speak(speaker)
+      },
+    async getVoices(){
+        let interval;
+        return new Promise((resolve)=>{
+            interval=setInterval(()=>{
+                if(this.textToSpeech.getVoices().length){
+                    resolve(this.textToSpeech.getVoices())
+                    clearInterval(interval)
+                }
+            },100)
+        })
+      }
   },
   computed: {
-    ...mapState([ "lessonInfo" ]),
+    ...mapState([ "lessonInfo", "currentClassIndex", "classList"]),
+    ...mapGetters(["getCurrentClassLearnedKeword"]),
     choices() {
-      const operators = ['.','!','?']
       var target = this.lessonInfo.lines_kr[1].split(' ')
-      for (let i = target.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        for (const operator of operators) {
-          if ( target[i].slice(-1) === operator){
-            target[i] = target[i].slice(0,-1)
-          }
-          if ( target[j].slice(-1) === operator){
-            target[j] = target[i].slice(0,-1)
-          }
-        }
-        [target[i], target[j]] = [target[j], target[i]];
+      var newList = []
+      for (var word in target) {
+        newList.push(String(word)+target[word])
       }
-      return target
+      for (let i = newList.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newList[i], newList[j]] = [newList[j], newList[i]];
+      }
+      return newList
     },
   },
   watch: {
@@ -306,8 +391,10 @@ export default {
       this.createEmptyList()
     }
   },
-  created() {
+  async created() {
     this.createEmptyList()
+    const voicesList=await this.getVoices();
+    this.voiceList = voicesList
   }
 
 }

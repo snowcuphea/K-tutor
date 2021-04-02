@@ -25,19 +25,19 @@
         <v-card tile height="72%" elevation="0" class="px-5">
           <v-card class="quiz" tile height="100%" elevation="0" color="black">
             <v-card tile height="70%" elevation="0">
-              <div v-for="(line, idx) in quizInfo.quizzes[currentProblem].lines_kr" :key="idx">
+              <div class="px-2" v-for="(line, idx) in quizInfo.quizzes[currentProblem].lines_kr" :key="idx">
                 <div v-if="idx%2 == 0" class="pb-4">
-                  <p class="pb-2"><span v-if="quizInfo.type !== 'pop'">A: </span>{{ quizInfo.quizzes[currentProblem].lines_kr[idx] }} </p>
-                  <p><span v-if="quizInfo.type !== 'pop'">A: </span>{{ quizInfo.quizzes[currentProblem].lines_en[idx] }} </p>
+                  <p class="pb-2">{{ quizInfo.quizzes[currentProblem].lines_kr[idx] }} </p>
+                  <p>{{ quizInfo.quizzes[currentProblem].lines_en[idx] }} </p>
                 </div>
                 <div v-else class="pb-4">
-                  <p class="pb-2"><span v-if="quizInfo.type !== 'pop'">B: </span>{{ myAnswer }} </p>
+                  <p class="pb-2">{{ myAnswer }} </p>
                   <p class="answer-correct mt-n2"
-                   v-if="isCorrect()"> Correct, you may proceed. </p>
+                   v-if="pass"> Correct, you may proceed. </p>
                   <p class="answer-wrong mt-n2"
-                   v-else-if="isCorrect() == false && pass !== null"
+                   v-else-if="pass == false && pass !== null"
                   >Incorrect, try again.</p>
-                  <p><span v-if="quizInfo.type !== 'pop'">B: </span>{{ quizInfo.quizzes[currentProblem].lines_en[idx] }} </p>
+                  <p>{{ quizInfo.quizzes[currentProblem].lines_en[idx] }} </p>
                 </div>
               </div>
               <div class="d-flex justify-end mt-n3 lesson-source">
@@ -45,14 +45,14 @@
               </div>
 
               <div class="d-flex justify-space-between">
-                <v-btn plain icon><v-icon>mdi-volume-high</v-icon></v-btn>
+                <v-btn plain icon @click="speech"><v-icon>mdi-volume-high</v-icon></v-btn>
                 <v-btn plain icon @click="empty()"><v-icon>mdi-restart</v-icon></v-btn>
               </div>
             </v-card>
             <v-card tile height="30%" elevation="0">
               <v-btn v-for="(choice,idx) in choices" :key="idx" 
               @click="putAnswer(choice)" :disabled="checked.includes(choice)"
-              class="mx-1 my-2"> {{ choice }} </v-btn>
+              class="mx-1 my-2"> {{ choice.slice(1) }} </v-btn>
             </v-card>
           </v-card>
 
@@ -90,7 +90,7 @@
         <v-btn
           color=""
           text
-          @click="endClass"
+          @click="endQuiz"
           class="d-flex justify-center"
         >
           Stop
@@ -123,6 +123,11 @@ export default {
       checked: [],
       order: 0,
       pass: null,
+
+      // myText: quizInfo.quizzes[this.currentProblem].lines_kr[1].split(' '),
+      selectedVoicer: 'Microsoft SunHi Online (Natural) - Korean (Korea)',
+      voiceList:[],
+      textToSpeech:window.speechSynthesis,
     }
   },
   components: {
@@ -143,9 +148,10 @@ export default {
     submitQuiz() {
       this.resultDialog = !this.resultDialog
       this.exp = 5
-      // this.$store.dispatch('gainExperience', this.exp)
+      this.$store.dispatch('gainExperience', this.exp)
+      this.$store.dispatch( "changeChance", "quiz")
     },
-    endClass() {
+    endQuiz() {
       this.defaultSetting()
       this.resultDialog = !this.resultDialog
       this.$emit('closeQuizPage')
@@ -167,10 +173,10 @@ export default {
     putAnswer(choice) {
       const temp = this.myAnswer.split(" ")
       this.checked.push(choice)
-      temp[this.order] = choice
+      temp[this.order] = choice.slice(1)
       this.order += 1
       this.myAnswer = temp.join(' ')
-      if (this.order == temp.length -1 ) {
+      if (this.order == temp.length ) {
         if (this.isCorrect()) {
           this.pass = true
         } else {
@@ -181,12 +187,17 @@ export default {
     isCorrect() {
       const answer = this.quizInfo.quizzes[this.currentProblem].lines_kr[1].split(' ')
       const myanswer = this.myAnswer.split(' ')
+      // const operators = ['.','!','?']
       for ( let idx = 0; idx < answer.length ; idx++) {
         var compare = answer[idx]
         var myCompare = myanswer[idx]
-        if ( idx == answer.length -1 ) {
-          compare = compare.slice(0, -1)
-        }
+        // if ( idx == answer.length -1 ) {
+        //   for (var operator of operators) {
+        //     if (compare.slice(-1) === operator) {
+        //       compare = compare.slice(0,-1)
+        //     }
+        //   }
+        // }
         if ( compare !== myCompare ) {
           return false
         }
@@ -194,40 +205,56 @@ export default {
       return true
     },
     createEmptyList() {
-      const operators = ['.','!','?']
+      // const operators = ['.','!','?']
       var target = this.quizInfo.quizzes[this.currentProblem].lines_kr[1].split(' ')
       var new_line = []
-      var last_word = ''
+      // var last_word = ''
       target.forEach( function(part, index) {
         this[index] = '_____'
       }, new_line)
-      for (var operator of operators) {
-        if (target[target.length - 1 ].slice(-1) === operator) {
-          last_word = operator
-        }
-      }
-      new_line.push(last_word)
+      // for (var operator of operators) {
+      //   if (target[target.length - 1 ].slice(-1) === operator) {
+      //     last_word = operator
+      //   }
+      // }
+      // new_line.push(last_word)
       this.myAnswer = new_line.join(' ')
+    },
+    speech(){
+        const text = this.quizInfo.quizzes[this.currentProblem].lines_kr[1]
+        let speaker=new SpeechSynthesisUtterance(text);
+        const findedVoicer = this.voiceList.find((item)=>{
+            return item.name == this.selectedVoicer
+        }) 
+        speaker.voice=findedVoicer;
+        speaker.volume=0.5;
+        this.textToSpeech.speak(speaker)
+    },
+    async getVoices(){
+        let interval;
+        return new Promise((resolve)=>{
+            interval=setInterval(()=>{
+                if(this.textToSpeech.getVoices().length){
+                    resolve(this.textToSpeech.getVoices())
+                    clearInterval(interval)
+                }
+            },100)
+        })
     }
   },
   computed: {
     ...mapState([ "quizInfo" ]),
     choices() {
-      const operators = ['.','!','?']
       var target = this.quizInfo.quizzes[this.currentProblem].lines_kr[1].split(' ')
-      for (let i = target.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        for (const operator of operators) {
-          if ( target[i].slice(-1) === operator){
-            target[i] = target[i].slice(0,-1)
-          }
-          if ( target[j].slice(-1) === operator){
-            target[j] = target[i].slice(0,-1)
-          }
-        }
-        [target[i], target[j]] = [target[j], target[i]];
+      var newList = []
+      for (var word in target) {
+        newList.push(String(word)+target[word])
       }
-      return target
+      for (let i = newList.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newList[i], newList[j]] = [newList[j], newList[i]];
+      }
+      return newList
     },
   },
   watch: {
@@ -235,9 +262,15 @@ export default {
       this.createEmptyList()
     }
   },
-  created() {
+  //   async created () {
+  //   const voicesList=await this.getVoices();
+  //   this.voiceList = voicesList
+  // },
+  async created() {
     this.createEmptyList()
-  }
+    const voicesList=await this.getVoices();
+    this.voiceList = voicesList
+  },
 
 }
 </script>

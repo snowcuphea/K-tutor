@@ -1,14 +1,11 @@
 <template>
   <div>
-    <v-expand-transition @click="detailClick">
-        <div v-show="show">
-        <v-divider></v-divider>
+    <v-list-item
+      @click="detailClick"
+    >
+      {{ pageDetailItem.title }}
+    </v-list-item>
 
-        {{ pageModalItem.contents }}                  
-
-        </div>
-    </v-expand-transition>
-    
   </div>
   
 </template>
@@ -22,14 +19,14 @@ export default {
       require: true,
       default: false
     },
-    pageModalItem: {
+    pageDetailItem: {
       type: Object,
       require: false,
     },
   },
   methods: {
     detailClick() {
-      this.$emit('pageUpdate',this.pageModalItem)
+      this.$emit('pageUpdate',this.pageDetailItem)
     },
   },
 }

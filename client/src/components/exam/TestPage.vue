@@ -26,13 +26,13 @@
           <v-card tile height="55%" elevation="0"
           class="px-5">
             <p>Listen carefully and select the correct words in order.</p>
-            <div v-for="(line, idx) in questions[targetQuestion].lines_kr" :key="idx">
+            <div class="px-2" v-for="(line, idx) in questions[targetQuestion].lines_kr" :key="idx">
               <div v-if="questions[targetQuestion].lines_kr.length == 3">
-                <p v-if="idx%2 == 0"><span v-if="questions[targetQuestion].type !== 'pop'">A: </span>{{ line }} </p>
-                <p v-else><span v-if="questions[targetQuestion].type !== 'pop'">B: </span>{{ myAnswer }} </p>
+                <p v-if="idx%2 == 0">{{ line }} </p>
+                <p v-else>{{ myAnswer }} </p>
               </div>
               <div v-else>
-                <p><span v-if="questions[targetQuestion].type !== 'pop'">A: </span>{{ myAnswer }}</p>
+                <p>{{ myAnswer }}</p>
               </div>
             </div>
 
@@ -41,7 +41,7 @@
             </div>
 
             <div class="d-flex justify-space-between mt-2">
-              <v-btn plain icon><v-icon>mdi-volume-high</v-icon></v-btn>
+              <v-btn plain icon @click="speech"><v-icon>mdi-volume-high</v-icon></v-btn>
               <v-btn plain icon @click="empty(targetQuestion)"><v-icon>mdi-restart</v-icon></v-btn>
             </div>
           </v-card>
@@ -50,7 +50,7 @@
           class="px-5 ">
             <v-btn v-for="(choice,idx) in choices" :key="idx" 
             @click="putAnswer(choice)" :disabled="checked.includes(choice)"
-            class="ma-2"> {{ choice }} </v-btn>
+            class="ma-2"> {{ choice.slice(1) }} </v-btn>
           </v-card>
 
         </v-card>
@@ -92,7 +92,7 @@
         </v-card>
 
         <v-card tile elevation="0" class="px-8">
-          <Experience :experience="grade"/>
+          <Experience :experience="grade/10"/>
           <div>
             <h4>Test Result :   {{ grade }}/{{ answers.length * 10 }}</h4>
           </div>
@@ -132,6 +132,9 @@
 
 <script>
 import Experience from "@/components/user/Experience.vue"
+import { mapState } from "vuex"
+import { sendExamResult } from "@/api/exam.js"
+
 
 export default {
   props: ['showDialog'],
@@ -140,30 +143,21 @@ export default {
   },
   data() {
     return {
-      N: 4,
+      N: this.$store.state.testQuestions.length,
       targetQuestion : 0,
       showDialog2 : false,
-      questions: [
-        {source : "태양의 후예", type: "drama",
-        lines_kr : ["오늘 저녁에 뭐 먹었어?", "나는 오늘 저녁으로 고기를 먹었어.","오, 맛있었니?"],
-        lines_en : ["What did you have for dinner?", "I had proteins for dinner.","Wow, how was it?"]},
-        {source : "도깨비", type: "movie",
-        lines_kr : ["나랑 벚꽃축제 갈래?", "너무 좋아, 나도 벚꽃 보러 가고 싶었어.","그러면 토요일 어때?"],
-        lines_en : ["Wanna visit the cherry blossom festival with me?", "Yes, I would love to go see cherry blossoms.","Saturday sounds good?"]},
-        {source : "에일리 - 어느 날 우연히", type: "pop",  
-        lines_kr : ["만약에 너에게 전활 걸면", "쓰다만 메시지를 보내면","무작정 찾아가서 널 본다면"],
-        lines_en : ["Wanna visit the cherry blossom festival with me?", "Yes, I would love to go see cherry blossoms.","Saturday sounds good?"]},
-        {source : "대화체", type: "chat",
-        lines_kr : ["이렇게 한줄로만 나오는 문제도 있다."],
-        lines_en : ["There are questions that only have one sentence."]}
-      ],
-      answers: [ "나는 오늘 저녁으로 고기를 먹었어.", "너무 좋아, 나도 벚꽃 보러 가고 싶었어.", "쓰다만 메시지를 보내면","이렇게 한줄로만 나오는 문제도 있다."],
+      questions: this.$store.state.testQuestions,
+      answers: [],
       myAnswers: new Array(this.N).fill([]),
       myAnswer: "",
       order: 0,
       checked: [],
       correct: new Array(this.N).fill(0),
-      grade: 0
+      grade: 0,
+
+      selectedVoicer: 'Microsoft SunHi Online (Natural) - Korean (Korea)',
+      voiceList:[],
+      textToSpeech:window.speechSynthesis,
 
     }
   },
@@ -209,6 +203,7 @@ export default {
     submitTest() {
       this.order = 0
       this.targetQuestion = 0
+      // const operators = ['.','!','?']
       for ( let idx = 0 ; idx < this.answers.length; idx++ ) {
         var flag = 1
         const answer = this.answers[idx].split(' ')
@@ -217,9 +212,13 @@ export default {
         for ( let idx2 = 0 ; idx2 < answer.length; idx2++ ) {
           var compare = answer[idx2]
           var myCompare = myanswer[idx2]
-          if ( idx2 == answer.length - 1 ) {
-            compare = compare.slice(0,-1)
-          } 
+          // if ( idx2 == answer.length - 1 ) {
+          //   for (var operator of operators) {
+          //     if (compare.slice(-1) === operator) {
+          //       compare = compare.slice(0,-1)
+          //     }
+          //   }
+          // } 
           if ( compare !== myCompare ) {
             flag = 0
             break
@@ -232,7 +231,20 @@ export default {
         }
       }
       this.showDialog2 = true
-      this.$store.dispatch('gainExperience', this.grade)
+      sendExamResult(
+        this.grade,
+        (res) => {
+          console.log(res.data)
+          this.$store.dispatch( "getTestGrades" )
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
+
+      this.$store.dispatch('gainExperience', this.grade/10)
+      this.$store.dispatch( "getTestGrades" )
+      this.$store.dispatch( "changeChance", "test")
     },
     myCorrect() {
       const correctList = []
@@ -265,27 +277,27 @@ export default {
     putAnswer(choice) {
       const temp = this.myAnswer.split(" ")
       this.checked.push(choice)
-      temp[this.order] = choice
+      temp[this.order] = choice.slice(1)
       this.order += 1
       this.myAnswer = temp.join(' ')
-      if (this.order == temp.length -1 ) {
+      if (this.order == temp.length ) {
         this.myAnswers[this.targetQuestion] = this.myAnswer
       }
     },
     createEmptyList(idx) {
-      const operators = ['.','!','?']
+      // const operators = ['.','!','?']
       var target = this.answers[idx].split(' ')
       var new_line = []
-      var last_word = ''
+      // var last_word = ''
       target.forEach( function(part, index) {
         this[index] = '_____'
       }, new_line)
-      for (var operator of operators) {
-        if (target[target.length - 1 ].slice(-1) === operator) {
-          last_word = operator
-        }
-      }
-      new_line.push(last_word)
+      // for (var operator of operators) {
+      //   if (target[target.length - 1 ].slice(-1) === operator) {
+      //     last_word = operator
+      //   }
+      // }
+      // new_line.push(last_word)
       this.myAnswers[idx] = new_line.join(' ')
     },
     defaultSetting() {
@@ -298,31 +310,67 @@ export default {
       this.targetQuestion = 0
       this.grade = 0
       this.checked = []
+    },
+    speech() {
+        const text = []
+        if (this.questions[this.targetQuestion].lines_kr.length == 3) {
+          text.push(this.questions[this.targetQuestion].lines_kr[1])
+        }
+        else {
+          text.push(this.questions[this.targetQuestion].lines_kr[0])
+        }
+        let speaker=new SpeechSynthesisUtterance(text);
+        const findedVoicer = this.voiceList.find((item)=>{
+            return item.name == this.selectedVoicer
+        }) 
+        speaker.voice=findedVoicer;
+        speaker.volume=0.5;
+        this.textToSpeech.speak(speaker)
+    },
+    async getVoices(){
+        let interval;
+        return new Promise((resolve)=>{
+            interval=setInterval(()=>{
+                if(this.textToSpeech.getVoices().length){
+                    resolve(this.textToSpeech.getVoices())
+                    clearInterval(interval)
+                }
+            },100)
+        })
     }
   },
-  created() {
+  async created() {
+
+    for (let answer of this.testQuestions) {
+      if ( answer.lines_kr.length == 3 ) {
+        this.answers.push(answer.lines_kr[1])
+      } else {
+        this.answers.push(answer.lines_kr[0])
+      }
+    }
+
     this.defaultSetting()
+
+    const voicesList=await this.getVoices();
+    this.voiceList = voicesList
+
   },
   computed: {
+    ...mapState([ "testQuestions" ]),
     choices() {
-      const operators = ['.','!','?']
       var target = this.answers[this.targetQuestion].split(' ')
-      for (let i = target.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        for (const operator of operators) {
-          if ( target[i].slice(-1) === operator){
-            target[i] = target[i].slice(0,-1)
-          }
-          if ( target[j].slice(-1) === operator){
-            target[j] = target[i].slice(0,-1)
-          }
-        }
-        [target[i], target[j]] = [target[j], target[i]];
+      var newList = []
+      for (var word in target) {
+        newList.push(String(word)+target[word])
       }
-      return target
+      for (let i = newList.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newList[i], newList[j]] = [newList[j], newList[i]];
+      }
+      return newList
     },
 
-  }
+  },
 }
 </script>
 

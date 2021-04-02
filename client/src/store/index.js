@@ -1,7 +1,10 @@
+// import axios from 'axios'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from "vuex-persistedstate"
-
+import { getLessonList, getLessonInfo, sendLessonInfo, getQuizInfo } from "@/api/klass.js"
+import { getExamProblems, getExamReport } from "@/api/exam.js"
+import { getExp, getMyAcieve, addAchieve } from "@/api/account.js"
 
 Vue.use(Vuex)
 
@@ -9,237 +12,114 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    time: null,
+    alert: {
+      status: false,
+      color: "primary",
+      content: "",
+    },
+
+    isLogin: false,
+    userEmail: null,
+    nickName: null,
+    userLevel: 1,
+    userExperience: 0,
+    required_exp: [0, 10, 20, 30, 50, 70,
+      100, 150, 200, 250, 300,
+      400, 500, 600, 750, 1000],
+
+
     currentPage: '', //밑 navbar에서 선택한 페이지
     currentPageValue: 2, //밑 navbar에서 선택한 index
     currentType: '', //선택한 타입(영화, 드라마, 가수) 
-    currentClass:'', //최근 클래스 정보
-    defaultClass:{cs_seq:1, cs_title: '싸이코지만괜찮아', cs_type:'drama', cs_level:1}, 
+    currentClass: {},
+    defaultClass:'', 
     classList:[], //title을 선택하면 나오는 학습 리스트
 
 
-    allTitleList: [
-      {cs_seq:1, cs_title: '싸이코지만괜찮아', cs_type:'drama', cs_level:1},
-      {cs_seq:2, cs_title: '사랑의불시착', cs_type:'drama', cs_level:1},
-      {cs_seq:3, cs_title: '스위트홈', cs_type:'drama', cs_level:3},
-      {cs_seq:4, cs_title: '미스터선샤인', cs_type:'drama', cs_level:2},
-      {cs_seq:5, cs_title: '이태원클라쓰', cs_type:'drama', cs_level:2},
-
-      {cs_seq:6, cs_title: '승리호', cs_type:'movie', cs_level:1},
-      {cs_seq:7, cs_title: '부산행', cs_type:'movie', cs_level:2},
-      {cs_seq:8, cs_title: '설국열차', cs_type:'movie', cs_level:2},
-      {cs_seq:9, cs_title: '반도', cs_type:'movie', cs_level:3},
-      {cs_seq:10, cs_title: '극한직업', cs_type:'movie', cs_level:1},
-
-      {cs_seq:11, cs_title: '방탄소년단', cs_type:'pop', cs_level:1},
-      {cs_seq:12, cs_title: '블랙핑크', cs_type:'pop', cs_level:1},
-      {cs_seq:13, cs_title: '아이유', cs_type:'pop', cs_level:1},
-      {cs_seq:14, cs_title: '소녀시대', cs_type:'pop', cs_level:2},
-      {cs_seq:15, cs_title: '트와이스', cs_type:'pop', cs_level:2},
-      {cs_seq:16, cs_title: '태연', cs_type:'pop', cs_level:2},
-      {cs_seq:17, cs_title: '악동뮤지션', cs_type:'pop', cs_level:3},
-      {cs_seq:18, cs_title: '갓세븐', cs_type:'pop', cs_level:3},
-      {cs_seq:19, cs_title: '세븐틴', cs_type:'pop', cs_level:3},
-      {cs_seq:20, cs_title: '엑소', cs_type:'pop', cs_level:1},
-      {cs_seq:21, cs_title: '박효신', cs_type:'pop', cs_level:1},
-
-    ],
+    allTitleList: [], //{level:"0", name:"소녀시대", type:"kpop"} 형태
+    //type은 kpop, drama, movie 세 가지 
     
-    userName: 'DanceMachine',
-    userLevel: 4,
-    userExperience: 35,
-    userGrade: [30,60,20,70,80,50,30,20,70,90],
-    userLearnedKeword: [ //유저가 학습한 키워드랑 키워드에 대한 정보
-      
-      {learned_seq:1, cpct_seq:1, cs_seq:3, cs_title: '스위트홈', cs_type:'drama', cs_level:3},
-      {learned_seq:2, cpct_seq:1,  cs_seq:4, cs_title: '미스터선샤인', cs_type:'drama', cs_level:2},
-      {learned_seq:3, cpct_seq:2,  cs_seq:4, cs_title: '미스터선샤인', cs_type:'drama', cs_level:2},
+    userGrade_date : [],
+    userGrade_score : [],
 
-      {learned_seq:5, cpct_seq:1,  cs_seq:6, cs_title: '승리호', cs_type:'movie', cs_level:1},
-      {learned_seq:6, cpct_seq:2,  cs_seq:6, cs_title: '승리호', cs_type:'movie', cs_level:1},
-      {learned_seq:7, cpct_seq:3,  cs_seq:6, cs_title: '승리호', cs_type:'movie', cs_level:1},
+    progress: [],
 
-      {learned_seq:9, cpct_seq:1, cs_seq:11, cs_title: '방탄소년단', cs_type:'pop', cs_level:1},
-      {learned_seq:10, cpct_seq:2, cs_seq:11, cs_title: '방탄소년단', cs_type:'pop', cs_level:1},
-      {learned_seq:11, cpct_seq:3, cs_seq:11, cs_title: '방탄소년단', cs_type:'pop', cs_level:1},
+    recent_lc_progress: [],
+    recent_learned_lc: [],
 
-    ],
-
-    userProgress: {
-      genres: [
-        { type : 'kmovie', total : 58, done : 45 },
-        { type: 'kdrama', total : 80, done : 57 },
-        { type : 'kpop', total : 94, done : 89 }
-      ],
-      class: [
-        { title: '태양의 후예', total : 100, done : 35},
-        { title: '도깨비', total : 100, done : 87},
-        { title: '승리호', total : 43, done : 23},
-        { title: '사이코지만 괜찮아', total : 100, done : 64},
-        { title: '기생충', total : 100, done : 64},
-        { title: '박효신', total : 87, done : 64},
-        { title: '방탄소년단', total : 70, done : 64},
-      ]
-    },
-
-    userLearned: [
-      { title : '태양의 후예', line: '봄바람 휘날리며', img : 'poster1' },
-      { title : '도깨비', line: '흩날리는 벚꽃 잎이', img : 'poster7' },
-      { title : '방탄소년단', line: '울려 퍼질 이 거리를 우우 둘이 걸어요', img : 'poster11' },
-      { title : '승리호', line: '바람 불면 울렁이는 기분 탓에 나도 모르게', img : 'poster1' },
-      { title : '아이유', line: '바람ㄴ 불면 저편에서', img : 'poster7' },
-      { title : '태양의 후예', line: '봄바람 휘날리며', img : 'poster11' },
-      { title : '도깨비', line: '흩날리는 벚꽃 잎이', img : 'poster1' },
-      { title : '방탄소년단', line: '울려 퍼질 이 거리를 우우 둘이 걸어요', img : 'poster1' },
-      { title : '승리호', line: '바람 불면 울렁이는 기분 탓에 나도 모르게', img : 'poster1' },
-      { title : '아이유', line: '바람ㄴ 불면 저편에서', img : 'poster1' },
-    ],
-    
+    currentClassIndex: 0,
     lessonInfo: {},
+    dbLessonInfo: {},
     quizInfo: {},
+    testQuestions: [],
 
-    studyCnt: 100,
-    contiDay: 9,
+    testChance: 2,
+    quizChance: 3,
+
+    studyCnt: 0,
+    contiDay: 0,
+
+    AchievementList:[],
   
-    items: [
-      {
-        title: '빛나는 트로피',
-        src: require('@/assets/img/score.png'),
-        contents: 'test에서 만점을 5회 달성하셨습니다',
-      },
-      {
-        title: '출석왕',
-        src: require('@/assets/img/award.png'),
-        contents: '30일 동안 매일 출석',
-      },
-      {
-        title: '오늘만 사는 사람',
-        src: require('@/assets/img/hardworker.png'),
-        contents: '하루에 카드 30개 학습',
-      },
-      {
-        title: '초보',
-        src: require('@/assets/img/jun.png'),
-        contents: '1개의 작품 학습 완료',
-      },
-      {
-        title: '명예 한국인',
-        src: require('@/assets/img/korean.png'),
-        contents: '학습률 100% 달성',
-      },
-      {
-        title: '팝스타',
-        src: require('@/assets/img/kpop.png'),
-        contents: 'K-POP 30개 이상 학습 완료',
-      },
-      {
-        title: '만렙',
-        src: require('@/assets/img/level.png'),
-        contents: '레벨 10 달성',
-      },
-      {
-        title: '마스터',
-        src: require('@/assets/img/master.png'),
-        contents: '한 장르의 학습률 100% 달성',
-      },
-      {
-        title: '신생아',
-        src: require('@/assets/img/sign.png'),
-        contents: '계정 생성 완료',
-      },
-      {
-        title: '100수생',
-        src: require('@/assets/img/tester.png'),
-        contents: 'test 100회 완료',
-      },
-      {
-        title: '중수',
-        src: require('@/assets/img/sen.png'),
-        contents: '10개의 작품 학습 완료',
-      },
-      {
-        title: '빛나는 트로피',
-        src: require('@/assets/img/score.png'),
-        contents: 'test에서 만점을 5회 달성하셨습니다',
-      },
-      {
-        title: '출석왕',
-        src: require('@/assets/img/award.png'),
-        contents: '30일 동안 매일 출석',
-      },
-      {
-        title: '오늘만 사는 사람',
-        src: require('@/assets/img/hardworker.png'),
-        contents: '하루에 카드 30개 학습',
-      },
-      {
-        title: '초보',
-        src: require('@/assets/img/jun.png'),
-        contents: '1개의 작품 학습 완료',
-      },
-      {
-        title: '명예 한국인',
-        src: require('@/assets/img/korean.png'),
-        contents: '학습률 100% 달성',
-      },
-      {
-        title: '팝스타',
-        src: require('@/assets/img/kpop.png'),
-        contents: 'K-POP 30개 이상 학습 완료',
-      },
-      {
-        title: '만렙',
-        src: require('@/assets/img/level.png'),
-        contents: '레벨 10 달성',
-      },
-      {
-        title: '마스터',
-        src: require('@/assets/img/master.png'),
-        contents: '한 장르의 학습률 100% 달성',
-      },
-      {
-        title: '뉴비',
-        src: require('@/assets/img/sign.png'),
-        contents: '계정 생성 완료',
-      },
-      {
-        title: '100수생',
-        src: require('@/assets/img/tester.png'),
-        contents: 'test 100회 완료',
-      },
-      {
-        title: '중수',
-        src: require('@/assets/img/sen.png'),
-        contents: '10개의 작품 학습 완료',
-      },
-    ],
   },
   
   getters: {
     getCurrentTypeTitleList: function (state) {
       let list = state.allTitleList.filter(
-        (re) => re.cs_type === state.currentType
+        (re) => re.type === state.currentType
       )
       return list
     },
 
     getCurrentClassLearnedKeword: function (state) {
-      let list = state.userLearnedKeword.filter(
-        (re) => re.cs_seq === state.currentClass.cs_seq
+      let list = state.classList.filter(
+        (re) => re["already_learned"] == true
       )
       return list
     },
   },
 
   mutations: {
-    changeCurrentPage ( state , changeItem ) {
+    LOGOUT ( state ){
+      localStorage.removeItem("jwt")
+      state.isLogin = false
+      state.userEmail= null,
+      state.nickName= null,
+      state.contiDay = 0,
+      state.studyCnt = 0,
+      state.userLevel= 1,
+      state.userExperience= 0,
+      state.currentPage = ''
+      state.currentPageValue = 2
+      state.currentType = ''
+      // 나중에 최근 학습내역으로 해야하나
+      state.currentClass = ''
+      state.classList = []
+      state.userGrade_score = []
+      state.userGrade_date = []
+      state.progress = []
+      state.recent_lc_progress = []
+      state.recent_learned_lc = []
+      state.testChance = 2
+      state.quizChance = 3
+      state.AchievementList = []
+    },
+
+    GETCLASSLIST(state, titlelist){
+      state.allTitleList = titlelist
+    },
+  
+    CHANGECURRENTPAGE ( state , changeItem ) {
       state.currentPage = changeItem.navName
       state.currentPageValue = changeItem.navValue
     },
-    changeExperience ( state, experience ) {
+
+    CHANGEEXPERIENCE ( state, experience ) {
       state.userExperience += experience
-      const temp = state.userExperience - (state.userLevel)*10
-      if ( state.userExperience >= state.userLevel*10 ) {
-        state.userExperience = state.userLevel*10
+      const temp = state.userExperience - state.required_exp[state.userLevel]
+      if ( state.userExperience >= state.required_exp[state.userLevel] ) {
+        state.userExperience = state.required_exp[state.userLevel]
         setTimeout( function() {
           state.userLevel += 1
           state.userExperience = 0
@@ -249,108 +129,420 @@ export default new Vuex.Store({
         }, 1500)
       }
     },
-    changeLastGrade ( state, grade ) {
-      state.userGrade.shift();
-      state.userGrade.push(grade)
+    CHANGECURRENTCLASS ( state, item) {
+      state.currentClass = item
+      // console.log("뮤ㄴ=텡이션 현재커렌트클래스",state.currentClass )
     },
-    changeCurrentClass ( state, item) {
-      state.currentClass =item
-    },
-    getListCurrentClass (state, titleInfo) {
+    GETLISTCURRENTCLASS (state, resclassList) {
       //titleInfo.cs_seq로 axios 요청받아서 리스트 받아오기
-      console.log("뮤테이션 getListCurrentClass실행:::", titleInfo)
-      const tempClassList = [
-        {cpct_seq:1, title:titleInfo.cs_title, img:'poster1', keyword:'싶어', keyword_en: 'to want' },
-        {cpct_seq:2, title:titleInfo.cs_title, img:'poster2', keyword:'좋아', keyword_en: 'I like it'},
-        {cpct_seq:3, title:titleInfo.cs_title, img:'poster3', keyword:'사랑해', keyword_en: 'I love you'},
-      ]
-      state.classList = tempClassList
+      // console.log("뮤테이션 getListCurrentClass실행:::", resclassList)
+      state.classList = resclassList
+      // console.log("현재 클래스 리스트는?", state.classList)
 
     },
-    getLessonInfo ( state ) {
+    GETLESSONINFO ( state, item ) {
+      // console.log("받아온 레슨인포", item)
+      // console.log("받아오고 현재 currnetClass", state.currentClass)
       // axios 요청 보내서 state에 저장
+
       const lessonForm = {
-        type: 'drama',
-        title: '태양의 후예',
+        id: item.id,
+        type: state.currentClass.type,
+        title: state.currentClass.name_kor,
         img: 'poster1',
-        keyword_kr: '싶어',
-        keyword_en: 'to want',
+        keyword_kr: item.main_kw_kor,
+        keyword_en: item.main_kw_eng,
         lines_kr: [
-          "나랑 벚꽃축제 갈래?",  
-          "너무 좋아, 나도 벚꽃 보러 가고 싶었어.", 
-          "그러면 토요일 어때?"
+          item.before_kor,  
+          item.cpct_kor, 
+          item.after_kor
         ],
         lines_en:  [
-          "Wanna visit the cherry blossom festival with me?", 
-          "Yes, I would love to go see cherry blossoms.",
-          "Saturday sounds good?"
+          item.before_eng,  
+          item.cpct_eng, 
+          item.after_eng
         ],
         example_kr: [
-          "제주도 가고 싶다.",
-          "예제2"
+          item.example_kor,
         ],
         example_en: [
-          "Want to visit Jeju Island.",
-          "example2"
+          item.example_eng
         ]
       }
       state.lessonInfo = lessonForm
+      state.dbLessonInfo = item
+      // console.log("레슨인포수정해떵0", state.lessonInfo)
     },
-    getQuizInfo ( state ) {
+    GETQUIZINFO ( state, problems ) {
+
       const quizForm = {
-        type: 'drama',
-        title : '태양의 후예',
-        quizzes: [
-          {
-            lines_kr : ["오늘 저녁에 뭐 먹었어?", "나는 오늘 저녁으로 고기를 먹었어.","오, 맛있었니?"],
-            lines_en : ["What did you have for dinner?", "I had proteins for dinner.","Wow, how was it?"]
-          },
-          {
-            lines_kr : ["나랑 벚꽃축제 갈래?", "너무 좋아, 나도 벚꽃 보러 가고 싶었어.","그러면 토요일 어때?"],
-            lines_en : ["Wanna visit the cherry blossom festival with me?", "Yes, I would love to go see cherry blossoms.","Saturday sounds good?"]
-          },
-          {
-            lines_kr : ["오늘 저녁에 뭐 먹었어?", "나는 오늘 저녁으로 고기를 먹었어.","오, 맛있었니?"],
-            lines_en : ["What did you have for dinner?", "I had proteins for dinner.","Wow, how was it?"]
-          },
-          {
-            lines_kr : ["나랑 벚꽃축제 갈래?", "너무 좋아, 나도 벚꽃 보러 가고 싶었어.","그러면 토요일 어때?"],
-            lines_en : ["Wanna visit the cherry blossom festival with me?", "Yes, I would love to go see cherry blossoms.","Saturday sounds good?"]
-          },
-          {
-            lines_kr : ["나랑 벚꽃축제 갈래?", "너무 좋아, 나도 벚꽃 보러 가고 싶었어.","그러면 토요일 어때?"],
-            lines_en : ["Wanna visit the cherry blossom festival with me?", "Yes, I would love to go see cherry blossoms.","Saturday sounds good?"]
-          },
-        ]
+        title : problems[0].cs,
+        quizzes: []
       }
+      
+      for (let problem of problems) {
+        const problemForm = {
+          lines_kr : [problem.problem.before_kor, problem.problem.main_kor, problem.problem.after_kor ],
+          lines_en : [problem.problem.before_eng, problem.problem.main_eng, problem.problem.after_eng ],
+        }
+        quizForm.quizzes.push(problemForm)
+      }
+
       state.quizInfo = quizForm
+
+    },
+    GETTESTQUESTIONS ( state , questions ) {
+      let test = []
+      for (let question of questions) {
+        let lines = []
+        if ( question.problem.before) {
+          lines = [question.problem.before, question.problem.main, question.problem.after]
+        } else {
+          lines = [question.problem.main]
+        }
+
+        const testForm = {
+          source : question.cs,
+          lines_kr : lines,
+        }
+        test.push(testForm)
+      }
+
+      state.testQuestions = test
+    },
+    GETTESTGRADES ( state, grades ) {
+
+      state.userGrade_score = []
+      state.userGrade_date = []
+
+      for ( let grade of grades) {
+        state.userGrade_score.push(grade.score)
+        state.userGrade_date.push(grade.exam_date)
+      }
+
+    },
+    GETREPORTINFO ( state, report ) {
+      // state.time = new Date().getDay()
+      state.time = new Date().getMinutes()
+      console.log(report)
+      state.currentClass = { type: report.recent_cs.type, name_kor: report.recent_cs.name_kor, name_eng:report.recent_cs.name_eng ,level: Number(report.recent_cs.level) }
+
+      const progressForm = [
+        {type: "drama", done: report.progress.drama[0] , total: report.progress.drama[1] },
+        {type: "kpop", done: report.progress.kpop[0] , total: report.progress.kpop[1] },
+        {type: "movie", done: report.progress.movie[0] , total: report.progress.movie[1] }
+      ]
+      state.progress = progressForm
+      state.isLogin = true
+      state.nickName = report.user.nickname
+      state.userLevel = report.user.level
+      state.userExperience = report.user.exp
+      state.studyCnt = report.learned_lc_cnt
+      state.contiDay = report.user.consecutive_access
+
+      if ( report.recent_learned_lc.length > 10) {
+        var amount = 10
+      } else {
+        amount = report.recent_learned_lc.length
+      }
+
+      for (let idx = 0; idx < amount; idx++) {
+        const lessonCardForm = {
+          id: report.recent_learned_lc[idx].id,
+          imgurl: report.recent_learned_lc[idx].imgurl,
+          main_kw_kor: report.recent_learned_lc[idx].main_kw_kor,
+          main_kw_eng: report.recent_learned_lc[idx].main_kw_eng,
+        }
+        state.recent_learned_lc.push(lessonCardForm)
+      }
+
+      for (let progress in report.recent_lc_progress) {
+        const lcProgressForm = {
+          title: progress, done: report.recent_lc_progress[progress][0], total: report.recent_lc_progress[progress][1]
+        }
+        state.recent_lc_progress.push(lcProgressForm)
+      }
+
+
+    },
+    ADDUSEREMAIL ( state, userEmail ) {
+      state.userEmail = userEmail
+    },
+    CHANGECURRENTCLASSINDEX ( state, idx ) {
+      state.currentClassIndex = idx
+    },
+    SENDCOMPLETELESSON ( state, idx ) {
+      
+      console.log(state.classList[idx])
+
+      if ( state.classList[idx]["already_learned"] == false) {
+
+        for ( let progress of state.recent_lc_progress){
+          if ( progress.title === state.currentClass.name_kor ){
+            progress.done += 1
+          }
+        }
+        
+        for ( let one of state.progress ) {
+          if ( one.type == state.currentClass.type) {
+            one.done += 1
+          }
+        }
+        
+        state.recent_learned_lc.pop()
+        
+        const lessonCardForm = {
+          id: state.classList[idx].id ,
+          imgurl: null,
+          main_kw_kor: state.classList[idx].main_kw_kor,
+          main_kw_eng: state.classList[idx].main_kw_eng,
+        }
+
+        state.recent_learned_lc.unshift(lessonCardForm)
+
+        state.classList[idx]["already_learned"] = true
+      }
+    },
+    ADDTOPROGRESSLIST ( state ) {
+      const progressForm = {
+        title: state.currentClass.name_kor, done: 0, total: state.classList.length
+      }
+
+      state.recent_lc_progress.push(progressForm)
+      console.log(state.recent_lc_progress)
+    },
+    SAVEACIEVEMENTLIST ( state, achievements ) {
+      const achieve_list = []
+
+      for (let achievement of achievements) {
+        const achieve_arr = {
+          id: achievement.id, title:achievement.title, content:achievement.content, src:require('@/assets/img/score.png'), total:30, done:3
+        }
+        achieve_list.push(achieve_arr)
+      }
+      state.AchievementList = achieve_list
+    },
+
+    SHOWALERT ( state, alertInfo ) {
+      
+      var timeout = 2000
+
+      if ( alertInfo.color == "error" || alertInfo.color == "warning" ) {
+        timeout = 3000
+      }
+
+      state.alert = alertInfo
+      setTimeout(() => {
+        state.alert.status = false
+      }, timeout);
+
+    },
+    RESETCHANCE ( state ) {
+      state.quizChance = 3
+      state.testChance = 2
+      console.log("reset 됐어")
+    },
+    CHANGECHANCE ( state, type) {
+      if ( type == "test" ) {
+        state.testChance -= 1
+        console.log(state.testChance)
+      } else {
+        state.quizChance -= 1
+        console.log(state.quizChance)
+      }
+    },
+    COMPLETEACHIEVE ( state, achieveId ) {
+      state.AchievementList[achieveId-1].status = 1
+      console.log(state.AchievementList)
     }
+
+    
   },
 
   actions: {
+    logout ( {commit} ){
+      commit('LOGOUT')
+    },
+    getClassList({ commit }, titlelist ){ //로긴하고나서 타이틀제목가져옴
+      commit('GETCLASSLIST', titlelist)
+    },
+
     changePage ({ commit }, changeItem ) {
-      commit('changeCurrentPage', changeItem)
+      commit('CHANGECURRENTPAGE', changeItem)
     },
     gainExperience ({ commit }, experience) {
       setTimeout( function() {
-        commit('changeExperience', experience )
+        commit('CHANGEEXPERIENCE', experience )
       }, 1500)
-    },
-    changeLastGrade ({ commit }, grade ) {
-      commit('changeLastGrade', grade)
+
+      getExp(
+        experience,
+        (res) => {
+          console.log(res.data)
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
+
     },
     changeCurrentClass ({ commit }, item ) {
-      commit('changeCurrentClass', item)
+      commit('CHANGECURRENTCLASS', item)
     },
-    getListCurrentClass ({ commit }, titleInfo) {
-      commit('getListCurrentClass', titleInfo)
+    getListCurrentClass ({ commit }, selectedItem) {
+      console.log("selectedItem", selectedItem)
+      let selectedClassInfo ={
+        type : selectedItem.type,
+        name_kor: selectedItem.name_kor,
+      }
+      getLessonList(
+        selectedClassInfo
+        ,
+        (res) => {
+          // console.log("getLessonList 액션즈 실행", res.data)
+          commit('GETLISTCURRENTCLASS',res.data )
+          commit('CHANGECURRENTCLASS',selectedItem )
+        },
+        (err) => {
+          console.log("getLessonList 액션즈 실패", err)
+          console.log("집어넣은 selectedClassInfo,",selectedClassInfo )
+        }
+      )
+      
     },
-    getLessonInfo ({ commit }) {
-      commit('getLessonInfo')
+    getLessonInfoByItem ({ commit }, itemId) {
+      getLessonInfo(
+        itemId,
+        (res) => {
+          // console.log("getLessonInfoByItem뮤테이션",res.data)
+          commit('GETLESSONINFO', res.data)
+
+        },
+        (err) => {
+          console.log("asdfsadfsdad,ItemId", itemId)
+          console.log("getLessonInfoByItem뮤테이션에러", err)
+
+        }
+      )
+      // // 임시로 요청 실패해도 커밋 보내지게
+      // commit('GETLESSONINFO', itemId)
+      
     },
-    getQuizInfo ({ commit }) {
-      commit('getQuizInfo')
+    getQuizInfo ({ commit, state }) {
+
+      const form = {
+        type: state.currentClass.type,
+        name: state.currentClass.name_kor
+      }
+
+      getQuizInfo(
+        form,
+        (res) => {
+          commit('GETQUIZINFO', res.data )
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
+
+    },
+    getTestQuestions ( { commit } ) {
+      getExamProblems(
+        (res) => {
+          commit('GETTESTQUESTIONS', res.data)
+        },
+        (err) => {
+          console.log("시험문제 10개 받아오기", err)
+        }
+      )
+    },
+    getTestGrades ({ commit }) {
+
+      getExamReport(
+        (res) => {
+          commit( 'GETTESTGRADES', res.data )
+        },
+        (err) => {
+          console.log("최근 성적 10개 받아오기", err)
+        }
+      )
+
+    },
+    getReportInfo( { commit }, reportData ) {
+      commit( 'GETREPORTINFO', reportData )
+    },
+    addUserEmail( { commit }, userEmail ) {
+      commit ( 'ADDUSEREMAIL', userEmail )
+    },
+    sendCompleteLesson( { commit, state }, idx ) {
+
+      const lessonInfo = {
+        ...state.dbLessonInfo,
+        "already_learned": true,
+      }
+
+      sendLessonInfo(
+        lessonInfo,
+        (res) => {
+          console.log(res.data)
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
+
+      commit( "SENDCOMPLETELESSON", idx )
+    },
+    changeCurrentClassIndex ( { commit }, idx ) {
+      commit( 'CHANGECURRENTCLASSINDEX', idx)
+    },
+    addtoProgressList( { commit } ) {
+      commit( 'ADDTOPROGRESSLIST' )
+    },
+    getAchievementList( {commit } ) {
+
+      getMyAcieve(
+        (res) => {
+          commit( 'SAVEACIEVEMENTLIST', res.data )
+        },
+        (err) => {
+          console.log(err.data)
+        }
+      )
+      console.log(commit)
+    },
+
+    deleteUser( {commit} ) {
+      commit('LOGOUT')
+    },
+    showAlert( {commit}, alertInfo ) {
+      commit("SHOWALERT", alertInfo)
+    },
+    resetChance( { commit } ) {
+      commit('RESETCHANCE')
+    },
+    changeChance( { commit }, type ) {
+      commit('CHANGECHANCE', type)
+    },
+    completeAchieve({ commit }, achieveInfo ) {
+      
+      const achieveForm = {
+        ...achieveInfo,
+        "status": 1,
+      }
+      
+      addAchieve(
+        achieveForm,
+        (res) => {
+          console.log(res.data)
+          commit( "COMPLETEACHIEVE", achieveInfo.id )
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
     }
+
   },
 
   modules: {
