@@ -32,15 +32,16 @@ export default {
       }
     }, 1500);
 
-    // if ( this.nowTime.getDay() !== this.time ) {
-    //   this.nowDay = this.nowTime.getDay()
-    //   this.$store.dispatch( 'resetChance' )
-    // } 
-
-    if ( this.nowTime.getMinutes() !== this.time ) {
-      this.nowDay = this.nowTime.getMinutes()
-      this.$store.dispatch( 'resetChance' )
+    console.log(this.time, this.nowTime.getDate())
+    if ( this.nowTime.getDate() !== this.time ) {
+      console.log(this.time, this.nowTime.getDate())
+      this.$store.dispatch( 'resetChance', this.nowTime.getDate() )
     } 
+    // console.log(this.time, this.nowTime.getMinutes())
+    // if ( this.nowTime.getMinutes() !== this.time ) {
+    //   console.log(this.time, this.nowTime.getMinutes())
+    //   this.$store.dispatch( 'resetChance', this.nowTime.getMinutes() )
+    // } 
 
     if ( this.isLogin == true ) {
       this.$store.dispatch('completeAchieve', 1)

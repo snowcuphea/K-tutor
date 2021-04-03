@@ -228,8 +228,8 @@ export default new Vuex.Store({
 
     },
     GETREPORTINFO ( state, report ) {
-      // state.time = new Date().getDay()
-      state.time = new Date().getMinutes()
+      state.time = new Date().getDate()
+      // state.time = new Date().getMinutes()
       // console.log(report)
       state.currentClass = { type: report.recent_cs.type, name_kor: report.recent_cs.name_kor, name_eng:report.recent_cs.name_eng ,level: Number(report.recent_cs.level) }
 
@@ -352,10 +352,12 @@ export default new Vuex.Store({
       }, timeout);
 
     },
-    RESETCHANCE ( state ) {
+    RESETCHANCE ( state, nowTime ) {
       state.quizChance = 3
       state.testChance = 2
+      state.time = nowTime
       console.log("reset 됐어")
+      console.log(state.time, state.quizChance, state.testChance)
     },
     CHANGECHANCE ( state, type) {
       if ( type == "test" ) {
@@ -538,8 +540,8 @@ export default new Vuex.Store({
     showAlert( {commit}, alertInfo ) {
       commit("SHOWALERT", alertInfo)
     },
-    resetChance( { commit } ) {
-      commit('RESETCHANCE')
+    resetChance( { commit }, nowTime ) {
+      commit('RESETCHANCE', nowTime)
     },
     changeChance( { commit }, type ) {
       commit('CHANGECHANCE', type)

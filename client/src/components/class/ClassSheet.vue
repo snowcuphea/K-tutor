@@ -23,6 +23,8 @@
       </v-col>
       <v-col cols="4" class="d-flex justify-end">
         <v-btn @click="startQuiz()"> quiz </v-btn>
+        <v-icon v-for="left in chanceUsed()" :key="left">mdi-heart</v-icon>
+        <v-icon v-for="used in quizChance" :key="used" color="red">mdi-heart</v-icon>
       </v-col>
     </v-row>
 
@@ -102,6 +104,9 @@
 
     },
     methods: {
+      chanceUsed() {
+        return 3 - this.quizChance
+      },
       startClass(item, idx) {
         // 서버에 요청을 보내서 해당 학습 내용을 받아온다
         // this.$store.dispatch('changeCurrentClass', item)

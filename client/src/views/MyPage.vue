@@ -30,7 +30,7 @@
       </v-row>
     </v-container>
 
-    <div>
+    <div class="pb-10">
 
       <v-list v-for="(item, idx) in myPageItems" :key="idx">
         <v-list-item @click="showDialog(item)">
@@ -41,7 +41,7 @@
       <v-list-item style="background: white" @click="logout">
         Logout
       </v-list-item>
-      <span class="d-flex justify-center" @click="showDialog({title: 'DeleteAccount'})">Delete Account</span>
+      <span style="color: blue;" class="d-flex justify-center" @click="showDialog({title: 'DeleteAccount'})">Delete Account</span>
 
     </div>
 
