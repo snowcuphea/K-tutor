@@ -1,7 +1,7 @@
-// import axios from 'axios'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from "vuex-persistedstate"
+
 import { getLessonList, getLessonInfo, sendLessonInfo, getQuizInfo } from "@/api/klass.js"
 import { getExamProblems, getExamReport } from "@/api/exam.js"
 import { getExp, getMyAcieve, addAchieve } from "@/api/account.js"
@@ -12,45 +12,46 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    isLogin: false,
     time: null,
+    userEmail: null,
+    nickName: null,
+    userLevel: 1,
+    userExperience: 0,
+    required_exp: [
+      0, 10, 20, 30, 50, 70,
+      100, 150, 200, 250, 300,
+      400, 500, 600, 750, 1000
+    ],
+    
+    userGrade_date : [], 
+    userGrade_score : [],
+    allProgress: [],        // 전체 type에 대한 진행도
+    recent_lc_progress: [], // 최근 학습한 학습카드
+    recent_learned_lc: [],  // 최근 학습한 진행도
+
+
     alert: {
       status: false,
       color: "primary",
       content: "",
     },
 
-    isLogin: false,
-    userEmail: null,
-    nickName: null,
-    userLevel: 1,
-    userExperience: 0,
-    required_exp: [0, 10, 20, 30, 50, 70,
-      100, 150, 200, 250, 300,
-      400, 500, 600, 750, 1000],
-
 
     currentPage: '', //밑 navbar에서 선택한 페이지
     currentPageValue: 2, //밑 navbar에서 선택한 index
     currentType: '', //선택한 타입(영화, 드라마, 가수) 
     currentClass: {},
-    defaultClass:'', 
-    classList:[], //title을 선택하면 나오는 학습 리스트
 
 
     allTitleList: [], //{level:"0", name:"소녀시대", type:"kpop"} 형태
     //type은 kpop, drama, movie 세 가지 
-    
-    userGrade_date : [],
-    userGrade_score : [],
-
-    progress: [],
-
-    recent_lc_progress: [],
-    recent_learned_lc: [],
+    classList:[], //title을 선택하면 나오는 학습 리스트
 
     currentClassIndex: 0,
     lessonInfo: {},
     dbLessonInfo: {},
+
     quizInfo: {},
     testQuestions: [],
 
@@ -60,7 +61,7 @@ export default new Vuex.Store({
     studyCnt: 0,
     contiDay: 0,
 
-    AchievementList:[],
+    AchievementList: [],
   
   },
   
@@ -99,12 +100,13 @@ export default new Vuex.Store({
       state.currentPage = ''
       state.currentPageValue = 2
       state.currentType = ''
-      // 나중에 최근 학습내역으로 해야하나
+      state.lessonInfo = {}
+      state.dbLessonInfo = {}
       state.currentClass = ''
       state.classList = []
       state.userGrade_score = []
       state.userGrade_date = []
-      state.progress = []
+      state.allProgress = []
       state.recent_lc_progress = []
       state.recent_learned_lc = []
       state.testChance = 2
@@ -136,6 +138,7 @@ export default new Vuex.Store({
       }
     },
     CHANGECURRENTCLASS ( state, item) {
+      console.log("현재", item)
       state.currentClass = item
       // console.log("뮤ㄴ=텡이션 현재커렌트클래스",state.currentClass )
     },
@@ -149,8 +152,6 @@ export default new Vuex.Store({
     GETLESSONINFO ( state, item ) {
       // console.log("받아온 레슨인포", item)
       // console.log("받아오고 현재 currnetClass", state.currentClass)
-      // axios 요청 보내서 state에 저장
-
       const lessonForm = {
         id: item.id,
         type: state.currentClass.type,
@@ -230,15 +231,22 @@ export default new Vuex.Store({
     GETREPORTINFO ( state, report ) {
       state.time = new Date().getDate()
       // state.time = new Date().getMinutes()
-      // console.log(report)
-      state.currentClass = { type: report.recent_cs.type, name_kor: report.recent_cs.name_kor, name_eng:report.recent_cs.name_eng ,level: Number(report.recent_cs.level) }
+      console.log(report)
+      state.currentClass = { 
+        type: report.recent_cs.type,
+        imgurl: report.recent_cs.imgurl,
+        name_kor: report.recent_cs.name_kor, 
+        name_eng: report.recent_cs.name_eng ,
+        level: report.recent_cs.level 
+
+      }
 
       const progressForm = [
         {type: "drama", done: report.progress.drama[0] , total: report.progress.drama[1] },
         {type: "kpop", done: report.progress.kpop[0] , total: report.progress.kpop[1] },
         {type: "movie", done: report.progress.movie[0] , total: report.progress.movie[1] }
       ]
-      state.progress = progressForm
+      state.allProgress = progressForm
       state.isLogin = true
       state.nickName = report.user.nickname
       state.userLevel = report.user.level
@@ -289,7 +297,7 @@ export default new Vuex.Store({
           }
         }
         
-        for ( let one of state.progress ) {
+        for ( let one of state.allProgress ) {
           if ( one.type == state.currentClass.type) {
             one.done += 1
           }
@@ -533,7 +541,6 @@ export default new Vuex.Store({
         }
       )
     },
-
     deleteUser( {commit} ) {
       commit('LOGOUT')
     },
@@ -572,7 +579,6 @@ export default new Vuex.Store({
             console.log(err)
           }
         )
-
       }  else {
         console.log("이미 달성")
       }

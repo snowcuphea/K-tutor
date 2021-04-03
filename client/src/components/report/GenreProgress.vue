@@ -1,6 +1,6 @@
 <template>
   <v-container class="d-flex justify-space-around">
-    <div v-for="(prgs, idx) in progress" :key="idx">
+    <div v-for="(prgs, idx) in allProgress" :key="idx">
       <v-progress-circular size="60" width="10" :value="percentage(prgs)" color="teal accent-4">
         <span style="color:black;"> {{ percentage(prgs) }} </span>
       </v-progress-circular>
@@ -21,7 +21,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['progress'])
+    ...mapState(['allProgress'])
   }
 }
 </script>

@@ -2,6 +2,7 @@
   <v-container id="classSheet">
     <v-row>
       <v-col class="d-flex flex-column justify-center align-center">
+        {{ currentClass }}
         <h2> {{currentClass.name_kor}} </h2>
         <h2> {{currentClass.name_eng}} </h2>
       </v-col>
@@ -126,9 +127,11 @@
         return false
       },
       ableStudy() {
-        if (this.lessonInfo.length != 0) {
+        if (Object.entries(this.lessonInfo).length !== 0 && this.lessonInfo.constructor === Object) {
+          console.log("돼")
           return true
         } else {
+          console.log("안돼")
           return false
         }
       },
