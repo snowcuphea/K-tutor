@@ -319,21 +319,23 @@ export default new Vuex.Store({
     },
     SAVEACIEVEMENTLIST ( state, achievements ) {
       const achieve_list = []
-
       for (let achievement of achievements) {
         const achieve_arr = {
           achievement_id: achievement.achievement_id, 
           title: achievement.title, 
           content: achievement.content, 
-          imgurl: require('@/assets/img/score.png'), 
+          imgurl: require(`@/assets/images/achievement/${achievement.imgurl}`), 
           done: achievement.done,
           total: achievement.total, 
-          status: achievement.status
+          status: achievement.status,
+          // great_kor: achievement.great_kor,
+          // great_eng: achievement.great_eng,
+          // great_dsc: achievement.great_dsc,
         }
         achieve_list.push(achieve_arr)
       }
       state.AchievementList = achieve_list
-      console.log("store", state.AchievementList)
+      // console.log("store", state.AchievementList)
     },
 
     SHOWALERT ( state, alertInfo ) {
@@ -369,6 +371,7 @@ export default new Vuex.Store({
       console.log(state.AchievementList)
     },
     COMPLETEACHIEVE ( state, achieveId ) {
+      state.AchievementList[achieveId-1].done += 1
       state.AchievementList[achieveId-1].status = 1
       console.log(state.AchievementList)
     }
@@ -520,7 +523,7 @@ export default new Vuex.Store({
 
       getMyAcieve(
         (res) => {
-          console.log(res.data)
+          // console.log(res.data)
           commit( 'SAVEACIEVEMENTLIST', res.data )
         },
         (err) => {

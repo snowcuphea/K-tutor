@@ -21,3 +21,8 @@
   top: 1.5em !important;
   /* width: 90% !important; */
 }
+
+
+.achievementNot {
+  filter: brightness(0%); 
+}

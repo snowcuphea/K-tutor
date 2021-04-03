@@ -6,15 +6,10 @@
           <v-img
             width="100%"
             height="100%"
-            :src=" require('@/assets/img/kite.png')"
-            @click="modalClick"
-          />
-          <!-- <v-img
-            width="100%"
-            height="100%"
             :src="modalItem.imgurl"
             @click="modalClick"
-          /> -->
+            :class="isDone() ? '':'achievementNot'"
+          />
         </v-col>
         <v-col cols="8" class="d-flex flex-column">
           <h3>
@@ -67,6 +62,13 @@ export default {
     modalClick() {
       this.$emit('update2',this.modalItem)
     },
+    isDone() {
+      if (this.modalItem.status == 1) {
+        return true
+      } else {
+        return false
+      }
+    }
   },
 }
 </script>

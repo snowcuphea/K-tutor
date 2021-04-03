@@ -42,6 +42,10 @@ export default {
       this.$store.dispatch( 'resetChance' )
     } 
 
+    if ( this.isLogin == true ) {
+      this.$store.dispatch('completeAchieve', 1)
+    }
+
   },
   computed: {
     ...mapState(['isLogin', 'time'])
