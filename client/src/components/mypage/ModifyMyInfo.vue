@@ -30,7 +30,7 @@
                         </v-col>
                         <v-col>
                             <v-text-field label="Nickname" :rules="rulesNickname" hide-details="auto"
-                                v-model="userNickName"></v-text-field>
+                                v-model="userCredentials.userNickname"></v-text-field>
                         </v-col>
                         
                     </v-row>
@@ -45,7 +45,7 @@
                         </v-col>
                         <v-col>
                             <v-text-field label="Password" :rules="rulesPassword" hide-details="auto" type="password"
-                                v-model="this.userCredentials.userPassword"></v-text-field>
+                                v-model="userCredentials.userPassword"></v-text-field>
                         </v-col>
                         
                     </v-row>
@@ -60,7 +60,7 @@
                         </v-col>
                         <v-col>
                             <v-text-field label="Password Confirm" :rules="passwordConfirmation" hide-details="auto" type="password"
-                                v-model="this.userCredentials.userPasswordConfirm"></v-text-field>
+                                v-model="userCredentials.userPasswordConfirm"></v-text-field>
                         </v-col>
                         
                     </v-row>
@@ -127,6 +127,7 @@
 
 <script>
 import { updateUser } from "@/api/account.js"
+import { mapState } from 'vuex'
 
 export default {
   props: ['showModifyMyInfo'],
@@ -140,10 +141,10 @@ export default {
         value => (value && value.length >= 3) || 'Min 3 characters',
       ],
       userCredentials: {
+          userNickname: "",
           userPassword: "",
           userPasswordConfirm: "",
       },
-      userNickName: "",
     //   items_month: [
     //       1,2,3,4,5,6,7,8,9,10,11,12
     //   ],
@@ -175,7 +176,7 @@ export default {
                   const alertInfo = {
                       status: true,
                       color: "error",
-                      content: "please check your Nickname or Password"
+                      content: err.response.data
                   }
                   this.$store.dispatch("showAlert", alertInfo)
               }
@@ -189,6 +190,10 @@ export default {
           value => value === this.userCredentials.userPassword || 'Confirm your password.'
         ]
       },
+      ...mapState (["nickName"]) 
+  },
+  created () {
+      this.userCredentials.userNickname = this.nickName
   }
 }
 

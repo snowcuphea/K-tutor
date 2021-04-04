@@ -386,7 +386,7 @@ export default new Vuex.Store({
       console.log(state.AchievementList)
     },
     UPDATEUSERINFO ( state, userInfo ) {
-      state.userInfo = userInfo
+      state.nickName = userInfo.userNickname
     }
     
   },
