@@ -9,8 +9,8 @@
 
     <v-row>
       <v-col>
-        <!-- <img :src="require(imgurl)" alt="title" class="imgSize"> -->
-        <img :src="require(`@/assets/images/poster/poster1.jpg`)" alt="title" class="imgSize">
+        <img :src="require(`@/assets/images/poster/${currentClass.imgurl}`)" alt="title" class="imgSize">
+        <!-- <img :src="require(`@/assets/images/poster/poster1.jpg`)" alt="title" class="imgSize"> -->
       </v-col>
     </v-row>
 

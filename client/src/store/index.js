@@ -115,6 +115,7 @@ export default new Vuex.Store({
     },
 
     GETCLASSLIST(state, titlelist){
+      console.log(titlelist)
       state.allTitleList = titlelist
     },
   
