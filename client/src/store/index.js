@@ -109,9 +109,11 @@ export default new Vuex.Store({
       state.allProgress = []
       state.recent_lc_progress = []
       state.recent_learned_lc = []
-      state.testChance = 2
-      state.quizChance = 3
+      // state.testChance = 2
+      // state.quizChance = 3
       state.AchievementList = []
+      state.quizInfo = {}
+      state.testQuestions = []
     },
 
     GETCLASSLIST(state, titlelist){
@@ -137,6 +139,8 @@ export default new Vuex.Store({
           state.userExperience += temp
         }, 1500)
       }
+      state.quizInfo = {}
+      state.testQuestions = []
     },
     CHANGECURRENTCLASS ( state, item) {
       // console.log("현재", item)
@@ -228,9 +232,10 @@ export default new Vuex.Store({
 
     },
     GETREPORTINFO ( state, report ) {
-      state.time = new Date().getDate()
-      // state.time = new Date().getMinutes()
-      console.log(report)
+      
+      state.recent_lc_progress = []
+      state.recent_learned_lc = []
+
       state.currentClass = { 
         type: report.recent_cs.type,
         imgurl: report.recent_cs.imgurl,
@@ -383,6 +388,9 @@ export default new Vuex.Store({
       state.AchievementList[achieveId-1].done += 1
       state.AchievementList[achieveId-1].status = 1
       console.log(state.AchievementList)
+    },
+    SETTIME ( state ) {
+      state.time = new Date().getDate()
     }
 
     
@@ -581,6 +589,9 @@ export default new Vuex.Store({
       }  else {
         console.log("이미 달성")
       }
+    },
+    setTime( { commit }) {
+      commit('SETTIME')
     }
   },
 

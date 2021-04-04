@@ -80,7 +80,7 @@
     </v-row>
 
     <StudyPage :openStudyPage="openStudyPage" @closeStudyPage="endClass" v-if="ableStudy()"/>
-    <QuizPage :openQuizPage="openQuizPage" @closeQuizPage="endQuiz" v-if="ableQuiz()" />
+    <QuizPage :openQuizPage="openQuizPage" @closeQuizPage="endQuiz" v-if="Object.entries(quizInfo).length !== 0 && quizInfo.constructor === Object" />
 
   </v-container>
 </template>
@@ -137,7 +137,7 @@
         }
       },
       ableQuiz() {
-        if (Object.entries(this.quizInfo).length !== 0 && this.quizInfo.constructor === Object) {
+        if (this.getCurrentClassLearnedKeword.length > 4) {
           return true
         } else {
           return false
@@ -192,6 +192,7 @@
 
       this.$store.dispatch('getListCurrentClass',this.currentClass )
       
+      console.log("랜더링")
     }
   }
 </script>

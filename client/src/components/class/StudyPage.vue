@@ -27,8 +27,10 @@
           <!-- step1 -->
           <v-card class="step1" v-if="currentStep == 1" tile height="100%" elevation="0">
             <v-card tile height="40%" elevation="0">
-              <img :src="require(`@/assets/images/poster/poster1.jpg`)"
-               alt="포스터 이미지" height="100%" width="100%">
+              <img :src="require(`@/assets/5.png`)"   
+               alt="포스터 이미지" width="100%">
+              <!-- <img :src="require(`@/assets/images/poster/poster1.jpg`)"
+               alt="포스터 이미지" height="100%" width="100%"> -->
             </v-card>
             <v-card tile height="60%" elevation="0" class="d-flex flex-column pt-2 px-2">
               <v-btn class="mb-4" plain icon @click="speech"><v-icon>mdi-volume-high</v-icon></v-btn>

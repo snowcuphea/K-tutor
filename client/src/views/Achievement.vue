@@ -115,7 +115,7 @@
 import Achievemodal from '../components/modal/Achievemodal'
 import Achievemodal2 from '../components/modal/Achievemodal2'
 
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   name: "Achievement",
@@ -124,6 +124,7 @@ export default {
     appMyModal2: Achievemodal2
   },
   data: () => ({
+    nowTime: new Date(),
     visible: false,
     viewlist: true,
     viewcalendar: false,
@@ -151,9 +152,18 @@ export default {
   },
   created() {
     this.$store.dispatch('getAchievementList')
+
+    // console.log(this.time, this.nowTime.getDate())
+    if ( this.nowTime.getDate() !== this.time ) {
+      console.log(this.time, this.nowTime.getDate())
+      this.$store.dispatch( 'resetChance', this.nowTime.getDate() )
+    } 
+
+
   },
   computed: {
-    ...mapGetters(["getCurrentAchieved"])
+    ...mapGetters(["getCurrentAchieved"]),
+    ...mapState(["time"])
   }
 }
 </script>
