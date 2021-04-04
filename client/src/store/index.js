@@ -330,6 +330,7 @@ export default new Vuex.Store({
       // console.log(state.recent_lc_progress)
     },
     SAVEACIEVEMENTLIST ( state, achievements ) {
+      console.log(achievements)
       const achieve_list = []
       for (let achievement of achievements) {
         const achieve_arr = {
