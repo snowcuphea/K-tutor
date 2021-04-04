@@ -248,8 +248,12 @@ class AchievementViewSet(viewsets.GenericViewSet,
         ___
         """
         user = request.user
-        user.achieved.add(request.data['AcId'])
-        return Response("updated", status=status.HTTP_200_OK)
+        achievement = Achievement.objects.get(id=request.data['Acld'])
+        achievement.done += 1
+        if achievement.done >= achievement.total:
+            user.achieved.add(request.data['AcId'])
+            return Response("Achieved", status=status.HTTP_200_OK)
+        return Response("Updated", status=status.HTTP_200_OK)
 
 
 class InquiryViewSet(viewsets.GenericViewSet,
@@ -270,10 +274,9 @@ class InquiryViewSet(viewsets.GenericViewSet,
         """
         user = request.user
         email = EmailMessage(
-            request['title'],
-            request['content'],
-            from_email=user.email,
-            to="malmoongchi@gmail.com"
+            request.data['title'],
+            body=str(user.username) + "\n " + request.data['content'],
+            to=["malmoongchi@gmail.com"]
         )
         email.send()
         return Response("ok", status=status.HTTP_200_OK)

@@ -20,12 +20,12 @@ export default {
               label: "Grades",
               data: this.$store.state.userGrade_score,
               backgroundColor: "rgba(0,0,0,0)",
-              borderColor: "#36495d",
+              borderColor: "#00bfa5",
               borderWidth: 3,
               pointRadius:5,
               pointHoverRadius:5,
-              pointBorderColor: "#36495d",
-              pointBackgroundColor: "#36495d"
+              pointBorderColor: "#00bfa5",
+              pointBackgroundColor: "#00bfa5"
             },
           ]
         },

@@ -9,7 +9,7 @@
 
     <v-row>
       <v-col>
-        <!-- <img :src="require(`@/assets/images/poster/poster${classInfo.cs_seq}.jpg`)" alt="title" class="imgSize"> -->
+        <!-- <img :src="require(imgurl)" alt="title" class="imgSize"> -->
         <img :src="require(`@/assets/images/poster/poster1.jpg`)" alt="title" class="imgSize">
       </v-col>
     </v-row>
@@ -23,6 +23,8 @@
       </v-col>
       <v-col cols="4" class="d-flex justify-end">
         <v-btn @click="startQuiz()"> quiz </v-btn>
+        <v-icon v-for="left in chanceUsed()" :key="left">mdi-heart</v-icon>
+        <v-icon v-for="used in quizChance" :key="used" color="red">mdi-heart</v-icon>
       </v-col>
     </v-row>
 
@@ -53,7 +55,7 @@
                 <span>{{idx+1}}</span>
               </v-col>
               <v-col cols="3" xs="4" style="" class="d-flex justify-center">
-                <img :src="require(`@/assets/images/poster/poster8.jpg`)" alt="keyword" class="imgSize">
+                <img :src="require(`@/assets/images/poster/poster1.jpg`)" alt="keyword" class="imgSize">
               </v-col>
               <v-col cols="6" xs="6" class="d-flex align-center">
                 <div class="d-flex flex-column ">
@@ -102,6 +104,9 @@
 
     },
     methods: {
+      chanceUsed() {
+        return 3 - this.quizChance
+      },
       startClass(item, idx) {
         // 서버에 요청을 보내서 해당 학습 내용을 받아온다
         // this.$store.dispatch('changeCurrentClass', item)
@@ -121,9 +126,11 @@
         return false
       },
       ableStudy() {
-        if (this.lessonInfo.length != 0) {
+        if (Object.entries(this.lessonInfo).length !== 0 && this.lessonInfo.constructor === Object) {
+          console.log("돼")
           return true
         } else {
+          console.log("안돼")
           return false
         }
       },

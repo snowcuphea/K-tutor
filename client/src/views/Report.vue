@@ -86,6 +86,9 @@ export default {
   },
   computed: {
     ...mapState(['nickName','contiDay','studyCnt','recent_lc_progress'])
+  },
+  created() {
+    // this.$store.dispatch('completeAchieve', 1)
   }
 }
 </script>
