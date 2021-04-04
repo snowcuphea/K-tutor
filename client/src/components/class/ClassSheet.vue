@@ -60,7 +60,7 @@
               <v-col cols="6" xs="6" class="d-flex align-center">
                 <div class="d-flex flex-column ">
                   <h3 class="text--primary my-1"> {{item.main_kw_kor}}</h3>
-                  <span class=""> (영어번역필요) {{ item.main_kw_eng }} </span>
+                  <span class=""> {{ item.main_kw_eng }} </span>
                 </div>
               </v-col>
               <v-col cols="2" xs="1" class="d-flex align-center justify-center">

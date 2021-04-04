@@ -97,7 +97,7 @@ function addAchieve( achieved, success, fail ){
   instance.defaults.headers['Authorization'] = "jwt " + window.localStorage.getItem('jwt')
 
   const achievedForm = {
-    "AcId" : achieved
+    "AcId" : String(achieved)
   }
 
   instance
