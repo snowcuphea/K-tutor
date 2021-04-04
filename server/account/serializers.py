@@ -39,4 +39,4 @@ class AchievedManageSerializer(serializers.Serializer):
     status = serializers.IntegerField()
     great_kor = serializers.CharField()
     great_eng = serializers.CharField()
-    great_dsc = serializers.TextField()
+    great_dsc = serializers.CharField()
