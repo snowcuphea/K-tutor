@@ -4,7 +4,7 @@
       id="img"
       width="100%"
       height="100%"
-      :src="modalItem.imgurl"
+      :src="require(`@/assets/images/achievement/${modalItem.imgurl}`)"
       @click="modalClick"
       :class="isDone() ? '':'achievementNot'"
     />
@@ -22,6 +22,8 @@ export default {
   },
   methods: {
     modalClick() {
+      // if (this.isDone() ) {
+      //   }
       this.$emit('update2',this.modalItem)
     },
     isDone() {

@@ -1,114 +1,119 @@
 <template>
-  <div>
-    <v-container class="progress_top">
-    </v-container>
+  <v-container>
 
-    <v-container>
-      <div class="modal-overlay"
-        v-if="visible"
-        @click="closeModal"
+    <div class="modal-overlay"
+      v-if="visible"
+      @click="closeModal"
+      >
+      <v-card width="90%" height="70%" class="pa-3 modal-window" >
+        <v-btn
+          icon
+          class="close-dialog"
+          @click="closeModal"
         >
-        <div class="modal-window">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+        <v-img 
+          :src="require(`@/assets/images/achievement/${item.imgurl}`)"
+          height="50%"
+          width="50%"
+          class="mx-auto"
+        />
+        <v-card-title class="modal_title">
+          {{ item.great_kor }}
+        </v-card-title>
+        <v-card-subtitle>
+          {{ item.great_eng }}
+        </v-card-subtitle>
 
-          <v-img 
-            :src="item.src"
-            height="50%"
-            width="50%"
-            padding="0"
-            class="modal_img"
-          />
-          <v-card-text class="modal_title">
-            {{ item.title }}
-          </v-card-text>
+        <v-card-text class="modal_contents">
+          {{ item.great_dsc | dsc() }} <br>
+          <a :href="item.great_dsc | toLink() ">Learn more via Wikipedia</a>
+        </v-card-text>
+      </v-card>
+    </div>
 
-          <v-card-text class="modal_contents">
-            {{ item.contents }}
-          </v-card-text>
+    <v-subheader style="padding:0;">
+      <v-container class="progress_top">
+
+        <v-row style="margin-bottom: 0;">
+          <v-col
+            cols="8"
+            class="d-flex flex-column"
+          >
+            <h4>Achievement Status</h4>
+
+            <v-progress-linear
+              color="light-blue"
+              height="15"
+              :value="(getCurrentAchieved.length/9)*100"
+              striped
+            >
+              <h6>{{ getCurrentAchieved.length }}/9</h6> 
+                
+            </v-progress-linear>
+
+          </v-col>
+          <v-col
+            cols="4"
+          >
+            <div class="d-flex justify-end" style="padding-right: 10%;">
+              <v-btn
+                icon
+                plain
+                :color="viewlist===false ? 'secondary' : 'primary'"
+              >
+                <v-icon @click="viewList">mdi-view-list</v-icon>
+              </v-btn>
+              <v-btn
+                icon
+                plain
+                :color="viewcalendar===false ? 'secondary' : 'primary'"
+              >
+                <v-icon @click="viewCalendar">mdi-grid</v-icon>
+              </v-btn>
+              
+            
+            </div>
+
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-subheader>
+    <div style="padding-top: 3%;">
+
+      <div class="wrap d-flex flex-column" v-if="viewlist">
+
+        <div
+          v-for = "(item, idx) in $store.state.AchievementList"
+          :key = "idx"
+        >
+
+          <appMyModal :modalItem="item" @update2="modal" />
+
         </div>
 
       </div>
-      <v-subheader style="padding:0;">
-        <v-container class="progress_top">
+      <div v-if="viewcalendar">
+        
+        <v-row
+          class="d-flex wrap"
 
-          <v-row style="margin-bottom: 0;">
-            <v-col
-              cols="8"
-              class="d-flex flex-column"
-            >
-              <h4>Achievement Status</h4>
-
-              <v-progress-linear
-                color="light-blue"
-                height="15"
-                :value="(getCurrentAchieved.length/9)*100"
-                striped
-              >
-                <h6>{{ getCurrentAchieved.length }}/9</h6> 
-                  
-              </v-progress-linear>
-
-            </v-col>
-            <v-col
-              cols="4"
-            >
-              <div class="d-flex justify-end" style="padding-right: 10%;">
-                <v-btn
-                  icon
-                  plain
-                  :color="viewlist===false ? 'secondary' : 'primary'"
-                >
-                  <v-icon @click="viewList">mdi-view-list</v-icon>
-                </v-btn>
-                <v-btn
-                  icon
-                  plain
-                  :color="viewcalendar===false ? 'secondary' : 'primary'"
-                >
-                  <v-icon @click="viewCalendar">mdi-grid</v-icon>
-                </v-btn>
-                
-              
-              </div>
-
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-subheader>
-      <div style="padding-top: 3%;">
-
-        <div class="wrap d-flex flex-column" v-if="viewlist">
-
-          <div
-            v-for = "(item, idx) in $store.state.AchievementList"
+        >
+          <v-col
+            cols="4"
+            v-for = "(item,idx) in $store.state.AchievementList"
             :key = "idx"
           >
+            <appMyModal2 :modalItem="item" @update2="modal" />
 
-            <appMyModal :modalItem="item" @update="modal" />
-
-          </div>
-
-        </div>
-        <div v-if="viewcalendar">
-          
-          <v-row
-            class="d-flex wrap"
-
-          >
-            <v-col
-              cols="4"
-              v-for = "(item,idx) in $store.state.AchievementList"
-              :key = "idx"
-            >
-              <appMyModal2 :modalItem="item" @update2="modal" />
-
-            </v-col>
-          </v-row>
-
-        </div>
+          </v-col>
+        </v-row>
+<a href=""></a>
       </div>
-      
-    </v-container>
-  </div>
+    </div>
+    
+  </v-container>
 </template>
 
 <script>
@@ -116,6 +121,21 @@ import Achievemodal from '../components/modal/Achievemodal'
 import Achievemodal2 from '../components/modal/Achievemodal2'
 
 import { mapGetters, mapState } from 'vuex'
+
+import Vue from 'vue'
+
+Vue.filter('dsc', function(value) {
+  const newDsc = value.split("https")
+  
+  return newDsc[0] 
+})
+Vue.filter('toLink', function(value) {
+  const newDsc = value.split("https")
+
+  return "https" + newDsc[1] 
+})
+
+
 
 export default {
   name: "Achievement",
@@ -204,25 +224,20 @@ export default {
 }
 
 .modal-window {
-  padding: 10px 20px;
-  background: #fff;
-  border-radius: 4px;
-  overflow: hidden;
-  min-width: 500px;
+  overflow-y: auto;
 }
 
 .modal_img {
   height: 50%;
   width: 50%;
-  margin-left: 25%;
 }
 
 .modal_title {
-  text-align: center;
+  /* text-align: center; */
 }
 
 .modal_contents {
-  text-align: center;
+  /* text-align: center; */
 }
 
 .main_img {
