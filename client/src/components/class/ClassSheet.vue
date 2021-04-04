@@ -2,7 +2,6 @@
   <v-container id="classSheet">
     <v-row>
       <v-col class="d-flex flex-column justify-center align-center">
-        {{ currentClass }}
         <h2> {{currentClass.name_kor}} </h2>
         <h2> {{currentClass.name_eng}} </h2>
       </v-col>

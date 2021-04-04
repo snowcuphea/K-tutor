@@ -3,15 +3,15 @@
   <div class="mypage_body">
     <v-container>
       <v-row>
-        <v-col cols="6">
+        <v-col cols="5">
           <div>
-            <v-avatar size="150" class="my_avatar">
+            <v-avatar size="100" class="my_avatar">
               <img :src="myImgSource()">
             </v-avatar>
           </div>
 
         </v-col>
-        <v-col cols="6" class="d-flex align-center">
+        <v-col cols="7" class="d-flex align-center">
           <v-row class="d-flex flex-column">
             <div class="d-flex align-center">
 
