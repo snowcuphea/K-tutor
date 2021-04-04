@@ -61,7 +61,8 @@ class CsViewSet(viewsets.GenericViewSet,
                 "name_kor": kor,
                 "name_eng": eng,
                 "type": "kpop",
-                "level": song_list.filter(name_kor__contains=kor)[0].level
+                "level": song_list.filter(name_kor__contains=kor)[0].level,
+                "imgurl": song_list.filter(name_kor__contains=kor)[0].imgurl
             })
         cs_list.extend(Cs.objects.filter(type__in=['drama', 'movie']).values())
         serializer = CsSerializer(data=cs_list, many=True)
