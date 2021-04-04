@@ -79,8 +79,8 @@
       </v-col>
     </v-row>
 
-    <StudyPage :openStudyPage="openStudyPage" @closeStudyPage="endClass" v-if="ableStudy()"/>
-    <QuizPage :openQuizPage="openQuizPage" @closeQuizPage="endQuiz" v-if="Object.entries(quizInfo).length !== 0 && quizInfo.constructor === Object" />
+    <StudyPage :openStudyPage="openStudyPage" @closeStudyPage="endClass" v-if="openStudyPage"/>
+    <QuizPage :openQuizPage="openQuizPage" @closeQuizPage="endQuiz" v-if="openQuizPage" />
 
   </v-container>
 </template>
@@ -128,13 +128,6 @@
           }
         }
         return false
-      },
-      ableStudy() {
-        if (Object.entries(this.lessonInfo).length !== 0 && this.lessonInfo.constructor === Object) {
-          return true
-        } else {
-          return false
-        }
       },
       ableQuiz() {
         if (this.getCurrentClassLearnedKeword.length > 4) {

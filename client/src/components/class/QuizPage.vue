@@ -149,7 +149,7 @@ export default {
       this.resultDialog = !this.resultDialog
       this.exp = 5
       this.$store.dispatch('gainExperience', this.exp)
-      // this.$store.dispatch( "changeChance", "quiz")
+      this.$store.dispatch( "changeChance", "quiz")
     },
     endQuiz() {
       this.defaultSetting()

@@ -139,8 +139,8 @@ export default new Vuex.Store({
           state.userExperience += temp
         }, 1500)
       }
-      state.quizInfo = {}
-      state.testQuestions = []
+      // state.quizInfo = {}
+      // state.testQuestions = []
     },
     CHANGECURRENTCLASS ( state, item) {
       // console.log("현재", item)
