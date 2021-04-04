@@ -127,10 +127,8 @@
       },
       ableStudy() {
         if (Object.entries(this.lessonInfo).length !== 0 && this.lessonInfo.constructor === Object) {
-          console.log("돼")
           return true
         } else {
-          console.log("안돼")
           return false
         }
       },
