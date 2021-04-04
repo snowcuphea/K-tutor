@@ -383,8 +383,10 @@ export default new Vuex.Store({
       state.AchievementList[achieveId-1].done += 1
       state.AchievementList[achieveId-1].status = 1
       console.log(state.AchievementList)
+    },
+    UPDATEUSERINFO ( state, userInfo ) {
+      state.nickName = userInfo.userNickname
     }
-
     
   },
 
@@ -581,6 +583,10 @@ export default new Vuex.Store({
       }  else {
         console.log("이미 달성")
       }
+    },
+    updateUser ( { commit }, userInfo ) {
+      commit ( 'UPDATEUSERINFO', userInfo )
+
     }
   },
 
