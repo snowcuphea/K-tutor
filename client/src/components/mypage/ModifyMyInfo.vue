@@ -74,6 +74,48 @@
                 </v-col>
             </v-row>
         </v-form>
+        <v-divider></v-divider>
+        <!-- <v-row align="center">
+            <v-col cols="2">
+                <v-subheader>
+                Month:
+                </v-subheader>
+            </v-col>
+
+            <v-col cols="3">
+                <v-select
+                    v-model="select_month"
+                    :items="items_month"
+                    label="1"
+                    persistent-hint
+                    return-object
+                    single-line
+                >
+                </v-select>
+            </v-col>
+            <v-col
+                cols="2"
+            >
+                <v-subheader>
+                    Days:
+                </v-subheader>
+            </v-col>
+            <v-col cols="3">
+                <v-select
+                    v-model="select_day"
+                    :items="items_day"
+                    label="1"
+                    persistent-hint
+                    return-object
+                    single-line
+                >
+                </v-select>
+            </v-col>
+            <v-col cols="2">
+                <v-btn @click="search_name">ok</v-btn>
+            </v-col>
+
+        </v-row> -->
 
 
       </v-card>
@@ -97,17 +139,55 @@ export default {
       ],
       signupCredentials: {
           userNickname: "",
-      }
+      },
+    //   items_month: [
+    //       1,2,3,4,5,6,7,8,9,10,11,12
+    //   ],
+    //   items_day: [
+    //       1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31
+    //   ],
+    //   select_month: '',
+    //   select_day: '',
+    //   select_name_month: [
+    //       'Ssang', 'Chul', 'Bok', 'Dol', 'Pang', 'Yuk', 'Ssang', 'Gae', 'Chil', 'Gap', 'Sam', 'Bang'
+    //   ]
 
   }),
   methods: {
     hideDialog () {
       this.$emit('hideTutorial')
     },
+    // modify () {
+    //     const form = []
+    //     this.form.push({nickname: this.$store.state.nickName, password: ''})
+    //     modify (
+    //         this.form,
+    //         (res) => {
+    //             console.log(res)
+    //         },
+    //         (err) => {
+    //             console.log('fail', err)
+    //         }
+    //     )
+    // }
+
+    
     // modify() {
     //     if ()
+    // },
+    // search_name () {
+    //     if (this.select_month != '' && this.select_day != '') {
+    //         if (this.select_month == 2) {
+
+    //         }
+    //         else if (this.select_month in [1,3,5,7,8,10,12]) {
+
+    //         }
+    //         else {
+
+    //         }
+    //     }
     // }
-    
     },
 
 }
