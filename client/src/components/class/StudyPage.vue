@@ -34,7 +34,7 @@
                <!-- <v-text>@/assets/images/card/{{lessonInfo.imgurl}}</v-text> -->
             </v-card>
             <v-card tile height="60%" elevation="0" class="d-flex flex-column pt-2 px-2">
-              <v-btn class="mb-4" plain icon @click="speech"><v-icon>mdi-volume-high</v-icon></v-btn>
+              <v-btn class="mb-4" fab small dark color="teal accent-4" @click="speech"><v-icon>mdi-volume-high</v-icon></v-btn>
               <div v-for="(line, idx) in lessonInfo.lines_kr" :key="idx">
                 <div v-if="idx%2 == 0" class="pb-2">
                   <p>{{ lessonInfo.lines_kr[idx] }} </p>
@@ -56,7 +56,7 @@
             <v-card tile height="25%" elevation="0" class="d-flex flex-column">
               <div class="d-flex align-center justify-space-between">
                 <h3>[ Key Sentence ]</h3>
-                <v-btn plain icon class="" @click="speech_keysentence"><v-icon>mdi-volume-high</v-icon></v-btn>
+                <v-btn fab small dark @click="speech_keysentence"><v-icon>mdi-volume-high</v-icon></v-btn>
               </div>
               <div class="pl-5 pt-2">
                 <p> {{ lessonInfo.lines_kr[1] }} </p>
@@ -76,7 +76,7 @@
             <v-card tile height="50%" elevation="0">
               <div class="d-flex align-center justify-space-between">
                 <h3>[ Example ]</h3>
-                <v-btn plain icon class="" @click="speech_example"><v-icon>mdi-volume-high</v-icon></v-btn>
+                <v-btn fab small dark class="" @click="speech_example"><v-icon>mdi-volume-high</v-icon></v-btn>
               </div>
               <div class="pl-5 pt-2" v-for="(example, idx) in lessonInfo.example_kr" :key="idx">
                 <p>{{ lessonInfo.example_kr[idx] }} </p>
@@ -108,7 +108,7 @@
               </div>
 
               <div class="d-flex justify-space-between">
-                <v-btn plain icon @click="speech_keysentence"><v-icon>mdi-volume-high</v-icon></v-btn>
+                <v-btn fab small dark class="ml-1" @click="speech_keysentence"><v-icon>mdi-volume-high</v-icon></v-btn>
                 <v-btn plain icon @click="empty()"><v-icon>mdi-restart</v-icon></v-btn>
               </div>
             </v-card>

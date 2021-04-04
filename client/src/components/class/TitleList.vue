@@ -12,7 +12,7 @@
               <v-col cols="3"  style="" class="d-flex justify-center">
                 <img :src="require(`@/assets/images/poster/${item.imgurl}`)" alt="title" class="imgSize">
               </v-col>
-              <v-col cols="6" class="d-flex flex-column align-center">
+              <v-col cols="6" class="d-flex flex-column align-center justify-center">
                 <h3 class="text--primary pt-1">{{item.name_kor}}</h3>
                 <h5 class="mb-0">{{item.name_eng}}</h5>
               </v-col>
