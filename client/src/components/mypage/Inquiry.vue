@@ -27,15 +27,16 @@
               <v-row>
                 <v-col>
                   <v-text-field
-                    label="name"            
-                    placeholder="please enter your name"
+                    label="title"            
+                    placeholder="please enter the title"
                     style="width:80%;"
+                    v-model="form.title"
                   ></v-text-field>
 
                 </v-col>
 
               </v-row>
-              <v-row>
+              <!-- <v-row>
                 <v-col>
                   <v-text-field
                     :rules="rulesEmail"
@@ -46,13 +47,14 @@
 
                 </v-col>
 
-              </v-row>
+              </v-row> -->
               <v-row>
                 <v-col>
                   <v-textarea
                     label="contents"            
                     placeholder="Please fill out your inquiry"
-                    style="width:80%;"             
+                    style="width:80%;"
+                    v-model="form.content"        
                   ></v-textarea>
 
                 </v-col>
@@ -64,12 +66,13 @@
           </v-row>
           <v-row class="send_icons" style="margin-right: 30%;">
             <v-btn
+              @click="sendemail"
             >
               Send
             </v-btn>
             
           </v-row>
-        </v-form> 
+        </v-form>
       </v-card>
 
     </v-dialog>
@@ -77,6 +80,8 @@
 </template>
 
 <script>
+import { sendEmail } from "@/api/account.js"
+
 export default {
   props: ['showInquiry'],
   data: () => ({
@@ -85,13 +90,31 @@ export default {
       value => /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/.test(value) ||
       'Confirm your Email.',
     ],
+    form: {
+      title: '',
+      content: '',
+    },
   }),
   methods: {
     hideDialog () {
       this.$emit('hideTutorial')
+    },
+    sendemail () {
+      console.log(this.form)
+      sendEmail(
+        this.form,
+        (res) => {
+          console.log(res)
+          this.form.title = ''
+          this.form.content = ''
+        },
+        (err) => {
+          console.log('fail', err)
+        }
+      )
+    }
     }
   }
-}
 </script>
 
 <style>
