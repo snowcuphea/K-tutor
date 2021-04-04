@@ -1,0 +1,42 @@
+version: '3.3'
+
+services:
+  db:
+    image: dudrlf1859/k-tutor
+    container_name: k-tutor
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: emh4baTVMa3SYmSf
+    stdin_open: true
+    tty: true
+  server:
+    command: bash -c 'while true; do python3 ./manage.py runserver 0:8000; sleep 2; done'
+    container_name: backend
+    build:
+      context: server
+      dockerfile: back.Dockerfile
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    expose:
+      - 8000
+    volumes:
+    - ./server:/code
+    stdin_open: true
+    tty: true
+  client:
+    container_name: frontend
+    build:
+      context: client
+      dockerfile: front.Dockerfile
+    stdin_open: true
+    tty: true
+    expose:
+      - 8080
+    ports:
+      - 8080:8080
+    volumes:
+      -  ./client:/app
