@@ -30,7 +30,7 @@
                         </v-col>
                         <v-col>
                             <v-text-field label="Nickname" :rules="rulesNickname" hide-details="auto"
-                                v-model="this.$store.state.nickName"></v-text-field>
+                                v-model="userNickName"></v-text-field>
                         </v-col>
                         
                     </v-row>
@@ -44,8 +44,8 @@
                             </h4>
                         </v-col>
                         <v-col>
-                            <v-text-field label="Password" :rules="rulesNickname" hide-details="auto" type="password"
-                                v-model="this.$store.state.nickName"></v-text-field>
+                            <v-text-field label="Password" :rules="rulesPassword" hide-details="auto" type="password"
+                                v-model="this.userCredentials.userPassword"></v-text-field>
                         </v-col>
                         
                     </v-row>
@@ -59,8 +59,8 @@
                             </h4>
                         </v-col>
                         <v-col>
-                            <v-text-field label="Password Confirm" :rules="rulesNickname" hide-details="auto" type="password"
-                                v-model="this.$store.state.nickName"></v-text-field>
+                            <v-text-field label="Password Confirm" :rules="passwordConfirmation" hide-details="auto" type="password"
+                                v-model="this.userCredentials.userPasswordConfirm"></v-text-field>
                         </v-col>
                         
                     </v-row>
@@ -126,6 +126,8 @@
 </template>
 
 <script>
+import { updateUser } from "@/api/account.js"
+
 export default {
   props: ['showModifyMyInfo'],
   data: () => ({
@@ -137,9 +139,11 @@ export default {
         value => !!value || 'Required.',
         value => (value && value.length >= 3) || 'Min 3 characters',
       ],
-      signupCredentials: {
-          userNickname: "",
+      userCredentials: {
+          userPassword: "",
+          userPasswordConfirm: "",
       },
+      userNickName: "",
     //   items_month: [
     //       1,2,3,4,5,6,7,8,9,10,11,12
     //   ],
@@ -154,24 +158,42 @@ export default {
 
   }),
   methods: {
-    hideDialog () {
-      this.$emit('hideTutorial')
-    },
-    // modify () {
-    //     const form = []
-    //     this.form.push({nickname: this.$store.state.nickName, password: ''})
-    //     modify (
-    //         this.form,
-    //         (res) => {
-    //             console.log(res)
-    //         },
-    //         (err) => {
-    //             console.log('fail', err)
-    //         }
-    //     )
-    // }
+      hideDialog () {
+          this.$emit('hideTutorial')
+      },
+      modify () {
+          const form = []
+          form.push({userNickname: this.userCredentials.userNickname, userPassword: this.userCredentials.userPassword})
+          updateUser (
+              form,
+              (res) => {
+                  this.$store.dispatch('updateUser',form)
+                  console.log(res)
+              },
+              (err) => {
+                  console.log(err)
+                  const alertInfo = {
+                      status: true,
+                      color: "error",
+                      content: "please check your Nickname or Password"
+                  }
+                  this.$store.dispatch("showAlert", alertInfo)
+              }
+          )
 
-    
+      }
+  },
+  computed: {
+      passwordConfirmation() {
+        return [
+          value => value === this.userCredentials.userPassword || 'Confirm your password.'
+        ]
+      },
+  }
+}
+
+
+
     // modify() {
     //     if ()
     // },
@@ -188,9 +210,8 @@ export default {
     //         }
     //     }
     // }
-    },
 
-}
+    
 </script>
 
 <style>
