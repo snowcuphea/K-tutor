@@ -16,13 +16,13 @@
           <v-icon>mdi-close</v-icon>
         </v-btn>
 
-        <v-card tile height="15%" elevation="0"
+        <v-card tile height="13%" elevation="0"
          class="d-flex justify-center align-center" >
           <h2>[ {{ currentProblem + 1 }}/5  ]</h2>
 
         </v-card>
 
-        <v-card tile height="72%" elevation="0" class="px-5">
+        <v-card tile height="76%" elevation="0" class="px-5">
           <v-card class="quiz" tile height="100%" elevation="0" color="black">
             <v-card tile height="70%" elevation="0">
               <div class="px-2" v-for="(line, idx) in quizInfo.quizzes[currentProblem].lines_kr" :key="idx">
@@ -58,7 +58,7 @@
 
         </v-card>
 
-        <v-card tile height="13%" elevation="0"
+        <v-card tile height="11%" elevation="0"
          class="d-flex align-center px-5" >
           <v-spacer></v-spacer>
           <v-btn text plain @click="nextProblem" v-if="currentProblem != 4" :disabled="!pass">
@@ -258,7 +258,7 @@ export default {
     },
   },
   watch: {
-    openStudyPage() {
+    quizInfo() {
       this.createEmptyList()
     }
   },

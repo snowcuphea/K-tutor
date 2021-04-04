@@ -23,8 +23,12 @@
       </v-col>
       <v-col cols="4" class="d-flex justify-end">
         <v-btn @click="startQuiz()"> quiz </v-btn>
-        <v-icon v-for="left in chanceUsed()" :key="left">mdi-heart</v-icon>
-        <v-icon v-for="used in quizChance" :key="used" color="red">mdi-heart</v-icon>
+        <div class="d-flex">
+          <v-icon v-for="left in chanceUsed()" :key="left">mdi-heart</v-icon>
+        </div>
+        <div class="d-flex">
+          <v-icon v-for="used in quizChance" :key="used" color="red">mdi-heart</v-icon>
+        </div>
       </v-col>
     </v-row>
 
@@ -133,7 +137,7 @@
         }
       },
       ableQuiz() {
-        if (this.getCurrentClassLearnedKeword.length > 4) {
+        if (Object.entries(this.quizInfo).length !== 0 && this.quizInfo.constructor === Object) {
           return true
         } else {
           return false
@@ -143,8 +147,12 @@
         // 서버에 요청을 보내서 퀴즈 받아오기
         if ( this.ableQuiz() && this.quizChance != 0) {
           this.$store.dispatch('getQuizInfo')
-          this.openQuizPage = !this.openQuizPage
-        } else if ( !this.ableQuiz() && this.quizChance == 0) {
+            .then(() => {
+              console.log(this.quizInfo)
+              this.openQuizPage = !this.openQuizPage
+            })
+            .catch(() => {})
+        } else if ( this.quizChance == 0) {
           const alertInfo = {
             status: true,
             color: "warning",
@@ -167,7 +175,7 @@
     },
     computed: {
       ...mapState([
-        "currentClass", "defaultClass", "classList", "quizChance", "lessonInfo"
+        "currentClass", "defaultClass", "classList", "quizChance", "lessonInfo", "quizInfo"
       ]),
       ...mapGetters([
         "getCurrentClassLearnedKeword",

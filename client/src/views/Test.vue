@@ -60,7 +60,7 @@ export default {
       if (this.ableTest() && this.testChance != 0 ){
         this.$store.dispatch( "getTestQuestions" )
         this.showDialog = !this.showDialog
-      } else if (!this.ableTest() && this.testChance == 0) {
+      } else if ( this.testChance == 0 ) {
         const alertInfo = {
           status: true,
           color: "warning",

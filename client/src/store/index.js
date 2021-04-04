@@ -139,7 +139,7 @@ export default new Vuex.Store({
       }
     },
     CHANGECURRENTCLASS ( state, item) {
-      console.log("현재", item)
+      // console.log("현재", item)
       state.currentClass = item
       // console.log("뮤ㄴ=텡이션 현재커렌트클래스",state.currentClass )
     },
@@ -195,9 +195,7 @@ export default new Vuex.Store({
         }
         quizForm.quizzes.push(problemForm)
       }
-
       state.quizInfo = quizForm
-
     },
     GETTESTQUESTIONS ( state , questions ) {
       let test = []

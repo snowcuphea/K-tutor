@@ -16,13 +16,13 @@
           <v-icon>mdi-close</v-icon>
         </v-btn>
 
-        <v-card tile height="15%" elevation="0"
+        <v-card tile height="13%" elevation="0"
          class="d-flex justify-center align-center" >
           <h2>Step {{ currentStep }}. {{ stepName[currentStep] }} </h2>
 
         </v-card>
 
-        <v-card tile height="72%" elevation="0" class="px-5">
+        <v-card tile height="76%" elevation="0" class="px-5">
 
           <!-- step1 -->
           <v-card class="step1" v-if="currentStep == 1" tile height="100%" elevation="0">
@@ -50,7 +50,7 @@
 
           <!-- step2 -->
           <v-card class="step2" v-else-if="currentStep == 2" tile height="100%" elevation="0">
-            <v-card tile height="30%" elevation="0" class="d-flex flex-column">
+            <v-card tile height="25%" elevation="0" class="d-flex flex-column">
               <div class="d-flex align-center justify-space-between">
                 <h3>[ Key Sentence ]</h3>
                 <v-btn plain icon class="" @click="speech_keysentence"><v-icon>mdi-volume-high</v-icon></v-btn>
@@ -60,7 +60,7 @@
                 <p> {{ lessonInfo.lines_en[1] }} </p>
               </div>
             </v-card>
-            <v-card tile height="30%" elevation="0" class="pt-4">
+            <v-card tile height="25%" elevation="0" class="pt-4">
               <div class="d-flex align-center justify-space-between">
                 <h3>[ Key Word ]</h3>
                 <!-- <v-btn plain icon class=""><v-icon>mdi-volume-high</v-icon></v-btn> -->
@@ -70,7 +70,7 @@
                 <p> {{ lessonInfo.keyword_en }} </p>
               </div>
             </v-card>
-            <v-card tile height="40%" elevation="0">
+            <v-card tile height="50%" elevation="0">
               <div class="d-flex align-center justify-space-between">
                 <h3>[ Example ]</h3>
                 <v-btn plain icon class="" @click="speech_example"><v-icon>mdi-volume-high</v-icon></v-btn>
@@ -120,7 +120,7 @@
 
         </v-card>
 
-        <v-card tile height="13%" elevation="0"
+        <v-card tile height="11%" elevation="0"
          class="d-flex align-center px-5" >
           <v-btn text plain @click="currentStep -= 1" v-if="currentStep != 1">
             previous
