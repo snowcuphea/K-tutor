@@ -215,7 +215,7 @@ class AchievementViewSet(viewsets.GenericViewSet,
         user = request.user
         achievement_list = AchieveManage.objects.filter(user=user)
         user_achievement = []
-
+        #asd
         for al in achievement_list:
             if al.done >= al.achievement.total:
                 user_achievement.append({
