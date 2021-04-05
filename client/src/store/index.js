@@ -27,8 +27,8 @@ export default new Vuex.Store({
     userGrade_date : [], 
     userGrade_score : [],
     allProgress: [],        // 전체 type에 대한 진행도
-    recent_lc_progress: [], // 최근 학습한 학습카드
-    recent_learned_lc: [],  // 최근 학습한 진행도
+    recent_lc_progress: [], // 최근 학습한 진행도
+    recent_learned_lc: [],  // 최근 학습한 학습카드
 
 
     alert: {
@@ -232,7 +232,7 @@ export default new Vuex.Store({
 
     },
     GETREPORTINFO ( state, report ) {
-      
+
       state.recent_lc_progress = []
       state.recent_learned_lc = []
 
@@ -291,9 +291,11 @@ export default new Vuex.Store({
     },
     SENDCOMPLETELESSON ( state, idx ) {
       
-      // console.log(state.classList[idx])
+      console.log(state.classList[idx])
 
       if ( state.classList[idx]["already_learned"] == false) {
+
+        state.classList[idx]["already_learned"] = true
 
         for ( let progress of state.recent_lc_progress){
           if ( progress.title === state.currentClass.name_kor ){
@@ -307,18 +309,14 @@ export default new Vuex.Store({
           }
         }
         
-        state.recent_learned_lc.pop()
-        
-        const lessonCardForm = {
-          id: state.classList[idx].id ,
-          imgurl: null,
-          main_kw_kor: state.classList[idx].main_kw_kor,
-          main_kw_eng: state.classList[idx].main_kw_eng,
+        if ( state.recent_learned_lc.length > 9) {
+          state.recent_learned_lc.pop()
         }
 
-        state.recent_learned_lc.unshift(lessonCardForm)
+        state.recent_learned_lc.unshift(state.classList[idx])
 
-        state.classList[idx]["already_learned"] = true
+        console.log(state.recent_learned_lc)
+
       }
     },
     ADDTOPROGRESSLIST ( state ) {
