@@ -185,8 +185,7 @@
       }
 
       this.$store.dispatch('getListCurrentClass',this.currentClass )
-      
-      console.log(this.currentClass)
+
     }
   }
 </script>
