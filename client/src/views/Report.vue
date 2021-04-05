@@ -66,6 +66,7 @@
 <script>
 import { mapState } from 'vuex' 
 import { getInfo } from '@/api/account.js'
+import { newbie } from '@/store/achievement.js'
 
 import Experience from "@/components/user/Experience.vue"
 import ClassCards from "@/components/report/ClassCards.vue"
@@ -87,7 +88,7 @@ export default {
     GenreProgress
   },
   computed: {
-    ...mapState(['nickName','contiDay','studyCnt','recent_lc_progress','time'])
+    ...mapState(['nickName','contiDay','studyCnt','recent_lc_progress','time','isLogin', 'myCompleteAchievement'])
   },
   created() {
     // this.$store.dispatch('completeAchieve', 1)
@@ -106,6 +107,13 @@ export default {
       console.log(this.time, this.nowTime.getDate())
       this.$store.dispatch( 'resetChance', this.nowTime.getDate() )
     } 
+
+    // if ( this.isLogin == true && !this.myCompleteAchievement.includes(1)) {
+    //   this.$store.dispatch('completeAchieve', 1)
+    // }
+     if ( newbie(this.isLogin, this.myCompleteAchievement) ) {
+       this.$store.dispatch('completeAchieve', 1)
+     }
 
   }
 }

@@ -38,9 +38,6 @@ export default {
       this.$store.dispatch( 'resetChance', this.nowTime.getDate() )
     } 
 
-    if ( this.isLogin == true ) {
-      this.$store.dispatch('completeAchieve', 1)
-    }
 
   },
   computed: {

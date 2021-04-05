@@ -21,7 +21,7 @@ export default new Vuex.Store({
     required_exp: [
       0, 10, 20, 30, 50, 70,
       100, 150, 200, 250, 300,
-      400, 500, 600, 750, 1000
+      400, 500, 750, 1000
     ],
     
     userGrade_date : [], 
@@ -62,7 +62,7 @@ export default new Vuex.Store({
     contiDay: 0,
 
     AchievementList: [],
-  
+    myCompleteAchievement: [],
   },
   
   getters: {
@@ -112,6 +112,7 @@ export default new Vuex.Store({
       state.testChance = 2
       state.quizChance = 3
       state.AchievementList = []
+      state.myCompleteAchievement = []
       state.quizInfo = {}
       state.testQuestions = []
     },
@@ -344,18 +345,22 @@ export default new Vuex.Store({
           great_dsc: achievement.great_dsc,
         }
         achieve_list.push(achieve_arr)
+        if (achievement.status == 1) {
+          state.myCompleteAchievement.push(achievement.achievement_id)
+        }
       }
       state.AchievementList = achieve_list
       // console.log("store", state.AchievementList)
+      // console.log("store", state.myCompleteAchievement)
     },
 
     SHOWALERT ( state, alertInfo ) {
       
-      var timeout = 2000
+      var timeout = 3000
 
-      if ( alertInfo.color == "error" || alertInfo.color == "warning" ) {
-        timeout = 3000
-      }
+      // if ( alertInfo.color == "error" || alertInfo.color == "warning" ) {
+      //   timeout = 3000
+      // }
 
       state.alert = alertInfo
       setTimeout(() => {
@@ -379,14 +384,8 @@ export default new Vuex.Store({
         console.log(state.quizChance)
       }
     },
-    UPDATEACHIEVEMENT( state, achieveId) {
-      state.AchievementList[achieveId-1].done += 1
-      console.log(state.AchievementList)
-    },
     COMPLETEACHIEVE ( state, achieveId ) {
-      state.AchievementList[achieveId-1].done += 1
-      state.AchievementList[achieveId-1].status = 1
-      console.log(state.AchievementList)
+      state.myCompleteAchievement.push(achieveId)
     },
     SETTIME ( state ) {
       state.time = new Date().getDate()
@@ -408,20 +407,23 @@ export default new Vuex.Store({
     changePage ({ commit }, changeItem ) {
       commit('CHANGECURRENTPAGE', changeItem)
     },
-    gainExperience ({ commit }, experience) {
-      setTimeout( function() {
-        commit('CHANGEEXPERIENCE', experience )
-      }, 1500)
+    gainExperience ({ commit,state }, experience) {
 
-      getExp(
-        experience,
-        (res) => {
-          console.log(res.data)
-        },
-        (err) => {
-          console.log(err)
-        }
-      )
+      if (state.userLevel < 15) {
+        setTimeout( function() {
+          commit('CHANGEEXPERIENCE', experience )
+        }, 1500)
+  
+        getExp(
+          experience,
+          (res) => {
+            console.log(res.data)
+          },
+          (err) => {
+            console.log(err)
+          }
+        )
+      }
 
     },
     changeCurrentClass ({ commit }, item ) {
@@ -561,26 +563,23 @@ export default new Vuex.Store({
     changeChance( { commit }, type ) {
       commit('CHANGECHANCE', type)
     },
-    completeAchieve({ dispatch, commit, state }, id ) {
+    completeAchieve({ dispatch, commit ,state }, id ) {
       
       if ( state.AchievementList[id-1].status == 0) {
         
         addAchieve(
           id,
           (res) => {
-            console.log(res.data)
-            if (res.data ) {
-              if (res.data == "completed") { 
-                commit( "COMPLETEACHIEVE", id )
-                const alertInfo = {
-                  status: true,
-                  color: "success",
-                  content: `Achievement ${state.AchievementList[id-1].title} completed.`
-                }
-                dispatch('showAlert', alertInfo)
-              } else {
-                this.commit( "UPDATEACHIEVEMENT", id)
+            if (res.data == "Achieved") { 
+              commit( "COMPLETEACHIEVE", id )
+              const alertInfo = {
+                status: true,
+                color: "success",
+                content: `Achievement "${state.AchievementList[id-1].title}" completed.`
               }
+              dispatch('showAlert', alertInfo)
+            } else {
+              console.log(res.data)
             }
           },
           (err) => {

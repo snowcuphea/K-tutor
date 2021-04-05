@@ -99,9 +99,7 @@ function addAchieve( achieved, success, fail ){
   const achievedForm = {
     "AcId" : achieved
   }
-
-  console.log(achievedForm)
-
+  
   instance
     .post("account/achievements", achievedForm)
     .then(success)

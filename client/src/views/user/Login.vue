@@ -94,7 +94,6 @@
                 this.$store.dispatch('setTime')
                 this.userCredentials.userEmail = ""
                 this.userCredentials.userPassword = ""
-
                 this.$store.dispatch('getReportInfo', response.data)
                 this.$store.dispatch('getAchievementList')
                 this.$store.dispatch( 'getTestGrades' )

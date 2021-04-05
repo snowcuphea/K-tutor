@@ -135,6 +135,8 @@ import Experience from "@/components/user/Experience.vue"
 import { mapState } from "vuex"
 import { sendExamResult } from "@/api/exam.js"
 
+import { slump, easyPeasy } from '@/store/achievement.js'
+
 
 export default {
   props: ['showDialog'],
@@ -226,7 +228,7 @@ export default {
       sendExamResult(
         this.grade,
         (res) => {
-          console.log(res.data)
+          console.log("시험성적 보내기", res.data)
           this.$store.dispatch( "getTestGrades" )
         },
         (err) => {
@@ -234,8 +236,14 @@ export default {
         }
       )
 
+      if ( slump( this.grade, this.myCompleteAchievement ) ) {
+        this.$store.dispatch('completeAchieve', 4)
+      }
+      if ( easyPeasy( this.grade, this.myCompleteAchievement ) ) {
+        this.$store.dispatch('completeAchieve', 5)
+      }
+
       this.$store.dispatch('gainExperience', this.grade/10)
-      this.$store.dispatch( "getTestGrades" )
       this.$store.dispatch( "changeChance", "test")
     },
     myCorrect() {
@@ -340,7 +348,7 @@ export default {
 
   },
   computed: {
-    ...mapState([ "testQuestions" ]),
+    ...mapState([ "testQuestions", "myCompleteAchievement" ]),
     choices() {
       var target = this.answers[this.targetQuestion].split(' ')
       var newList = []
