@@ -203,7 +203,6 @@ export default {
     submitTest() {
       this.order = 0
       this.targetQuestion = 0
-      // const operators = ['.','!','?']
       for ( let idx = 0 ; idx < this.answers.length; idx++ ) {
         var flag = 1
         const answer = this.answers[idx].split(' ')
@@ -212,13 +211,6 @@ export default {
         for ( let idx2 = 0 ; idx2 < answer.length; idx2++ ) {
           var compare = answer[idx2]
           var myCompare = myanswer[idx2]
-          // if ( idx2 == answer.length - 1 ) {
-          //   for (var operator of operators) {
-          //     if (compare.slice(-1) === operator) {
-          //       compare = compare.slice(0,-1)
-          //     }
-          //   }
-          // } 
           if ( compare !== myCompare ) {
             flag = 0
             break
@@ -285,19 +277,11 @@ export default {
       }
     },
     createEmptyList(idx) {
-      // const operators = ['.','!','?']
       var target = this.answers[idx].split(' ')
       var new_line = []
-      // var last_word = ''
       target.forEach( function(part, index) {
         this[index] = '_____'
       }, new_line)
-      // for (var operator of operators) {
-      //   if (target[target.length - 1 ].slice(-1) === operator) {
-      //     last_word = operator
-      //   }
-      // }
-      // new_line.push(last_word)
       this.myAnswers[idx] = new_line.join(' ')
     },
     defaultSetting() {

@@ -124,7 +124,6 @@ export default {
       order: 0,
       pass: null,
 
-      // myText: quizInfo.quizzes[this.currentProblem].lines_kr[1].split(' '),
       selectedVoicer: 'Microsoft SunHi Online (Natural) - Korean (Korea)',
       voiceList:[],
       textToSpeech:window.speechSynthesis,
@@ -187,17 +186,9 @@ export default {
     isCorrect() {
       const answer = this.quizInfo.quizzes[this.currentProblem].lines_kr[1].split(' ')
       const myanswer = this.myAnswer.split(' ')
-      // const operators = ['.','!','?']
       for ( let idx = 0; idx < answer.length ; idx++) {
         var compare = answer[idx]
         var myCompare = myanswer[idx]
-        // if ( idx == answer.length -1 ) {
-        //   for (var operator of operators) {
-        //     if (compare.slice(-1) === operator) {
-        //       compare = compare.slice(0,-1)
-        //     }
-        //   }
-        // }
         if ( compare !== myCompare ) {
           return false
         }
@@ -205,19 +196,11 @@ export default {
       return true
     },
     createEmptyList() {
-      // const operators = ['.','!','?']
       var target = this.quizInfo.quizzes[this.currentProblem].lines_kr[1].split(' ')
       var new_line = []
-      // var last_word = ''
       target.forEach( function(part, index) {
         this[index] = '_____'
       }, new_line)
-      // for (var operator of operators) {
-      //   if (target[target.length - 1 ].slice(-1) === operator) {
-      //     last_word = operator
-      //   }
-      // }
-      // new_line.push(last_word)
       this.myAnswer = new_line.join(' ')
     },
     speech(){
@@ -262,10 +245,6 @@ export default {
       this.createEmptyList()
     }
   },
-  //   async created () {
-  //   const voicesList=await this.getVoices();
-  //   this.voiceList = voicesList
-  // },
   async created() {
     this.createEmptyList()
     const voicesList=await this.getVoices();
