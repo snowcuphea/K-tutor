@@ -226,6 +226,9 @@ class AchievementViewSet(viewsets.GenericViewSet,
                     "imgurl": al.achievement.imgurl,
                     "done": al.done,
                     "total": al.achievement.total,
+                    "great_kor" : al.achievement.great_kor,
+                    "great_eng" : al.achievement.great_eng,
+                    "great_dsc" : al.achievement.great_dsc,
                     "status": 1
                 })
             else:
@@ -236,6 +239,9 @@ class AchievementViewSet(viewsets.GenericViewSet,
                     "imgurl": al.achievement.imgurl,
                     "done": al.done,
                     "total": al.achievement.total,
+                    "great_kor": al.achievement.great_kor,
+                    "great_eng": al.achievement.great_eng,
+                    "great_dsc": al.achievement.great_dsc,
                     "status": 0
                 })
 
