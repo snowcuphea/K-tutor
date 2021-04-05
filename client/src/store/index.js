@@ -161,7 +161,7 @@ export default new Vuex.Store({
         id: item.id,
         type: state.currentClass.type,
         title: state.currentClass.name_kor,
-        img: 'poster1',
+        imgurl: item.imgurl,
         keyword_kr: item.main_kw_kor,
         keyword_en: item.main_kw_eng,
         lines_kr: [

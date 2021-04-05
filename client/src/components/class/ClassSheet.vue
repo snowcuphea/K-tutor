@@ -58,10 +58,11 @@
               <v-col cols="1" xs="1" class="d-flex justify-center align-center">
                 <span>{{idx+1}}</span>
               </v-col>
-              <v-col cols="3" xs="4" style="" class="d-flex justify-center">
-                <img :src="require(`@/assets/images/poster/poster1.jpg`)" alt="keyword" class="imgSize">
+              <v-col cols="4" xs="4" style="" class="d-flex justify-center">
+                <!-- <img :src="require(`@/assets/images/poster/poster1.jpg`)" alt="keyword" class="imgSize"> -->
+                <img :src="require(`@/assets/images/card/${item.imgurl}`)" alt="keyword" class="imgSize">
               </v-col>
-              <v-col cols="6" xs="6" class="d-flex align-center">
+              <v-col cols="5" xs="6" class="d-flex align-center">
                 <div class="d-flex flex-column ">
                   <h3 class="text--primary my-1"> {{item.main_kw_kor}}</h3>
                   <span class=""> {{ item.main_kw_eng }} </span>
@@ -194,6 +195,6 @@
   .imgSize {
     /* max-width: 15vh; */
     /* height: 50vh; */
-    width: 100%;
+    max-width: 100%;
   }
 </style>

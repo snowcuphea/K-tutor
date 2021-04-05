@@ -45,7 +45,7 @@
               </div>
 
               <div class="d-flex justify-space-between">
-                <v-btn plain icon @click="speech"><v-icon>mdi-volume-high</v-icon></v-btn>
+                <v-btn fab small dark @click="speech"><v-icon>mdi-volume-high</v-icon></v-btn>
                 <v-btn plain icon @click="empty()"><v-icon>mdi-restart</v-icon></v-btn>
               </div>
             </v-card>
