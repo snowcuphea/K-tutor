@@ -186,7 +186,7 @@
 
       this.$store.dispatch('getListCurrentClass',this.currentClass )
       
-      console.log("랜더링")
+      console.log(this.currentClass)
     }
   }
 </script>
