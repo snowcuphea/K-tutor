@@ -49,6 +49,23 @@ function signUp(user, success, fail ){
     .catch(fail);
 }
 
+
+function updateUser( user, success, fail ) {
+
+  instance.defaults.headers['Authorization'] = "jwt " + window.localStorage.getItem('jwt')
+
+  const accountInfo = {
+    nickname: user.userNickname,
+    password: user.userPassword
+  }
+
+  instance
+    .put("account/modify_delete", accountInfo)
+    .then(success)
+    .catch(fail)
+}
+
+
 function getExp( exp, success, fail ){
   
   instance.defaults.headers['Authorization'] = "jwt " + window.localStorage.getItem('jwt')
@@ -79,8 +96,12 @@ function addAchieve( achieved, success, fail ){
 
   instance.defaults.headers['Authorization'] = "jwt " + window.localStorage.getItem('jwt')
 
+  const achievedForm = {
+    "AcId" : String(achieved)
+  }
+
   instance
-    .post("account/achievements", achieved)
+    .post("account/achievements", achievedForm)
     .then(success)
     .catch(fail)
 
@@ -88,14 +109,20 @@ function addAchieve( achieved, success, fail ){
 
 function sendEmail( mail, success, fail) {
 
+  const mailInfo = {
+    "title": mail.title,
+    "content": mail.content,
+  }
+  console.log(mailInfo)
+
   instance.defaults.headers['Authorization'] = "jwt " + window.localStorage.getItem('jwt')
 
   instance
-    .post("account/inquiry", mail)
+    .post("account/inquiry", mailInfo)
     .then(success)
     .catch(fail)
 
 }
 
 
-export { getToken, getInfo, signUp, getExp, getMyAcieve, addAchieve, deleteUser, sendEmail }
+export { getToken, getInfo, signUp, getExp, getMyAcieve, addAchieve, deleteUser, sendEmail, updateUser }

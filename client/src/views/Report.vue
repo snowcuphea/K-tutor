@@ -65,6 +65,7 @@
 
 <script>
 import { mapState } from 'vuex' 
+import { getInfo } from '@/api/account.js'
 
 import Experience from "@/components/user/Experience.vue"
 import ClassCards from "@/components/report/ClassCards.vue"
@@ -75,6 +76,7 @@ import GenreProgress from "@/components/report/GenreProgress.vue"
 export default {
   data() {
     return {
+      nowTime: new Date(),
       showMore: false,
     }
   },
@@ -85,7 +87,26 @@ export default {
     GenreProgress
   },
   computed: {
-    ...mapState(['nickName','contiDay','studyCnt','recent_lc_progress'])
+    ...mapState(['nickName','contiDay','studyCnt','recent_lc_progress','time'])
+  },
+  created() {
+    // this.$store.dispatch('completeAchieve', 1)
+    getInfo(
+      (response) => {
+        // console.log("레포트정보", response.data)
+        this.$store.dispatch('getReportInfo', response.data) 
+      },
+      (error) => {
+        console.log("account/login 에러", error)
+      }
+    )
+
+    // console.log(this.time, this.nowTime.getDate())
+    if ( this.nowTime.getDate() !== this.time ) {
+      console.log(this.time, this.nowTime.getDate())
+      this.$store.dispatch( 'resetChance', this.nowTime.getDate() )
+    } 
+
   }
 }
 </script>

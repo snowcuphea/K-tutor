@@ -3,21 +3,21 @@
   <div class="mypage_body">
     <v-container>
       <v-row>
-        <v-col cols="6">
+        <v-col cols="5">
           <div>
-            <v-avatar size="150" class="my_avatar">
+            <v-avatar size="100" class="my_avatar">
               <img :src="myImgSource()">
             </v-avatar>
           </div>
 
         </v-col>
-        <v-col cols="6" class="d-flex align-center">
+        <v-col cols="7" class="d-flex align-center">
           <v-row class="d-flex flex-column">
             <div class="d-flex align-center">
 
               <h4>{{ $store.state.nickName }}</h4>
               <v-btn icon class="my_info_icon">
-                <v-icon>mdi-cog-outline</v-icon>
+                <v-icon @click="showDialog('ModifyMyInfo')">mdi-cog-outline</v-icon>
               </v-btn>
             </div>
 
@@ -30,7 +30,7 @@
       </v-row>
     </v-container>
 
-    <div>
+    <div class="pb-10">
 
       <v-list v-for="(item, idx) in myPageItems" :key="idx">
         <v-list-item @click="showDialog(item)">
@@ -41,7 +41,7 @@
       <v-list-item style="background: white" @click="logout">
         Logout
       </v-list-item>
-      <span class="d-flex justify-center" @click="showDialog({title: 'DeleteAccount'})">Delete Account</span>
+      <span style="color: blue;" class="d-flex justify-center" @click="showDialog({title: 'DeleteAccount'})">Delete Account</span>
 
     </div>
 
@@ -52,17 +52,21 @@
   <TermsOfUse :showTermsOfUse="showTermsOfUse" @hideTutorial="showTermsOfUse = !showTermsOfUse"/>
   <OpenSource :showOpenSource="showOpenSource" @hideTutorial="showOpenSource = !showOpenSource"/>
   <DeleteAccount :showDeleteAccount="showDeleteAccount" @hideTutorial="showDeleteAccount = !showDeleteAccount"/>
+  <ModifyMyInfo :showModifyMyInfo="showModifyMyInfo" @hideTutorial="showModifyMyInfo = !showModifyMyInfo"/>
   </div>
 
 </template>
 
 <script>
+  import { mapState } from 'vuex'
+
   import Tutorial from '../components/mypage/Tutorial'
   import Notice from '../components/mypage/Notice'
   import Inquiry from '../components/mypage/Inquiry'
   import TermsOfUse from '../components/mypage/TermsOfUse'
   import OpenSource from '../components/mypage/OpenSource'
   import DeleteAccount from '../components/mypage/DeleteAccount'
+  import ModifyMyInfo from '../components/mypage/ModifyMyInfo'
   
   export default {
     components: {
@@ -72,9 +76,11 @@
       TermsOfUse,
       OpenSource,
       DeleteAccount,
+      ModifyMyInfo,
 
     },
     data: () => ({
+      nowTime: new Date(),
       myPageItems: [{
           title: 'Tutorial',
         },
@@ -99,6 +105,7 @@
       showTermsOfUse: false,
       showOpenSource: false,
       showDeleteAccount: false,
+      showModifyMyInfo: false,
       tempLevel: 15,
     }),
     methods: {
@@ -120,7 +127,9 @@
           this.showTermsOfUse = !this.showTermsOfUse
         } else if (item.title == 'DeleteAccount'){
           this.showDeleteAccount = !this.showDeleteAccount
-        }else {
+        } else if (item == 'ModifyMyInfo') {
+          this.showModifyMyInfo = !this.showModifyMyInfo
+        } else {
           this.showOpenSource = !this.showOpenSource
         }
       },
@@ -158,9 +167,18 @@
       },
 
      
-
+    },
+    created() {
+      // console.log(this.time, this.nowTime.getDate())
+      if ( this.nowTime.getDate() !== this.time ) {
+        console.log(this.time, this.nowTime.getDate())
+        this.$store.dispatch( 'resetChance', this.nowTime.getDate() )
+      } 
 
     },
+    computed: {
+      ...mapState(["time"])
+    }
 
 
   }

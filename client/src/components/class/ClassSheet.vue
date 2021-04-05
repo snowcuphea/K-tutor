@@ -9,8 +9,8 @@
 
     <v-row>
       <v-col>
-        <!-- <img :src="require(`@/assets/images/poster/poster${classInfo.cs_seq}.jpg`)" alt="title" class="imgSize"> -->
-        <img :src="require(`@/assets/images/poster/poster1.jpg`)" alt="title" class="imgSize">
+        <img :src="require(`@/assets/images/poster/${currentClass.imgurl}`)" alt="title" class="imgSize">
+        <!-- <img :src="require(`@/assets/images/poster/poster1.jpg`)" alt="title" class="imgSize"> -->
       </v-col>
     </v-row>
 
@@ -23,6 +23,12 @@
       </v-col>
       <v-col cols="4" class="d-flex justify-end">
         <v-btn @click="startQuiz()"> quiz </v-btn>
+        <div class="d-flex">
+          <v-icon v-for="left in chanceUsed()" :key="left">mdi-heart</v-icon>
+        </div>
+        <div class="d-flex">
+          <v-icon v-for="used in quizChance" :key="used" color="red">mdi-heart</v-icon>
+        </div>
       </v-col>
     </v-row>
 
@@ -52,13 +58,14 @@
               <v-col cols="1" xs="1" class="d-flex justify-center align-center">
                 <span>{{idx+1}}</span>
               </v-col>
-              <v-col cols="3" xs="4" style="" class="d-flex justify-center">
-                <img :src="require(`@/assets/images/poster/poster8.jpg`)" alt="keyword" class="imgSize">
+              <v-col cols="4" xs="4" style="" class="d-flex justify-center">
+                <!-- <img :src="require(`@/assets/images/poster/poster1.jpg`)" alt="keyword" class="imgSize"> -->
+                <img :src="require(`@/assets/images/card/${item.imgurl}`)" alt="keyword" class="imgSize">
               </v-col>
-              <v-col cols="6" xs="6" class="d-flex align-center">
+              <v-col cols="5" xs="6" class="d-flex align-center">
                 <div class="d-flex flex-column ">
                   <h3 class="text--primary my-1"> {{item.main_kw_kor}}</h3>
-                  <span class=""> (영어번역필요) {{ item.main_kw_eng }} </span>
+                  <span class=""> {{ item.main_kw_eng }} </span>
                 </div>
               </v-col>
               <v-col cols="2" xs="1" class="d-flex align-center justify-center">
@@ -73,8 +80,8 @@
       </v-col>
     </v-row>
 
-    <StudyPage :openStudyPage="openStudyPage" @closeStudyPage="endClass" v-if="ableStudy()"/>
-    <QuizPage :openQuizPage="openQuizPage" @closeQuizPage="endQuiz" v-if="ableQuiz()" />
+    <StudyPage :openStudyPage="openStudyPage" @closeStudyPage="endClass" v-if="openStudyPage"/>
+    <QuizPage :openQuizPage="openQuizPage" @closeQuizPage="endQuiz" v-if="openQuizPage" />
 
   </v-container>
 </template>
@@ -102,6 +109,9 @@
 
     },
     methods: {
+      chanceUsed() {
+        return 3 - this.quizChance
+      },
       startClass(item, idx) {
         // 서버에 요청을 보내서 해당 학습 내용을 받아온다
         // this.$store.dispatch('changeCurrentClass', item)
@@ -120,13 +130,6 @@
         }
         return false
       },
-      ableStudy() {
-        if (this.lessonInfo.length != 0) {
-          return true
-        } else {
-          return false
-        }
-      },
       ableQuiz() {
         if (this.getCurrentClassLearnedKeword.length > 4) {
           return true
@@ -138,8 +141,12 @@
         // 서버에 요청을 보내서 퀴즈 받아오기
         if ( this.ableQuiz() && this.quizChance != 0) {
           this.$store.dispatch('getQuizInfo')
-          this.openQuizPage = !this.openQuizPage
-        } else if ( !this.ableQuiz() && this.quizChance == 0) {
+            .then(() => {
+              console.log(this.quizInfo)
+              this.openQuizPage = !this.openQuizPage
+            })
+            .catch(() => {})
+        } else if ( this.quizChance == 0) {
           const alertInfo = {
             status: true,
             color: "warning",
@@ -162,7 +169,7 @@
     },
     computed: {
       ...mapState([
-        "currentClass", "defaultClass", "classList", "quizChance", "lessonInfo"
+        "currentClass", "defaultClass", "classList", "quizChance", "lessonInfo", "quizInfo"
       ]),
       ...mapGetters([
         "getCurrentClassLearnedKeword",
@@ -179,6 +186,7 @@
 
       this.$store.dispatch('getListCurrentClass',this.currentClass )
       
+      console.log(this.currentClass)
     }
   }
 </script>
@@ -187,6 +195,6 @@
   .imgSize {
     /* max-width: 15vh; */
     /* height: 50vh; */
-    width: 100%;
+    max-width: 100%;
   }
 </style>

@@ -16,22 +16,25 @@
           <v-icon>mdi-close</v-icon>
         </v-btn>
 
-        <v-card tile height="15%" elevation="0"
+        <v-card tile height="13%" elevation="0"
          class="d-flex justify-center align-center" >
           <h2>Step {{ currentStep }}. {{ stepName[currentStep] }} </h2>
 
         </v-card>
 
-        <v-card tile height="72%" elevation="0" class="px-5">
+        <v-card tile height="76%" elevation="0" class="px-5">
 
           <!-- step1 -->
           <v-card class="step1" v-if="currentStep == 1" tile height="100%" elevation="0">
             <v-card tile height="40%" elevation="0">
-              <img :src="require(`@/assets/images/poster/poster7.jpg`)"
-               alt="포스터 이미지" height="100%" width="100%">
+              <img :src="require(`@/assets/images/card/${lessonInfo.imgurl}`)"   
+               alt="포스터 이미지" width="100%">
+              <!-- <img :src="require(`@/assets/images/poster/poster1.jpg`)"
+               alt="포스터 이미지" height="100%" width="100%"> -->
+               <!-- <v-text>@/assets/images/card/{{lessonInfo.imgurl}}</v-text> -->
             </v-card>
             <v-card tile height="60%" elevation="0" class="d-flex flex-column pt-2 px-2">
-              <v-btn class="mb-4" plain icon @click="speech"><v-icon>mdi-volume-high</v-icon></v-btn>
+              <v-btn class="mb-4" fab small dark color="teal accent-4" @click="speech"><v-icon>mdi-volume-high</v-icon></v-btn>
               <div v-for="(line, idx) in lessonInfo.lines_kr" :key="idx">
                 <div v-if="idx%2 == 0" class="pb-2">
                   <p>{{ lessonInfo.lines_kr[idx] }} </p>
@@ -50,17 +53,17 @@
 
           <!-- step2 -->
           <v-card class="step2" v-else-if="currentStep == 2" tile height="100%" elevation="0">
-            <v-card tile height="30%" elevation="0" class="d-flex flex-column">
+            <v-card tile height="25%" elevation="0" class="d-flex flex-column">
               <div class="d-flex align-center justify-space-between">
                 <h3>[ Key Sentence ]</h3>
-                <v-btn plain icon class="" @click="speech_keysentence"><v-icon>mdi-volume-high</v-icon></v-btn>
+                <v-btn fab small dark @click="speech_keysentence"><v-icon>mdi-volume-high</v-icon></v-btn>
               </div>
               <div class="pl-5 pt-2">
                 <p> {{ lessonInfo.lines_kr[1] }} </p>
                 <p> {{ lessonInfo.lines_en[1] }} </p>
               </div>
             </v-card>
-            <v-card tile height="30%" elevation="0" class="pt-4">
+            <v-card tile height="25%" elevation="0" class="pt-4">
               <div class="d-flex align-center justify-space-between">
                 <h3>[ Key Word ]</h3>
                 <!-- <v-btn plain icon class=""><v-icon>mdi-volume-high</v-icon></v-btn> -->
@@ -70,10 +73,10 @@
                 <p> {{ lessonInfo.keyword_en }} </p>
               </div>
             </v-card>
-            <v-card tile height="40%" elevation="0">
+            <v-card tile height="50%" elevation="0">
               <div class="d-flex align-center justify-space-between">
                 <h3>[ Example ]</h3>
-                <v-btn plain icon class="" @click="speech_example"><v-icon>mdi-volume-high</v-icon></v-btn>
+                <v-btn fab small dark class="" @click="speech_example"><v-icon>mdi-volume-high</v-icon></v-btn>
               </div>
               <div class="pl-5 pt-2" v-for="(example, idx) in lessonInfo.example_kr" :key="idx">
                 <p>{{ lessonInfo.example_kr[idx] }} </p>
@@ -105,7 +108,7 @@
               </div>
 
               <div class="d-flex justify-space-between">
-                <v-btn plain icon @click="speech_keysentence"><v-icon>mdi-volume-high</v-icon></v-btn>
+                <v-btn fab small dark class="ml-1" @click="speech_keysentence"><v-icon>mdi-volume-high</v-icon></v-btn>
                 <v-btn plain icon @click="empty()"><v-icon>mdi-restart</v-icon></v-btn>
               </div>
             </v-card>
@@ -120,7 +123,7 @@
 
         </v-card>
 
-        <v-card tile height="13%" elevation="0"
+        <v-card tile height="11%" elevation="0"
          class="d-flex align-center px-5" >
           <v-btn text plain @click="currentStep -= 1" v-if="currentStep != 1">
             previous
@@ -320,8 +323,8 @@ export default {
           const findedVoicer = this.voiceList.find((item)=>{
               return item.name == this.selectedVoicer
           }) 
-          console.log(findedVoicer)
-          console.log(speaker)
+          // console.log(findedVoicer)
+          // console.log(speaker)
 
           speaker.voice=findedVoicer;
           speaker.volume=0.5;
@@ -333,8 +336,8 @@ export default {
           const findedVoicer = this.voiceList.find((item)=>{
               return item.name == this.selectedVoicer
           }) 
-          console.log(findedVoicer)
-          console.log(speaker)
+          // console.log(findedVoicer)
+          // console.log(speaker)
 
           speaker.voice=findedVoicer;
           speaker.volume=0.5;
@@ -351,8 +354,8 @@ export default {
           const findedVoicer = this.voiceList.find((item)=>{
               return item.name == this.selectedVoicer
           }) 
-          console.log(findedVoicer)
-          console.log(speaker)
+          // console.log(findedVoicer)
+          // console.log(speaker)
 
           speaker.voice=findedVoicer;
           speaker.volume=0.5;
