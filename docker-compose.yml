@@ -1,6 +1,16 @@
 version: '3.3'
 
 services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - '80:80'
+    volumes:
+      - .:/code
+      - ./nginx:/server/nginx/conf
+      - ./staticfiles:/static
+    depends_on:
+      - server
   db:
     image: dudrlf1859/k-tutor
     container_name: k-tutor
@@ -12,7 +22,7 @@ services:
     stdin_open: true
     tty: true
   server:
-    command: bash -c 'while true; do python3 ./manage.py runserver 172.26.12.150:8000; sleep 2; done'
+    command: bash -c 'while true; do gunicorn ./server/wsgi:application --bind 0.0.0.0:8000; sleep 2; done'
     container_name: backend
     build:
       context: server
@@ -25,6 +35,7 @@ services:
       - 8000
     volumes:
     - ./server:/code
+    - ./staticfiles:/staticfiles
     stdin_open: true
     tty: true
   client:
@@ -40,3 +51,4 @@ services:
       - 8080:8080
     volumes:
       -  ./client:/app
+      - ./staticfiles:/staticfiles
