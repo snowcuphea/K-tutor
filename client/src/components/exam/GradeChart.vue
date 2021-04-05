@@ -85,6 +85,8 @@ export default {
     const ctx = document.getElementById('grade-chart')
     new Chart(ctx, this.gradeChart)
   },
+  created() {
+  }
 }
 </script>
 

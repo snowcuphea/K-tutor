@@ -61,10 +61,10 @@
         <v-card tile height="11%" elevation="0"
          class="d-flex align-center px-5" >
           <v-spacer></v-spacer>
-          <v-btn text plain @click="nextProblem" v-if="currentProblem != 4" >
+          <v-btn text plain @click="nextProblem" v-if="currentProblem != 4" :disabled="!pass">
             next
           </v-btn>
-          <v-btn text plain @click="submitQuiz" v-if="currentProblem == 4">
+          <v-btn text plain @click="submitQuiz" v-if="currentProblem == 4" :disabled="!pass">
             Finish
           </v-btn>
         </v-card>

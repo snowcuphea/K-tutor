@@ -225,12 +225,14 @@ export default {
         if (this.lessonInfo.id == learned.id) {
           this.exp = 0
         }
-
       }
+
       if ( this.exp !== 0) {
         this.$store.dispatch('gainExperience', this.exp)
         this.$store.dispatch('sendCompleteLesson', this.currentClassIndex)
       }
+
+
     },
     nextStep() {
       this.currentStep += 1
@@ -375,13 +377,7 @@ export default {
       return newList
     },
   },
-  watch: {
-    openStudyPage() {
-      this.createEmptyList()
-    }
-  },
   async created() {
-    this.createEmptyList()
     const voicesList=await this.getVoices();
     this.voiceList = voicesList
   }
