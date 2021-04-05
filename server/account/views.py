@@ -72,14 +72,13 @@ class UserViewSet(viewsets.GenericViewSet,
         """
         # 회원 수정한 정보를 request.data에 담았다고 가정
         user = request.user
-        if User.objects.filter(username=request.data['username']).exists():
-            return Response("This email is already registered.", status=status.HTTP_302_FOUND)
-        if User.objects.filter(nickname=request.data['nickname']).exists():
+        if user.nickname != request.data['nickname'] and \
+                User.objects.filter(nickname=request.data['nickname']).exists():
             return Response("This nickname is already registered.", status=status.HTTP_302_FOUND)
         user.set_password(request.data['password'])
         user.nickname = request.data['nickname']
         user.save()
-        return Response(user.serializable_value(field_name="username"), status=status.HTTP_200_OK)
+        return Response(user.serializable_value(field_name="nickname"), status=status.HTTP_200_OK)
 
     # 회원 탈퇴
     @swagger_auto_schema(responses={200: "deleted"}, manual_parameters=[
@@ -140,7 +139,7 @@ class LoginViewSet(viewsets.GenericViewSet,
                 recent_cs['name_eng'] = recent_cs['name_eng'].split(' - ')[0]
         else:
             recent_cs = Cs.objects.get(pk=1).__dict__
-        del(recent_cs['_state'])
+        del (recent_cs['_state'])
         data['recent_cs'] = recent_cs
         # recent_lc_progress = serializers.DictField()
         recent_lc_progress = dict()
@@ -214,34 +213,39 @@ class AchievementViewSet(viewsets.GenericViewSet,
         ___
         """
         user = request.user
-        achievement_list = AchieveManage.objects.filter(user=user)
+        achievement_list = Achievement.objects.all()
         user_achievement = []
 
         for al in achievement_list:
-            if al.done >= al.achievement.total:
+            if not Achievement.objects.filter(Q(achieved_user=user) & Q(id=al.id)).exists():
+                user.achieved.add(al)
+        ac_manage = user.achieved.all()
+        for acm in ac_manage:
+            al = Achievement.objects.get(id=acm.achievement_id)
+            if al.done >= al.total:
                 user_achievement.append({
-                    "achievement_id": al.achievement.id,
-                    "title": al.achievement.title,
-                    "content": al.achievement.content,
-                    "imgurl": al.achievement.imgurl,
-                    "done": al.done,
-                    "total": al.achievement.total,
-                    "great_kor" : al.achievement.great_kor,
-                    "great_eng" : al.achievement.great_eng,
-                    "great_dsc" : al.achievement.great_dsc,
+                    "achievement_id": al.id,
+                    "title": al.title,
+                    "content": al.content,
+                    "imgurl": al.imgurl,
+                    "done": acm.done,
+                    "total": al.total,
+                    "great_kor": al.great_kor,
+                    "great_eng": al.great_eng,
+                    "great_dsc": al.great_dsc,
                     "status": 1
                 })
             else:
                 user_achievement.append({
-                    "achievement_id": al.achievement.id,
-                    "title": al.achievement.title,
-                    "content": al.achievement.content,
-                    "imgurl": al.achievement.imgurl,
-                    "done": al.done,
-                    "total": al.achievement.total,
-                    "great_kor": al.achievement.great_kor,
-                    "great_eng": al.achievement.great_eng,
-                    "great_dsc": al.achievement.great_dsc,
+                    "achievement_id": al.id,
+                    "title": al.title,
+                    "content": al.content,
+                    "imgurl": al.imgurl,
+                    "done": acm.done,
+                    "total": al.total,
+                    "great_kor": al.great_kor,
+                    "great_eng": al.great_eng,
+                    "great_dsc": al.great_dsc,
                     "status": 0
                 })
 
@@ -260,7 +264,11 @@ class AchievementViewSet(viewsets.GenericViewSet,
         """
         user = request.user
         achievement = Achievement.objects.get(id=request.data['AcId'])
-        ac_manage = AchieveManage.objects.get(user=user, achievement=achievement)
+        ac_manage = AchieveManage.objects.filter(Q(user=user) & Q(achievement=achievement))
+        if not ac_manage.exists():
+            user.achieved.add(achievement)
+            ac_manage = AchieveManage.objects.filter(Q(user=user) & Q(achievement=achievement))
+
         if ac_manage.done >= achievement.total:
             return Response("Already Achieved", status=status.HTTP_208_ALREADY_REPORTED)
         else:

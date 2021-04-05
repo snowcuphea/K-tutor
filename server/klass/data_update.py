@@ -13,50 +13,51 @@ from .models import Kw, Cs, Cpct, Cpcq, Lc
 
 
 def update():
-    # kw 업데이트
     path = os.getcwd()
-    kw_data_frame = pd.read_pickle(path + "/data/pandas/kw.pkl")
-    for i, row in kw_data_frame.iterrows():
-       if not Kw.objects.filter(content=row.content).exists():
-           Kw.objects.create(
-               content=row['content'],
-               count=row['count']
-           )
+    # kw 업데이트
+    # kw_data_frame = pd.read_pickle(path + "/data/pandas/kw.pkl")
+    # for i, row in kw_data_frame.iterrows():
+    #    if not Kw.objects.filter(content=row.content).exists():
+    #        Kw.objects.create(
+    #            content=row['content'],
+    #            count=row['count']
+    #        )
 
     # cs 업데이트
-    cs_data_frame = pd.read_pickle(path + "/data/pandas/cs.pkl")
-    for i, row in cs_data_frame.iterrows():
-       if not Cs.objects.filter(name=row['name']).exists():
-           Cs.objects.create(
-               name=row['name'],
-               type=row['type'],
-               level=0
-           )
+    # cs_data_frame = pd.read_pickle(path + "/data/pandas/cs.pkl")
+    # for i, row in cs_data_frame.iterrows():
+    #    if not Cs.objects.filter(name=row['name']).exists():
+    #        Cs.objects.create(
+    #            name=row['name'],
+    #            type=row['type'],
+    #            level=0
+    #        )
 
-    slang = ["씨발", "새끼", "미친", "썅"]
-    # cpct 업데이트
+    # slang = ["씨발", "새끼", "미친", "썅"]
+    # # cpct 업데이트
     kkma = Kkma()
-    cpct_data_frame = pd.read_pickle(path + "/data/pandas/cpct.pkl")
-    for i, row in cpct_data_frame.iterrows():
-        try:
-            if not Cpct.objects.filter(kor=row.kor).exists():
-                temp_kor = row['kor'].strip()
-                temp_word_list = kkma.pos(temp_kor)
-                temp_word_list = ['+'.join(w) for w in temp_word_list if w[1] in ['NNG', 'VV', 'VA', 'MAJ', 'XR']]
-                kws = Kw.objects.filter(content_kor__in=temp_word_list)
-                if kws.exists():
-                    main_kw = max(kws, key=lambda x: x.count)
-                    cs = Cs.objects.get(id=row['cs'] + 1)
-                    if filter(lambda x:x in temp_kor, slang):
-                        raise Exception("욕이 포함되어 있습니다.")
-                    Cpct.objects.create(
-                        kor=temp_kor,
-                        eng=row['eng'],
-                        cs=cs,
-                        main_kw=main_kw
-                    )
-        except:
-            print(row)
+    # cpct_data_frame = pd.read_pickle(path + "/data/pandas/cpct.pkl")
+    # for i, row in cpct_data_frame.iterrows():
+    #     try:
+    #         if not Cpct.objects.filter(kor=row.kor).exists():
+    #             temp_kor = row['kor'].strip()
+    #             temp_word_list = kkma.pos(temp_kor)
+    #             temp_word_list = ['+'.join(w) for w in temp_word_list if w[1] in ['NNG', 'VV', 'VA', 'MAJ', 'XR']]
+    #             kws = Kw.objects.filter(content_kor__in=temp_word_list)
+    #             if kws.exists():
+    #                 main_kw = max(kws, key=lambda x: x.count)
+    #                 cs = Cs.objects.get(id=row['cs'] + 1)
+    #                 if list(filter(lambda x: x in temp_kor, slang)):
+    #                     raise Exception("욕이 포함되어 있습니다.")
+    #                 Cpct.objects.create(
+    #                     kor=temp_kor,
+    #                     eng=row['eng'],
+    #                     cs=cs,
+    #                     main_kw=main_kw
+    #                 )
+    #     except Exception as e:
+    #         print(row)
+    #         print(e)
 
     # cpcq, kcq 업데이트
     cpcq_data_frame = pd.read_pickle(path + "/data/pandas/cpcq.pkl")
@@ -66,9 +67,8 @@ def update():
             kor=row['kor'],
             eng=row['eng'],
         )
-        for kw in Kw.objects.filter(content_kor_in=list(map("+".join, kkma.pos(cpcq.kor)))):
+        for kw in Kw.objects.filter(content_kor__in=list(map("+".join, kkma.pos(cpcq.kor)))):
             cpcq.kcq.add(kw)
-
 
 
 def create_lc():
@@ -316,9 +316,29 @@ def request_dict(word):
 
 
 def updateLc():
-    lcs = Lc.objects.all()
-    for lc in lcs:
-        example = random.choice(list(lc.main_kw.contained_cpcq.all()))
-        lc.example_kor = example.kor
-        lc.example_eng = example.eng
-
+    cs_list = Cs.objects.filter(type="kpop")
+    singer_list = list(set({x.name_kor.split(" - ")[0] for x in cs_list}))
+    singer_dict = dict()
+    for singer in singer_list:
+        song_list = Cs.objects.filter(name__contains=singer)
+        cpct_list = [Cpct.objects.filter(cs=song) for song in song_list if Cpct.objects.filter(cs=song).exists()]
+        level_list = [0] * len(cpct_list)
+        for i, cpcts in enumerate(cpct_list):
+            level_list[i] = sum([cpct.main_kw.id for cpct in cpcts]) / len(cpcts)
+        singer_dict[singer] = sum(level_list) / len(level_list)
+    singer_list.sort(key=lambda x: singer_dict[x])
+    singer_cnt = len(singer_list)
+    singer_level = [
+        singer_cnt // 3 if singer_cnt % 3 == 0 else singer_cnt // 3 + 1,  # end index of beginner
+        singer_cnt // 3 + 1 if singer_cnt % 3 == 2 else singer_cnt // 3,  # end index of intermediate
+        singer_cnt // 3  # end index of advanced
+    ]
+    index = 1
+    for i in range(3):
+        while index <= sum(singer_level[:i + 1]):
+            singer = singer_list[index]
+            index += 1
+            song_list = Cs.objects.filter(name__contains=singer)
+            for song in song_list:
+                song.level = i
+                song.save()
