@@ -131,15 +131,15 @@
         }
       },
       myImgSource() {
-        if (this.tempLevel > 14) {
+        if (this.$store.state.userLevel > 14) {
           return require('@/assets/img/mypage/sejong-the-great.png')
-        } else if (this.tempLevel > 11) {
+        } else if (this.$store.state.userLevel > 11) {
           return require('@/assets/img/mypage/korea.png')
-        } else if (this.tempLevel > 8) {
+        } else if (this.$store.state.userLevel > 8) {
           return require('@/assets/img/mypage/empress.png')
-        } else if (this.tempLevel > 5) {
+        } else if (this.$store.state.userLevel > 5) {
           return require('@/assets/img/mypage/emperor.png')
-        } else if (this.tempLevel > 2) {
+        } else if (this.$store.state.userLevel > 2) {
           return require('@/assets/img/mypage/woman.png')
         } else {
           return require('@/assets/img/mypage/man.png')
