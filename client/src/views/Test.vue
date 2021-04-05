@@ -21,7 +21,7 @@
     <Experience :experience="-1" />
 
     <div class="d-flex justify-center">
-      <v-btn elevation="0" class="mt-5" @click="startTest">Take a Test</v-btn>
+      <v-btn elevation="2" class="main-bg-color-imp mt-5 text-subtitle-1" large dark @click="startTest">Take a Test</v-btn>
     </div>
     <TestPage :showDialog="showDialog" @hideDialog="showDialog = !showDialog" v-if="showDialog"/>
     

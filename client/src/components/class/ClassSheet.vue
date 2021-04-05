@@ -14,23 +14,34 @@
       </v-col>
     </v-row>
 
-    <v-row >
-      <v-col cols="8" class="d-flex align-center" >
-        <span v-if="currentClass.level == '0'">Difficulty: Beginner</span>
-        <span v-else-if="currentClass.level == '1'">Difficulty: Intermediate</span>
-        <span v-else-if="currentClass.level == '2'">Difficulty: Advanced</span>
-        <span v-else>Difficulty: Basic</span>
-      </v-col>
-      <v-col cols="4" class="d-flex justify-end">
-        <v-btn @click="startQuiz()"> quiz </v-btn>
-        <div class="d-flex">
-          <v-icon v-for="left in chanceUsed()" :key="left">mdi-heart</v-icon>
-        </div>
-        <div class="d-flex">
-          <v-icon v-for="used in quizChance" :key="used" color="red">mdi-heart</v-icon>
+    <v-row no-gutters>
+      <v-col class="my-1">
+        <div class="d-flex justify-end">
+          <v-text class="text--secondary">chances : </v-text>
+          <div  class="d-flex mx-1">
+          <v-icon v-for="used in quizChance" :key="used" color="red" small>mdi-heart</v-icon>
+          </div>
         </div>
       </v-col>
     </v-row>
+
+    <v-row no-gutters >
+      <v-col cols="8" class="d-flex align-center" >
+        <span v-if="currentClass.level == 0">Difficulty: Beginner</span>
+        <span v-else-if="currentClass.level == 1">Difficulty: Intermediate</span>
+        <span v-else-if="currentClass.level == 2">Difficulty: Advanced</span>
+        <span v-else>Difficulty: Basic</span>
+      </v-col>
+      <v-col cols="4" class="d-flex justify-end">
+        <v-btn class="main-bg-color-imp" dark rounded  @click="startQuiz()"> quiz </v-btn>
+        <div class="d-flex">
+          <v-icon v-for="left in chanceUsed()" :key="left">mdi-heart</v-icon>
+        </div>
+        
+      </v-col>
+    </v-row>
+
+    
 
     <v-row>
       <v-col>

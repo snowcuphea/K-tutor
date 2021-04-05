@@ -33,10 +33,10 @@
         </v-row>
         <v-row class="mx-5 my-5">
           <v-col>
-            <v-btn block large @click="login">LOGIN</v-btn>
-            <div class="d-flex justify-space-between my-2">
-              <span @click="goToSignup">Join</span>
-              <span @click="goToFindPassword">forgot password</span>
+            <v-btn block dark rounded large @click="login" class="main-bg-color-imp font-weight-bold">LOGIN</v-btn>
+            <div class="d-flex justify-center my-3">
+              <span class="text-decoration-underline" @click="goToSignup">Sign up</span>
+              <!-- <span @click="goToFindPassword">forgot password</span> -->
             </div>
 
           </v-col>
