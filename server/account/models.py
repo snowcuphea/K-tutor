@@ -26,10 +26,15 @@ class RecentLearnedLc(models.Model):
 class Achievement(models.Model):
     title = models.CharField(max_length=100)
     content = models.CharField(max_length=200)
-    done = models.IntegerField(default=0)
-    total = models.IntegerField()
+    total = models.IntegerField(default=1)
     imgurl = models.TextField(default="Need to add")
-    achieved_user = models.ManyToManyField(User, related_name="achieved")
+    achieved_user = models.ManyToManyField(User, related_name="achieved", through='AchieveManage')
     great_kor = models.CharField(max_length=30)
     great_eng = models.CharField(max_length=30)
     great_dsc = models.TextField()
+
+
+class AchieveManage(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    achievement = models.ForeignKey(Achievement, on_delete=models.CASCADE)
+    done = models.IntegerField(default=0)
