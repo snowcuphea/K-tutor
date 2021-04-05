@@ -27,11 +27,14 @@
           <!-- step1 -->
           <v-card class="step1" v-if="currentStep == 1" tile height="100%" elevation="0">
             <v-card tile height="40%" elevation="0">
-              <img :src="require(`@/assets/images/poster/poster1.jpg`)"
-               alt="포스터 이미지" height="100%" width="100%">
+              <img :src="require(`@/assets/images/card/${lessonInfo.imgurl}`)"   
+               alt="포스터 이미지" width="100%">
+              <!-- <img :src="require(`@/assets/images/poster/poster1.jpg`)"
+               alt="포스터 이미지" height="100%" width="100%"> -->
+               <!-- <v-text>@/assets/images/card/{{lessonInfo.imgurl}}</v-text> -->
             </v-card>
             <v-card tile height="60%" elevation="0" class="d-flex flex-column pt-2 px-2">
-              <v-btn class="mb-4" plain icon @click="speech"><v-icon>mdi-volume-high</v-icon></v-btn>
+              <v-btn class="mb-4" fab small dark color="teal accent-4" @click="speech"><v-icon>mdi-volume-high</v-icon></v-btn>
               <div v-for="(line, idx) in lessonInfo.lines_kr" :key="idx">
                 <div v-if="idx%2 == 0" class="pb-2">
                   <p>{{ lessonInfo.lines_kr[idx] }} </p>
@@ -53,7 +56,7 @@
             <v-card tile height="25%" elevation="0" class="d-flex flex-column">
               <div class="d-flex align-center justify-space-between">
                 <h3>[ Key Sentence ]</h3>
-                <v-btn plain icon class="" @click="speech_keysentence"><v-icon>mdi-volume-high</v-icon></v-btn>
+                <v-btn fab small dark @click="speech_keysentence"><v-icon>mdi-volume-high</v-icon></v-btn>
               </div>
               <div class="pl-5 pt-2">
                 <p> {{ lessonInfo.lines_kr[1] }} </p>
@@ -73,7 +76,7 @@
             <v-card tile height="50%" elevation="0">
               <div class="d-flex align-center justify-space-between">
                 <h3>[ Example ]</h3>
-                <v-btn plain icon class="" @click="speech_example"><v-icon>mdi-volume-high</v-icon></v-btn>
+                <v-btn fab small dark class="" @click="speech_example"><v-icon>mdi-volume-high</v-icon></v-btn>
               </div>
               <div class="pl-5 pt-2" v-for="(example, idx) in lessonInfo.example_kr" :key="idx">
                 <p>{{ lessonInfo.example_kr[idx] }} </p>
@@ -105,7 +108,7 @@
               </div>
 
               <div class="d-flex justify-space-between">
-                <v-btn plain icon @click="speech_keysentence"><v-icon>mdi-volume-high</v-icon></v-btn>
+                <v-btn fab small dark class="ml-1" @click="speech_keysentence"><v-icon>mdi-volume-high</v-icon></v-btn>
                 <v-btn plain icon @click="empty()"><v-icon>mdi-restart</v-icon></v-btn>
               </div>
             </v-card>
@@ -279,13 +282,6 @@ export default {
       for ( let idx = 0; idx < answer.length ; idx++) {
         var compare = answer[idx]
         var myCompare = myanswer[idx]
-        // if ( idx == answer.length -1 ) {
-        //   for (var operator of operators) {
-        //     if (compare.slice(-1) === operator) {
-        //       compare = compare.slice(0,-1)
-        //     }
-        //   }
-        // }
         if ( compare !== myCompare ) {
           console.log(compare, myCompare)
           return false
@@ -294,19 +290,12 @@ export default {
       return true
     },
     createEmptyList() {
-      // const operators = ['.','!','?']
       var target = this.lessonInfo.lines_kr[1].split(' ')
       var new_line = []
       // var last_word = ''
       target.forEach( function(part, index) {
         this[index] = '_____'
       }, new_line)
-      // for (var operator of operators) {
-      //   if (target[target.length - 1 ].slice(-1) === operator) {
-      //     last_word = operator
-      //   }
-      // }
-      // new_line.push(last_word)
       this.myAnswer = new_line.join(' ')
     },
     speech(){
@@ -320,8 +309,8 @@ export default {
           const findedVoicer = this.voiceList.find((item)=>{
               return item.name == this.selectedVoicer
           }) 
-          console.log(findedVoicer)
-          console.log(speaker)
+          // console.log(findedVoicer)
+          // console.log(speaker)
 
           speaker.voice=findedVoicer;
           speaker.volume=0.5;
@@ -333,8 +322,8 @@ export default {
           const findedVoicer = this.voiceList.find((item)=>{
               return item.name == this.selectedVoicer
           }) 
-          console.log(findedVoicer)
-          console.log(speaker)
+          // console.log(findedVoicer)
+          // console.log(speaker)
 
           speaker.voice=findedVoicer;
           speaker.volume=0.5;
@@ -351,8 +340,8 @@ export default {
           const findedVoicer = this.voiceList.find((item)=>{
               return item.name == this.selectedVoicer
           }) 
-          console.log(findedVoicer)
-          console.log(speaker)
+          // console.log(findedVoicer)
+          // console.log(speaker)
 
           speaker.voice=findedVoicer;
           speaker.volume=0.5;

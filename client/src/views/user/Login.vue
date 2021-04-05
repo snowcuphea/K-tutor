@@ -91,7 +91,7 @@
               (response) => {
                 // console.log("레포트정보", response.data)
                 this.$store.dispatch('addUserEmail', this.userCredentials.userEmail )
-
+                this.$store.dispatch('setTime')
                 this.userCredentials.userEmail = ""
                 this.userCredentials.userPassword = ""
 

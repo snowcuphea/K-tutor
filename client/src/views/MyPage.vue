@@ -58,6 +58,8 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex'
+
   import Tutorial from '../components/mypage/Tutorial'
   import Notice from '../components/mypage/Notice'
   import Inquiry from '../components/mypage/Inquiry'
@@ -78,6 +80,7 @@
 
     },
     data: () => ({
+      nowTime: new Date(),
       myPageItems: [{
           title: 'Tutorial',
         },
@@ -164,9 +167,18 @@
       },
 
      
-
+    },
+    created() {
+      // console.log(this.time, this.nowTime.getDate())
+      if ( this.nowTime.getDate() !== this.time ) {
+        console.log(this.time, this.nowTime.getDate())
+        this.$store.dispatch( 'resetChance', this.nowTime.getDate() )
+      } 
 
     },
+    computed: {
+      ...mapState(["time"])
+    }
 
 
   }

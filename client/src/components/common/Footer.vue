@@ -60,6 +60,7 @@ export default {
 .foot-nav {
   border-top: 1px solid;
   height: 4.5em !important;
+  z-index: 96;
 }
 
 </style>

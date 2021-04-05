@@ -109,9 +109,11 @@ export default new Vuex.Store({
       state.allProgress = []
       state.recent_lc_progress = []
       state.recent_learned_lc = []
-      state.testChance = 2
-      state.quizChance = 3
+      // state.testChance = 2
+      // state.quizChance = 3
       state.AchievementList = []
+      state.quizInfo = {}
+      state.testQuestions = []
     },
 
     GETCLASSLIST(state, titlelist){
@@ -137,6 +139,8 @@ export default new Vuex.Store({
           state.userExperience += temp
         }, 1500)
       }
+      // state.quizInfo = {}
+      // state.testQuestions = []
     },
     CHANGECURRENTCLASS ( state, item) {
       // console.log("현재", item)
@@ -157,7 +161,7 @@ export default new Vuex.Store({
         id: item.id,
         type: state.currentClass.type,
         title: state.currentClass.name_kor,
-        img: 'poster1',
+        imgurl: item.imgurl,
         keyword_kr: item.main_kw_kor,
         keyword_en: item.main_kw_eng,
         lines_kr: [
@@ -228,9 +232,10 @@ export default new Vuex.Store({
 
     },
     GETREPORTINFO ( state, report ) {
-      state.time = new Date().getDate()
-      // state.time = new Date().getMinutes()
-      console.log(report)
+      
+      state.recent_lc_progress = []
+      state.recent_learned_lc = []
+
       state.currentClass = { 
         type: report.recent_cs.type,
         imgurl: report.recent_cs.imgurl,
@@ -325,19 +330,20 @@ export default new Vuex.Store({
       // console.log(state.recent_lc_progress)
     },
     SAVEACIEVEMENTLIST ( state, achievements ) {
+      // console.log(achievements)
       const achieve_list = []
       for (let achievement of achievements) {
         const achieve_arr = {
           achievement_id: achievement.achievement_id, 
           title: achievement.title, 
           content: achievement.content, 
-          imgurl: require(`@/assets/images/achievement/${achievement.imgurl}`), 
+          imgurl: achievement.imgurl, 
           done: achievement.done,
           total: achievement.total, 
           status: achievement.status,
-          // great_kor: achievement.great_kor,
-          // great_eng: achievement.great_eng,
-          // great_dsc: achievement.great_dsc,
+          great_kor: achievement.great_kor,
+          great_eng: achievement.great_eng,
+          great_dsc: achievement.great_dsc,
         }
         achieve_list.push(achieve_arr)
       }
@@ -383,6 +389,9 @@ export default new Vuex.Store({
       state.AchievementList[achieveId-1].done += 1
       state.AchievementList[achieveId-1].status = 1
       console.log(state.AchievementList)
+    },
+    SETTIME ( state ) {
+      state.time = new Date().getDate()
     },
     UPDATEUSERINFO ( state, userInfo ) {
       state.nickName = userInfo.userNickname
@@ -583,6 +592,9 @@ export default new Vuex.Store({
       }  else {
         console.log("이미 달성")
       }
+    },
+    setTime( { commit }) {
+      commit('SETTIME')
     },
     updateUser ( { commit }, userInfo ) {
       commit ( 'UPDATEUSERINFO', userInfo )

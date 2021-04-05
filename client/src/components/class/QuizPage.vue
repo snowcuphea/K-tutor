@@ -24,7 +24,7 @@
 
         <v-card tile height="76%" elevation="0" class="px-5">
           <v-card class="quiz" tile height="100%" elevation="0" color="black">
-            <v-card tile height="70%" elevation="0">
+            <v-card tile height="65%" elevation="0">
               <div class="px-2" v-for="(line, idx) in quizInfo.quizzes[currentProblem].lines_kr" :key="idx">
                 <div v-if="idx%2 == 0" class="pb-4">
                   <p class="pb-2">{{ quizInfo.quizzes[currentProblem].lines_kr[idx] }} </p>
@@ -45,11 +45,11 @@
               </div>
 
               <div class="d-flex justify-space-between">
-                <v-btn plain icon @click="speech"><v-icon>mdi-volume-high</v-icon></v-btn>
+                <v-btn fab small dark @click="speech"><v-icon>mdi-volume-high</v-icon></v-btn>
                 <v-btn plain icon @click="empty()"><v-icon>mdi-restart</v-icon></v-btn>
               </div>
             </v-card>
-            <v-card tile height="30%" elevation="0">
+            <v-card tile height="35%" elevation="0">
               <v-btn v-for="(choice,idx) in choices" :key="idx" 
               @click="putAnswer(choice)" :disabled="checked.includes(choice)"
               class="mx-1 my-2"> {{ choice.slice(1) }} </v-btn>
@@ -61,10 +61,10 @@
         <v-card tile height="11%" elevation="0"
          class="d-flex align-center px-5" >
           <v-spacer></v-spacer>
-          <v-btn text plain @click="nextProblem" v-if="currentProblem != 4" :disabled="!pass">
+          <v-btn text plain @click="nextProblem" v-if="currentProblem != 4" >
             next
           </v-btn>
-          <v-btn text plain @click="submitQuiz" v-if="currentProblem == 4" :disabled="!pass">
+          <v-btn text plain @click="submitQuiz" v-if="currentProblem == 4">
             Finish
           </v-btn>
         </v-card>
@@ -79,7 +79,7 @@
       <v-card class="d-flex flex-column pt-8" height="100%" width="100%" tile>
         <v-card tile class="d-flex flex-column justify-center align-center" elevation="0">
           <h3>Congratulations</h3>
-          <h4>You've gained 3 points</h4>
+          <h4>You've gained 5 points</h4>
         </v-card>
         <v-card tile elevation="0" class="px-8">
           <Experience :experience="exp"/>
@@ -93,7 +93,7 @@
           @click="endQuiz"
           class="d-flex justify-center"
         >
-          Stop
+          close
         </v-btn>
       </v-card>
 
@@ -124,7 +124,6 @@ export default {
       order: 0,
       pass: null,
 
-      // myText: quizInfo.quizzes[this.currentProblem].lines_kr[1].split(' '),
       selectedVoicer: 'Microsoft SunHi Online (Natural) - Korean (Korea)',
       voiceList:[],
       textToSpeech:window.speechSynthesis,
@@ -187,17 +186,9 @@ export default {
     isCorrect() {
       const answer = this.quizInfo.quizzes[this.currentProblem].lines_kr[1].split(' ')
       const myanswer = this.myAnswer.split(' ')
-      // const operators = ['.','!','?']
       for ( let idx = 0; idx < answer.length ; idx++) {
         var compare = answer[idx]
         var myCompare = myanswer[idx]
-        // if ( idx == answer.length -1 ) {
-        //   for (var operator of operators) {
-        //     if (compare.slice(-1) === operator) {
-        //       compare = compare.slice(0,-1)
-        //     }
-        //   }
-        // }
         if ( compare !== myCompare ) {
           return false
         }
@@ -205,19 +196,11 @@ export default {
       return true
     },
     createEmptyList() {
-      // const operators = ['.','!','?']
       var target = this.quizInfo.quizzes[this.currentProblem].lines_kr[1].split(' ')
       var new_line = []
-      // var last_word = ''
       target.forEach( function(part, index) {
         this[index] = '_____'
       }, new_line)
-      // for (var operator of operators) {
-      //   if (target[target.length - 1 ].slice(-1) === operator) {
-      //     last_word = operator
-      //   }
-      // }
-      // new_line.push(last_word)
       this.myAnswer = new_line.join(' ')
     },
     speech(){
@@ -262,10 +245,6 @@ export default {
       this.createEmptyList()
     }
   },
-  //   async created () {
-  //   const voicesList=await this.getVoices();
-  //   this.voiceList = voicesList
-  // },
   async created() {
     this.createEmptyList()
     const voicesList=await this.getVoices();

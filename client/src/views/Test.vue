@@ -5,6 +5,7 @@
       <div class="d-flex">
         <h3> Report Card </h3>
         <v-spacer></v-spacer>
+        
         <div>
           <v-icon v-for="left in chanceUsed()" :key="left">mdi-heart</v-icon>
         </div>
@@ -22,7 +23,7 @@
     <div class="d-flex justify-center">
       <v-btn elevation="0" class="mt-5" @click="startTest">Take a Test</v-btn>
     </div>
-    <TestPage :showDialog="showDialog" @hideDialog="showDialog = !showDialog" v-if="ableTest()"/>
+    <TestPage :showDialog="showDialog" @hideDialog="showDialog = !showDialog" v-if="showDialog"/>
     
   </v-container>
 </template>
@@ -42,6 +43,7 @@ export default {
   },
   data() {
     return {
+      nowTime: new Date(),
       showDialog: false,
     }
   },
@@ -79,7 +81,7 @@ export default {
 
   },
   computed: {
-    ...mapState([ "userGrade_score", "recent_learned_lc", "testChance"  ]),
+    ...mapState([ "userGrade_score", "recent_learned_lc", "testChance", "time" ]),
 
     average() {
       var total = 0
@@ -102,7 +104,11 @@ export default {
     if (this.ableTest()) {
       this.$store.dispatch( "getTestQuestions" )
     }
-
+    // console.log(this.time, this.nowTime.getDate())
+    if ( this.nowTime.getDate() !== this.time ) {
+      console.log(this.time, this.nowTime.getDate())
+      this.$store.dispatch( 'resetChance', this.nowTime.getDate() )
+    } 
   }
 
 
