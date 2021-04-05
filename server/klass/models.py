@@ -3,7 +3,6 @@ from django.db import models
 
 class Kw(models.Model):
     content_kor = models.CharField(max_length=30)
-    content_eng = models.CharField(max_length=30, null=True, blank=True)
     count = models.IntegerField()
 
 

@@ -72,9 +72,8 @@ class UserViewSet(viewsets.GenericViewSet,
         """
         # 회원 수정한 정보를 request.data에 담았다고 가정
         user = request.user
-        if User.objects.filter(username=request.data['username']).exists():
-            return Response("This email is already registered.", status=status.HTTP_302_FOUND)
-        if User.objects.filter(nickname=request.data['nickname']).exists():
+        if user.nickname != request.data['nickname'] and \
+                User.objects.filter(nickname=request.data['nickname']).exists():
             return Response("This nickname is already registered.", status=status.HTTP_302_FOUND)
         user.set_password(request.data['password'])
         user.nickname = request.data['nickname']
