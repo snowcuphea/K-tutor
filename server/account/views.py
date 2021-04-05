@@ -215,7 +215,7 @@ class AchievementViewSet(viewsets.GenericViewSet,
         user = request.user
         achievement_list = Achievement.objects.all()
         user_achievement = []
-
+        #asd
         for al in achievement_list:
             if not Achievement.objects.filter(Q(achieved_user=user) & Q(id=al.id)).exists():
                 user.achieved.add(al)
