@@ -5,7 +5,14 @@
       <h2> Class </h2>
     </v-container>
 
-    <v-navigation-drawer v-model="drawer" absolute temporary style="z-index:99;">
+    <v-navigation-drawer v-model="drawer" stateless absolute overlay-opacity="0" temporary style="z-index:66; position: fixed;">
+      <v-btn
+        icon
+        class="close-drawer"
+        @click="drawer = !drawer"
+      >
+        <v-icon>mdi-arrow-collapse-left</v-icon>
+      </v-btn>
       <v-list
         nav
         dense
@@ -37,7 +44,7 @@
       </v-card>
     </v-dialog>
 
-    <v-container>
+    <v-container class="class-container">
       
       <ClassSheet :classInfo="currentClass ? currentClass : defaultClass" />
 
@@ -59,6 +66,7 @@ export default {
   },
   data() { 
     return {
+      nowTime: new Date(),
       drawer: false,
       dialog: false,
       selectedIdx: null,
@@ -96,10 +104,16 @@ export default {
     }
   },
   computed: {
-    ...mapState(["currentClass", "defaultClass", "allTitleList"])
+    ...mapState(["currentClass", "defaultClass", "allTitleList", "time"])
   },
   created() {
     // console.log("클래스에서 this.currentClass", this.currentClass)
+
+    // console.log(this.time, this.nowTime.getDate())
+    if ( this.nowTime.getDate() !== this.time ) {
+      console.log(this.time, this.nowTime.getDate())
+      this.$store.dispatch( 'resetChance', this.nowTime.getDate() )
+    } 
 
   },
 }
@@ -121,6 +135,14 @@ export default {
   height: 60px;
   border-bottom: 1px solid;
   z-index: 49;
+}
+
+
+.close-drawer {
+  position: fixed;
+  top: 1.5em;
+  right: 0.5em;
+  z-index: 99;
 }
 
 </style>

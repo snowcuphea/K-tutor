@@ -6,16 +6,20 @@
           <v-img
             width="100%"
             height="100%"
-            :src="modalItem.imgurl"
+            :src="require(`@/assets/images/achievement/${modalItem.imgurl}`)"
             @click="modalClick"
             :class="isDone() ? '':'achievementNot'"
           />
         </v-col>
         <v-col cols="8" class="d-flex flex-column">
-          <h3>
-            {{ modalItem.title }}
+          <div class="d-flex">
+            <h3>
+              {{ modalItem.title }}
 
-          </h3>
+            </h3>
+            <v-spacer></v-spacer>
+            <v-btn icon @click="modalClick" v-if="isDone()" > <v-icon>mdi-text-box-search</v-icon> </v-btn>
+          </div>
           <v-spacer></v-spacer>
           <h5 style="margin:0;">
             {{ modalItem.content }}
@@ -60,7 +64,9 @@ export default {
   },
   methods: {
     modalClick() {
-      this.$emit('update2',this.modalItem)
+      if ( this.isDone() ) {
+        this.$emit('update2',this.modalItem)
+      }
     },
     isDone() {
       if (this.modalItem.status == 1) {
