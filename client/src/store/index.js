@@ -392,7 +392,7 @@ export default new Vuex.Store({
       state.time = new Date().getDate()
     },
     UPDATEUSERINFO ( state, userInfo ) {
-      state.nickName = userInfo.userNickname
+      state.nickName = userInfo
     }
     
   },
@@ -594,7 +594,7 @@ export default new Vuex.Store({
     setTime( { commit }) {
       commit('SETTIME')
     },
-    updateUser ( { commit }, userInfo ) {
+    updateUserInfo ( { commit }, userInfo ) {
       commit ( 'UPDATEUSERINFO', userInfo )
 
     }
