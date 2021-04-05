@@ -97,8 +97,10 @@ function addAchieve( achieved, success, fail ){
   instance.defaults.headers['Authorization'] = "jwt " + window.localStorage.getItem('jwt')
 
   const achievedForm = {
-    "AcId" : String(achieved)
+    "AcId" : achieved
   }
+
+  console.log(achievedForm)
 
   instance
     .post("account/achievements", achievedForm)

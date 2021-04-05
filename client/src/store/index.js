@@ -109,8 +109,8 @@ export default new Vuex.Store({
       state.allProgress = []
       state.recent_lc_progress = []
       state.recent_learned_lc = []
-      // state.testChance = 2
-      // state.quizChance = 3
+      state.testChance = 2
+      state.quizChance = 3
       state.AchievementList = []
       state.quizInfo = {}
       state.testQuestions = []
