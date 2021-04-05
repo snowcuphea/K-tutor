@@ -56,7 +56,7 @@ class CsViewSet(viewsets.GenericViewSet,
         cs_list_kor = [x.name_kor.split(" - ")[0] for x in song_list]
         cs_list_eng = [x.name_eng for x in song_list]
         singer_list = set()
-        for kor, eng in zip:
+        for kor, eng in zip(cs_list_kor, cs_list_eng):
             singer_list.add(kor, eng)
         cs_list = []
         for kor, eng in singer_list:
