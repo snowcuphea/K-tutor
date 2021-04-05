@@ -35,15 +35,16 @@
               cols="8"
               class="d-flex flex-column"
             >
-              <h6>업적 달성률</h6>
+              <h4>Achievement Status</h4>
 
               <v-progress-linear
                 color="light-blue"
-                height="10"
-                value="30"
+                height="15"
+                :value="(getCurrentAchieved.length/9)*100"
                 striped
               >
-
+                <h6>{{ getCurrentAchieved.length }}/9</h6> 
+                  
               </v-progress-linear>
 
             </v-col>
@@ -63,7 +64,7 @@
                   plain
                   :color="viewcalendar===false ? 'secondary' : 'primary'"
                 >
-                  <v-icon @click="viewCalendar">mdi-calendar-range</v-icon>
+                  <v-icon @click="viewCalendar">mdi-grid</v-icon>
                 </v-btn>
                 
               
@@ -72,49 +73,6 @@
             </v-col>
           </v-row>
         </v-container>
-        <!-- <v-row>
-          <v-col
-            cols="8"
-            class="d-flex flex-column"
-          >
-            <h6>업적 달성률</h6>
-
-            <v-progress-linear
-              color="light-blue"
-              height="10"
-              value="30"
-              striped
-            >
-
-            </v-progress-linear>
-
-          </v-col>
-          <v-col
-            cols="4"
-          >
-            <div class="d-flex justify-end">
-              <v-btn
-                icon
-                plain
-                :color="viewlist===false ? 'secondary' : 'primary'"
-              >
-                <v-icon @click="viewList">mdi-view-list</v-icon>
-              </v-btn>
-              <v-btn
-                icon
-                plain
-                :color="viewcalendar===false ? 'secondary' : 'primary'"
-              >
-                <v-icon @click="viewCalendar">mdi-calendar-range</v-icon>
-              </v-btn>
-
-            </div>
-
-          </v-col>
-        </v-row> -->
-        <!-- <div class="main_progressbar" style="width:90%;">
-
-        </div> -->
       </v-subheader>
       <div style="padding-top: 3%;">
 
@@ -126,9 +84,6 @@
           >
 
             <appMyModal :modalItem="item" @update="modal" />
-
-
-            <v-divider></v-divider>
 
           </div>
 
@@ -160,6 +115,8 @@
 import Achievemodal from '../components/modal/Achievemodal'
 import Achievemodal2 from '../components/modal/Achievemodal2'
 
+import { mapGetters, mapState } from 'vuex'
+
 export default {
   name: "Achievement",
   components: {
@@ -167,6 +124,7 @@ export default {
     appMyModal2: Achievemodal2
   },
   data: () => ({
+    nowTime: new Date(),
     visible: false,
     viewlist: true,
     viewcalendar: false,
@@ -194,6 +152,18 @@ export default {
   },
   created() {
     this.$store.dispatch('getAchievementList')
+
+    // console.log(this.time, this.nowTime.getDate())
+    if ( this.nowTime.getDate() !== this.time ) {
+      console.log(this.time, this.nowTime.getDate())
+      this.$store.dispatch( 'resetChance', this.nowTime.getDate() )
+    } 
+
+
+  },
+  computed: {
+    ...mapGetters(["getCurrentAchieved"]),
+    ...mapState(["time"])
   }
 }
 </script>

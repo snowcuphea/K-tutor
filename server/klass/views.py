@@ -22,10 +22,10 @@ from django.db.models import Q
 
 @api_view(['GET'])
 def updateDB(request):
-    # update()
+    update()
     # create_lc()
     # add_meaning_to_lc()
-    updateLc()
+    # updateLc()
     return Response("OK", status=status.HTTP_200_OK)
 
 
@@ -61,7 +61,8 @@ class CsViewSet(viewsets.GenericViewSet,
                 "name_kor": kor,
                 "name_eng": eng,
                 "type": "kpop",
-                "level": song_list.filter(name_kor__contains=kor)[0].level
+                "level": song_list.filter(name_kor__contains=kor)[0].level,
+                "imgurl": song_list.filter(name_kor__contains=kor)[0].imgurl
             })
         cs_list.extend(Cs.objects.filter(type__in=['drama', 'movie']).values())
         serializer = CsSerializer(data=cs_list, many=True)

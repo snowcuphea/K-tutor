@@ -15,24 +15,25 @@ from .models import Kw, Cs, Cpct, Cpcq, Lc
 def update():
     # kw 업데이트
     path = os.getcwd()
-    # kw_data_frame = pd.read_pickle(path + "\data\pandas\kw.pkl")
-    # for i, row in kw_data_frame.iterrows():
-    #    if not Kw.objects.filter(content=row.content).exists():
-    #        Kw.objects.create(
-    #            content=row['content'],
-    #            count=row['count']
-    #        )
+    kw_data_frame = pd.read_pickle(path + "/data/pandas/kw.pkl")
+    for i, row in kw_data_frame.iterrows():
+       if not Kw.objects.filter(content=row.content).exists():
+           Kw.objects.create(
+               content=row['content'],
+               count=row['count']
+           )
 
     # cs 업데이트
-    # cs_data_frame = pd.read_pickle(path + "\data\pandas\cs.pkl")
-    # for i, row in cs_data_frame.iterrows():
-    #    if not Cs.objects.filter(name=row['name']).exists():
-    #        Cs.objects.create(
-    #            name=row['name'],
-    #            type=row['type'],
-    #            level=0
-    #        )
+    cs_data_frame = pd.read_pickle(path + "/data/pandas/cs.pkl")
+    for i, row in cs_data_frame.iterrows():
+       if not Cs.objects.filter(name=row['name']).exists():
+           Cs.objects.create(
+               name=row['name'],
+               type=row['type'],
+               level=0
+           )
 
+    slang = ["씨발", "새끼", "미친", "썅"]
     # cpct 업데이트
     kkma = Kkma()
     cpct_data_frame = pd.read_pickle(path + "/data/pandas/cpct.pkl")
@@ -42,10 +43,12 @@ def update():
                 temp_kor = row['kor'].strip()
                 temp_word_list = kkma.pos(temp_kor)
                 temp_word_list = ['+'.join(w) for w in temp_word_list if w[1] in ['NNG', 'VV', 'VA', 'MAJ', 'XR']]
-                kws = Kw.objects.filter(content__in=temp_word_list)
+                kws = Kw.objects.filter(content_kor__in=temp_word_list)
                 if kws.exists():
                     main_kw = max(kws, key=lambda x: x.count)
                     cs = Cs.objects.get(id=row['cs'] + 1)
+                    if filter(lambda x:x in temp_kor, slang):
+                        raise Exception("욕이 포함되어 있습니다.")
                     Cpct.objects.create(
                         kor=temp_kor,
                         eng=row['eng'],
@@ -56,18 +59,16 @@ def update():
             print(row)
 
     # cpcq, kcq 업데이트
-    # cpcq_data_frame = pd.read_pickle(path + "\data\pandas\cpcq.pkl")
-    # kcq_data_frame = pd.read_pickle(path + "\data\pandas\kcq.pkl")
+    cpcq_data_frame = pd.read_pickle(path + "/data/pandas/cpcq.pkl")
 
-    # for i, row in cpcq_data_frame.iterrows():
-    #    if not Cpcq.objects.filter(kor=row.kor).exists():
-    #        cpcq = Cpcq.objects.create(
-    #            kor=row['kor'],
-    #            eng=row['eng'],
-    #        )
-    #        kcq_list = list(kcq_data_frame.loc[kcq_data_frame['cpcq_id'] == cpcq.id]['kw_id'])
-    #        for kcq in kcq_list:
-    #            cpcq.kcq.add(kcq)
+    for i, row in cpcq_data_frame.iterrows():
+        cpcq = Cpcq.objects.create(
+            kor=row['kor'],
+            eng=row['eng'],
+        )
+        for kw in Kw.objects.filter(content_kor_in=list(map("+".join, kkma.pos(cpcq.kor)))):
+            cpcq.kcq.add(kw)
+
 
 
 def create_lc():
