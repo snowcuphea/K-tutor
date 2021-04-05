@@ -139,7 +139,7 @@ class LoginViewSet(viewsets.GenericViewSet,
                 recent_cs['name_eng'] = recent_cs['name_eng'].split(' - ')[0]
         else:
             recent_cs = Cs.objects.get(pk=1).__dict__
-        del(recent_cs['_state'])
+        del (recent_cs['_state'])
         data['recent_cs'] = recent_cs
         # recent_lc_progress = serializers.DictField()
         recent_lc_progress = dict()
@@ -217,6 +217,11 @@ class AchievementViewSet(viewsets.GenericViewSet,
         user_achievement = []
 
         for al in achievement_list:
+            if not Achievement.objects.filter(Q(user=user) & Q(id=al.id)).exists():
+                user.achieved.add(al)
+        ac_manage = user.achieved.all()
+        for acm in ac_manage:
+            al = Achievement.objects.get(id=acm.achievement_id)
             if al.done >= al.achievement.total:
                 user_achievement.append({
                     "achievement_id": al.achievement.id,
@@ -225,9 +230,9 @@ class AchievementViewSet(viewsets.GenericViewSet,
                     "imgurl": al.achievement.imgurl,
                     "done": al.done,
                     "total": al.achievement.total,
-                    "great_kor" : al.achievement.great_kor,
-                    "great_eng" : al.achievement.great_eng,
-                    "great_dsc" : al.achievement.great_dsc,
+                    "great_kor": al.achievement.great_kor,
+                    "great_eng": al.achievement.great_eng,
+                    "great_dsc": al.achievement.great_dsc,
                     "status": 1
                 })
             else:
@@ -259,7 +264,11 @@ class AchievementViewSet(viewsets.GenericViewSet,
         """
         user = request.user
         achievement = Achievement.objects.get(id=request.data['AcId'])
-        ac_manage = AchieveManage.objects.get(user=user, achievement=achievement)
+        ac_manage = AchieveManage.objects.filter(Q(user=user) & Q(achievement=achievement))
+        if not ac_manage.exists():
+            user.achieved.add(achievement)
+            ac_manage = AchieveManage.objects.filter(Q(user=user) & Q(achievement=achievement))
+
         if ac_manage.done >= achievement.total:
             return Response("Already Achieved", status=status.HTTP_208_ALREADY_REPORTED)
         else:
