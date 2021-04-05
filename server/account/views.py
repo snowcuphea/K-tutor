@@ -213,7 +213,7 @@ class AchievementViewSet(viewsets.GenericViewSet,
         ___
         """
         user = request.user
-        achievement_list = Achievement.objects.filter(user=user)
+        achievement_list = Achievement.objects.all()
         user_achievement = []
 
         for al in achievement_list:
