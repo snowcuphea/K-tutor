@@ -17,9 +17,12 @@
     <v-row no-gutters>
       <v-col class="my-1">
         <div class="d-flex justify-end">
-          <v-text class="text--secondary">chances : </v-text>
-          <div  class="d-flex mx-1">
-          <v-icon v-for="used in quizChance" :key="used" color="red" small>mdi-heart</v-icon>
+          <span class="text--secondary">chances: </span>
+          <div class="d-flex">
+            <v-icon v-for="left in chanceUsed()" :key="left" small>mdi-heart</v-icon>
+          </div>
+          <div  class="d-flex">
+            <v-icon v-for="used in quizChance" :key="used" color="red" small>mdi-heart</v-icon>
           </div>
         </div>
       </v-col>
@@ -34,10 +37,6 @@
       </v-col>
       <v-col cols="4" class="d-flex justify-end">
         <v-btn class="main-bg-color-imp" dark rounded  @click="startQuiz()"> quiz </v-btn>
-        <div class="d-flex">
-          <v-icon v-for="left in chanceUsed()" :key="left">mdi-heart</v-icon>
-        </div>
-        
       </v-col>
     </v-row>
 
