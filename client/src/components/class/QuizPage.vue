@@ -16,15 +16,15 @@
           <v-icon>mdi-close</v-icon>
         </v-btn>
 
-        <v-card tile height="13%" elevation="0"
+        <v-card tile height="15%" elevation="0"
          class="d-flex justify-center align-center" >
           <h2>[ {{ currentProblem + 1 }}/5  ]</h2>
 
         </v-card>
 
-        <v-card tile height="76%" elevation="0" class="px-5">
+        <v-card tile height="72%" elevation="0" class="px-5">
           <v-card class="quiz" tile height="100%" elevation="0" color="black">
-            <v-card tile height="65%" elevation="0">
+            <v-card tile height="70%" elevation="0">
               <div class="px-2" v-for="(line, idx) in quizInfo.quizzes[currentProblem].lines_kr" :key="idx">
                 <div v-if="idx%2 == 0" class="pb-4">
                   <p class="pb-2">{{ quizInfo.quizzes[currentProblem].lines_kr[idx] }} </p>
@@ -45,11 +45,11 @@
               </div>
 
               <div class="d-flex justify-space-between">
-                <v-btn fab small dark @click="speech"><v-icon>mdi-volume-high</v-icon></v-btn>
+                <v-btn plain icon @click="speech"><v-icon>mdi-volume-high</v-icon></v-btn>
                 <v-btn plain icon @click="empty()"><v-icon>mdi-restart</v-icon></v-btn>
               </div>
             </v-card>
-            <v-card tile height="35%" elevation="0">
+            <v-card tile height="30%" elevation="0">
               <v-btn v-for="(choice,idx) in choices" :key="idx" 
               @click="putAnswer(choice)" :disabled="checked.includes(choice)"
               class="mx-1 my-2"> {{ choice.slice(1) }} </v-btn>
@@ -58,13 +58,13 @@
 
         </v-card>
 
-        <v-card tile height="11%" elevation="0"
+        <v-card tile height="13%" elevation="0"
          class="d-flex align-center px-5" >
           <v-spacer></v-spacer>
-          <v-btn text plain @click="nextProblem" v-if="currentProblem != 4" >
+          <v-btn text plain @click="nextProblem" v-if="currentProblem != 4" :disabled="!pass">
             next
           </v-btn>
-          <v-btn text plain @click="submitQuiz" v-if="currentProblem == 4">
+          <v-btn text plain @click="submitQuiz" v-if="currentProblem == 4" :disabled="!pass">
             Finish
           </v-btn>
         </v-card>
@@ -79,7 +79,7 @@
       <v-card class="d-flex flex-column pt-8" height="100%" width="100%" tile>
         <v-card tile class="d-flex flex-column justify-center align-center" elevation="0">
           <h3>Congratulations</h3>
-          <h4>You've gained 5 points</h4>
+          <h4>You've gained 3 points</h4>
         </v-card>
         <v-card tile elevation="0" class="px-8">
           <Experience :experience="exp"/>
@@ -93,7 +93,7 @@
           @click="endQuiz"
           class="d-flex justify-center"
         >
-          close
+          Stop
         </v-btn>
       </v-card>
 
@@ -258,7 +258,7 @@ export default {
     },
   },
   watch: {
-    quizInfo() {
+    openStudyPage() {
       this.createEmptyList()
     }
   },

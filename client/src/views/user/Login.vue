@@ -91,13 +91,13 @@
               (response) => {
                 // console.log("레포트정보", response.data)
                 this.$store.dispatch('addUserEmail', this.userCredentials.userEmail )
-                this.$store.dispatch('setTime')
+
                 this.userCredentials.userEmail = ""
                 this.userCredentials.userPassword = ""
 
                 this.$store.dispatch('getReportInfo', response.data)
                 this.$store.dispatch('getAchievementList')
-                this.$store.dispatch( 'getTestGrades' )
+                this.$store.dispatch( "getTestGrades" )
                 
               },
               (error) => {
@@ -140,6 +140,7 @@
       goToFindPassword() {
 
       },
+
     }
 
 

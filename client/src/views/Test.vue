@@ -2,17 +2,7 @@
   <v-container class="px-5 d-flex flex-column">
 
     <div class="d-flex flex-column">
-      <div class="d-flex">
-        <h3> Report Card </h3>
-        <v-spacer></v-spacer>
-        
-        <div>
-          <v-icon v-for="left in chanceUsed()" :key="left">mdi-heart</v-icon>
-        </div>
-        <div>
-          <v-icon v-for="used in testChance" :key="used" color="red">mdi-heart</v-icon>
-        </div>
-      </div>
+      <h3> Report Card </h3>
       <GradeChart />
       <p class="mt-2" v-if="average">Average of last {{ userGrade_score.length }} exams: {{ average }} </p>
       <p class="mt-2" v-else>Take a test to get information.</p>
@@ -23,7 +13,10 @@
     <div class="d-flex justify-center">
       <v-btn elevation="0" class="mt-5" @click="startTest">Take a Test</v-btn>
     </div>
-    <TestPage :showDialog="showDialog" @hideDialog="showDialog = !showDialog" v-if="showDialog"/>
+
+    <v-btn @click="toggleTime">toggle time</v-btn>
+
+    <TestPage :showDialog="showDialog" @hideDialog="showDialog = !showDialog" v-if="ableTest()"/>
     
   </v-container>
 </template>
@@ -43,14 +36,10 @@ export default {
   },
   data() {
     return {
-      nowTime: new Date(),
       showDialog: false,
     }
   },
   methods: {
-    chanceUsed() {
-      return 2-this.testChance
-    },
     ableTest() {
       if ( this.recent_learned_lc.length > 9 ) {
         return true
@@ -62,7 +51,7 @@ export default {
       if (this.ableTest() && this.testChance != 0 ){
         this.$store.dispatch( "getTestQuestions" )
         this.showDialog = !this.showDialog
-      } else if ( this.testChance == 0 ) {
+      } else if (!this.ableTest() && this.testChance == 0) {
         const alertInfo = {
           status: true,
           color: "warning",
@@ -78,10 +67,13 @@ export default {
         this.$store.dispatch("showAlert", alertInfo)
       }
     },
-
+    toggleTime() {
+      const now = new Date()
+      console.log(now)
+    }
   },
   computed: {
-    ...mapState([ "userGrade_score", "recent_learned_lc", "testChance", "time" ]),
+    ...mapState([ "userGrade_score", "recent_learned_lc", "alert", "testChance"  ]),
 
     average() {
       var total = 0
@@ -104,11 +96,7 @@ export default {
     if (this.ableTest()) {
       this.$store.dispatch( "getTestQuestions" )
     }
-    // console.log(this.time, this.nowTime.getDate())
-    if ( this.nowTime.getDate() !== this.time ) {
-      console.log(this.time, this.nowTime.getDate())
-      this.$store.dispatch( 'resetChance', this.nowTime.getDate() )
-    } 
+
   }
 
 

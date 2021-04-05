@@ -1,7 +1,7 @@
 <template>
   <v-card height="100%" class="start-home d-flex justify-center align-center">
 
-    <img src="@/assets/logo.png" height="100px" width="100px" alt="">
+    <img src="@/assets/logo.svg" height="100px" width="100px" alt="">
   </v-card>
 
 </template>
@@ -24,6 +24,7 @@ export default {
     // default setting
     this.$store.dispatch('changePage', defaultSetting)
 
+
     setTimeout(() => {
       if (this.isLogin){
         this.$router.push({path: '/report'})
@@ -32,15 +33,15 @@ export default {
       }
     }, 1500);
 
-    // console.log(this.time, this.nowTime.getDate())
-    if ( this.nowTime.getDate() !== this.time ) {
-      console.log(this.time, this.nowTime.getDate())
-      this.$store.dispatch( 'resetChance', this.nowTime.getDate() )
-    } 
+    // if ( this.nowTime.getDay() !== this.time ) {
+    //   this.nowDay = this.nowTime.getDay()
+    //   this.$store.dispatch( 'resetChance' )
+    // } 
 
-    if ( this.isLogin == true ) {
-      this.$store.dispatch('completeAchieve', 1)
-    }
+    if ( this.nowTime.getMinutes() !== this.time ) {
+      this.nowDay = this.nowTime.getMinutes()
+      this.$store.dispatch( 'resetChance' )
+    } 
 
   },
   computed: {
@@ -52,7 +53,7 @@ export default {
 <style>
 
 .start-home {
-  background-color: #62D2A2 !important;
+  background-color: rgb(47, 184, 47) !important;
 
 }
 

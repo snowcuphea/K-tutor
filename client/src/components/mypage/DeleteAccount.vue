@@ -44,13 +44,8 @@ import {
             console.log("deleteAccount(),", res)
             this.$store.dispatch('deleteUser')
               .then(() => {
-                const alertInfo = {
-                  status: true,
-                  color: "success",
-                  content: "ByeBye..."
-                }
-                this.$store.dispatch("showAlert", alertInfo)
                 this.$emit('hideTutorial')
+                alert("ByeBye...")
                 this.$router.push({
                   name: 'Login'
                 })

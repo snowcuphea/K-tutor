@@ -1,18 +1,20 @@
 <template>
   <div>
+
     <v-img
-      id="img"
-      width="100%"
-      height="100%"
-      :src="modalItem.imgurl"
-      @click="modalClick"
-      :class="isDone() ? '':'achievementNot'"
-    />
+        width="100%"
+        height="100%"
+        :src="modalItem.src"
+        @click="modalClick"
+    >
+        
+    </v-img>
+
+
   </div>
 </template>
 
 <script>
-
 export default {
   props: {
     modalItem: {
@@ -24,25 +26,11 @@ export default {
     modalClick() {
       this.$emit('update2',this.modalItem)
     },
-    isDone() {
-      if (this.modalItem.status == 1) {
-        return true
-      } else {
-        return false
-      }
-    }
-  },
-  created() {
-
   }
-
 
 }
 </script>
 
 <style>
-
-
-
 
 </style>

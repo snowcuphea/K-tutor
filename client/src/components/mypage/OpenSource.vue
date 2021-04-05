@@ -114,12 +114,6 @@ export default {
         url: 'https://www.chartjs.org/',
         copyright: 'Copyright © 2018 Chart.js Contributors, licensed under the MIT License',
       },
-      {
-        name: '리디바탕 RIDI',
-        version: '1.1',
-        url: 'https://ridicorp.com/ridibatang/',
-        copyright: 'This Font Software is licensed under the SIL Open Font License, Version 1.1.',
-      },
       // {
       //   name: 'google-trans-new',
       //   version: '-',

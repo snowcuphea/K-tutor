@@ -7,9 +7,6 @@ Django==3.1.7
 django-extensions==3.1.1
 djangorestframework==3.12.2
 djangorestframework-jwt==1.11.0
-django-cors-headers==3.7.0
-docker==4.1.0
-docker-compose==1.25.0
 idna==2.10
 JPype1
 konlpy==0.5.2
@@ -29,7 +26,8 @@ tweepy==3.10.0
 typing-extensions==3.7.4.3
 urllib3==1.26.4
 drf-yasg==1.20.0
+<<<<<<< Updated upstream
 gensim==3.8.3
-drf-yasg-examples==0.1.1
-mysqlclient==2.0.3
-gensim==3.8.3
+=======
+drf-yasg-examples=0.1.1
+>>>>>>> Stashed changes

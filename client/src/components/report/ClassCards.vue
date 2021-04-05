@@ -5,7 +5,7 @@
       <!-- <img :src="card.imgurl" alt="아직읎다" width="100px" height="80px"> -->
       <img :src="require(`@/assets/images/poster/poster1.jpg`)" alt="아직읎다" width="100px" height="80px">
       <p class="card-line"> {{ card.main_kw_kor }} </p>
-      <p class="card-line"> {{ card.main_kw_eng }} </p>
+      <p class="card-line"> {{ card.main_kw_eng }} neet to add</p>
     </v-card>
   </v-container>
 </template>
