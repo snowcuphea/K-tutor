@@ -5,7 +5,7 @@
       <v-row>
         <v-col cols="5">
           <div>
-            <v-avatar size="100" class="my_avatar">
+            <v-avatar size="120" class="my_avatar">
               <img :src="myImgSource()">
             </v-avatar>
           </div>
@@ -135,13 +135,13 @@
       },
       myImgSource() {
         if (this.$store.state.userLevel == 15) {
-          return require('@/assets/images/user/ranklow.png')
+          return require('@/assets/images/user/rankking.png')
         } else if (this.$store.state.userLevel > 9) {
           return require('@/assets/images/user/ranklow.png')
         } else if (this.$store.state.userLevel > 4) {
           return require('@/assets/images/user/ranklow.png')
         } else {
-          return require('@/assets/images/user/ranklow.png')
+          return require('@/assets/images/user/rankking.png')
         }
 
       },
