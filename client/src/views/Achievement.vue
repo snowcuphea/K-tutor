@@ -120,8 +120,6 @@
 import Achievemodal from '../components/modal/Achievemodal'
 import Achievemodal2 from '../components/modal/Achievemodal2'
 
-import { flexx } from '@/store/achievement.js'
-
 import { mapGetters, mapState } from 'vuex'
 
 import Vue from 'vue'
@@ -180,10 +178,6 @@ export default {
       console.log(this.time, this.nowTime.getDate())
       this.$store.dispatch( 'resetChance', this.nowTime.getDate() )
     } 
-
-    if ( flexx( this.myCompleteAchievement ) ) {
-      this.$store.dispatch('completeAchieve', 3)
-    }
 
   },
   computed: {

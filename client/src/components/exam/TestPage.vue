@@ -363,7 +363,6 @@ export default {
         const j = Math.floor(Math.random() * (i + 1));
         [newList[i], newList[j]] = [newList[j], newList[i]];
       }
-      console.log(newList)
       return newList
     },
 

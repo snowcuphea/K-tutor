@@ -6,6 +6,8 @@ import { getLessonList, getLessonInfo, sendLessonInfo, getQuizInfo } from "@/api
 import { getExamProblems, getExamReport } from "@/api/exam.js"
 import { getExp, getMyAcieve, addAchieve } from "@/api/account.js"
 
+import { flexx } from "@/store/achievement.js"
+
 Vue.use(Vuex)
 
 
@@ -376,6 +378,7 @@ export default new Vuex.Store({
       state.quizChance = 3
       state.testChance = 2
       state.time = nowTime
+      state.isSameDay = false
       console.log("reset 됐어")
       console.log(state.time, state.quizChance, state.testChance)
     },
@@ -582,6 +585,9 @@ export default new Vuex.Store({
                 content: `Achievement "${state.AchievementList[id-1].title}" completed.`
               }
               dispatch('showAlert', alertInfo)
+              if ( flexx( state.myCompleteAchievement ) ) {
+                dispatch('completeAchieve', 3)
+              }
             } else {
               console.log(res.data)
             }

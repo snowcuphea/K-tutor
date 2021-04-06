@@ -18,8 +18,8 @@ function climber( completedAchieve ) {
 }
 
 function flexx( completedAchieve ) {
-
-  if ( completedAchieve.length == 8 && !completedAchieve.includes(3) ) {
+  
+  if ( !completedAchieve.includes(3) ) {
     return true
   } else {
     return false
