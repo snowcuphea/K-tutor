@@ -353,6 +353,7 @@ export default {
   computed: {
     ...mapState([ "testQuestions", "myCompleteAchievement" ]),
     choices() {
+      
       var target = this.answers[this.targetQuestion].split(' ')
       var newList = []
       for (var word in target) {
@@ -362,6 +363,7 @@ export default {
         const j = Math.floor(Math.random() * (i + 1));
         [newList[i], newList[j]] = [newList[j], newList[i]];
       }
+      console.log(newList)
       return newList
     },
 

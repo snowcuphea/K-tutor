@@ -21,7 +21,7 @@ export default new Vuex.Store({
     required_exp: [
       0, 10, 20, 30, 50, 70,
       100, 150, 200, 250, 300,
-      400, 500, 750, 1000
+      400, 500, 750, 1000 
     ],
     
     userGrade_date : [], 
@@ -332,6 +332,7 @@ export default new Vuex.Store({
     SAVEACIEVEMENTLIST ( state, achievements ) {
       // console.log(achievements)
       const achieve_list = []
+      const tempComplete = []
       for (let achievement of achievements) {
         const achieve_arr = {
           achievement_id: achievement.achievement_id, 
@@ -346,11 +347,13 @@ export default new Vuex.Store({
           great_dsc: achievement.great_dsc,
         }
         achieve_list.push(achieve_arr)
+        
         if (achievement.status == 1) {
-          state.myCompleteAchievement.push(achievement.achievement_id)
+          tempComplete.push(achievement.achievement_id)
         }
       }
       state.AchievementList = achieve_list
+      state.myCompleteAchievement = tempComplete
       // console.log("store", state.AchievementList)
       // console.log("store", state.myCompleteAchievement)
     },

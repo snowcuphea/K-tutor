@@ -24,15 +24,15 @@ import { intermediate } from '@/store/achievement.js'
 export default {
   props: [ 'experience' ],
   computed: {
-    ...mapState(['userLevel', 'userExperience','required_exp']),
+    ...mapState(['userLevel', 'userExperience','required_exp', 'myCompleteAchievement']),
 
     progress() {
       return this.userExperience/this.required_exp[this.userLevel] * 100
     }
   },
   watch: {
-    experience() {
-      console.log("경험치 보고있다")
+    userLevel() {
+      console.log("레벨업했다")
       if ( intermediate( this.myCompleteAchievement ) ) {
         this.$store.dispatch('completeAchieve', 6)
       }
