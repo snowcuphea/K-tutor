@@ -135,7 +135,7 @@ import Experience from "@/components/user/Experience.vue"
 import { mapState } from "vuex"
 import { sendExamResult } from "@/api/exam.js"
 
-import { slump, easyPeasy } from '@/store/achievement.js'
+import { slump, easyPeasy, becomingPro } from '@/store/achievement.js'
 
 
 export default {
@@ -241,6 +241,9 @@ export default {
       }
       if ( easyPeasy( this.grade, this.myCompleteAchievement ) ) {
         this.$store.dispatch('completeAchieve', 5)
+      }
+      if ( becomingPro( this.grade, this.myCompleteAchievement ) ) {
+        this.$store.dispatch('completeAchieve', 9)
       }
 
       this.$store.dispatch('gainExperience', this.grade/10)

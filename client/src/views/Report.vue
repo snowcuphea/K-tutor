@@ -66,7 +66,7 @@
 <script>
 import { mapState } from 'vuex' 
 import { getInfo } from '@/api/account.js'
-import { newbie } from '@/store/achievement.js'
+import { newbie, climber } from '@/store/achievement.js'
 
 import Experience from "@/components/user/Experience.vue"
 import ClassCards from "@/components/report/ClassCards.vue"
@@ -113,6 +113,10 @@ export default {
     // }
      if ( newbie(this.isLogin, this.myCompleteAchievement) ) {
        this.$store.dispatch('completeAchieve', 1)
+     }
+
+     if ( climber( this.myCompleteAchievement ) ) {
+       this.$store.dispatch('completeAchieve', 2)
      }
 
   }

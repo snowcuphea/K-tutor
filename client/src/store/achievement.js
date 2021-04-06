@@ -7,9 +7,15 @@ function newbie( isLogin, completedAchieve) {
   }
 }
 
-// function climber( ) {
+function climber( completedAchieve ) {
 
-// }
+  if ( !completedAchieve.includes(2)) {
+    return true
+  } else {
+    return false
+  }
+
+}
 
 function flexx( completedAchieve ) {
 
@@ -41,9 +47,9 @@ function easyPeasy( grade, completedAchieve ) {
 
 }
 
-function intermediate( level, completedAchieve ) {
+function intermediate( completedAchieve ) {
 
-  if ( level == 5 && !completedAchieve.includes(6)) {
+  if ( !completedAchieve.includes(6)) {
     return true
   } else {
     return false
@@ -51,23 +57,37 @@ function intermediate( level, completedAchieve ) {
 
 }
 
-// function hardWorker(  , completedAchieve ) {
+function hardWorker( completedAchieve ) {
+
+  if ( !completedAchieve.includes(7) ) {
+    return true
+  } else {
+    return false
+  }
+
+}
+
+function getBreak( completedAchieve ) {
+
+  if ( !completedAchieve.includes(8) ) {
+    return true
+  } else {
+    return false
+  }
+
+}
+
+function becomingPro( grade, completedAchieve ) {
+
+  if ( grade ==  100 && !completedAchieve.includes(9)) {
+    return true
+  } else {
+    return false
+  }
+
+}
 
 
-// }
-
-// function getBreak(  , completedAchieve ) {
 
 
-// }
-
-// function becomingPro(  , completedAchieve) {
-
-
-// }
-
-
-
-
-
-export { newbie, flexx, slump, easyPeasy, intermediate }
+export { newbie, climber, flexx, slump, easyPeasy, intermediate, hardWorker, getBreak, becomingPro }

@@ -91,12 +91,12 @@ export default new Vuex.Store({
     LOGOUT ( state ){
       localStorage.removeItem("jwt")
       state.isLogin = false
-      state.userEmail= null,
-      state.nickName= null,
-      state.contiDay = 0,
-      state.studyCnt = 0,
-      state.userLevel= 1,
-      state.userExperience= 0,
+      state.userEmail= null
+      state.nickName= null
+      state.contiDay = 0
+      state.studyCnt = 0
+      state.userLevel= 1
+      state.userExperience= 0
       state.currentPage = ''
       state.currentPageValue = 2
       state.currentType = ''
@@ -294,8 +294,9 @@ export default new Vuex.Store({
       
       console.log(state.classList[idx])
 
-      if ( state.classList[idx]["already_learned"] == false) {
 
+      if ( state.classList[idx]["already_learned"] == false) {
+        
         state.classList[idx]["already_learned"] = true
 
         for ( let progress of state.recent_lc_progress){

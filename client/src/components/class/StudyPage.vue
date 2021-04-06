@@ -183,6 +183,9 @@
 
 <script>
 import { mapState,mapGetters } from 'vuex'
+import { hardWorker, getBreak } from '@/store/achievement.js'
+
+
 
 import Experience from "@/components/user/Experience.vue"
 
@@ -230,7 +233,15 @@ export default {
       if ( this.exp !== 0) {
         this.$store.dispatch('gainExperience', this.exp)
         this.$store.dispatch('sendCompleteLesson', this.currentClassIndex)
+        if ( hardWorker( this.myCompleteAchievement ) ) {
+          this.$store.dispatch('completeAchieve', 7)
+        }
+        if ( getBreak( this.myCompleteAchievement ) ) {
+          this.$store.dispatch('completeAchieve', 8)
+        }
       }
+
+
 
 
     },
@@ -362,7 +373,7 @@ export default {
       }
   },
   computed: {
-    ...mapState([ "lessonInfo", "currentClassIndex", "classList"]),
+    ...mapState([ "lessonInfo", "currentClassIndex", "classList", "myCompleteAchievement"]),
     ...mapGetters(["getCurrentClassLearnedKeword"]),
     choices() {
       var target = this.lessonInfo.lines_kr[1].split(' ')

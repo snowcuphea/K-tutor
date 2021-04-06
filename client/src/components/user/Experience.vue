@@ -33,7 +33,7 @@ export default {
   watch: {
     experience() {
       console.log("경험치 보고있다")
-      if ( intermediate( this.userLevel, this.myCompleteAchievement ) ) {
+      if ( intermediate( this.myCompleteAchievement ) ) {
         this.$store.dispatch('completeAchieve', 6)
       }
     }
