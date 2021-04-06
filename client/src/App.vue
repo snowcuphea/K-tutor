@@ -2,7 +2,7 @@
   <v-app>
     <Header class="header" v-if="isNotClass"/>
 
-    <v-main class="main">
+    <v-main id="main" class="main">
       <router-view />
     </v-main>
 
@@ -67,10 +67,15 @@
 
     },
     methods: {
-
+      scrollToTop() {
+        document.getElementById('main').scrollTop = 0
+      }
     },
-    created() {
-    },
+    watch: {
+      $route() {
+        this.scrollToTop()
+      }
+    }
   };
 </script>
 

@@ -61,6 +61,7 @@ export default {
     startTest() {
       if (this.ableTest() && this.testChance != 0 ){
         this.$store.dispatch( "getTestQuestions" )
+        this.$store.dispatch( "changeChance", "test")
         this.showDialog = !this.showDialog
       } else if ( this.testChance == 0 ) {
         const alertInfo = {
@@ -94,9 +95,8 @@ export default {
       } else {
         avg = 0
       }
-      
 
-      return avg
+      return +(Math.round(avg + "e+2") + "e-2")
     }
   },
   created() {

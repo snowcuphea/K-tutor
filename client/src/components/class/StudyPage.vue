@@ -86,8 +86,8 @@
           </v-card>
 
           <!-- step3 -->
-          <v-card class="step3" v-else tile height="100%" elevation="0" color="black">
-            <v-card tile height="70%" elevation="0">
+          <v-card class="step3" v-else tile height="100%" elevation="0">
+            <v-card tile elevation="0">
               <div v-for="(line, idx) in lessonInfo.lines_kr" :key="idx">
                 <div v-if="idx%2 == 0" class="pb-4">
                   <p class="pb-2">{{ lessonInfo.lines_kr[idx] }} </p>
@@ -112,10 +112,10 @@
                 <v-btn rounded @click="empty()"><v-icon class="mr-1">mdi-restart</v-icon>reset</v-btn>
               </div>
             </v-card>
-            <v-card tile height="30%" elevation="0">
+            <v-card tile elevation="0" class="mt-3">
               <v-btn v-for="(choice,idx) in choices" :key="idx" 
-              @click="putAnswer(choice)" :disabled="checked.includes(choice)"
-              class="mx-1 my-2"> {{ choice.slice(1) }} </v-btn>
+              @click="putAnswer(choice)" color="orange lighten-5" :disabled="checked.includes(choice)"
+              class="mx-1 mb-1"> {{ choice.slice(2) }} </v-btn>
             </v-card>
           </v-card>
 
@@ -277,7 +277,7 @@ export default {
     putAnswer(choice) {
       const temp = this.myAnswer.split(" ")
       this.checked.push(choice)
-      temp[this.order] = choice.slice(1)
+      temp[this.order] = choice.slice(2)
       this.order += 1
       this.myAnswer = temp.join(' ')
       if (this.order == temp.length ) {
@@ -291,12 +291,10 @@ export default {
     isCorrect() {
       const answer = this.lessonInfo.lines_kr[1].split(' ')
       const myanswer = this.myAnswer.split(' ')
-      // const operators = ['.','!','?']
       for ( let idx = 0; idx < answer.length ; idx++) {
         var compare = answer[idx]
         var myCompare = myanswer[idx]
         if ( compare !== myCompare ) {
-          console.log(compare, myCompare)
           return false
         }
       }
@@ -379,7 +377,11 @@ export default {
       var target = this.lessonInfo.lines_kr[1].split(' ')
       var newList = []
       for (var word in target) {
-        newList.push(String(word)+target[word])
+        if ( word < 10 ) {
+          newList.push("0"+String(word)+target[word])
+        } else {
+          newList.push(String(word)+target[word])
+        }
       }
       for (let i = newList.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));

@@ -6,7 +6,7 @@ import { getLessonList, getLessonInfo, sendLessonInfo, getQuizInfo } from "@/api
 import { getExamProblems, getExamReport } from "@/api/exam.js"
 import { getExp, getMyAcieve, addAchieve } from "@/api/account.js"
 
-import { flexx } from "@/store/achievement.js"
+import { climber, flexx } from "@/store/achievement.js"
 
 Vue.use(Vuex)
 
@@ -564,8 +564,11 @@ export default new Vuex.Store({
     showAlert( {commit}, alertInfo ) {
       commit("SHOWALERT", alertInfo)
     },
-    resetChance( { commit }, nowTime ) {
+    resetChance( { commit, state, dispatch }, nowTime ) {
       commit('RESETCHANCE', nowTime)
+      if ( climber( state.myCompleteAchievement ) ) {
+        dispatch('completeAchieve', 2)
+      }
     },
     changeChance( { commit }, type ) {
       commit('CHANGECHANCE', type)

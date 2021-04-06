@@ -32,13 +32,6 @@ export default {
       }
     }, 1500);
 
-    // console.log(this.time, this.nowTime.getDate())
-    if ( this.nowTime.getDate() !== this.time ) {
-      console.log(this.time, this.nowTime.getDate())
-      this.$store.dispatch( 'resetChance', this.nowTime.getDate() )
-    } 
-
-
   },
   computed: {
     ...mapState(['isLogin', 'time'])

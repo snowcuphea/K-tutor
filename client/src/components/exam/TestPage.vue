@@ -8,13 +8,13 @@
       scrollable
     >
       <v-card height="100%" width="100%" tile>
-        <v-btn
+        <!-- <v-btn
           icon
           class="close-dialog"
           @click="hideDialog"
         >
           <v-icon>mdi-close</v-icon>
-        </v-btn>
+        </v-btn> -->
 
         <v-card tile height="15%" elevation="0"
          class="d-flex justify-center align-center" >
@@ -23,7 +23,7 @@
         </v-card>
 
         <v-card tile height="75%" elevation="0">
-          <v-card tile height="55%" elevation="0"
+          <v-card tile height="50%" elevation="0"
           class="px-5">
             <p>Listen carefully and select the correct words in order.</p>
             <div class="px-2" v-for="(line, idx) in questions[targetQuestion].lines_kr" :key="idx">
@@ -46,11 +46,11 @@
             </div>
           </v-card>
 
-          <v-card tile height="45%" elevation="0"
+          <v-card tile height="50%" elevation="0"
           class="px-5 ">
             <v-btn v-for="(choice,idx) in choices" :key="idx" 
-            @click="putAnswer(choice)" :disabled="checked.includes(choice)"
-            class="ma-2"> {{ choice.slice(1) }} </v-btn>
+            @click="putAnswer(choice)" color="orange lighten-5" :disabled="checked.includes(choice)"
+            class="ma-2"> {{ choice.slice(2) }} </v-btn>
           </v-card>
 
         </v-card>
@@ -247,7 +247,6 @@ export default {
       }
 
       this.$store.dispatch('gainExperience', this.grade/10)
-      this.$store.dispatch( "changeChance", "test")
     },
     myCorrect() {
       const correctList = []
@@ -280,7 +279,7 @@ export default {
     putAnswer(choice) {
       const temp = this.myAnswer.split(" ")
       this.checked.push(choice)
-      temp[this.order] = choice.slice(1)
+      temp[this.order] = choice.slice(2)
       this.order += 1
       this.myAnswer = temp.join(' ')
       if (this.order == temp.length ) {
@@ -357,7 +356,12 @@ export default {
       var target = this.answers[this.targetQuestion].split(' ')
       var newList = []
       for (var word in target) {
-        newList.push(String(word)+target[word])
+        if ( word < 10 ) {
+          newList.push("0"+String(word)+target[word])
+        } else {
+          newList.push(String(word)+target[word])
+        }
+
       }
       for (let i = newList.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));

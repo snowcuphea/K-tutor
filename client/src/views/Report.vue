@@ -66,7 +66,7 @@
 <script>
 import { mapState } from 'vuex' 
 import { getInfo } from '@/api/account.js'
-import { newbie, climber } from '@/store/achievement.js'
+import { newbie } from '@/store/achievement.js'
 
 import Experience from "@/components/user/Experience.vue"
 import ClassCards from "@/components/report/ClassCards.vue"
@@ -102,13 +102,10 @@ export default {
       }
     )
 
-    console.log(this.time, this.nowTime.getDate())
+    // console.log(this.time, this.nowTime.getDate())
     if ( this.nowTime.getDate() !== this.time ) {
       console.log(this.time, this.nowTime.getDate())
       this.$store.dispatch( 'resetChance', this.nowTime.getDate() )
-      if ( climber( this.myCompleteAchievement ) ) {
-       this.$store.dispatch('completeAchieve', 2)
-      }
     } 
 
 

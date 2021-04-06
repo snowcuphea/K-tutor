@@ -90,8 +90,8 @@
       </v-col>
     </v-row>
 
-    <StudyPage :openStudyPage="openStudyPage" @closeStudyPage="endClass" v-if="openStudyPage"/>
-    <QuizPage :openQuizPage="openQuizPage" @closeQuizPage="endQuiz" v-if="openQuizPage" />
+    <StudyPage :openStudyPage="openStudyPage" @closeStudyPage="endClass" v-if="!(Object.entries(lessonInfo).length === 0 && lessonInfo.constructor === Object)"/>
+    <QuizPage :openQuizPage="openQuizPage" @closeQuizPage="endQuiz" v-if="!(Object.entries(quizInfo).length === 0 && quizInfo.constructor === Object)" />
 
   </v-container>
 </template>
@@ -151,11 +151,7 @@
         // 서버에 요청을 보내서 퀴즈 받아오기
         if ( this.ableQuiz() && this.quizChance != 0) {
           this.$store.dispatch('getQuizInfo')
-            .then(() => {
-              console.log(this.quizInfo)
-              this.openQuizPage = !this.openQuizPage
-            })
-            .catch(() => {})
+          this.openQuizPage = !this.openQuizPage
         } else if ( this.quizChance == 0) {
           const alertInfo = {
             status: true,
