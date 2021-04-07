@@ -217,7 +217,7 @@ class AchievementViewSet(viewsets.GenericViewSet,
         user_achievement = []
 
         for al in achievement_list:
-            if not Achievement.objects.filter(Q(user=user) & Q(id=al.id)).exists():
+            if not Achievement.objects.filter(Q(achieved_user=user) & Q(id=al.id)).exists():
                 user.achieved.add(al)
         ac_manage = user.achieved.all()
         for acm in ac_manage:
@@ -264,7 +264,11 @@ class AchievementViewSet(viewsets.GenericViewSet,
         """
         user = request.user
         achievement = Achievement.objects.get(id=request.data['AcId'])
-        ac_manage = AchieveManage.objects.get(user=user, achievement=achievement)
+        ac_manage = AchieveManage.objects.filter(Q(user=user) & Q(achievement=achievement))
+        if not ac_manage.exists():
+            user.achieved.add(achievement)
+            ac_manage = AchieveManage.objects.filter(Q(user=user) & Q(achievement=achievement))
+
         if ac_manage.done >= achievement.total:
             return Response("Already Achieved", status=status.HTTP_208_ALREADY_REPORTED)
         else:
