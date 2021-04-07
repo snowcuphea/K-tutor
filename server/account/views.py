@@ -216,12 +216,12 @@ class AchievementViewSet(viewsets.GenericViewSet,
         achievement_list = Achievement.objects.all()
         user_achievement = []
 
-        for al in achievement_list:
-            if not Achievement.objects.filter(Q(achieved_user=user) & Q(id=al.id)).exists():
-                user.achieved.add(al)
+        for acv in achievement_list:
+            if not Achievement.objects.filter(Q(achieved_user=user) & Q(id=acv.id)).exists():
+                user.achieved.add(acv)
         al = user.achieved.all()
         for acv in al:
-            acvm = AchieveManage.objects.get(user=user, achievement=a)
+            acvm = AchieveManage.objects.get(user=user, achievement=acv)
             if acvm.done >= acv.total:
                 user_achievement.append({
                     "achievement_id": acv.id,
