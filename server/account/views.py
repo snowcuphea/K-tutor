@@ -221,13 +221,14 @@ class AchievementViewSet(viewsets.GenericViewSet,
                 user.achieved.add(al)
         al = user.achieved.all()
         for acv in al:
-            if acv.done >= acv.total:
+            acvm = AchieveManage.objects.get(user=user, achievement=a)
+            if acvm.done >= acv.total:
                 user_achievement.append({
                     "achievement_id": acv.id,
                     "title": acv.title,
                     "content": acv.content,
                     "imgurl": acv.imgurl,
-                    "done": AchieveManage.objects.get(user=user, achievement=acv).done,
+                    "done": acvm.done,
                     "total": acv.total,
                     "great_kor": acv.great_kor,
                     "great_eng": acv.great_eng,
@@ -240,7 +241,7 @@ class AchievementViewSet(viewsets.GenericViewSet,
                     "title": acv.title,
                     "content": acv.content,
                     "imgurl": acv.imgurl,
-                    "done": AchieveManage.objects.get(user=user, achievement=acv).done,
+                    "done": acvm.done,
                     "total": acv.total,
                     "great_kor": acv.great_kor,
                     "great_eng": acv.great_eng,
