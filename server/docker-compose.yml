@@ -29,8 +29,6 @@ services:
       dockerfile: back.Dockerfile
     ports:
       - 8000:8000
-    depends_on:
-      - db
     expose:
       - 8000
     volumes:
