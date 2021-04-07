@@ -268,6 +268,8 @@ class AchievementViewSet(viewsets.GenericViewSet,
         if not ac_manage.exists():
             user.achieved.add(achievement)
             ac_manage = AchieveManage.objects.get(user=user, achievement=achievement)
+        else:
+            ac_manage = ac_manage[0]
 
         if ac_manage.done >= achievement.total:
             return Response("Already Achieved", status=status.HTTP_208_ALREADY_REPORTED)
