@@ -65,13 +65,11 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=100)),
                 ('content', models.CharField(max_length=200)),
-                ('done', models.IntegerField(default=0)),
                 ('total', models.IntegerField()),
                 ('imgurl', models.TextField(default='Need to add')),
                 ('great_kor', models.CharField(max_length=30)),
                 ('great_eng', models.CharField(max_length=30)),
                 ('great_dsc', models.TextField()),
-                ('achieved_user', models.ManyToManyField(related_name='achieved', to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(

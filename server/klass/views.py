@@ -22,10 +22,10 @@ from django.db.models import Q
 
 @api_view(['GET'])
 def updateDB(request):
-    update()
+    # update()
     # create_lc()
     # add_meaning_to_lc()
-    # updateLc()
+    updateLc()
     return Response("OK", status=status.HTTP_200_OK)
 
 
@@ -53,10 +53,13 @@ class CsViewSet(viewsets.GenericViewSet,
         ___
         """
         song_list = Cs.objects.filter(type="kpop")
-        cs_list_kor = list(set({x.name_kor.split(" - ")[0] for x in song_list}))
-        cs_list_eng = list(set({x.name_eng.split(" - ")[0] for x in song_list}))
-        cs_list = []
+        cs_list_kor = [x.name_kor.split(" - ")[0] for x in song_list]
+        cs_list_eng = [x.name_eng for x in song_list]
+        singer_list = set()
         for kor, eng in zip(cs_list_kor, cs_list_eng):
+            singer_list.add((kor, eng))
+        cs_list = []
+        for kor, eng in singer_list:
             cs_list.append({
                 "name_kor": kor,
                 "name_eng": eng,

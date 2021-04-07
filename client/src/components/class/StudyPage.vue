@@ -34,7 +34,7 @@
                <!-- <v-text>@/assets/images/card/{{lessonInfo.imgurl}}</v-text> -->
             </v-card>
             <v-card tile height="60%" elevation="0" class="d-flex flex-column pt-2 px-2">
-              <v-btn class="mb-4" fab small dark color="teal accent-4" @click="speech"><v-icon>mdi-volume-high</v-icon></v-btn>
+              <v-btn class="mb-4" fab small dark color="teal accent-4" elevation="3" @click="speech"><v-icon>mdi-volume-high</v-icon></v-btn>
               <div v-for="(line, idx) in lessonInfo.lines_kr" :key="idx">
                 <div v-if="idx%2 == 0" class="pb-2">
                   <p>{{ lessonInfo.lines_kr[idx] }} </p>
@@ -56,7 +56,7 @@
             <v-card tile height="25%" elevation="0" class="d-flex flex-column">
               <div class="d-flex align-center justify-space-between">
                 <h3>[ Key Sentence ]</h3>
-                <v-btn fab small dark @click="speech_keysentence"><v-icon>mdi-volume-high</v-icon></v-btn>
+                <v-btn fab small dark color="teal accent-4" elevation="3" @click="speech_keysentence"><v-icon>mdi-volume-high</v-icon></v-btn>
               </div>
               <div class="pl-5 pt-2">
                 <p> {{ lessonInfo.lines_kr[1] }} </p>
@@ -76,7 +76,7 @@
             <v-card tile height="50%" elevation="0">
               <div class="d-flex align-center justify-space-between">
                 <h3>[ Example ]</h3>
-                <v-btn fab small dark class="" @click="speech_example"><v-icon>mdi-volume-high</v-icon></v-btn>
+                <v-btn fab small dark color="teal accent-4" elevation="3" @click="speech_example"><v-icon>mdi-volume-high</v-icon></v-btn>
               </div>
               <div class="pl-5 pt-2" v-for="(example, idx) in lessonInfo.example_kr" :key="idx">
                 <p>{{ lessonInfo.example_kr[idx] }} </p>
@@ -86,8 +86,8 @@
           </v-card>
 
           <!-- step3 -->
-          <v-card class="step3" v-else tile height="100%" elevation="0" color="black">
-            <v-card tile height="70%" elevation="0">
+          <v-card class="step3" v-else tile height="100%" elevation="0">
+            <v-card tile elevation="0">
               <div v-for="(line, idx) in lessonInfo.lines_kr" :key="idx">
                 <div v-if="idx%2 == 0" class="pb-4">
                   <p class="pb-2">{{ lessonInfo.lines_kr[idx] }} </p>
@@ -107,15 +107,15 @@
                 <span> Source : {{ lessonInfo.title }} </span>
               </div>
 
-              <div class="d-flex justify-space-between">
-                <v-btn fab small dark class="ml-1" @click="speech_keysentence"><v-icon>mdi-volume-high</v-icon></v-btn>
-                <v-btn plain icon @click="empty()"><v-icon>mdi-restart</v-icon></v-btn>
+              <div class="d-flex justify-space-between mt-3 mx-2">
+                <v-btn fab small dark color="teal accent-4" elevation="3" class="ml-1" @click="speech_keysentence"><v-icon>mdi-volume-high</v-icon></v-btn>
+                <v-btn rounded @click="empty()"><v-icon class="mr-1">mdi-restart</v-icon>reset</v-btn>
               </div>
             </v-card>
-            <v-card tile height="30%" elevation="0">
+            <v-card tile elevation="0" class="mt-3">
               <v-btn v-for="(choice,idx) in choices" :key="idx" 
-              @click="putAnswer(choice)" :disabled="checked.includes(choice)"
-              class="mx-1 my-2"> {{ choice.slice(1) }} </v-btn>
+              @click="putAnswer(choice)" color="orange lighten-5" :disabled="checked.includes(choice)"
+              class="mx-1 mb-1"> {{ choice.slice(2) }} </v-btn>
             </v-card>
           </v-card>
 
@@ -183,6 +183,9 @@
 
 <script>
 import { mapState,mapGetters } from 'vuex'
+import { hardWorker, getBreak } from '@/store/achievement.js'
+
+
 
 import Experience from "@/components/user/Experience.vue"
 
@@ -230,7 +233,15 @@ export default {
       if ( this.exp !== 0) {
         this.$store.dispatch('gainExperience', this.exp)
         this.$store.dispatch('sendCompleteLesson', this.currentClassIndex)
+        if ( hardWorker( this.myCompleteAchievement ) ) {
+          this.$store.dispatch('completeAchieve', 7)
+        }
+        if ( getBreak( this.myCompleteAchievement ) ) {
+          this.$store.dispatch('completeAchieve', 8)
+        }
       }
+
+
 
 
     },
@@ -266,7 +277,7 @@ export default {
     putAnswer(choice) {
       const temp = this.myAnswer.split(" ")
       this.checked.push(choice)
-      temp[this.order] = choice.slice(1)
+      temp[this.order] = choice.slice(2)
       this.order += 1
       this.myAnswer = temp.join(' ')
       if (this.order == temp.length ) {
@@ -280,12 +291,10 @@ export default {
     isCorrect() {
       const answer = this.lessonInfo.lines_kr[1].split(' ')
       const myanswer = this.myAnswer.split(' ')
-      // const operators = ['.','!','?']
       for ( let idx = 0; idx < answer.length ; idx++) {
         var compare = answer[idx]
         var myCompare = myanswer[idx]
         if ( compare !== myCompare ) {
-          console.log(compare, myCompare)
           return false
         }
       }
@@ -362,13 +371,17 @@ export default {
       }
   },
   computed: {
-    ...mapState([ "lessonInfo", "currentClassIndex", "classList"]),
+    ...mapState([ "lessonInfo", "currentClassIndex", "classList", "myCompleteAchievement"]),
     ...mapGetters(["getCurrentClassLearnedKeword"]),
     choices() {
       var target = this.lessonInfo.lines_kr[1].split(' ')
       var newList = []
       for (var word in target) {
-        newList.push(String(word)+target[word])
+        if ( word < 10 ) {
+          newList.push("0"+String(word)+target[word])
+        } else {
+          newList.push(String(word)+target[word])
+        }
       }
       for (let i = newList.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));

@@ -8,13 +8,13 @@
       scrollable
     >
       <v-card height="100%" width="100%" tile>
-        <v-btn
+        <!-- <v-btn
           icon
           class="close-dialog"
           @click="hideDialog"
         >
           <v-icon>mdi-close</v-icon>
-        </v-btn>
+        </v-btn> -->
 
         <v-card tile height="15%" elevation="0"
          class="d-flex justify-center align-center" >
@@ -23,7 +23,7 @@
         </v-card>
 
         <v-card tile height="75%" elevation="0">
-          <v-card tile height="55%" elevation="0"
+          <v-card tile height="50%" elevation="0"
           class="px-5">
             <p>Listen carefully and select the correct words in order.</p>
             <div class="px-2" v-for="(line, idx) in questions[targetQuestion].lines_kr" :key="idx">
@@ -41,16 +41,16 @@
             </div>
 
             <div class="d-flex justify-space-between mt-2">
-              <v-btn fab small dark @click="speech"><v-icon>mdi-volume-high</v-icon></v-btn>
-              <v-btn plain icon @click="empty(targetQuestion)"><v-icon>mdi-restart</v-icon></v-btn>
+              <v-btn fab small dark color="teal accent-4" elevation="3" @click="speech"><v-icon>mdi-volume-high</v-icon></v-btn>
+              <v-btn @click="empty(targetQuestion)"><v-icon class="mr-1">mdi-restart</v-icon>reset</v-btn>
             </div>
           </v-card>
 
-          <v-card tile height="45%" elevation="0"
+          <v-card tile height="50%" elevation="0"
           class="px-5 ">
             <v-btn v-for="(choice,idx) in choices" :key="idx" 
-            @click="putAnswer(choice)" :disabled="checked.includes(choice)"
-            class="ma-2"> {{ choice.slice(1) }} </v-btn>
+            @click="putAnswer(choice)" color="orange lighten-5" :disabled="checked.includes(choice)"
+            class="ma-2"> {{ choice.slice(2) }} </v-btn>
           </v-card>
 
         </v-card>
@@ -134,6 +134,8 @@
 import Experience from "@/components/user/Experience.vue"
 import { mapState } from "vuex"
 import { sendExamResult } from "@/api/exam.js"
+
+import { slump, easyPeasy, becomingPro } from '@/store/achievement.js'
 
 
 export default {
@@ -226,7 +228,7 @@ export default {
       sendExamResult(
         this.grade,
         (res) => {
-          console.log(res.data)
+          console.log("시험성적 보내기", res.data)
           this.$store.dispatch( "getTestGrades" )
         },
         (err) => {
@@ -234,9 +236,17 @@ export default {
         }
       )
 
+      if ( slump( this.grade, this.myCompleteAchievement ) ) {
+        this.$store.dispatch('completeAchieve', 4)
+      }
+      if ( easyPeasy( this.grade, this.myCompleteAchievement ) ) {
+        this.$store.dispatch('completeAchieve', 5)
+      }
+      if ( becomingPro( this.grade, this.myCompleteAchievement ) ) {
+        this.$store.dispatch('completeAchieve', 9)
+      }
+
       this.$store.dispatch('gainExperience', this.grade/10)
-      this.$store.dispatch( "getTestGrades" )
-      this.$store.dispatch( "changeChance", "test")
     },
     myCorrect() {
       const correctList = []
@@ -269,7 +279,7 @@ export default {
     putAnswer(choice) {
       const temp = this.myAnswer.split(" ")
       this.checked.push(choice)
-      temp[this.order] = choice.slice(1)
+      temp[this.order] = choice.slice(2)
       this.order += 1
       this.myAnswer = temp.join(' ')
       if (this.order == temp.length ) {
@@ -340,12 +350,18 @@ export default {
 
   },
   computed: {
-    ...mapState([ "testQuestions" ]),
+    ...mapState([ "testQuestions", "myCompleteAchievement" ]),
     choices() {
+      
       var target = this.answers[this.targetQuestion].split(' ')
       var newList = []
       for (var word in target) {
-        newList.push(String(word)+target[word])
+        if ( word < 10 ) {
+          newList.push("0"+String(word)+target[word])
+        } else {
+          newList.push(String(word)+target[word])
+        }
+
       }
       for (let i = newList.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));

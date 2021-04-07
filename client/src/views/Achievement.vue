@@ -179,11 +179,10 @@ export default {
       this.$store.dispatch( 'resetChance', this.nowTime.getDate() )
     } 
 
-
   },
   computed: {
     ...mapGetters(["getCurrentAchieved"]),
-    ...mapState(["time"])
+    ...mapState(["time", "myCompleteAchievement"])
   }
 }
 </script>

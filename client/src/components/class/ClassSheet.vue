@@ -14,23 +14,33 @@
       </v-col>
     </v-row>
 
-    <v-row >
-      <v-col cols="8" class="d-flex align-center" >
-        <span v-if="currentClass.level == '0'">Difficulty: Beginner</span>
-        <span v-else-if="currentClass.level == '1'">Difficulty: Intermediate</span>
-        <span v-else-if="currentClass.level == '2'">Difficulty: Advanced</span>
-        <span v-else>Difficulty: Basic</span>
-      </v-col>
-      <v-col cols="4" class="d-flex justify-end">
-        <v-btn @click="startQuiz()"> quiz </v-btn>
-        <div class="d-flex">
-          <v-icon v-for="left in chanceUsed()" :key="left">mdi-heart</v-icon>
-        </div>
-        <div class="d-flex">
-          <v-icon v-for="used in quizChance" :key="used" color="red">mdi-heart</v-icon>
+    <v-row no-gutters>
+      <v-col class="my-1">
+        <div class="d-flex justify-end">
+          <span class="text--secondary">chances: </span>
+          <div class="d-flex">
+            <v-icon v-for="left in chanceUsed()" :key="left" small>mdi-heart</v-icon>
+          </div>
+          <div  class="d-flex">
+            <v-icon v-for="used in quizChance" :key="used" color="red" small>mdi-heart</v-icon>
+          </div>
         </div>
       </v-col>
     </v-row>
+
+    <v-row no-gutters >
+      <v-col cols="8" class="d-flex align-center" >
+        <span v-if="currentClass.level == 0">Difficulty: Beginner</span>
+        <span v-else-if="currentClass.level == 1">Difficulty: Intermediate</span>
+        <span v-else-if="currentClass.level == 2">Difficulty: Advanced</span>
+        <span v-else>Difficulty: Basic</span>
+      </v-col>
+      <v-col cols="4" class="d-flex justify-end">
+        <v-btn class="main-bg-color-imp" dark rounded  @click="startQuiz()"> quiz </v-btn>
+      </v-col>
+    </v-row>
+
+    
 
     <v-row>
       <v-col>
@@ -80,8 +90,8 @@
       </v-col>
     </v-row>
 
-    <StudyPage :openStudyPage="openStudyPage" @closeStudyPage="endClass" v-if="openStudyPage"/>
-    <QuizPage :openQuizPage="openQuizPage" @closeQuizPage="endQuiz" v-if="openQuizPage" />
+    <StudyPage :openStudyPage="openStudyPage" @closeStudyPage="endClass" v-if="!(Object.entries(lessonInfo).length === 0 && lessonInfo.constructor === Object)"/>
+    <QuizPage :openQuizPage="openQuizPage" @closeQuizPage="endQuiz" v-if="!(Object.entries(quizInfo).length === 0 && quizInfo.constructor === Object)" />
 
   </v-container>
 </template>
@@ -141,11 +151,7 @@
         // 서버에 요청을 보내서 퀴즈 받아오기
         if ( this.ableQuiz() && this.quizChance != 0) {
           this.$store.dispatch('getQuizInfo')
-            .then(() => {
-              console.log(this.quizInfo)
-              this.openQuizPage = !this.openQuizPage
-            })
-            .catch(() => {})
+          this.openQuizPage = !this.openQuizPage
         } else if ( this.quizChance == 0) {
           const alertInfo = {
             status: true,

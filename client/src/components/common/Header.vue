@@ -1,7 +1,7 @@
 <template>
-  <v-container class="head d-flex justify-center">
+  <div class="head d-flex flex-column justify-center">
     <h2> {{ section }} </h2>
-  </v-container>
+  </div>
 </template>
 
 <script>
@@ -35,6 +35,7 @@ export default {
 
 .head {
   border-bottom: 1px solid;
+  text-align: center;
 }
 
 

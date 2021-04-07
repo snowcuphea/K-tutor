@@ -1,9 +1,9 @@
 <template>
   <div id="class">
     <v-app-bar-nav-icon class="nav-icon" @click="drawer = !drawer" />
-    <v-container class="class-head d-flex justify-center">
+    <div class="class-head d-flex flex-column justify-center">
       <h2> Class </h2>
-    </v-container>
+    </div>
 
     <v-navigation-drawer v-model="drawer" stateless absolute overlay-opacity="0" temporary style="z-index:66; position: fixed;">
       <v-btn
@@ -135,6 +135,7 @@ export default {
   height: 60px;
   border-bottom: 1px solid;
   z-index: 49;
+  text-align: center;
 }
 
 

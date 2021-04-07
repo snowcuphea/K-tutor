@@ -22,9 +22,9 @@ export default {
   },
   methods: {
     modalClick() {
-      // if (this.isDone() ) {
-      //   }
-      this.$emit('update2',this.modalItem)
+      if (this.isDone() ) {
+        this.$emit('update2',this.modalItem)
+      }
     },
     isDone() {
       if (this.modalItem.status == 1) {

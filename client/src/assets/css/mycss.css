@@ -16,6 +16,16 @@
 
 }
 
+.main-bg-color-imp{
+  background-color: #62D2A2 !important;
+
+}
+
+.main-ft-color-imp{
+  color: #62D2A2 !important;
+
+}
+
 .alert-info {
   /* position: fixed !important; */
   top: 1.5em !important;

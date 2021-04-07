@@ -6,6 +6,8 @@
 
 <script>
 import Chart from 'chart.js'
+import { mapState } from 'vuex'
+
 
 export default {
   name: 'GradeChart',
@@ -86,6 +88,17 @@ export default {
     new Chart(ctx, this.gradeChart)
   },
   created() {
+  },
+  computed: {
+    ...mapState(["userGrade_date", "userGrade_score" ])
+  },
+  watch: {
+    userGrade_date() {
+      this.gradeChart.data.labels = this.userGrade_date
+      this.gradeChart.data.datasets[0].data = this.userGrade_score
+      const ctx = document.getElementById('grade-chart')
+      new Chart(ctx, this.gradeChart)
+    }
   }
 }
 </script>

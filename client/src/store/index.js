@@ -6,6 +6,8 @@ import { getLessonList, getLessonInfo, sendLessonInfo, getQuizInfo } from "@/api
 import { getExamProblems, getExamReport } from "@/api/exam.js"
 import { getExp, getMyAcieve, addAchieve } from "@/api/account.js"
 
+import { climber, flexx } from "@/store/achievement.js"
+
 Vue.use(Vuex)
 
 
@@ -21,7 +23,7 @@ export default new Vuex.Store({
     required_exp: [
       0, 10, 20, 30, 50, 70,
       100, 150, 200, 250, 300,
-      400, 500, 600, 750, 1000
+      400, 500, 750, 1000 
     ],
     
     userGrade_date : [], 
@@ -62,7 +64,7 @@ export default new Vuex.Store({
     contiDay: 0,
 
     AchievementList: [],
-  
+    myCompleteAchievement: [],
   },
   
   getters: {
@@ -91,12 +93,12 @@ export default new Vuex.Store({
     LOGOUT ( state ){
       localStorage.removeItem("jwt")
       state.isLogin = false
-      state.userEmail= null,
-      state.nickName= null,
-      state.contiDay = 0,
-      state.studyCnt = 0,
-      state.userLevel= 1,
-      state.userExperience= 0,
+      state.userEmail= null
+      state.nickName= null
+      state.contiDay = 0
+      state.studyCnt = 0
+      state.userLevel= 1
+      state.userExperience= 0
       state.currentPage = ''
       state.currentPageValue = 2
       state.currentType = ''
@@ -112,12 +114,13 @@ export default new Vuex.Store({
       state.testChance = 2
       state.quizChance = 3
       state.AchievementList = []
+      state.myCompleteAchievement = []
       state.quizInfo = {}
       state.testQuestions = []
     },
 
     GETCLASSLIST(state, titlelist){
-      console.log(titlelist)
+      // console.log(titlelist)
       state.allTitleList = titlelist
     },
   
@@ -293,8 +296,9 @@ export default new Vuex.Store({
       
       console.log(state.classList[idx])
 
-      if ( state.classList[idx]["already_learned"] == false) {
 
+      if ( state.classList[idx]["already_learned"] == false) {
+        
         state.classList[idx]["already_learned"] = true
 
         for ( let progress of state.recent_lc_progress){
@@ -330,6 +334,7 @@ export default new Vuex.Store({
     SAVEACIEVEMENTLIST ( state, achievements ) {
       // console.log(achievements)
       const achieve_list = []
+      const tempComplete = []
       for (let achievement of achievements) {
         const achieve_arr = {
           achievement_id: achievement.achievement_id, 
@@ -344,18 +349,24 @@ export default new Vuex.Store({
           great_dsc: achievement.great_dsc,
         }
         achieve_list.push(achieve_arr)
+        
+        if (achievement.status == 1) {
+          tempComplete.push(achievement.achievement_id)
+        }
       }
       state.AchievementList = achieve_list
+      state.myCompleteAchievement = tempComplete
       // console.log("store", state.AchievementList)
+      // console.log("store", state.myCompleteAchievement)
     },
 
     SHOWALERT ( state, alertInfo ) {
       
-      var timeout = 2000
+      var timeout = 3000
 
-      if ( alertInfo.color == "error" || alertInfo.color == "warning" ) {
-        timeout = 3000
-      }
+      // if ( alertInfo.color == "error" || alertInfo.color == "warning" ) {
+      //   timeout = 3000
+      // }
 
       state.alert = alertInfo
       setTimeout(() => {
@@ -367,6 +378,7 @@ export default new Vuex.Store({
       state.quizChance = 3
       state.testChance = 2
       state.time = nowTime
+      state.isSameDay = false
       console.log("reset 됐어")
       console.log(state.time, state.quizChance, state.testChance)
     },
@@ -379,20 +391,14 @@ export default new Vuex.Store({
         console.log(state.quizChance)
       }
     },
-    UPDATEACHIEVEMENT( state, achieveId) {
-      state.AchievementList[achieveId-1].done += 1
-      console.log(state.AchievementList)
-    },
     COMPLETEACHIEVE ( state, achieveId ) {
-      state.AchievementList[achieveId-1].done += 1
-      state.AchievementList[achieveId-1].status = 1
-      console.log(state.AchievementList)
+      state.myCompleteAchievement.push(achieveId)
     },
     SETTIME ( state ) {
       state.time = new Date().getDate()
     },
     UPDATEUSERINFO ( state, userInfo ) {
-      state.nickName = userInfo.userNickname
+      state.nickName = userInfo
     }
     
   },
@@ -408,20 +414,23 @@ export default new Vuex.Store({
     changePage ({ commit }, changeItem ) {
       commit('CHANGECURRENTPAGE', changeItem)
     },
-    gainExperience ({ commit }, experience) {
-      setTimeout( function() {
-        commit('CHANGEEXPERIENCE', experience )
-      }, 1500)
+    gainExperience ({ commit,state }, experience) {
 
-      getExp(
-        experience,
-        (res) => {
-          console.log(res.data)
-        },
-        (err) => {
-          console.log(err)
-        }
-      )
+      if (state.userLevel < 15) {
+        setTimeout( function() {
+          commit('CHANGEEXPERIENCE', experience )
+        }, 1500)
+  
+        getExp(
+          experience,
+          (res) => {
+            console.log(res.data)
+          },
+          (err) => {
+            console.log(err)
+          }
+        )
+      }
 
     },
     changeCurrentClass ({ commit }, item ) {
@@ -555,32 +564,35 @@ export default new Vuex.Store({
     showAlert( {commit}, alertInfo ) {
       commit("SHOWALERT", alertInfo)
     },
-    resetChance( { commit }, nowTime ) {
+    resetChance( { commit, state, dispatch }, nowTime ) {
       commit('RESETCHANCE', nowTime)
+      if ( climber( state.myCompleteAchievement ) ) {
+        dispatch('completeAchieve', 2)
+      }
     },
     changeChance( { commit }, type ) {
       commit('CHANGECHANCE', type)
     },
-    completeAchieve({ dispatch, commit, state }, id ) {
+    completeAchieve({ dispatch, commit ,state }, id ) {
       
       if ( state.AchievementList[id-1].status == 0) {
         
         addAchieve(
           id,
           (res) => {
-            console.log(res.data)
-            if (res.data ) {
-              if (res.data == "completed") { 
-                commit( "COMPLETEACHIEVE", id )
-                const alertInfo = {
-                  status: true,
-                  color: "success",
-                  content: `Achievement ${state.AchievementList[id-1].title} completed.`
-                }
-                dispatch('showAlert', alertInfo)
-              } else {
-                this.commit( "UPDATEACHIEVEMENT", id)
+            if (res.data == "Achieved") { 
+              commit( "COMPLETEACHIEVE", id )
+              const alertInfo = {
+                status: true,
+                color: "success",
+                content: `Achievement "${state.AchievementList[id-1].title}" completed.`
               }
+              dispatch('showAlert', alertInfo)
+              if ( flexx( state.myCompleteAchievement ) ) {
+                dispatch('completeAchieve', 3)
+              }
+            } else {
+              console.log(res.data)
             }
           },
           (err) => {
@@ -594,7 +606,7 @@ export default new Vuex.Store({
     setTime( { commit }) {
       commit('SETTIME')
     },
-    updateUser ( { commit }, userInfo ) {
+    updateUserInfo ( { commit }, userInfo ) {
       commit ( 'UPDATEUSERINFO', userInfo )
 
     }

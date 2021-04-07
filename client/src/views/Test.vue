@@ -21,7 +21,7 @@
     <Experience :experience="-1" />
 
     <div class="d-flex justify-center">
-      <v-btn elevation="0" class="mt-5" @click="startTest">Take a Test</v-btn>
+      <v-btn elevation="2" class="main-bg-color-imp mt-5 text-subtitle-1" large dark @click="startTest">Take a Test</v-btn>
     </div>
     <TestPage :showDialog="showDialog" @hideDialog="showDialog = !showDialog" v-if="showDialog"/>
     
@@ -61,6 +61,7 @@ export default {
     startTest() {
       if (this.ableTest() && this.testChance != 0 ){
         this.$store.dispatch( "getTestQuestions" )
+        this.$store.dispatch( "changeChance", "test")
         this.showDialog = !this.showDialog
       } else if ( this.testChance == 0 ) {
         const alertInfo = {
@@ -94,9 +95,8 @@ export default {
       } else {
         avg = 0
       }
-      
 
-      return avg
+      return +(Math.round(avg + "e+2") + "e-2")
     }
   },
   created() {
@@ -108,7 +108,9 @@ export default {
     if ( this.nowTime.getDate() !== this.time ) {
       console.log(this.time, this.nowTime.getDate())
       this.$store.dispatch( 'resetChance', this.nowTime.getDate() )
-    } 
+    }
+    
+    this.$store.dispatch( 'getTestGrades' )
   }
 
 

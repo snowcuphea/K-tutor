@@ -3,7 +3,8 @@
     <div class="d-flex">
       <p class="mb-0">Lv.{{ userLevel }}</p>
       <v-spacer></v-spacer>
-      <p class="mb-0">{{ userExperience }}/{{ required_exp[this.userLevel] }}</p>
+      <p class="mb-0" v-if="userLevel < 15">{{ userExperience }}/{{ required_exp[this.userLevel] }}</p>
+      <p class="mb-0" v-else>MAX</p>
     </div>
     <v-progress-linear
       :value="progress" height="10" color="teal accent-4" striped>
@@ -17,13 +18,24 @@
 <script>
 import { mapState } from 'vuex'
 
+import { intermediate } from '@/store/achievement.js'
+
+
 export default {
   props: [ 'experience' ],
   computed: {
-    ...mapState(['userLevel', 'userExperience','required_exp']),
+    ...mapState(['userLevel', 'userExperience','required_exp', 'myCompleteAchievement']),
 
     progress() {
       return this.userExperience/this.required_exp[this.userLevel] * 100
+    }
+  },
+  watch: {
+    userLevel() {
+      console.log("레벨업했다")
+      if ( intermediate( this.myCompleteAchievement ) ) {
+        this.$store.dispatch('completeAchieve', 6)
+      }
     }
   }
 }

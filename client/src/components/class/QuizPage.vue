@@ -23,8 +23,8 @@
         </v-card>
 
         <v-card tile height="76%" elevation="0" class="px-5">
-          <v-card class="quiz" tile height="100%" elevation="0" color="black">
-            <v-card tile height="65%" elevation="0">
+          <v-card class="quiz" tile height="100%" elevation="0">
+            <v-card tile elevation="0">
               <div class="px-2" v-for="(line, idx) in quizInfo.quizzes[currentProblem].lines_kr" :key="idx">
                 <div v-if="idx%2 == 0" class="pb-4">
                   <p class="pb-2">{{ quizInfo.quizzes[currentProblem].lines_kr[idx] }} </p>
@@ -45,14 +45,14 @@
               </div>
 
               <div class="d-flex justify-space-between">
-                <v-btn fab small dark @click="speech"><v-icon>mdi-volume-high</v-icon></v-btn>
-                <v-btn plain icon @click="empty()"><v-icon>mdi-restart</v-icon></v-btn>
+                <v-btn fab small dark color="teal accent-4" elevation="3" @click="speech"><v-icon>mdi-volume-high</v-icon></v-btn>
+                <v-btn @click="empty()"><v-icon class="mr-1">mdi-restart</v-icon>reset</v-btn>
               </div>
             </v-card>
-            <v-card tile height="35%" elevation="0">
+            <v-card tile elevation="0" class="mt-3">
               <v-btn v-for="(choice,idx) in choices" :key="idx" 
-              @click="putAnswer(choice)" :disabled="checked.includes(choice)"
-              class="mx-1 my-2"> {{ choice.slice(1) }} </v-btn>
+              @click="putAnswer(choice)" color="orange lighten-5" :disabled="checked.includes(choice)"
+              class="mx-1 my-2"> {{ choice.slice(2) }} </v-btn>
             </v-card>
           </v-card>
 
@@ -172,7 +172,7 @@ export default {
     putAnswer(choice) {
       const temp = this.myAnswer.split(" ")
       this.checked.push(choice)
-      temp[this.order] = choice.slice(1)
+      temp[this.order] = choice.slice(2)
       this.order += 1
       this.myAnswer = temp.join(' ')
       if (this.order == temp.length ) {
@@ -231,7 +231,11 @@ export default {
       var target = this.quizInfo.quizzes[this.currentProblem].lines_kr[1].split(' ')
       var newList = []
       for (var word in target) {
-        newList.push(String(word)+target[word])
+        if ( word < 10 ) {
+          newList.push("0"+String(word)+target[word])
+        } else {
+          newList.push(String(word)+target[word])
+        }
       }
       for (let i = newList.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
