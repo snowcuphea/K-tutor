@@ -2,7 +2,7 @@
   <v-container class="classCards">
     <v-card v-for="(card,idx) in recent_learned_lc" :key="idx"
     class="mr-3 class-card" elevation="0" tile>
-      <img :src="require(`@/assets/images/card/${card.imgurl}`)" alt="아직읎다" height="43%">
+      <img :src="require(`@/assets/images/card/${card.imgurl}`)" alt="poster image" height="43%">
       <p class="card-line"> {{ card.main_kw_kor }} </p>
       <p class="card-line"> {{ card.main_kw_eng }} </p>
     </v-card>

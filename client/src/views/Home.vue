@@ -1,7 +1,7 @@
 <template>
   <v-card height="100%" class="start-home d-flex justify-center align-center">
 
-    <img src="@/assets/logo.png" height="100px" width="100px" alt="">
+    <img src="@/assets/logo.png" height="100px" width="100px" alt="poster image">
   </v-card>
 
 </template>

@@ -9,22 +9,22 @@
     <img src="https://img.shields.io/badge/language-python%2C javascript-yellowgreen">
     <img src="https://img.shields.io/badge/swagger-valid-brightgreen">
 </div>
-
+프로젝트 소개~
 
 
 
 
 ## 목차
 
-### 팀원소개 
-
-### 프로젝트 기획
-
-### 프로젝트 소개
+### [팀원소개](#팀원소개) 
 
 ### 기술스택
 
-### Convention 
+### 구동방법
+
+
+
+
 
 
 
@@ -34,22 +34,14 @@
 
 
 
-## 프로젝트 기획
-
-
-
-## 프로젝트 소개
-
-
-
 ## 기술스택
 
 ### Bigdata 분석
 
 | python 라이브러리 | Version | Comment                                |
 | :---------------: | :-----: | :------------------------------------- |
-|       axios       | 0.21.1  | 서버로 요청을 보내기 위해 사용         |
-|    vue-router     |  3.5.1  | 요청 URL에 따라 브라우저에서 돔을 변경 |
+|                   | 0.21.1  | 서버로 요청을 보내기 위해 사용         |
+|                   |  3.5.1  | 요청 URL에 따라 브라우저에서 돔을 변경 |
 
 ### Backend 구성 요소
 
@@ -84,4 +76,5 @@
 
 
 
-## Convention
+## 구동방법
+
