@@ -6,7 +6,7 @@ services:
     ports:
       - '8081:8081'
     volumes:
-      - .:/code
+      - ./server:/server
       - ./nginx:/server/nginx/conf
       - ./static_root:/static
     depends_on:
@@ -39,5 +39,5 @@ services:
     ports:
       - 8080:8080
     volumes:
-      -  ./client:/app
+      -  ./client:/client
       - ./staticfiles:/staticfiles

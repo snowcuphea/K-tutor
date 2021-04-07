@@ -1,7 +1,7 @@
 FROM node:lts-alpine
 
 MAINTAINER dudrlf1859@naver.com
-WORKDIR /app
+WORKDIR /client
 ADD package.json ./
 ADD . ./
 CMD npm install && npm run serve
