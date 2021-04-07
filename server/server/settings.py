@@ -24,7 +24,7 @@ SECRET_KEY = '$hg$^-wim2pk)gn9+49#3jc4im9xor#6!c9vk6fzcow*y8@8fw'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'j4a303.p.ssafy.io', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'j4a303.p.ssafy.io']
 
 # Application definition
 
@@ -155,3 +155,16 @@ EMAIL_HOST_USER = 'malmoongchi@gmail.com'
 EMAIL_HOST_PASSWORD = 'k-tutormalmoe'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'malmoongchi@gmail.com'
+
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT_DIR = os.path.dirname(BASE_DIR)
+
+STATIC_URL = '/static'
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [
+    STATIC_DIR,
+]
+
+STATIC_ROOT = os.path.join(ROOT_DIR, '.staticfiles')
