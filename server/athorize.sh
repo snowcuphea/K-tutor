@@ -5,10 +5,10 @@ if ! [ -x "$(command -v docker-compose)" ]; then
   exit 1
 fi
 
-domains="expamle.org"
+domains="j4a303.p.ssafy.io.com"
 rsa_key_size=4096
 data_path="../volumes/certbot"
-email="email@gmail.com" # Adding a valid address is strongly recommended
+email="dudrlf1859@naver.com" # Adding a valid address is strongly recommended
 staging=0 # Set to 1 if you're testing your setup to avoid hitting request limits
 
 if [ -d "$data_path" ]; then
