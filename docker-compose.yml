@@ -11,16 +11,6 @@ services:
       - ./staticfiles:/static
     depends_on:
       - server
-  db:
-    image: dudrlf1859/k-tutor
-    container_name: k-tutor
-    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
-    ports:
-      - 3306:3306
-    environment:
-      MYSQL_ROOT_PASSWORD: emh4baTVMa3SYmSf
-    stdin_open: true
-    tty: true
   server:
     command: bash -c 'while true; do gunicorn ./server/wsgi:application --bind 0.0.0.0:8000; sleep 2; done'
     container_name: backend
@@ -29,8 +19,6 @@ services:
       dockerfile: back.Dockerfile
     ports:
       - 8000:8000
-    depends_on:
-      - db
     expose:
       - 8000
     volumes:
