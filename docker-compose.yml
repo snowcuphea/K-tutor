@@ -8,15 +8,13 @@ services:
     volumes:
       - .:/code
       - ./nginx:/server/nginx/conf
-      - ./staticfiles:/static
+      - ./static_root:/static
     depends_on:
       - server
   server:
-    command: bash -c 'while true; do gunicorn server.server.wsgi:application --bind 0.0.0.0:8000; sleep 2; done'
+    command: bash -c 'while true; do gunicorn server.wsgi:application --bind 0.0.0.0:8000; sleep 2; done'
     container_name: backend
-    build:
-      context: server
-      dockerfile: back.Dockerfile
+    working_dir: /server
     ports:
       - 8000:8000
     expose:
