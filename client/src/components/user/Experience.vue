@@ -32,7 +32,6 @@ export default {
   },
   watch: {
     userLevel() {
-      console.log("레벨업했다")
       if ( intermediate( this.myCompleteAchievement ) ) {
         this.$store.dispatch('completeAchieve', 6)
       }

@@ -294,7 +294,7 @@ export default new Vuex.Store({
     },
     SENDCOMPLETELESSON ( state, idx ) {
       
-      console.log(state.classList[idx])
+      // console.log(state.classList[idx])
 
 
       if ( state.classList[idx]["already_learned"] == false) {
@@ -319,7 +319,7 @@ export default new Vuex.Store({
 
         state.recent_learned_lc.unshift(state.classList[idx])
 
-        console.log(state.recent_learned_lc)
+        // console.log(state.recent_learned_lc)
 
       }
     },
@@ -380,7 +380,7 @@ export default new Vuex.Store({
       state.time = nowTime
       state.isSameDay = false
       console.log("reset 됐어")
-      console.log(state.time, state.quizChance, state.testChance)
+      // console.log(state.time, state.quizChance, state.testChance)
     },
     CHANGECHANCE ( state, type) {
       if ( type == "test" ) {
@@ -592,15 +592,13 @@ export default new Vuex.Store({
                 dispatch('completeAchieve', 3)
               }
             } else {
-              console.log(res.data)
+              console.log(state.AchievementList[id-1].title ,res.data)
             }
           },
           (err) => {
             console.log(err)
           }
         )
-      }  else {
-        console.log("이미 달성")
       }
     },
     setTime( { commit }) {

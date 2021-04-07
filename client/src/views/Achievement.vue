@@ -16,7 +16,7 @@
         <v-img 
           :src="require(`@/assets/images/achievement/${item.imgurl}`)"
           height="50%"
-          width="50%"
+          width="60%"
           class="mx-auto"
         />
         <v-card-title class="modal_title">
