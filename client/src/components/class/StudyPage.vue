@@ -28,10 +28,9 @@
           <v-card class="step1" v-if="currentStep == 1" tile height="100%" elevation="0">
             <v-card tile height="40%" elevation="0">
               <img :src="require(`@/assets/images/card/${lessonInfo.imgurl}`)"   
-               alt="포스터 이미지" width="100%">
-              <!-- <img :src="require(`@/assets/images/poster/poster1.jpg`)"
-               alt="포스터 이미지" height="100%" width="100%"> -->
-               <!-- <v-text>@/assets/images/card/{{lessonInfo.imgurl}}</v-text> -->
+               alt="poster image" width="100%">
+              <!-- <img :src="require(`@/assets/iuiu2.png`)"
+               alt="poster image" height="100%" width="100%"> -->
             </v-card>
             <v-card tile height="60%" elevation="0" class="d-flex flex-column pt-2 px-2">
               <v-btn class="mb-4" fab small dark color="teal accent-4" elevation="3" @click="speech"><v-icon>mdi-volume-high</v-icon></v-btn>
@@ -46,7 +45,7 @@
                 </div>
               </div>
               <div class="d-flex justify-end mt-n3 lesson-source">
-                <span> Source : {{ lessonInfo.title }} </span>
+                <span> Source : {{ lessonInfo.title_eng }} </span>
               </div>
             </v-card>
           </v-card>
@@ -104,7 +103,7 @@
                 </div>
               </div>
               <div class="d-flex justify-end mt-n3 lesson-source">
-                <span> Source : {{ lessonInfo.title }} </span>
+                <span> Source : {{ lessonInfo.title_eng }} </span>
               </div>
 
               <div class="d-flex justify-space-between mt-3 mx-2">

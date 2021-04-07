@@ -9,8 +9,7 @@
 
     <v-row>
       <v-col>
-        <img :src="require(`@/assets/images/poster/${currentClass.imgurl}`)" alt="title" class="imgSize">
-        <!-- <img :src="require(`@/assets/images/poster/poster1.jpg`)" alt="title" class="imgSize"> -->
+        <img :src="require(`@/assets/images/poster/${currentClass.imgurl}`)" alt="poster image" class="imgSize">
       </v-col>
     </v-row>
 
@@ -70,7 +69,7 @@
               </v-col>
               <v-col cols="4" xs="4" style="" class="d-flex justify-center">
                 <!-- <img :src="require(`@/assets/images/poster/poster1.jpg`)" alt="keyword" class="imgSize"> -->
-                <img :src="require(`@/assets/images/card/${item.imgurl}`)" alt="keyword" class="imgSize">
+                <img :src="require(`@/assets/images/card/${item.imgurl}`)" alt="poster image" class="imgSize">
               </v-col>
               <v-col cols="5" xs="6" class="d-flex align-center">
                 <div class="d-flex flex-column ">

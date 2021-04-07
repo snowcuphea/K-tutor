@@ -34,7 +34,7 @@ export default {
         options: {
           title: {
             display: true,
-            text: "Last 10 test grades",
+            text: "Last " + this.$store.state.userGrade_score.length + " test grades",
             fontSize: 16,
           },
           tooltips:{
