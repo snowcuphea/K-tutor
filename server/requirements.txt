@@ -33,3 +33,4 @@ gensim==3.8.3
 drf-yasg-examples==0.1.1
 mysqlclient==2.0.3
 gensim==3.8.3
+gunicorn==20.1.0
