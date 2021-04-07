@@ -39,7 +39,13 @@
 export default {
   props: ['showTutorial'],
   data: () => ({
-    tutorialItems: [require('@/assets/img/mypage/1.png'), require('@/assets/img/mypage/2.png'), require('@/assets/img/mypage/3.png'), require('@/assets/img/mypage/4.png'), require('@/assets/img/mypage/5.png'), require('@/assets/img/mypage/6.png')]   
+    tutorialItems: [
+      require('@/assets/images/mypage/1.png'), 
+      require('@/assets/images/mypage/2.png'), 
+      require('@/assets/images/mypage/3.png'), 
+      require('@/assets/images/mypage/4.png'), 
+      require('@/assets/images/mypage/5.png'), 
+      require('@/assets/images/mypage/6.png')]   
   }),
   methods: {
     hideDialog () {
