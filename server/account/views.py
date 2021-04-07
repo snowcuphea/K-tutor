@@ -213,34 +213,39 @@ class AchievementViewSet(viewsets.GenericViewSet,
         ___
         """
         user = request.user
-        achievement_list = AchieveManage.objects.filter(user=user)
+        achievement_list = Achievement.objects.all()
         user_achievement = []
-        
+
         for al in achievement_list:
-            if al.done >= al.achievement.total:
+            if not Achievement.objects.filter(Q(user=user) & Q(id=al.id)).exists():
+                user.achieved.add(al)
+        ac_manage = user.achieved.all()
+        for acm in ac_manage:
+            al = Achievement.objects.get(id=acm.achievement_id)
+            if al.done >= al.total:
                 user_achievement.append({
-                    "achievement_id": al.achievement.id,
-                    "title": al.achievement.title,
-                    "content": al.achievement.content,
-                    "imgurl": al.achievement.imgurl,
-                    "done": al.done,
-                    "total": al.achievement.total,
-                    "great_kor" : al.achievement.great_kor,
-                    "great_eng" : al.achievement.great_eng,
-                    "great_dsc" : al.achievement.great_dsc,
+                    "achievement_id": al.id,
+                    "title": al.title,
+                    "content": al.content,
+                    "imgurl": al.imgurl,
+                    "done": acm.done,
+                    "total": al.total,
+                    "great_kor": al.great_kor,
+                    "great_eng": al.great_eng,
+                    "great_dsc": al.great_dsc,
                     "status": 1
                 })
             else:
                 user_achievement.append({
-                    "achievement_id": al.achievement.id,
-                    "title": al.achievement.title,
-                    "content": al.achievement.content,
-                    "imgurl": al.achievement.imgurl,
-                    "done": al.done,
-                    "total": al.achievement.total,
-                    "great_kor": al.achievement.great_kor,
-                    "great_eng": al.achievement.great_eng,
-                    "great_dsc": al.achievement.great_dsc,
+                    "achievement_id": al.id,
+                    "title": al.title,
+                    "content": al.content,
+                    "imgurl": al.imgurl,
+                    "done": acm.done,
+                    "total": al.total,
+                    "great_kor": al.great_kor,
+                    "great_eng": al.great_eng,
+                    "great_dsc": al.great_dsc,
                     "status": 0
                 })
 
