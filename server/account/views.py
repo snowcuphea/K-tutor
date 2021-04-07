@@ -219,33 +219,32 @@ class AchievementViewSet(viewsets.GenericViewSet,
         for al in achievement_list:
             if not Achievement.objects.filter(Q(achieved_user=user) & Q(id=al.id)).exists():
                 user.achieved.add(al)
-        ac_manage = user.achieved.all()
-        for acm in ac_manage:
-            al = Achievement.objects.get(id=acm.achievement_id)
-            if al.done >= al.total:
+        al = user.achieved.all()
+        for acv in al:
+            if acv.done >= acv.total:
                 user_achievement.append({
-                    "achievement_id": al.id,
-                    "title": al.title,
-                    "content": al.content,
-                    "imgurl": al.imgurl,
-                    "done": acm.done,
-                    "total": al.total,
-                    "great_kor": al.great_kor,
-                    "great_eng": al.great_eng,
-                    "great_dsc": al.great_dsc,
+                    "achievement_id": acv.id,
+                    "title": acv.title,
+                    "content": acv.content,
+                    "imgurl": acv.imgurl,
+                    "done": AchieveManage.objects.get(user=user, achievement=acv).done,
+                    "total": acv.total,
+                    "great_kor": acv.great_kor,
+                    "great_eng": acv.great_eng,
+                    "great_dsc": acv.great_dsc,
                     "status": 1
                 })
             else:
                 user_achievement.append({
-                    "achievement_id": al.id,
-                    "title": al.title,
-                    "content": al.content,
-                    "imgurl": al.imgurl,
-                    "done": acm.done,
-                    "total": al.total,
-                    "great_kor": al.great_kor,
-                    "great_eng": al.great_eng,
-                    "great_dsc": al.great_dsc,
+                    "achievement_id": acv.id,
+                    "title": acv.title,
+                    "content": acv.content,
+                    "imgurl": acv.imgurl,
+                    "done": AchieveManage.objects.get(user=user, achievement=acv).done,
+                    "total": acv.total,
+                    "great_kor": acv.great_kor,
+                    "great_eng": acv.great_eng,
+                    "great_dsc": acv.great_dsc,
                     "status": 0
                 })
 
@@ -267,7 +266,7 @@ class AchievementViewSet(viewsets.GenericViewSet,
         ac_manage = AchieveManage.objects.filter(Q(user=user) & Q(achievement=achievement))
         if not ac_manage.exists():
             user.achieved.add(achievement)
-            ac_manage = AchieveManage.objects.filter(Q(user=user) & Q(achievement=achievement))
+            ac_manage = AchieveManage.objects.get(user=user, achievement=achievement)
 
         if ac_manage.done >= achievement.total:
             return Response("Already Achieved", status=status.HTTP_208_ALREADY_REPORTED)
