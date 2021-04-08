@@ -48,7 +48,7 @@ class ExamViewSet(viewsets.GenericViewSet,
         index = 0
         cnt = 0
         learned_kw = random.shuffle(list(user.learned_kw.all()))
-        while cnt < 3:
+        while cnt < 3 and index < len(learned_kw):
             kw = learned_kw[index]
             index += 1
             if not Lc.objects.filter(main_kw=kw):
