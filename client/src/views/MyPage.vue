@@ -137,7 +137,7 @@
         if (this.$store.state.userLevel == 15) {
           return require('@/assets/images/user/rankking.png')
         } else if (this.$store.state.userLevel > 9) {
-          return require('@/assets/images/user/ranklow.png')
+          return require('@/assets/images/user/rankhigh.png')
         } else if (this.$store.state.userLevel > 4) {
           return require('@/assets/images/user/rankmiddle.png')
         } else {

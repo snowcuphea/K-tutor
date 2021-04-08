@@ -34,15 +34,11 @@
             </v-card>
             <v-card tile height="60%" elevation="0" class="d-flex flex-column pt-2 px-2">
               <v-btn class="mb-4" fab small dark color="teal accent-4" elevation="3" @click="speech"><v-icon>mdi-volume-high</v-icon></v-btn>
-              <div v-for="(line, idx) in lessonInfo.lines_kr" :key="idx">
-                <div v-if="idx%2 == 0" class="pb-2">
-                  <p>{{ lessonInfo.lines_kr[idx] }} </p>
-                  <p>{{ lessonInfo.lines_en[idx] }} </p>
-                </div>
-                <div v-else class="pb-2">
-                  <p>{{ lessonInfo.lines_kr[idx] }} </p>
-                  <p>{{ lessonInfo.lines_en[idx] }} </p>
-                </div>
+              <div>
+                <p v-for="(line, idx) in lessonInfo.lines_kr" :key="idx" class="pb-2">{{ line }} </p>
+              </div>
+              <div class="py-1">
+                <p v-for="(line, idx2) in lessonInfo.lines_en" :key="idx2" class="pb-2">{{ line }} </p>
               </div>
               <div class="d-flex justify-end mt-n3 lesson-source">
                 <span> Source : {{ lessonInfo.title_eng }} </span>
@@ -87,10 +83,12 @@
           <!-- step3 -->
           <v-card class="step3" v-else tile height="100%" elevation="0">
             <v-card tile elevation="0">
+              <div class="pb-2">
+                <p v-for="(line, idx) in lessonInfo.lines_en" :key="idx" class="pb-2"> {{ line }}</p>
+              </div>
               <div v-for="(line, idx) in lessonInfo.lines_kr" :key="idx">
-                <div v-if="idx%2 == 0" class="pb-4">
+                <div v-if="idx%2 == 0" class="pb-2">
                   <p class="pb-2">{{ lessonInfo.lines_kr[idx] }} </p>
-                  <p>{{ lessonInfo.lines_en[idx] }} </p>
                 </div>
                 <div v-else class="pb-4">
                   <p class="pb-2">{{ myAnswer }} </p>
@@ -99,7 +97,6 @@
                   <p class="answer-wrong mt-n2"
                    v-else-if="pass == false && pass !== null"
                   >Incorrect, try again.</p>
-                  <p>{{ lessonInfo.lines_en[idx] }} </p>
                 </div>
               </div>
               <div class="d-flex justify-end mt-n3 lesson-source">
