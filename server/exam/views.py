@@ -47,7 +47,8 @@ class ExamViewSet(viewsets.GenericViewSet,
             })
         index = 0
         cnt = 0
-        learned_kw = random.shuffle(list(user.learned_kw.all()))
+        learned_kw = list(user.learned_kw.all())
+        random.shuffle(learned_kw)
         while cnt < 3 and index < len(learned_kw):
             kw = learned_kw[index]
             index += 1
