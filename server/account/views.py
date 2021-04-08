@@ -131,7 +131,7 @@ class LoginViewSet(viewsets.GenericViewSet,
         # learned_lc_cnt = serializers.IntegerField()
         data['learned_lc_cnt'] = user.learned_lc.all().count()
         # recent_learned_lc = serializers.ListField()
-        pk_list = RecentLearnedLc.objects.filter(user=user).order_by('learned_at').values_list('lc_id', flat=True)
+        pk_list = RecentLearnedLc.objects.filter(user=user).order_by('-id').values_list('lc_id', flat=True)
         ordering = 'FIELD(`id`, %s)' % ','.join(str(id) for id in pk_list)
         data['recent_learned_lc'] = Lc.objects.filter(id__in=pk_list).extra(
             select={'ordering': ordering}, order_by=('ordering',)
