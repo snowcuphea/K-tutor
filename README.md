@@ -18,7 +18,7 @@
 
 * 결과물 : http://j4a303.p.ssafy.io:8080 (Web)
 
-* UCC :
+* UCC : 
 
 
 
@@ -139,7 +139,7 @@ npm run serve
 
 
 ######### ver. yarn ##########
-# Project Setup (ver. npm)
+# Project Setup
 yarn install
 
 # Compiles and hot-reloads for development

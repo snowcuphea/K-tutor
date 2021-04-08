@@ -1,0 +1,42 @@
+
+.hide {
+    visibility: hidden;
+  }
+
+.close-dialog {
+  position: fixed;
+  top: 0.5em;
+  left: 0.5em;
+  z-index: 99;
+}
+
+
+.main-background-color{
+  background-color: #62D2A2;
+
+}
+
+.main-bg-color-imp{
+  background-color: #62D2A2 !important;
+
+}
+
+.main-ft-color-imp{
+  color: #62D2A2 !important;
+
+}
+
+.alert-info {
+  /* position: fixed !important; */
+  top: 1.5em !important;
+  /* width: 90% !important; */
+}
+
+
+.achievementNot {
+  filter: brightness(0%); 
+}
+
+html, body {
+  height: 100% !important;
+}
