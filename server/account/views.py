@@ -144,11 +144,19 @@ class LoginViewSet(viewsets.GenericViewSet,
         # recent_lc_progress = serializers.DictField()
         recent_lc_progress = dict()
         for lc in list(user.learned_lc.all()):
-            if lc.cs.name_kor not in recent_lc_progress:
-                recent_lc_progress[lc.cs.name_kor] = [
-                    Lc.objects.filter(cs__name_kor=lc.cs.name_kor).filter(learned_user=user).count(),
-                    Lc.objects.filter(cs__name_kor=lc.cs.name_kor).count()
-                ]
+            if lc.cs.type == 'kpop':
+                singer = lc.cs.name_kor.split(" - ")[0]
+                if singer not in recent_lc_progress:
+                    recent_lc_progress[singer] = [
+                        Lc.objects.filter(cs__name_kor__contains=singer).filter(learned_user=user).count(),
+                        Lc.objects.filter(cs__name_kor__contains=singer).count()
+                    ]
+            else:
+                if lc.cs.name_kor not in recent_lc_progress:
+                    recent_lc_progress[lc.cs.name_kor] = [
+                        Lc.objects.filter(cs__name_kor=lc.cs.name_kor).filter(learned_user=user).count(),
+                        Lc.objects.filter(cs__name_kor=lc.cs.name_kor).count()
+                    ]
         data['recent_lc_progress'] = recent_lc_progress
         # progress = serializers.DictField()
         progress = dict()
