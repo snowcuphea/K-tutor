@@ -56,7 +56,7 @@ export default {
       },
       {
         name: 'MariaDB',
-        version: '-',
+        version: '10.5.9',
         url: 'https://mariadb.org/',
         copyright: 'Copyright (c) 2000, 2017, Oracle, MariaDB Corporation Ab and others',
       },
