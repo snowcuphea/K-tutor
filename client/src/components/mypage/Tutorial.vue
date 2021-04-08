@@ -40,7 +40,6 @@ export default {
   props: ['showTutorial'],
   data: () => ({
     tutorialItems: [
-      require('@/assets/images/mypage/1.png'), 
       require('@/assets/images/mypage/2.png'), 
       require('@/assets/images/mypage/3.png'), 
       require('@/assets/images/mypage/4.png'), 
