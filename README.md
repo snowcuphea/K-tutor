@@ -16,7 +16,7 @@
 
 * 수행 기간:  2021.02.26 ~ 2021.04.09 
 
-* 결과물 : http://j4a303.p.ssafy.io:8080 
+* 결과물 : http://j4a303.p.ssafy.io:8080 (Web)
 
 * UCC :
 
@@ -75,9 +75,7 @@
 |  MariaDB  |   10.5.9    | DB                                  |
 |  Ubuntu   | 20.04.2 LTS | 서비스 제공을 위해 리눅스 서버 구축 |
 |  Docker   |   20.10.2   | 컨테이너화 된 애플리케이션 관리     |
-|   Nginx   |   1.19.6    | Vue 클라이언트 웹 서버 사용         |
-
-
+|   Nginx   |   1.19.6    | 웹서버, 서버 프록시                 |
 
 ### Frontend 구성 요소
 
@@ -99,6 +97,24 @@
 
 
 ### Server
+
+```bash
+# Install Docker , docker-compose
+curl -fsSL https://get.docker.com/ | sudo sh
+sudo curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+# Docker-compose
+docker-compose up
+
+# Without Docker
+gunicorn server.wsgi:application --bind 0.0.0.0:8000
+
+# or 
+
+python manage.py runserver
+```
+
+
 
 
 
