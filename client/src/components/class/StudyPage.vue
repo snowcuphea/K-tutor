@@ -28,25 +28,20 @@
           <v-card class="step1" v-if="currentStep == 1" tile height="100%" elevation="0">
             <v-card tile height="40%" elevation="0">
               <img :src="require(`@/assets/images/card/${lessonInfo.imgurl}`)"   
-               alt="포스터 이미지" width="100%">
-              <!-- <img :src="require(`@/assets/images/poster/poster1.jpg`)"
-               alt="포스터 이미지" height="100%" width="100%"> -->
-               <!-- <v-text>@/assets/images/card/{{lessonInfo.imgurl}}</v-text> -->
+               alt="poster image" width="100%">
+              <!-- <img :src="require(`@/assets/iuiu2.png`)"
+               alt="poster image" height="100%" width="100%"> -->
             </v-card>
             <v-card tile height="60%" elevation="0" class="d-flex flex-column pt-2 px-2">
               <v-btn class="mb-4" fab small dark color="teal accent-4" elevation="3" @click="speech"><v-icon>mdi-volume-high</v-icon></v-btn>
-              <div v-for="(line, idx) in lessonInfo.lines_kr" :key="idx">
-                <div v-if="idx%2 == 0" class="pb-2">
-                  <p>{{ lessonInfo.lines_kr[idx] }} </p>
-                  <p>{{ lessonInfo.lines_en[idx] }} </p>
-                </div>
-                <div v-else class="pb-2">
-                  <p>{{ lessonInfo.lines_kr[idx] }} </p>
-                  <p>{{ lessonInfo.lines_en[idx] }} </p>
-                </div>
+              <div>
+                <p v-for="(line, idx) in lessonInfo.lines_kr" :key="idx" class="pb-2">{{ line }} </p>
+              </div>
+              <div class="py-1">
+                <p v-for="(line, idx2) in lessonInfo.lines_en" :key="idx2" class="pb-2">{{ line }} </p>
               </div>
               <div class="d-flex justify-end mt-n3 lesson-source">
-                <span> Source : {{ lessonInfo.title }} </span>
+                <span> Source : {{ lessonInfo.title_eng }} </span>
               </div>
             </v-card>
           </v-card>
@@ -66,7 +61,7 @@
             <v-card tile height="25%" elevation="0" class="pt-4">
               <div class="d-flex align-center justify-space-between">
                 <h3>[ Key Word ]</h3>
-                <!-- <v-btn plain icon class=""><v-icon>mdi-volume-high</v-icon></v-btn> -->
+                <v-btn fab small dark color="teal accent-4" elevation="3" class="ml-1" @click="speech_keysentence"><v-icon>mdi-volume-high</v-icon></v-btn>
               </div>
               <div class="pl-5 pt-2">
                 <p> {{ lessonInfo.keyword_kr }} </p>
@@ -88,10 +83,12 @@
           <!-- step3 -->
           <v-card class="step3" v-else tile height="100%" elevation="0">
             <v-card tile elevation="0">
+              <div class="pb-2">
+                <p v-for="(line, idx) in lessonInfo.lines_en" :key="idx" class="pb-2"> {{ line }}</p>
+              </div>
               <div v-for="(line, idx) in lessonInfo.lines_kr" :key="idx">
-                <div v-if="idx%2 == 0" class="pb-4">
+                <div v-if="idx%2 == 0" class="pb-2">
                   <p class="pb-2">{{ lessonInfo.lines_kr[idx] }} </p>
-                  <p>{{ lessonInfo.lines_en[idx] }} </p>
                 </div>
                 <div v-else class="pb-4">
                   <p class="pb-2">{{ myAnswer }} </p>
@@ -100,11 +97,10 @@
                   <p class="answer-wrong mt-n2"
                    v-else-if="pass == false && pass !== null"
                   >Incorrect, try again.</p>
-                  <p>{{ lessonInfo.lines_en[idx] }} </p>
                 </div>
               </div>
               <div class="d-flex justify-end mt-n3 lesson-source">
-                <span> Source : {{ lessonInfo.title }} </span>
+                <span> Source : {{ lessonInfo.title_eng }} </span>
               </div>
 
               <div class="d-flex justify-space-between mt-3 mx-2">

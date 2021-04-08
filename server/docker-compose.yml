@@ -1,0 +1,38 @@
+version: '3.3'
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx_service
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./server:/server
+      - ./nginx.cof:/server/nginx/conf
+      - ./staticfiles:/static
+    depends_on:
+      - server
+    command : "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+  certbot:
+    image: certbot/certbot
+    container_name: certbot_service
+    volumes :
+      - ../volumes/certbot/conf:/etc/letsencrypt
+      - ../volumes/certbot/www:/var/www/certbot
+    entrypoint : "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+  server:
+    command: bash -c 'while true; do gunicorn server.wsgi:application --bind 0.0.0.0:8000; sleep 2; done'
+    container_name: backend
+    build:
+      context: .
+      dockerfile: back.Dockerfile
+    ports:
+      - 8000:8000
+    expose:
+      - 8000
+    volumes:
+      - .:/code
+      - ./staticfiles:/staticfiles
+    stdin_open: true
+    tty: true

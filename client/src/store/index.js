@@ -120,7 +120,7 @@ export default new Vuex.Store({
     },
 
     GETCLASSLIST(state, titlelist){
-      // console.log(titlelist)
+      console.log(titlelist)
       state.allTitleList = titlelist
     },
   
@@ -164,6 +164,7 @@ export default new Vuex.Store({
         id: item.id,
         type: state.currentClass.type,
         title: state.currentClass.name_kor,
+        title_eng: state.currentClass.name_eng,
         imgurl: item.imgurl,
         keyword_kr: item.main_kw_kor,
         keyword_en: item.main_kw_eng,

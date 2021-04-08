@@ -75,6 +75,14 @@
       $route() {
         this.scrollToTop()
       }
+    },
+    created() {
+      const alertInfo = {
+        status: false,
+        color: "success",
+        content: ""
+      }
+      this.$store.dispatch('showAlert', alertInfo)
     }
   };
 </script>

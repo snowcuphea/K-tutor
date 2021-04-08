@@ -24,11 +24,13 @@
 
         <v-card tile height="76%" elevation="0" class="px-5">
           <v-card class="quiz" tile height="100%" elevation="0">
-            <v-card tile elevation="0">
-              <div class="px-2" v-for="(line, idx) in quizInfo.quizzes[currentProblem].lines_kr" :key="idx">
-                <div v-if="idx%2 == 0" class="pb-4">
+            <v-card class="px-2" tile elevation="0">
+              <div class="pb-2">
+                <p v-for="(line, idx) in quizInfo.quizzes[currentProblem].lines_en" :key="idx" class="pb-2"> {{ line }}</p>
+              </div>
+              <div v-for="(line, idx) in quizInfo.quizzes[currentProblem].lines_kr" :key="idx">
+                <div v-if="idx%2 == 0" class="pb-2">
                   <p class="pb-2">{{ quizInfo.quizzes[currentProblem].lines_kr[idx] }} </p>
-                  <p>{{ quizInfo.quizzes[currentProblem].lines_en[idx] }} </p>
                 </div>
                 <div v-else class="pb-4">
                   <p class="pb-2">{{ myAnswer }} </p>
@@ -37,7 +39,6 @@
                   <p class="answer-wrong mt-n2"
                    v-else-if="pass == false && pass !== null"
                   >Incorrect, try again.</p>
-                  <p>{{ quizInfo.quizzes[currentProblem].lines_en[idx] }} </p>
                 </div>
               </div>
               <div class="d-flex justify-end mt-n3 lesson-source">

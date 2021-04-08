@@ -11,6 +11,21 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+from django.core.exceptions import ImproperlyConfigured
+import os
+
+
+def get_env_value(env_variable):
+    try:
+      	return os.getenv(env_variable)
+    except KeyError:
+        error_msg = 'Set the {} environment variable'.format(env_variable)
+        raise ImproperlyConfigured(error_msg)
+
+DB_PASSWORD = get_env_value('DB_PASSWORD')
+EMAIL_USER = get_env_value('EMAIL_USER')
+EMAIL_PASSWORD = get_env_value('EMAIL_PASSWORD')
+OWN_KEY = get_env_value('OWN_KEY')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,12 +34,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '$hg$^-wim2pk)gn9+49#3jc4im9xor#6!c9vk6fzcow*y8@8fw'
+SECRET_KEY = OWN_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'j4a303.p.ssafy.io', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'j4a303.p.ssafy.io']
 
 # Application definition
 
@@ -91,7 +106,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'k-tutor',
         'USER': 'root',
-        'PASSWORD': 'emh4baTVMa3SYmSf',
+        'PASSWORD': DB_PASSWORD,
         'HOST': 'J4A303.p.ssafy.io',
         'PORT': '3306',
     }
@@ -151,7 +166,19 @@ SWAGGER_SETTINGS = {
 # 이메일
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = '587'
-EMAIL_HOST_USER = 'malmoongchi@gmail.com'
-EMAIL_HOST_PASSWORD = 'k-tutormalmoe'
+EMAIL_HOST_USER = EMAIL_USER
+EMAIL_HOST_PASSWORD = EMAIL_PASSWORD
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'malmoongchi@gmail.com'
+DEFAULT_FROM_EMAIL = EMAIL_USER
+
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT_DIR = os.path.dirname(BASE_DIR)
+
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [
+    STATIC_DIR,
+]
+
+STATIC_ROOT = os.path.join(ROOT_DIR, '.staticfiles')
