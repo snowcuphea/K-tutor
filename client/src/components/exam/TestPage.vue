@@ -318,7 +318,7 @@ export default {
             return item.name == this.selectedVoicer
         }) 
         speaker.voice=findedVoicer;
-        speaker.volume=0.5;
+        speaker.volume=2;
         this.textToSpeech.speak(speaker)
     },
     async getVoices(){
