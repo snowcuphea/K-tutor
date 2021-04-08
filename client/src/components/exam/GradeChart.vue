@@ -32,6 +32,9 @@ export default {
           ]
         },
         options: {
+          animation: {
+            duration: 0
+          },
           title: {
             display: true,
             text: "Last " + this.$store.state.userGrade_score.length + " test grades",
