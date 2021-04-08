@@ -489,7 +489,7 @@ export default new Vuex.Store({
           commit('GETQUIZINFO', res.data )
         },
         (err) => {
-          console.log(err)
+          console.log("여기", err)
         }
       )
 
