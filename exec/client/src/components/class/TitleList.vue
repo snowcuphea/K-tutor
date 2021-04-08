@@ -47,11 +47,11 @@
     }),
     methods: {
       selectClass(item) {
-        console.log(item)
+        // console.log(item)
         this.$store.dispatch('changeCurrentClass', item)
         // this.$store.state.currentClass = item
         this.$emit("closeDialog")
-        console.log("selected Class!!!!!!!:::::", item.name_kor)
+        // console.log("selected Class!!!!!!!:::::", item.name_kor)
         this.$store.dispatch("getListCurrentClass", item) //선택한 타이틀의 학습리스트 가져온다.
 
       }

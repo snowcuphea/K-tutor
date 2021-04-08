@@ -111,7 +111,7 @@ export default {
 
     // console.log(this.time, this.nowTime.getDate())
     if ( this.nowTime.getDate() !== this.time ) {
-      console.log(this.time, this.nowTime.getDate())
+      // console.log(this.time, this.nowTime.getDate())
       this.$store.dispatch( 'resetChance', this.nowTime.getDate() )
     } 
 

@@ -100,7 +100,7 @@ export default {
       this.$emit('hideTutorial')
     },
     sendemail () {
-      console.log(this.form)
+      // console.log(this.form)
       sendEmail(
         this.form,
         (res) => {

@@ -122,7 +122,7 @@
               })
             },
             (err) => {
-              console.log("회원가입실패", err)
+              // console.log("회원가입실패", err)
               if (err.response.status != undefined) {
                 // alert(err.response.data)
                 const alertInfo = {

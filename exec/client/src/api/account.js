@@ -113,7 +113,7 @@ function sendEmail( mail, success, fail) {
     "title": mail.title,
     "content": mail.content,
   }
-  console.log(mailInfo)
+  // console.log(mailInfo)
 
   instance.defaults.headers['Authorization'] = "jwt " + window.localStorage.getItem('jwt')
 

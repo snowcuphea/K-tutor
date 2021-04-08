@@ -38,7 +38,7 @@ export default {
           navValue : idx
         }
         this.$store.dispatch('changePage', changeItem)
-        console.log(this.current, this.value)
+        // console.log(this.current, this.value)
 
       }
 

@@ -120,7 +120,7 @@ export default new Vuex.Store({
     },
 
     GETCLASSLIST(state, titlelist){
-      console.log(titlelist)
+      // console.log(titlelist)
       state.allTitleList = titlelist
     },
   
@@ -380,16 +380,16 @@ export default new Vuex.Store({
       state.testChance = 2
       state.time = nowTime
       state.isSameDay = false
-      console.log("reset 됐어")
+      // console.log("reset 됐어")
       // console.log(state.time, state.quizChance, state.testChance)
     },
     CHANGECHANCE ( state, type) {
       if ( type == "test" ) {
         state.testChance -= 1
-        console.log(state.testChance)
+        // console.log(state.testChance)
       } else {
         state.quizChance -= 1
-        console.log(state.quizChance)
+        // console.log(state.quizChance)
       }
     },
     COMPLETEACHIEVE ( state, achieveId ) {
@@ -453,7 +453,7 @@ export default new Vuex.Store({
         },
         (err) => {
           console.log("getLessonList 액션즈 실패", err)
-          console.log("집어넣은 selectedClassInfo,",selectedClassInfo )
+          // console.log("집어넣은 selectedClassInfo,",selectedClassInfo )
         }
       )
       
@@ -467,7 +467,7 @@ export default new Vuex.Store({
 
         },
         (err) => {
-          console.log("asdfsadfsdad,ItemId", itemId)
+          // console.log("asdfsadfsdad,ItemId", itemId)
           console.log("getLessonInfoByItem뮤테이션에러", err)
 
         }

@@ -161,7 +161,7 @@
             this.userCredentials,
             (res) => {
               this.$store.dispatch('updateUserInfo', res.data)
-              console.log("update??", res.data)
+              // console.log("update??", res.data)
               const alertInfo = {
                 status: true,
                 color: "success",
@@ -175,9 +175,9 @@
 
             },
             (err) => {
-              console.log(err)
+              // console.log(err)
               if (err.response.status != undefined) {
-                console.log(err.response.data)
+                // console.log(err.response.data)
                 const alertInfo = {
                   status: true,
                   color: "error",
