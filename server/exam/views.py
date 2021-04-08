@@ -45,9 +45,15 @@ class ExamViewSet(viewsets.GenericViewSet,
                 },
                 "cs": lc.cs.name_kor
             })
-
-        learned_kw = list(user.learned_kw.all())
-        for kw in random.sample(learned_kw, 3):
+        index = 0
+        cnt = 0
+        learned_kw = random.shuffle(list(user.learned_kw.all()))
+        while cnt < 3:
+            kw = learned_kw[index]
+            index += 1
+            if not Lc.objects.filter(main_kw=kw):
+                continue
+            cnt += 1
             lc = random.choice(list(Lc.objects.filter(main_kw=kw)))
             d = {
                 "problem": {
