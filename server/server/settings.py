@@ -17,7 +17,7 @@ import os
 
 def get_env_value(env_variable):
     try:
-      	return os.environ.get("env_variable")
+      	return os.getenv(env_variable)
     except KeyError:
         error_msg = 'Set the {} environment variable'.format(env_variable)
         raise ImproperlyConfigured(error_msg)
@@ -25,7 +25,7 @@ def get_env_value(env_variable):
 DB_PASSWORD = get_env_value('DB_PASSWRORD')
 EMAIL_USER = get_env_value('EMAIL_USER')
 EMAIL_PASSWORD = get_env_value('EMAIL_PASSWORD')
-OWN_KEY = get_env_value('SECRET_KEY')
+OWN_KEY = get_env_value('OWN_KEY')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
