@@ -61,7 +61,7 @@
             <v-card tile height="25%" elevation="0" class="pt-4">
               <div class="d-flex align-center justify-space-between">
                 <h3>[ Key Word ]</h3>
-                <!-- <v-btn plain icon class=""><v-icon>mdi-volume-high</v-icon></v-btn> -->
+                <v-btn fab small dark color="teal accent-4" elevation="3" @click="speech_keyword"><v-icon>mdi-volume-high</v-icon></v-btn>
               </div>
               <div class="pl-5 pt-2">
                 <p> {{ lessonInfo.keyword_kr }} </p>
@@ -320,7 +320,7 @@ export default {
           // console.log(speaker)
 
           speaker.voice=findedVoicer;
-          speaker.volume=0.5;
+          speaker.volume=2;
           this.textToSpeech.speak(speaker)
       },
       speech_keysentence(){
@@ -333,7 +333,7 @@ export default {
           // console.log(speaker)
 
           speaker.voice=findedVoicer;
-          speaker.volume=0.5;
+          speaker.volume=2;
           this.textToSpeech.speak(speaker)
       },
       speech_example(){
@@ -351,7 +351,20 @@ export default {
           // console.log(speaker)
 
           speaker.voice=findedVoicer;
-          speaker.volume=0.5;
+          speaker.volume=2;
+          this.textToSpeech.speak(speaker)
+      },
+      speech_keyword(){
+        const text = this.lessonInfo.keyword_kr
+        let speaker=new SpeechSynthesisUtterance(text);
+          const findedVoicer = this.voiceList.find((item)=>{
+              return item.name == this.selectedVoicer
+          }) 
+          // console.log(findedVoicer)
+          // console.log(speaker)
+
+          speaker.voice=findedVoicer;
+          speaker.volume=2;
           this.textToSpeech.speak(speaker)
       },
     async getVoices(){

@@ -88,7 +88,7 @@
           <v-icon>mdi-close</v-icon>
         </v-btn>
         <v-card tile height="15%" class="d-flex justify-center align-center" elevation="0">
-          <h3>Test Report</h3>
+          <h3 class="pt-5">Test Report</h3>
         </v-card>
 
         <v-card tile elevation="0" class="px-8">
@@ -106,8 +106,8 @@
             <h4 v-if="myWrong().length != 0">Incorrect Answers</h4>
             <div v-for="(wrong,idx) in myWrong()" :key="'wrong'+idx"
             class="px-3">
-              <p>{{ wrong.problemId }}. {{ wrong.correctAnswer }} </p>
-              <p>My Answer : {{ wrong.myAnswer }} </p>
+              <p class="mb-0">{{ wrong.problemId }}. {{ wrong.correctAnswer }} </p>
+              <p style="font-size: 0.8em;">My Answer : {{ wrong.myAnswer }} </p>
             </div>
           </div>
         </v-card>
@@ -318,7 +318,7 @@ export default {
             return item.name == this.selectedVoicer
         }) 
         speaker.voice=findedVoicer;
-        speaker.volume=0.5;
+        speaker.volume=2;
         this.textToSpeech.speak(speaker)
     },
     async getVoices(){
@@ -380,5 +380,6 @@ export default {
   color: grey;
   font-size: 0.7em;
 }
+
 
 </style>
