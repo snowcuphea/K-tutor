@@ -13,7 +13,7 @@
         <v-row class="mx-5 my-5">
           <v-col>
             <h2 class="float-left ml-3">Welcome to</h2>
-            <h1 class="float-right main-background-color">Malmoong-Chi</h1>
+            <h1 class="float-right main-background-color">말뭉치 (K-tutor)</h1>
           </v-col>
         </v-row>
 
@@ -97,6 +97,14 @@
                 this.$store.dispatch('getReportInfo', response.data)
                 this.$store.dispatch('getAchievementList')
                 this.$store.dispatch( 'getTestGrades' )
+
+
+                const alertInfo = {
+                  status: true,
+                  color: "success",
+                  content: "Welcome to 말뭉치(K-tutor)."
+                }
+                this.$store.dispatch("showAlert", alertInfo)
                 
               },
               (error) => {

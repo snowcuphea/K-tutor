@@ -14,7 +14,7 @@
           >
             <v-icon>mdi-close</v-icon>
         </v-btn>
-        <h5 v-for="(term,idx) in terms" :key="idx">{{ term }}</h5>
+        <h5 v-for="(term,idx) in terms" :key="idx" class="px-3">{{ term }}</h5>
 
       </v-card>
 

@@ -9,7 +9,7 @@
     <v-progress-linear
       :value="progress" height="10" color="teal accent-4" striped>
     </v-progress-linear>
-    <div>
+    <div v-if="userLevel != 15">
       <p v-if="experience != -1" class="text-end">+{{ experience }} exp</p>
     </div>
   </v-container>
@@ -27,7 +27,11 @@ export default {
     ...mapState(['userLevel', 'userExperience','required_exp', 'myCompleteAchievement']),
 
     progress() {
-      return this.userExperience/this.required_exp[this.userLevel] * 100
+      if (this.userLevel == 15) {
+        return 100
+      } else {
+        return this.userExperience/this.required_exp[this.userLevel] * 100
+      }
     }
   },
   watch: {
