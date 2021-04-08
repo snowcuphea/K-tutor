@@ -96,6 +96,7 @@ export default {
     userGrade_date() {
       this.gradeChart.data.labels = this.userGrade_date
       this.gradeChart.data.datasets[0].data = this.userGrade_score
+      this.gradeChart.options.title.text = "Last " + this.$store.state.userGrade_score.length + " test grades"
       const ctx = document.getElementById('grade-chart')
       new Chart(ctx, this.gradeChart)
     }
