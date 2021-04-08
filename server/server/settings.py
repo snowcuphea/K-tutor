@@ -22,7 +22,7 @@ def get_env_value(env_variable):
         error_msg = 'Set the {} environment variable'.format(env_variable)
         raise ImproperlyConfigured(error_msg)
 
-DB_PASSWORD = get_env_value('DB_PASSWRORD')
+DB_PASSWORD = get_env_value('DB_PASSWORD')
 EMAIL_USER = get_env_value('EMAIL_USER')
 EMAIL_PASSWORD = get_env_value('EMAIL_PASSWORD')
 OWN_KEY = get_env_value('OWN_KEY')
