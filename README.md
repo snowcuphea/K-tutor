@@ -166,7 +166,7 @@ yarn serve
 
   ​	3) 키워드 중심 문장 나열 연습
 
-  ![image-20210408165327489](README.assets/image-20210408165327489.png)
+  <img src="README.assets/image-20210408165327489.png" alt="image-20210408165327489"  />
 
 * Quiz
 
@@ -174,7 +174,7 @@ yarn serve
   * 사용자가 학습한 내용을 토대로 문제 제출
   * 하루에 3번까지만 가능 (경험치 어뷰징 방지)
 
-  <img src="README.assets/image-20210408170034425.png" alt="image-20210408170034425" style="zoom: 67%;" />
+  <img src="README.assets/image-20210408170034425.png" alt="image-20210408170034425" style="zoom: 50%;" />
 
 ### 2. Test
 
@@ -198,7 +198,7 @@ yarn serve
 * 최근 학습한 카드 리스트
 * 총 학습 진행 현황
 
-<img src="README.assets/image-20210408171547869.png" alt="image-20210408171547869" style="zoom: 67%;" />
+<img src="README.assets/image-20210408171547869.png" alt="image-20210408171547869" style="zoom: 50%;" />
 
 ### 4. Achieve
 
@@ -210,7 +210,7 @@ yarn serve
 * 그리드형, 설명형 2가지 방식으로 UI 제공
 * 업적 달성 시 한국 문화에 대한 설명 및 위키url 제공
 
-<img src="README.assets/image-20210408171742805.png" alt="image-20210408171742805" style="zoom:67%;" />
+<img src="README.assets/image-20210408171742805.png" alt="image-20210408171742805" style="zoom: 50%;" />
 
 ### 5. My Page
 
