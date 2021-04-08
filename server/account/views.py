@@ -136,7 +136,7 @@ class LoginViewSet(viewsets.GenericViewSet,
         data['recent_learned_lc'] = sorted(list(learned_lc_list), key=lambda x: temp[list(learned_lc_list).index(x)])
 
         if Lc.objects.filter(learned_user=user).exists():
-            recent_cs = Cs.objects.get(pk=data['recent_learned_lc'][0]['cs_id']).__dict__
+            recent_cs = Cs.objects.get(pk=data['recent_learned_lc'][0].cs_id).__dict__
             if recent_cs['type'] == 'kpop':
                 recent_cs['name_kor'] = recent_cs['name_kor'].split(' - ')[0]
                 recent_cs['name_eng'] = recent_cs['name_eng'].split(' - ')[0]
