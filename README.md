@@ -70,12 +70,12 @@
 
 | 기술 스택 |   Version   | Comment                             |
 | :-------: | :---------: | :---------------------------------- |
-|  python   |    3.7.7    |                                     |
+|  python   |    3.8.5    |                                     |
 |  Django   |    3.1.7    | Rest API 웹 애플리케이션 개발       |
 |  MariaDB  |   10.5.9    | DB                                  |
 |  Ubuntu   | 20.04.2 LTS | 서비스 제공을 위해 리눅스 서버 구축 |
 |  Docker   |   20.10.2   | 컨테이너화 된 애플리케이션 관리     |
-|   Nginx   |   1.19.6    | 웹서버, 서버 프록시                 |
+|   Nginx   |   1.19.6    | 웹 서버, 서버 프록시                |
 
 ### Frontend 구성 요소
 
@@ -114,9 +114,13 @@ gunicorn server.wsgi:application --bind 0.0.0.0:8000
 python manage.py runserver
 ```
 
-
-
-
+```
+# server/.env
+DB_PASSWORD = password
+EMAIL_USER = user
+EMAIL_PASSWORD = password
+OWN_KEY = django secret key
+```
 
 
 
@@ -162,13 +166,15 @@ yarn serve
 
   ​	3) 키워드 중심 문장 나열 연습
 
+  ![image-20210408165327489](README.assets/image-20210408165327489.png)
+
 * Quiz
 
   * 학습카드 5개 이상 학습 시 활성화
   * 사용자가 학습한 내용을 토대로 문제 제출
   * 하루에 3번까지만 가능 (경험치 어뷰징 방지)
 
-  
+  <img src="README.assets/image-20210408170034425.png" alt="image-20210408170034425" style="zoom: 67%;" />
 
 ### 2. Test
 
@@ -181,7 +187,7 @@ yarn serve
   * 점수에 따른 경험치 상승
   * 하루에 2번까지만 가능 (경험치 어뷰징 방지)
 
-
+![image-20210408170520522](README.assets/image-20210408170520522.png)
 
 ### 3. Report
 
@@ -192,7 +198,7 @@ yarn serve
 * 최근 학습한 카드 리스트
 * 총 학습 진행 현황
 
-
+<img src="README.assets/image-20210408171547869.png" alt="image-20210408171547869" style="zoom: 67%;" />
 
 ### 4. Achieve
 
@@ -204,7 +210,7 @@ yarn serve
 * 그리드형, 설명형 2가지 방식으로 UI 제공
 * 업적 달성 시 한국 문화에 대한 설명 및 위키url 제공
 
-
+<img src="README.assets/image-20210408171742805.png" alt="image-20210408171742805" style="zoom:67%;" />
 
 ### 5. My Page
 
@@ -217,27 +223,21 @@ yarn serve
   * 정보 수정
     * 닉네임,  비밀번호 수정
     * 조선시대 이름 짓기 기능 (월, 일 입력)
-
 * 튜토리얼
 
   * 말뭉치(K-tutor) 서비스 사용법 제공
-
 * 문의하기
 
   * 서비스 관리자에게 문의할 수 있는 기능 제공
-
 * 이용약관
-
 * 라이선스
 
   * 사용한 오픈소스 및 라이브러리 출처 명시
   * 폰트 출처 명시
-
 * 로그아웃
-
 * 회원탈퇴
 
-  
+![image-20210408171914025](README.assets/image-20210408171914025.png)
 
 
 
