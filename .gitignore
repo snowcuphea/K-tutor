@@ -1,6 +1,5 @@
-server/data/excel
-server/data/kpop
-server/data/movie
+server/data/
+server/data/pandas/*
 # Created by https://www.toptal.com/developers/gitignore/api/venv,windows,macos,django,vue,pycharm,visualstudio
 # Edit at https://www.toptal.com/developers/gitignore?templates=venv,windows,macos,django,vue,pycharm,visualstudio
 
