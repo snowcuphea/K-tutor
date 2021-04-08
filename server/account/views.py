@@ -133,7 +133,7 @@ class LoginViewSet(viewsets.GenericViewSet,
         # recent_learned_lc = serializers.ListField()
         learned_lc_list = Lc.objects.filter(learned_user=user)
         temp = learned_lc_list.values_list('learned_user__id', flat=True)
-        data['recent_learned_lc'] = sorted(list(learned_lc_list), key=lambda x: temp.index(x.id))
+        data['recent_learned_lc'] = sorted(list(learned_lc_list), key=lambda x: list(temp).index(x.id))
         if Lc.objects.filter(learned_user=user).exists():
             recent_cs = Cs.objects.get(pk=data['recent_learned_lc'][0]['cs_id']).__dict__
             if recent_cs['type'] == 'kpop':
