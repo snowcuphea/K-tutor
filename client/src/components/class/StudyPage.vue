@@ -61,7 +61,7 @@
             <v-card tile height="25%" elevation="0" class="pt-4">
               <div class="d-flex align-center justify-space-between">
                 <h3>[ Key Word ]</h3>
-                <v-btn fab small dark color="teal accent-4" elevation="3" class="ml-1" @click="speech_keysentence"><v-icon>mdi-volume-high</v-icon></v-btn>
+                <v-btn fab small dark color="teal accent-4" elevation="3" class="ml-1" @click="speech_keyword"><v-icon>mdi-volume-high</v-icon></v-btn>
               </div>
               <div class="pl-5 pt-2">
                 <p> {{ lessonInfo.keyword_kr }} </p>
@@ -343,6 +343,19 @@ export default {
           text.push(this.lessonInfo.example_kr[cnt])
           cnt += 1
         }
+        let speaker=new SpeechSynthesisUtterance(text);
+          const findedVoicer = this.voiceList.find((item)=>{
+              return item.name == this.selectedVoicer
+          }) 
+          // console.log(findedVoicer)
+          // console.log(speaker)
+
+          speaker.voice=findedVoicer;
+          speaker.volume=0.5;
+          this.textToSpeech.speak(speaker)
+      },
+      speech_keyword(){
+        const text = this.lessonInfo.keyword_kr
         let speaker=new SpeechSynthesisUtterance(text);
           const findedVoicer = this.voiceList.find((item)=>{
               return item.name == this.selectedVoicer
