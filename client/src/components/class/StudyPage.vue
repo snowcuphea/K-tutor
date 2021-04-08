@@ -142,8 +142,8 @@
     >
       <v-card class="d-flex flex-column pt-8" height="100%" width="100%" tile>
         <v-card tile class="d-flex flex-column justify-center align-center" elevation="0">
-          <h3>Congratulations</h3>
-          <h4>You've gained 3 points</h4>
+          <h3 v-if="exp != 0">Congratulations</h3>
+          <h4>You've gained {{ exp }} points</h4>
         </v-card>
         <v-card tile elevation="0" class="px-8">
           <Experience :experience="exp"/>
