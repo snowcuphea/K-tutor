@@ -185,9 +185,6 @@
       },
     },
     created() {
-      if ( this.ableQuiz() ) {
-        this.$store.dispatch('getQuizInfo')
-      }
 
       this.$store.dispatch('getListCurrentClass',this.currentClass )
 
