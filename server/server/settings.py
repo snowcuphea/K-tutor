@@ -12,16 +12,17 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 from django.core.exceptions import ImproperlyConfigured
+import os
 
 
 def get_env_value(env_variable):
     try:
-      	return os.environ[env_variable]
+      	return os.environ.get("env_variable")
     except KeyError:
         error_msg = 'Set the {} environment variable'.format(env_variable)
         raise ImproperlyConfigured(error_msg)
 
-DB_PASSWORD = get_env_value('DB_ROOT_PASSWRORD')
+DB_PASSWORD = get_env_value('DB_PASSWRORD')
 EMAIL_USER = get_env_value('EMAIL_USER')
 EMAIL_PASSWORD = get_env_value('EMAIL_PASSWORD')
 OWN_KEY = get_env_value('SECRET_KEY')

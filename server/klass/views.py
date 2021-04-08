@@ -20,31 +20,19 @@ from account.models import RecentLearnedLc
 from django.db.models import Q
 
 
-@api_view(['GET'])
-def updateDB(request):
-    # update()
-    # create_lc()
-    # add_meaning_to_lc()
-    updateLc()
-    return Response("OK", status=status.HTTP_200_OK)
+# @api_view(['GET'])
+# def updateDB(request):
+#     update()
+#     create_lc()
+#     add_meaning_to_lc()
+#     updateLc()
+#     return Response("OK", status=status.HTTP_200_OK)
 
 
 class CsViewSet(viewsets.GenericViewSet,
                 mixins.ListModelMixin,
                 View):
     serializer_class = CsSerializer
-
-    def get_queryset(self):
-        conditions = {
-            'id': self.kwargs.get("id", None),
-            'name_kor__contains': self.request.GET.get('name_kor', None),
-            'type__contains': self.request.GET.get('type', None),
-        }
-        conditions = {key: val for key, val in conditions.items() if val is not None}
-        cs = Cs.objects.filter(**conditions)
-        if not cs.exists():
-            raise Http404()
-        return cs
 
     def get(self, request):
         """
@@ -80,17 +68,6 @@ class LcListViewSet(viewsets.GenericViewSet,
     authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = (IsAuthenticated,)
 
-    def get_queryset(self):
-        conditions = {
-            'id': self.kwargs.get("music_num", None),
-        }
-        conditions = {key: val for key, val in conditions.items() if val is not None}
-
-        lc = Lc.objects.filter(**conditions)
-        if not lc.exists():
-            raise Http404()
-        return lc
-
     @swagger_auto_schema(responses={200: "OK"}, manual_parameters=[
         openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
                           type=openapi.TYPE_STRING)])
@@ -123,18 +100,6 @@ class LcViewSet(viewsets.GenericViewSet,
     serializer_class = LcSerializer
     authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = (IsAuthenticated,)
-
-    def get_queryset(self):
-        conditions = {
-            'id': self.kwargs.get("music_num", None),
-        }
-        conditions = {key: val for key, val in conditions.items() if val is not None}
-
-        lc = Lc.objects.filter(**conditions)
-        if not lc.exists():
-            raise Http404()
-
-        return lc
 
     @swagger_auto_schema(manual_parameters=[
         openapi.Parameter('header_token', openapi.IN_HEADER, description="token must contain jwt token",
