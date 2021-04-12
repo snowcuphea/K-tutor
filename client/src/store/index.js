@@ -363,7 +363,7 @@ export default new Vuex.Store({
 
     SHOWALERT ( state, alertInfo ) {
       
-      var timeout = 3000
+      var timeout = 5000
 
       // if ( alertInfo.color == "error" || alertInfo.color == "warning" ) {
       //   timeout = 3000
