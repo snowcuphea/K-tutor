@@ -35,7 +35,7 @@
             <v-card tile height="60%" elevation="0" class="d-flex flex-column pt-2 px-2">
               <v-btn class="mb-4" fab small dark color="teal accent-4" elevation="3" @click="speech"><v-icon>mdi-volume-high</v-icon></v-btn>
               <div>
-                <p v-for="(line, idx) in lessonInfo.lines_kr" :key="idx" class="pb-2">{{ line }} </p>
+                <p v-for="(line, idx) in lessonInfo.lines_kr" :key="idx" class="pb-2"><span :style="idx%2==1 ? 'background-color: #D7FBE8' : ''">{{ line }}</span></p>
               </div>
               <div class="py-1">
                 <p v-for="(line, idx2) in lessonInfo.lines_en" :key="idx2" class="pb-2">{{ line }} </p>
